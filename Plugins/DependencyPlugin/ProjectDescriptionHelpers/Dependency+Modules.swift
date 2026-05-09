@@ -1,0 +1,41 @@
+import ProjectDescription
+
+// MARK: - Layer aggregators
+
+public extension TargetDependency {
+    static let feature: TargetDependency = .project(
+        target: "Feature",
+        path: .relativeToRoot("Projects/Feature")
+    )
+    static let core: TargetDependency = .project(
+        target: "Core",
+        path: .relativeToRoot("Projects/Core")
+    )
+    static let shared: TargetDependency = .project(
+        target: "Shared",
+        path: .relativeToRoot("Projects/Shared")
+    )
+}
+
+// MARK: - Feature sub-module shorthands
+
+public extension TargetDependency {
+    static func feature(interface module: ModulePath.Feature) -> TargetDependency {
+        .project(
+            target: "Feature\(module.rawValue)Interface",
+            path: .relativeToRoot("Projects/Feature/\(module.rawValue)")
+        )
+    }
+    static func feature(implements module: ModulePath.Feature) -> TargetDependency {
+        .project(
+            target: "Feature\(module.rawValue)",
+            path: .relativeToRoot("Projects/Feature/\(module.rawValue)")
+        )
+    }
+    static func feature(testing module: ModulePath.Feature) -> TargetDependency {
+        .project(
+            target: "Feature\(module.rawValue)Testing",
+            path: .relativeToRoot("Projects/Feature/\(module.rawValue)")
+        )
+    }
+}
