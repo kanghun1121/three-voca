@@ -1,11 +1,14 @@
-import SwiftUI
 import FeatureHome
+import FeatureHomeTesting
+import SwiftUI
 
 @main
 struct HomeExampleApp: App {
     var body: some Scene {
         WindowGroup {
-            HomeView()
+            NavigationStack {
+                HomeView(viewModel: HomeViewModel(repository: MockHomeRepository()))
+            }
         }
     }
 }

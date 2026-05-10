@@ -33,6 +33,7 @@ let project = Project.makeModule(
             dependencies: [
                 .feature(interface: .Home),
                 .feature(implements: .Home),
+                .feature(testing: .Home),
             ]
         )),
     ],
