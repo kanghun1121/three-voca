@@ -6,6 +6,7 @@ let targets: [Target] = [
         dependencies: [
             .core,
             .feature(implements: .Home),
+            .feature(implements: .Voca),
         ]
     ))
 ]

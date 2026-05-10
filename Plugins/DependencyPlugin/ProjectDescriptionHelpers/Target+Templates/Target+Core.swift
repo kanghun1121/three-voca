@@ -5,7 +5,7 @@ public extension Target {
     static func core(factory: TargetFactory) -> Self {
         var f = factory
         f.name = ModulePath.Core.name
-        f.sources = nil
+        f.sources = ["Sources/**"]
         return make(factory: f)
     }
 }
