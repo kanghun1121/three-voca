@@ -73,3 +73,6 @@ Tuist/.build
 graph.png
 shrimp_data/
 .claude/settings.local.json
+
+### 시크릿 ###
+Projects/Core/Example/Secrets.xcconfig
