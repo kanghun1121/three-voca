@@ -4,14 +4,14 @@ struct SessionRow: View {
     let viewState: SessionRowViewState
 
     var body: some View {
-        HStack(spacing: 10) {
+        HStack(spacing: 12) {
             SessionStatusIcon(kind: viewState.icon)
-            Text(viewState.title)
-                .font(.subheadline)
+            SessionInfo(title: viewState.title, subtitle: viewState.subtitle)
             Spacer()
-            Text(viewState.trailingText)
+            Image(systemName: "chevron.right")
                 .font(.caption)
                 .foregroundStyle(.secondary)
+                .accessibilityHidden(true)
         }
     }
 }
@@ -19,27 +19,27 @@ struct SessionRow: View {
 #Preview {
     VStack(spacing: 12) {
         SessionRow(viewState: SessionRowViewState(
-            id: "1",
+            id: 1,
             title: "Session 1",
-            trailingText: "완료 · 92%",
+            subtitle: "완료 · 9일 전 · 정답률 92%",
             icon: .completedHigh
         ))
         SessionRow(viewState: SessionRowViewState(
-            id: "2",
+            id: 2,
             title: "Session 3",
-            trailingText: "완료 · 58%",
+            subtitle: "완료 · 6일 전 · 정답률 58%",
             icon: .completedLow
         ))
         SessionRow(viewState: SessionRowViewState(
-            id: "3",
+            id: 3,
             title: "Session 5",
-            trailingText: "시작 전",
+            subtitle: "시작 전",
             icon: .notStarted
         ))
         SessionRow(viewState: SessionRowViewState(
-            id: "4",
+            id: 4,
             title: "Session 6",
-            trailingText: "시작 전",
+            subtitle: "시작 전",
             icon: .notStarted
         ))
     }

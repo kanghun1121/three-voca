@@ -1,6 +1,7 @@
 import Foundation
 
 struct HomeViewState: Equatable {
+    let streakDays: Int
     let levels: [LevelCardViewState]
 }
 
@@ -15,9 +16,9 @@ struct LevelCardViewState: Equatable, Identifiable {
 }
 
 struct SessionRowViewState: Equatable, Identifiable {
-    let id: String
+    let id: Int
     let title: String
-    let trailingText: String
+    let subtitle: String
     let icon: SessionIconKind
 }
 
@@ -31,5 +32,6 @@ enum LevelBadgeColor: Equatable {
     case level1
     case level2
     case level3
+    case level4
     case unknown
 }

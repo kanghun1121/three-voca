@@ -1,11 +1,15 @@
-import FeatureHomeInterface
 import Foundation
+
+import FeatureHomeInterface
 
 private let lowAccuracyThreshold: Double = 0.7
 
 extension VocabularyLibrary {
-    func toHomeViewState() -> HomeViewState {
-        HomeViewState(levels: levels.map { $0.toLevelCardViewState() })
+    func toHomeViewState(streakDays: Int) -> HomeViewState {
+        HomeViewState(
+            streakDays: streakDays,
+            levels: levels.map { $0.toLevelCardViewState() }
+        )
     }
 }
 
@@ -16,7 +20,7 @@ private extension LevelSummary {
             levelBadgeText: "L\(level)",
             levelBadgeColor: LevelBadgeColor(level: level),
             name: name,
-            subtitle: "\(difficulty.replacingOccurrences(of: "-", with: "·")) · \(completedSessions)/\(totalSessions)",
+            subtitle: "\(difficulty.replacing("-", with: "·")) · \(completedSessions)/\(totalSessions) 완료",
             progressRatio: totalSessions == 0 ? 0 : Double(completedSessions) / Double(totalSessions),
             sessions: sessions.map { $0.toSessionRowViewState() }
         )
@@ -28,16 +32,19 @@ private extension SessionProgress {
         SessionRowViewState(
             id: id,
             title: "Session \(sessionNumber)",
-            trailingText: trailingText,
+            subtitle: subtitle,
             icon: iconKind
         )
     }
 
-    private var trailingText: String {
+    private var subtitle: String {
         switch status {
         case .completed:
             let pct = accuracy.map { Int(round($0 * 100)) } ?? 0
-            return "완료 · \(pct)%"
+            if let date = lastStudiedAt {
+                return "완료 · \(Self.relativeFormatter.localizedString(for: date, relativeTo: .now)) · 정답률 \(pct)%"
+            }
+            return "완료 · 정답률 \(pct)%"
         case .notStarted:
             return "시작 전"
         }
@@ -46,14 +53,18 @@ private extension SessionProgress {
     private var iconKind: SessionIconKind {
         switch status {
         case .completed:
-            if let acc = accuracy, acc < lowAccuracyThreshold {
-                return .completedLow
-            }
-            return .completedHigh
+            (accuracy ?? 1) < lowAccuracyThreshold ? .completedLow : .completedHigh
         case .notStarted:
-            return .notStarted
+            .notStarted
         }
     }
+
+    private static let relativeFormatter: RelativeDateTimeFormatter = {
+        let f = RelativeDateTimeFormatter()
+        f.locale = Locale(identifier: "ko_KR")
+        f.unitsStyle = .short
+        return f
+    }()
 }
 
 private extension LevelBadgeColor {
@@ -62,6 +73,7 @@ private extension LevelBadgeColor {
         case 1: self = .level1
         case 2: self = .level2
         case 3: self = .level3
+        case 4: self = .level4
         default: self = .unknown
         }
     }

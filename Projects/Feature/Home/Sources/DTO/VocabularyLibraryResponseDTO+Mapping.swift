@@ -29,8 +29,7 @@ private extension VocabularyLibraryResponseDTO.SessionDTO {
             totalWords: totalWords,
             status: SessionProgressStatus(rawValue: status) ?? .notStarted,
             lastStudiedAt: lastStudiedAt.flatMap { Self.iso.date(from: $0) },
-            accuracy: accuracy,
-            wordsCompleted: wordsCompleted
+            accuracy: accuracy
         )
     }
 

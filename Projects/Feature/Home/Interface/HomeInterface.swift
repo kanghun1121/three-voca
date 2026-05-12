@@ -6,22 +6,20 @@ public enum SessionProgressStatus: String {
 }
 
 public struct SessionProgress: Equatable, Identifiable {
-    public let id: String
+    public let id: Int
     public let sessionNumber: Int
     public let totalWords: Int
     public let status: SessionProgressStatus
     public let lastStudiedAt: Date?
     public let accuracy: Double?
-    public let wordsCompleted: Int
 
     public init(
-        id: String,
+        id: Int,
         sessionNumber: Int,
         totalWords: Int,
         status: SessionProgressStatus,
         lastStudiedAt: Date?,
-        accuracy: Double?,
-        wordsCompleted: Int
+        accuracy: Double?
     ) {
         self.id = id
         self.sessionNumber = sessionNumber
@@ -29,7 +27,6 @@ public struct SessionProgress: Equatable, Identifiable {
         self.status = status
         self.lastStudiedAt = lastStudiedAt
         self.accuracy = accuracy
-        self.wordsCompleted = wordsCompleted
     }
 }
 

@@ -14,12 +14,11 @@ struct VocabularyLibraryResponseDTO: Decodable {
     }
 
     struct SessionDTO: Decodable {
-        let id: String
+        let id: Int
         let sessionNumber: Int
         let totalWords: Int
         let status: String
         let lastStudiedAt: String?
         let accuracy: Double?
-        let wordsCompleted: Int
     }
 }

@@ -11,183 +11,128 @@ public final class MockHomeRepository: HomeRepository {
 
     // MARK: - Sample Fixtures
 
+    public static let sampleVocabularyLibrary: VocabularyLibrary = {
+        guard let url = Bundle.module.url(forResource: "vocabulary_library", withExtension: "json"),
+              let data = try? Data(contentsOf: url)
+        else {
+            fatalError("[MockHomeRepository] vocabulary_library.json 리소스를 찾을 수 없음")
+        }
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        guard let payload = try? decoder.decode(LibraryPayload.self, from: data) else {
+            fatalError("[MockHomeRepository] vocabulary_library.json 디코딩 실패")
+        }
+        return patchDemoSessions(payload.toDomain())
+    }()
+
+    // MARK: - Private
+
     private static let iso: ISO8601DateFormatter = {
         let f = ISO8601DateFormatter()
         f.formatOptions = [.withInternetDateTime]
         return f
     }()
 
-    private static func date(_ string: String) -> Date? {
-        iso.date(from: string)
+    private static func patchDemoSessions(_ library: VocabularyLibrary) -> VocabularyLibrary {
+        let demoSessions: [(id: Int, accuracy: Double, date: String)] = [
+            (1, 0.92, "2026-05-03T14:20:00Z"),
+            (2, 0.87, "2026-05-09T10:15:00Z"),
+            (3, 0.58, "2026-05-06T20:45:00Z"),
+            (4, 0.88, "2026-05-08T08:10:00Z"),
+        ]
+
+        let levels = library.levels.enumerated().map { (index, level) -> LevelSummary in
+            guard index == 0 else { return level }
+
+            let patchedSessions = level.sessions.map { session -> SessionProgress in
+                guard let demo = demoSessions.first(where: { $0.id == session.id }) else {
+                    return session
+                }
+                return SessionProgress(
+                    id: session.id,
+                    sessionNumber: session.sessionNumber,
+                    totalWords: session.totalWords,
+                    status: .completed,
+                    lastStudiedAt: iso.date(from: demo.date),
+                    accuracy: demo.accuracy
+                )
+            }
+
+            return LevelSummary(
+                id: level.id,
+                level: level.level,
+                name: level.name,
+                difficulty: level.difficulty,
+                totalSessions: level.totalSessions,
+                completedSessions: demoSessions.count,
+                sessions: patchedSessions
+            )
+        }
+
+        return VocabularyLibrary(levels: levels)
+    }
+}
+
+// MARK: - Internal Decodable payload (Testing 타겟 전용)
+
+private struct LibraryPayload: Decodable {
+    let levels: [LevelPayload]
+
+    struct LevelPayload: Decodable {
+        let id: String
+        let level: Int
+        let name: String
+        let difficulty: String
+        let totalSessions: Int
+        let completedSessions: Int
+        let sessions: [SessionPayload]
     }
 
-    private static let level1Sessions: [SessionProgress] = [
-        SessionProgress(
-            id: "session_l1_s1",
-            sessionNumber: 1,
-            totalWords: 15,
-            status: .completed,
-            lastStudiedAt: date("2026-05-03T14:20:00Z"),
-            accuracy: 0.92,
-            wordsCompleted: 15
-        ),
-        SessionProgress(
-            id: "session_l1_s2",
-            sessionNumber: 2,
-            totalWords: 15,
-            status: .completed,
-            lastStudiedAt: date("2026-05-09T10:15:00Z"),
-            accuracy: 0.87,
-            wordsCompleted: 15
-        ),
-        SessionProgress(
-            id: "session_l1_s3",
-            sessionNumber: 3,
-            totalWords: 15,
-            status: .completed,
-            lastStudiedAt: date("2026-05-06T20:45:00Z"),
-            accuracy: 0.58,
-            wordsCompleted: 15
-        ),
-        SessionProgress(
-            id: "session_l1_s4",
-            sessionNumber: 4,
-            totalWords: 15,
-            status: .completed,
-            lastStudiedAt: date("2026-05-08T08:10:00Z"),
-            accuracy: 0.88,
-            wordsCompleted: 15
-        ),
-        SessionProgress(
-            id: "session_l1_s5",
-            sessionNumber: 5,
-            totalWords: 15,
-            status: .notStarted,
-            lastStudiedAt: nil,
-            accuracy: nil,
-            wordsCompleted: 0
-        ),
-        SessionProgress(
-            id: "session_l1_s6",
-            sessionNumber: 6,
-            totalWords: 15,
-            status: .notStarted,
-            lastStudiedAt: nil,
-            accuracy: nil,
-            wordsCompleted: 0
-        ),
-        SessionProgress(
-            id: "session_l1_s7",
-            sessionNumber: 7,
-            totalWords: 15,
-            status: .notStarted,
-            lastStudiedAt: nil,
-            accuracy: nil,
-            wordsCompleted: 0
-        ),
-        SessionProgress(
-            id: "session_l1_s8",
-            sessionNumber: 8,
-            totalWords: 15,
-            status: .notStarted,
-            lastStudiedAt: nil,
-            accuracy: nil,
-            wordsCompleted: 0
-        ),
-        SessionProgress(
-            id: "session_l1_s9",
-            sessionNumber: 9,
-            totalWords: 15,
-            status: .notStarted,
-            lastStudiedAt: nil,
-            accuracy: nil,
-            wordsCompleted: 0
-        ),
-        SessionProgress(
-            id: "session_l1_s10",
-            sessionNumber: 10,
-            totalWords: 15,
-            status: .notStarted,
-            lastStudiedAt: nil,
-            accuracy: nil,
-            wordsCompleted: 0
-        ),
-        SessionProgress(
-            id: "session_l1_s11",
-            sessionNumber: 11,
-            totalWords: 15,
-            status: .notStarted,
-            lastStudiedAt: nil,
-            accuracy: nil,
-            wordsCompleted: 0
-        ),
-        SessionProgress(
-            id: "session_l1_s12",
-            sessionNumber: 12,
-            totalWords: 15,
-            status: .notStarted,
-            lastStudiedAt: nil,
-            accuracy: nil,
-            wordsCompleted: 0
-        ),
-        SessionProgress(
-            id: "session_l1_s13",
-            sessionNumber: 13,
-            totalWords: 15,
-            status: .notStarted,
-            lastStudiedAt: nil,
-            accuracy: nil,
-            wordsCompleted: 0
-        ),
-    ]
+    struct SessionPayload: Decodable {
+        let id: Int
+        let sessionNumber: Int
+        let totalWords: Int
+        let status: String
+        let lastStudiedAt: String?
+        let accuracy: Double?
+    }
+}
 
-    public static let sampleVocabularyLibrary = VocabularyLibrary(levels: [
+private extension LibraryPayload {
+    func toDomain() -> VocabularyLibrary {
+        VocabularyLibrary(levels: levels.map { $0.toDomain() })
+    }
+}
+
+private extension LibraryPayload.LevelPayload {
+    func toDomain() -> LevelSummary {
         LevelSummary(
-            id: "level_1",
-            level: 1,
-            name: "초등 기초",
-            difficulty: "A1-A2",
-            totalSessions: 13,
-            completedSessions: 4,
-            sessions: level1Sessions
-        ),
-        LevelSummary(
-            id: "level_2",
-            level: 2,
-            name: "초등 심화",
-            difficulty: "B1",
-            totalSessions: 17,
-            completedSessions: 0,
-            sessions: (1...17).map { i in
-                SessionProgress(
-                    id: "session_l2_s\(i)",
-                    sessionNumber: i,
-                    totalWords: 15,
-                    status: .notStarted,
-                    lastStudiedAt: nil,
-                    accuracy: nil,
-                    wordsCompleted: 0
-                )
-            }
-        ),
-        LevelSummary(
-            id: "level_3",
-            level: 3,
-            name: "중등 기본",
-            difficulty: "B2",
-            totalSessions: 40,
-            completedSessions: 0,
-            sessions: (1...40).map { i in
-                SessionProgress(
-                    id: "session_l3_s\(i)",
-                    sessionNumber: i,
-                    totalWords: 15,
-                    status: .notStarted,
-                    lastStudiedAt: nil,
-                    accuracy: nil,
-                    wordsCompleted: 0
-                )
-            }
-        ),
-    ])
+            id: id,
+            level: level,
+            name: name,
+            difficulty: difficulty,
+            totalSessions: totalSessions,
+            completedSessions: completedSessions,
+            sessions: sessions.map { $0.toDomain() }
+        )
+    }
+}
+
+private extension LibraryPayload.SessionPayload {
+    private static let iso: ISO8601DateFormatter = {
+        let f = ISO8601DateFormatter()
+        f.formatOptions = [.withInternetDateTime]
+        return f
+    }()
+
+    func toDomain() -> SessionProgress {
+        SessionProgress(
+            id: id,
+            sessionNumber: sessionNumber,
+            totalWords: totalWords,
+            status: SessionProgressStatus(rawValue: status) ?? .notStarted,
+            lastStudiedAt: lastStudiedAt.flatMap { Self.iso.date(from: $0) },
+            accuracy: accuracy
+        )
+    }
 }
