@@ -12,9 +12,8 @@ public struct HomeView: View {
             if let state = viewModel.state {
                 HomeContentView(
                     state: state,
-                    expandedLevelIDs: viewModel.expandedLevelIDs,
-                    onToggleLevel: { viewModel.toggleLevel(id: $0) }
-                )
+                    expandedLevelIDs: viewModel.expandedLevelIDs
+                ) { viewModel.toggleLevel(id: $0) }
             } else if viewModel.isLoading {
                 ProgressView()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)

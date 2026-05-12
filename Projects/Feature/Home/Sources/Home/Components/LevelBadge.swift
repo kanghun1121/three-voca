@@ -24,23 +24,8 @@ struct LevelBadge: View {
 }
 
 extension LevelBadgeColor {
-    var backgroundColor: Color {
-        switch self {
-        case .level1: return Color(red: 0.91, green: 0.96, blue: 0.91)
-        case .level2: return Color(red: 0.89, green: 0.95, blue: 1.00)
-        case .level3: return Color(red: 0.89, green: 0.95, blue: 1.00)
-        case .unknown: return .gray.opacity(0.15)
-        }
-    }
-
-    var foregroundColor: Color {
-        switch self {
-        case .level1: return Color(red: 0.18, green: 0.49, blue: 0.20)
-        case .level2: return Color(red: 0.08, green: 0.40, blue: 0.75)
-        case .level3: return Color(red: 0.08, green: 0.40, blue: 0.75)
-        case .unknown: return .gray
-        }
-    }
+    var backgroundColor: Color { HomeColors.badgeBackground(self) }
+    var foregroundColor: Color { HomeColors.badgeForeground(self) }
 }
 
 #Preview {
@@ -48,6 +33,18 @@ extension LevelBadgeColor {
         LevelBadge(text: "L1", color: .level1)
         LevelBadge(text: "L2", color: .level2)
         LevelBadge(text: "L3", color: .level3)
+        LevelBadge(text: "L4", color: .level4)
     }
     .padding()
+}
+
+#Preview("다크 모드") {
+    HStack(spacing: 8) {
+        LevelBadge(text: "L1", color: .level1)
+        LevelBadge(text: "L2", color: .level2)
+        LevelBadge(text: "L3", color: .level3)
+        LevelBadge(text: "L4", color: .level4)
+    }
+    .padding()
+    .preferredColorScheme(.dark)
 }

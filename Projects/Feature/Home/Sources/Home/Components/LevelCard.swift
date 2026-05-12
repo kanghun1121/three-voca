@@ -5,88 +5,31 @@ struct LevelCard: View {
     let isExpanded: Bool
     let action: () -> Void
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.colorScheme) private var colorScheme
+
     var body: some View {
-        VStack(spacing: 0) {
-            HeaderRow(viewState: viewState, isExpanded: isExpanded)
-            ProgressBar(ratio: viewState.progressRatio)
-                .padding(.horizontal, 16)
-                .padding(.bottom, 12)
-            if isExpanded {
-                Divider()
+        Button(action: action) {
+            VStack(spacing: 0) {
+                HeaderRow(viewState: viewState, isExpanded: isExpanded)
+                ProgressFill(ratio: viewState.progressRatio)
                     .padding(.horizontal, 16)
-                SessionList(sessions: viewState.sessions)
-            }
-        }
-        .background(.white)
-        .clipShape(.rect(cornerRadius: 12))
-        .shadow(
-            color: .black.opacity(0.06),
-            radius: 4,
-            x: 0,
-            y: 2
-        )
-        .animation(.snappy, value: isExpanded)
-        .onTapGesture(perform: action)
-    }
-
-    struct HeaderRow: View {
-        let viewState: LevelCardViewState
-        let isExpanded: Bool
-
-        var body: some View {
-            HStack(spacing: 10) {
-                LevelBadge(text: viewState.levelBadgeText, color: viewState.levelBadgeColor)
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(viewState.name)
-                        .font(.subheadline)
-                        .bold()
-                    Text(viewState.subtitle)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-                Spacer()
-                Image(systemName: isExpanded ? "chevron.down" : "chevron.right")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 14)
-        }
-    }
-
-    struct ProgressBar: View {
-        let ratio: Double
-
-        var body: some View {
-            GeometryReader { geo in
-                ZStack(alignment: .leading) {
-                    RoundedRectangle(cornerRadius: 2)
-                        .fill(Color(red: 0.93, green: 0.93, blue: 0.93))
-                    RoundedRectangle(cornerRadius: 2)
-                        .fill(Color(red: 0.20, green: 0.78, blue: 0.35))
-                        .frame(width: geo.size.width * max(0, min(1, ratio)))
+                    .padding(.bottom, 12)
+                if isExpanded {
+                    SessionList(sessions: viewState.sessions)
                 }
             }
-            .frame(height: 4)
+            .background(HomeColors.cardBackground)
+            .clipShape(.rect(cornerRadius: 12))
+            .shadow(
+                color: colorScheme == .dark ? .clear : .black.opacity(0.06),
+                radius: 4,
+                x: 0,
+                y: 2
+            )
+            .animation(reduceMotion ? nil : .snappy, value: isExpanded)
         }
-    }
-
-    struct SessionList: View {
-        let sessions: [SessionRowViewState]
-
-        var body: some View {
-            LazyVStack(spacing: 0) {
-                ForEach(sessions) { session in
-                    SessionRow(viewState: session)
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 10)
-                    if session.id != sessions.last?.id {
-                        Divider()
-                            .padding(.horizontal, 16)
-                    }
-                }
-            }
-        }
+        .buttonStyle(.plain)
     }
 }
 
@@ -97,13 +40,12 @@ struct LevelCard: View {
             levelBadgeText: "L1",
             levelBadgeColor: .level1,
             name: "초등 기초",
-            subtitle: "A1·A2 · 4/13",
+            subtitle: "A1·A2 · 4/13 완료",
             progressRatio: 4.0 / 13.0,
             sessions: []
         ),
-        isExpanded: false,
-        action: {}
-    )
+        isExpanded: false
+    ) {}
     .padding()
 }
 
@@ -114,37 +56,66 @@ struct LevelCard: View {
             levelBadgeText: "L1",
             levelBadgeColor: .level1,
             name: "초등 기초",
-            subtitle: "A1·A2 · 4/13",
+            subtitle: "A1·A2 · 4/13 완료",
             progressRatio: 4.0 / 13.0,
             sessions: [
                 SessionRowViewState(
-                    id: "s1",
+                    id: 1,
                     title: "Session 1",
-                    trailingText: "완료 · 92%",
+                    subtitle: "완료 · 9일 전 · 정답률 92%",
                     icon: .completedHigh
                 ),
                 SessionRowViewState(
-                    id: "s3",
+                    id: 3,
                     title: "Session 3",
-                    trailingText: "완료 · 58%",
+                    subtitle: "완료 · 6일 전 · 정답률 58%",
                     icon: .completedLow
                 ),
                 SessionRowViewState(
-                    id: "s5",
+                    id: 5,
                     title: "Session 5",
-                    trailingText: "시작 전",
+                    subtitle: "시작 전",
                     icon: .notStarted
                 ),
                 SessionRowViewState(
-                    id: "s6",
+                    id: 6,
                     title: "Session 6",
-                    trailingText: "시작 전",
+                    subtitle: "시작 전",
                     icon: .notStarted
                 ),
             ]
         ),
-        isExpanded: true,
-        action: {}
-    )
+        isExpanded: true
+    ) {}
     .padding()
+}
+
+#Preview("다크 모드") {
+    LevelCard(
+        viewState: LevelCardViewState(
+            id: "level_1",
+            levelBadgeText: "L1",
+            levelBadgeColor: .level1,
+            name: "초등 기초",
+            subtitle: "A1·A2 · 4/13 완료",
+            progressRatio: 4.0 / 13.0,
+            sessions: [
+                SessionRowViewState(
+                    id: 1,
+                    title: "Session 1",
+                    subtitle: "완료 · 9일 전 · 정답률 92%",
+                    icon: .completedHigh
+                ),
+                SessionRowViewState(
+                    id: 5,
+                    title: "Session 5",
+                    subtitle: "시작 전",
+                    icon: .notStarted
+                ),
+            ]
+        ),
+        isExpanded: true
+    ) {}
+    .padding()
+    .preferredColorScheme(.dark)
 }

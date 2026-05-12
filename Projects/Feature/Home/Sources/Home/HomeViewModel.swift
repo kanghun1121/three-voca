@@ -1,5 +1,6 @@
-import FeatureHomeInterface
 import Foundation
+
+import FeatureHomeInterface
 
 @Observable
 @MainActor
@@ -20,7 +21,8 @@ public final class HomeViewModel {
         defer { isLoading = false }
         do {
             let library = try await repository.fetchVocabularyLibrary()
-            state = library.toHomeViewState()
+            // TODO: 실제 streak 데이터 연동
+            state = library.toHomeViewState(streakDays: 7)
         } catch {
             errorMessage = "홈 정보를 불러오지 못했습니다."
         }
