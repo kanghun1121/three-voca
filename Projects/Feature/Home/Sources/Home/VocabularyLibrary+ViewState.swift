@@ -5,7 +5,7 @@ private let lowAccuracyThreshold: Double = 0.7
 
 extension VocabularyLibrary {
     func toHomeViewState() -> HomeViewState {
-        HomeViewState(levels: levels.map { $0.toLevelCardViewState() })
+        HomeViewState(streakDays: 0, levels: levels.map { $0.toLevelCardViewState() })
     }
 }
 
@@ -26,14 +26,14 @@ private extension LevelSummary {
 private extension SessionProgress {
     func toSessionRowViewState() -> SessionRowViewState {
         SessionRowViewState(
-            id: id,
+            id: Int(id) ?? 0,
             title: "Session \(sessionNumber)",
-            trailingText: trailingText,
+            subtitle: subtitle,
             icon: iconKind
         )
     }
 
-    private var trailingText: String {
+    private var subtitle: String {
         switch status {
         case .completed:
             let pct = accuracy.map { Int(round($0 * 100)) } ?? 0

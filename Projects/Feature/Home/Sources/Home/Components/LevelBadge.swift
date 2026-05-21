@@ -10,7 +10,7 @@ struct LevelBadge: View {
     var body: some View {
         VStack(spacing: 0) {
             Text(letterPart)
-                .font(.caption2)
+                .font(.caption)
                 .foregroundStyle(color.foregroundColor)
             Text(numberPart)
                 .font(.title3)
