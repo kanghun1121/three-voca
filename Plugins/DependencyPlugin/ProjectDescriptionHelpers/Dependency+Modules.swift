@@ -17,6 +17,19 @@ public extension TargetDependency {
     )
 }
 
+// MARK: - Domain shorthands
+
+public extension TargetDependency {
+    static let domainInterface: TargetDependency = .project(
+        target: "DomainInterface",
+        path: .relativeToRoot("Projects/Domain")
+    )
+    static let domain: TargetDependency = .project(
+        target: "Domain",
+        path: .relativeToRoot("Projects/Domain")
+    )
+}
+
 // MARK: - Feature sub-module shorthands
 
 public extension TargetDependency {

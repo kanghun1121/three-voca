@@ -1,4 +1,4 @@
-import FeatureHomeInterface
+import DomainInterface
 import Foundation
 
 extension VocabularyLibraryResponseDTO {
@@ -24,12 +24,13 @@ private extension VocabularyLibraryResponseDTO.LevelDTO {
 private extension VocabularyLibraryResponseDTO.SessionDTO {
     func toDomain() -> SessionProgress {
         SessionProgress(
-            id: id,
+            id: String(id),
             sessionNumber: sessionNumber,
             totalWords: totalWords,
             status: SessionProgressStatus(rawValue: status) ?? .notStarted,
             lastStudiedAt: lastStudiedAt.flatMap { Self.iso.date(from: $0) },
-            accuracy: accuracy
+            accuracy: accuracy,
+            wordsCompleted: wordsCompleted ?? 0
         )
     }
 

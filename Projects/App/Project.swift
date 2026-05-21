@@ -15,11 +15,18 @@ let project = Project.makeModule(
                 "UIApplicationSceneManifest": [
                     "UIApplicationSupportsMultipleScenes": false,
                     "UISceneConfigurations": [:]
-                ]
+                ],
+                "SUPABASE_ANON_KEY": "$(SUPABASE_ANON_KEY)"
             ]),
             sources: ["Sources/**"],
             resources: ["Resources/**"],
-            dependencies: [.feature]
+            dependencies: [.feature, .domain],
+            settings: .settings(
+                configurations: [
+                    .debug(name: "Debug", xcconfig: "Secrets.xcconfig"),
+                    .release(name: "Release", xcconfig: "Secrets.xcconfig")
+                ]
+            )
         ))
     ]
 )

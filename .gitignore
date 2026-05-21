@@ -76,3 +76,4 @@ shrimp_data/
 
 ### 시크릿 ###
 Projects/Core/Example/Secrets.xcconfig
+Projects/App/Secrets.xcconfig

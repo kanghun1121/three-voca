@@ -1,6 +1,6 @@
+import Dependencies
+import DomainInterface
 import Foundation
-
-import FeatureHomeInterface
 
 @Observable
 @MainActor
@@ -10,19 +10,16 @@ public final class HomeViewModel {
     private(set) var errorMessage: String?
     private(set) var expandedLevelIDs: Set<String> = []
 
-    private let repository: HomeRepository
+    @ObservationIgnored @Dependency(\.homeClient) private var homeClient
 
-    public init(repository: HomeRepository) {
-        self.repository = repository
-    }
+    public init() {}
 
     public func load() async {
         isLoading = true
         defer { isLoading = false }
         do {
-            let library = try await repository.fetchVocabularyLibrary()
-            // TODO: 실제 streak 데이터 연동
-            state = library.toHomeViewState(streakDays: 7)
+            let library = try await homeClient.fetchHomeOverview()
+            state = library.toHomeViewState()
         } catch {
             errorMessage = "홈 정보를 불러오지 못했습니다."
         }

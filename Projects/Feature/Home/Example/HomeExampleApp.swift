@@ -1,13 +1,19 @@
+import Dependencies
 import FeatureHome
-import FeatureHomeTesting
 import SwiftUI
 
 @main
 struct HomeExampleApp: App {
+    init() {
+        prepareDependencies {
+            $0.homeClient = .previewValue
+        }
+    }
+
     var body: some Scene {
         WindowGroup {
             NavigationStack {
-                HomeView(viewModel: HomeViewModel(repository: MockHomeRepository()))
+                HomeView(viewModel: HomeViewModel())
             }
         }
     }

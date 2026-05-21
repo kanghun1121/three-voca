@@ -1,10 +1,9 @@
+import DomainInterface
 import Foundation
 
-import FeatureVocaInterface
-
-public extension SessionDetailResponseDTO {
-    func toDomain() -> FeatureVocaInterface.Session {
-        FeatureVocaInterface.Session(
+extension SessionDetailResponseDTO {
+    func toDomain() -> Session {
+        Session(
             id: session.id,
             level: session.level,
             sessionNumber: session.sessionNumber,
@@ -16,9 +15,9 @@ public extension SessionDetailResponseDTO {
     }
 }
 
-public extension SessionDetailResponseDTO.Word {
-    func toDomain() -> FeatureVocaInterface.Session.Word {
-        FeatureVocaInterface.Session.Word(
+private extension SessionDetailResponseDTO.Word {
+    func toDomain() -> Session.Word {
+        Session.Word(
             id: id,
             term: term,
             pronunciation: pronunciation,
@@ -27,19 +26,19 @@ public extension SessionDetailResponseDTO.Word {
     }
 }
 
-public extension SessionDetailResponseDTO.Word.Definition {
-    func toDomain() -> FeatureVocaInterface.Session.Word.Definition {
-        FeatureVocaInterface.Session.Word.Definition(
+private extension SessionDetailResponseDTO.Word.Definition {
+    func toDomain() -> Session.Word.Definition {
+        Session.Word.Definition(
             id: id,
-            partOfSpeech: FeatureVocaInterface.Session.Word.Definition.PartOfSpeech(rawValue: partOfSpeech) ?? .unknown,
+            partOfSpeech: Session.Word.Definition.PartOfSpeech(rawValue: partOfSpeech) ?? .unknown,
             meaning: meaning
         )
     }
 }
 
-public extension SessionDetailResponseDTO.LearningHistory {
-    func toDomain() -> FeatureVocaInterface.Session.Record {
-        FeatureVocaInterface.Session.Record(
+private extension SessionDetailResponseDTO.LearningHistory {
+    func toDomain() -> Session.Record {
+        Session.Record(
             firstCompletedAt: Self.iso8601.date(from: firstCompletedAt) ?? .distantPast,
             lastStudiedAt: Self.iso8601.date(from: lastStudiedAt) ?? .distantPast,
             reviewCount: reviewCount,

@@ -20,5 +20,6 @@ struct VocabularyLibraryResponseDTO: Decodable {
         let status: String
         let lastStudiedAt: String?
         let accuracy: Double?
+        let wordsCompleted: Int?
     }
 }
