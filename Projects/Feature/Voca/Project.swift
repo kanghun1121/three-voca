@@ -4,11 +4,13 @@ import DependencyPlugin
 let project = Project.makeModule(
     name: ModulePath.Feature.name + ModulePath.Feature.Voca.rawValue,
     targets: [
-        .feature(interface: .Voca, factory: .init()),
+        .feature(interface: .Voca, factory: .init(
+            dependencies: [.domainInterface]
+        )),
         .feature(implements: .Voca, factory: .init(
             dependencies: [
                 .feature(interface: .Voca),
-                .core,
+                .dependencies,
             ]
         )),
         .feature(testing: .Voca, factory: .init(
@@ -18,6 +20,8 @@ let project = Project.makeModule(
             dependencies: [
                 .feature(testing: .Voca),
                 .feature(implements: .Voca),
+                .domainInterface,
+                .dependencies,
             ]
         )),
         .feature(example: .Voca, factory: .init(
@@ -35,6 +39,7 @@ let project = Project.makeModule(
                 .feature(interface: .Voca),
                 .feature(implements: .Voca),
                 .feature(testing: .Voca),
+                .dependencies,
             ]
         )),
     ],

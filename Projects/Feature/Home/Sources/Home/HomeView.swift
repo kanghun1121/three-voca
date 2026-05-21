@@ -29,3 +29,7 @@ public struct HomeView: View {
         .task { await viewModel.load() }
     }
 }
+
+#Preview {
+    HomeView(viewModel: HomeViewModel())
+}

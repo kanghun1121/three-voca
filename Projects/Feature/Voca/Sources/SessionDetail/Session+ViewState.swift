@@ -1,5 +1,5 @@
 import Foundation
-import FeatureVocaInterface
+import DomainInterface
 
 extension Session {
     func toSessionDetailViewState(previewLimit: Int = 4) -> SessionDetailViewState {

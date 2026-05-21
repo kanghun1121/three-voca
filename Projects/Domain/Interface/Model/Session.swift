@@ -1,0 +1,258 @@
+import Foundation
+
+public struct Session: Equatable {
+    public struct Word: Equatable, Identifiable {
+        public struct Definition: Equatable, Identifiable {
+            public enum PartOfSpeech: String, Equatable {
+                case noun
+                case verb
+                case adjective
+                case adverb
+                case preposition
+                case conjunction
+                case interjection
+                case pronoun
+                case unknown
+            }
+
+            public let id: String
+            public let partOfSpeech: PartOfSpeech
+            public let meaning: String
+
+            public init(
+                id: String,
+                partOfSpeech: PartOfSpeech,
+                meaning: String
+            ) {
+                self.id = id
+                self.partOfSpeech = partOfSpeech
+                self.meaning = meaning
+            }
+        }
+
+        public let id: String
+        public let term: String
+        public let pronunciation: String
+        public let definitions: [Definition]
+
+        public init(
+            id: String,
+            term: String,
+            pronunciation: String,
+            definitions: [Definition]
+        ) {
+            self.id = id
+            self.term = term
+            self.pronunciation = pronunciation
+            self.definitions = definitions
+        }
+    }
+
+    public struct Record: Equatable {
+        public let firstCompletedAt: Date
+        public let lastStudiedAt: Date
+        public let reviewCount: Int
+        public let averageAccuracy: Double
+
+        public init(
+            firstCompletedAt: Date,
+            lastStudiedAt: Date,
+            reviewCount: Int,
+            averageAccuracy: Double
+        ) {
+            self.firstCompletedAt = firstCompletedAt
+            self.lastStudiedAt = lastStudiedAt
+            self.reviewCount = reviewCount
+            self.averageAccuracy = averageAccuracy
+        }
+    }
+
+    public let id: String
+    public let level: Int
+    public let sessionNumber: Int
+    public let estimatedDurationMinutes: Int
+    public let cefrLevel: String
+    public let words: [Word]
+    public let record: Record?
+
+    public init(
+        id: String,
+        level: Int,
+        sessionNumber: Int,
+        estimatedDurationMinutes: Int,
+        cefrLevel: String,
+        words: [Word],
+        record: Record?
+    ) {
+        self.id = id
+        self.level = level
+        self.sessionNumber = sessionNumber
+        self.estimatedDurationMinutes = estimatedDurationMinutes
+        self.cefrLevel = cefrLevel
+        self.words = words
+        self.record = record
+    }
+}
+
+// MARK: - Preview Fixtures
+
+public extension Session {
+    static func previewWithRecord(id: String) -> Session {
+        Session(
+            id: id,
+            level: 1,
+            sessionNumber: 2,
+            estimatedDurationMinutes: 15,
+            cefrLevel: "A1-A2",
+            words: previewWords,
+            record: Record(
+                firstCompletedAt: iso.date(from: "2026-05-01T10:23:45Z") ?? .distantPast,
+                lastStudiedAt: iso.date(from: "2026-05-09T18:30:00Z") ?? .distantPast,
+                reviewCount: 3,
+                averageAccuracy: 0.87
+            )
+        )
+    }
+
+    static func previewWithoutRecord(id: String) -> Session {
+        Session(
+            id: id,
+            level: 1,
+            sessionNumber: 2,
+            estimatedDurationMinutes: 15,
+            cefrLevel: "A1-A2",
+            words: previewWords,
+            record: nil
+        )
+    }
+
+    static let previewWords: [Word] = [
+        Word(
+            id: "word_001",
+            term: "ambiguous",
+            pronunciation: "/æmˈbɪɡjuəs/",
+            definitions: [
+                Word.Definition(id: "def_001_1", partOfSpeech: .adjective, meaning: "모호한, 애매한")
+            ]
+        ),
+        Word(
+            id: "word_002",
+            term: "persevere",
+            pronunciation: "/ˌpɜːrsəˈvɪr/",
+            definitions: [
+                Word.Definition(id: "def_002_1", partOfSpeech: .verb, meaning: "끈기 있게 계속하다, 인내하다")
+            ]
+        ),
+        Word(
+            id: "word_003",
+            term: "eloquent",
+            pronunciation: "/ˈeləkwənt/",
+            definitions: [
+                Word.Definition(id: "def_003_1", partOfSpeech: .adjective, meaning: "유창한, 능변의")
+            ]
+        ),
+        Word(
+            id: "word_004",
+            term: "inevitable",
+            pronunciation: "/ɪnˈevɪtəbl/",
+            definitions: [
+                Word.Definition(id: "def_004_1", partOfSpeech: .adjective, meaning: "불가피한, 필연적인"),
+                Word.Definition(id: "def_004_2", partOfSpeech: .noun, meaning: "피할 수 없는 일"),
+            ]
+        ),
+        Word(
+            id: "word_005",
+            term: "meticulous",
+            pronunciation: "/məˈtɪkjuləs/",
+            definitions: [
+                Word.Definition(id: "def_005_1", partOfSpeech: .adjective, meaning: "꼼꼼한, 세심한")
+            ]
+        ),
+        Word(
+            id: "word_006",
+            term: "benevolent",
+            pronunciation: "/bəˈnevələnt/",
+            definitions: [
+                Word.Definition(id: "def_006_1", partOfSpeech: .adjective, meaning: "자비로운, 친절한")
+            ]
+        ),
+        Word(
+            id: "word_007",
+            term: "ephemeral",
+            pronunciation: "/ɪˈfemərəl/",
+            definitions: [
+                Word.Definition(id: "def_007_1", partOfSpeech: .adjective, meaning: "덧없는, 단명하는")
+            ]
+        ),
+        Word(
+            id: "word_008",
+            term: "resilient",
+            pronunciation: "/rɪˈzɪliənt/",
+            definitions: [
+                Word.Definition(id: "def_008_1", partOfSpeech: .adjective, meaning: "회복력 있는, 탄력적인")
+            ]
+        ),
+        Word(
+            id: "word_009",
+            term: "tenacious",
+            pronunciation: "/təˈneɪʃəs/",
+            definitions: [
+                Word.Definition(id: "def_009_1", partOfSpeech: .adjective, meaning: "끈질긴, 고집스러운")
+            ]
+        ),
+        Word(
+            id: "word_010",
+            term: "serene",
+            pronunciation: "/səˈriːn/",
+            definitions: [
+                Word.Definition(id: "def_010_1", partOfSpeech: .adjective, meaning: "고요한, 평온한")
+            ]
+        ),
+        Word(
+            id: "word_011",
+            term: "arduous",
+            pronunciation: "/ˈɑːrdjuəs/",
+            definitions: [
+                Word.Definition(id: "def_011_1", partOfSpeech: .adjective, meaning: "힘든, 고된")
+            ]
+        ),
+        Word(
+            id: "word_012",
+            term: "pragmatic",
+            pronunciation: "/præɡˈmætɪk/",
+            definitions: [
+                Word.Definition(id: "def_012_1", partOfSpeech: .adjective, meaning: "실용적인, 현실적인")
+            ]
+        ),
+        Word(
+            id: "word_013",
+            term: "vivid",
+            pronunciation: "/ˈvɪvɪd/",
+            definitions: [
+                Word.Definition(id: "def_013_1", partOfSpeech: .adjective, meaning: "생생한, 선명한")
+            ]
+        ),
+        Word(
+            id: "word_014",
+            term: "profound",
+            pronunciation: "/prəˈfaʊnd/",
+            definitions: [
+                Word.Definition(id: "def_014_1", partOfSpeech: .adjective, meaning: "심오한, 깊은")
+            ]
+        ),
+        Word(
+            id: "word_015",
+            term: "subtle",
+            pronunciation: "/ˈsʌtl/",
+            definitions: [
+                Word.Definition(id: "def_015_1", partOfSpeech: .adjective, meaning: "미묘한, 섬세한")
+            ]
+        ),
+    ]
+
+    private static let iso: ISO8601DateFormatter = {
+        let f = ISO8601DateFormatter()
+        f.formatOptions = [.withInternetDateTime]
+        return f
+    }()
+}

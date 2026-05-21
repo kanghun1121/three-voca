@@ -5,10 +5,13 @@ let project = Project.makeModule(
     name: ModulePath.Feature.name + ModulePath.Feature.Home.rawValue,
     targets: [
         .feature(interface: .Home, factory: .init(
-            dependencies: [.core]
+            dependencies: [.domainInterface]
         )),
         .feature(implements: .Home, factory: .init(
-            dependencies: [.feature(interface: .Home)]
+            dependencies: [
+                .feature(interface: .Home),
+                .dependencies,
+            ]
         )),
         .feature(testing: .Home, factory: .init(
             resources: ["Testing/Resources/**"],
@@ -18,6 +21,8 @@ let project = Project.makeModule(
             dependencies: [
                 .feature(testing: .Home),
                 .feature(implements: .Home),
+                .domainInterface,
+                .dependencies,
             ]
         )),
         .feature(example: .Home, factory: .init(
@@ -35,6 +40,7 @@ let project = Project.makeModule(
                 .feature(interface: .Home),
                 .feature(implements: .Home),
                 .feature(testing: .Home),
+                .dependencies,
             ]
         )),
     ],
