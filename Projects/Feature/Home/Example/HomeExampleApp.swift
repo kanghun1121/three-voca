@@ -12,9 +12,7 @@ struct HomeExampleApp: App {
 
     var body: some Scene {
         WindowGroup {
-            NavigationStack {
-                HomeView(viewModel: HomeViewModel())
-            }
+            HomeView(viewModel: HomeViewModel())
         }
     }
 }

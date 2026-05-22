@@ -2,31 +2,33 @@ import ProjectDescription
 import DependencyPlugin
 
 let project = Project.makeModule(
-    name: ModulePath.Feature.name + ModulePath.Feature.Home.rawValue,
+    name: ModulePath.Feature.name + ModulePath.Feature.home.rawValue,
     targets: [
-        .feature(interface: .Home, factory: .init(
+        .feature(interface: .home, factory: .init(
             dependencies: [.domainInterface]
         )),
-        .feature(implements: .Home, factory: .init(
+        .feature(implements: .home, factory: .init(
             dependencies: [
-                .feature(interface: .Home),
+                .feature(interface: .home),
+                .feature(implements: .session),
                 .dependencies,
                 .designSystem,
+                .swiftUINavigation,
             ]
         )),
-        .feature(testing: .Home, factory: .init(
+        .feature(testing: .home, factory: .init(
             resources: ["Testing/Resources/**"],
-            dependencies: [.feature(interface: .Home)]
+            dependencies: [.feature(interface: .home)]
         )),
-        .feature(tests: .Home, factory: .init(
+        .feature(tests: .home, factory: .init(
             dependencies: [
-                .feature(testing: .Home),
-                .feature(implements: .Home),
+                .feature(testing: .home),
+                .feature(implements: .home),
                 .domainInterface,
                 .dependencies,
             ]
         )),
-        .feature(example: .Home, factory: .init(
+        .feature(example: .home, factory: .init(
             infoPlist: .extendingDefault(with: [
                 "CFBundleShortVersionString": "1.0",
                 "CFBundleVersion": "1",
@@ -38,9 +40,9 @@ let project = Project.makeModule(
             ]),
             resources: ["Example/Resources/**"],
             dependencies: [
-                .feature(interface: .Home),
-                .feature(implements: .Home),
-                .feature(testing: .Home),
+                .feature(interface: .home),
+                .feature(implements: .home),
+                .feature(testing: .home),
                 .dependencies,
                 .designSystem,
             ]

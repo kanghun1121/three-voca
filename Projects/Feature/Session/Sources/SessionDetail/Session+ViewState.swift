@@ -1,5 +1,5 @@
-import Foundation
 import DomainInterface
+import Foundation
 
 extension Session {
     func toSessionDetailViewState(previewLimit: Int = 4) -> SessionDetailViewState {

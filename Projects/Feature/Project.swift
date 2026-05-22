@@ -5,8 +5,8 @@ let targets: [Target] = [
     .feature(factory: .init(
         dependencies: [
             .core,
-            .feature(implements: .Home),
-            .feature(implements: .Voca),
+            .feature(implements: .home),
+            .feature(implements: .session),
         ]
     ))
 ]

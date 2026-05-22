@@ -2,30 +2,30 @@ import ProjectDescription
 import DependencyPlugin
 
 let project = Project.makeModule(
-    name: ModulePath.Feature.name + ModulePath.Feature.Voca.rawValue,
+    name: ModulePath.Feature.name + ModulePath.Feature.session.rawValue,
     targets: [
-        .feature(interface: .Voca, factory: .init(
+        .feature(interface: .session, factory: .init(
             dependencies: [.domainInterface]
         )),
-        .feature(implements: .Voca, factory: .init(
+        .feature(implements: .session, factory: .init(
             dependencies: [
-                .feature(interface: .Voca),
+                .feature(interface: .session),
                 .dependencies,
                 .designSystem,
             ]
         )),
-        .feature(testing: .Voca, factory: .init(
-            dependencies: [.feature(interface: .Voca)]
+        .feature(testing: .session, factory: .init(
+            dependencies: [.feature(interface: .session)]
         )),
-        .feature(tests: .Voca, factory: .init(
+        .feature(tests: .session, factory: .init(
             dependencies: [
-                .feature(testing: .Voca),
-                .feature(implements: .Voca),
+                .feature(testing: .session),
+                .feature(implements: .session),
                 .domainInterface,
                 .dependencies,
             ]
         )),
-        .feature(example: .Voca, factory: .init(
+        .feature(example: .session, factory: .init(
             infoPlist: .extendingDefault(with: [
                 "CFBundleShortVersionString": "1.0",
                 "CFBundleVersion": "1",
@@ -37,9 +37,9 @@ let project = Project.makeModule(
             ]),
             resources: ["Example/Resources/**"],
             dependencies: [
-                .feature(interface: .Voca),
-                .feature(implements: .Voca),
-                .feature(testing: .Voca),
+                .feature(interface: .session),
+                .feature(implements: .session),
+                .feature(testing: .session),
                 .dependencies,
                 .designSystem,
             ]
@@ -47,9 +47,9 @@ let project = Project.makeModule(
     ],
     schemes: [
         .scheme(
-            name: "FeatureVocaExample",
-            buildAction: .buildAction(targets: [.target("FeatureVocaExample")]),
-            runAction: .runAction(executable: .target("FeatureVocaExample"))
+            name: "FeatureSessionExample",
+            buildAction: .buildAction(targets: [.target("FeatureSessionExample")]),
+            runAction: .runAction(executable: .target("FeatureSessionExample"))
         )
     ]
 )

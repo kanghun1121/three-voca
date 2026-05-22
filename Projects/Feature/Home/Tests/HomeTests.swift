@@ -59,7 +59,7 @@ final class HomeViewStateTests: XCTestCase {
     }
 
     @MainActor
-    func test_toggleLevel_expandsAndCollapses() async {
+    func test_levelTapped_expandsAndCollapses() async {
         let viewModel = withDependencies {
             $0.homeClient = .previewValue
         } operation: {
@@ -70,10 +70,10 @@ final class HomeViewStateTests: XCTestCase {
         let id = "level_1"
         XCTAssertFalse(viewModel.expandedLevelIDs.contains(id))
 
-        viewModel.toggleLevel(id: id)
+        viewModel.levelTapped(id: id)
         XCTAssertTrue(viewModel.expandedLevelIDs.contains(id))
 
-        viewModel.toggleLevel(id: id)
+        viewModel.levelTapped(id: id)
         XCTAssertFalse(viewModel.expandedLevelIDs.contains(id))
     }
 }
