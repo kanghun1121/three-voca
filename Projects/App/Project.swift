@@ -16,11 +16,22 @@ let project = Project.makeModule(
                     "UIApplicationSupportsMultipleScenes": false,
                     "UISceneConfigurations": [:]
                 ],
-                "SUPABASE_ANON_KEY": "$(SUPABASE_ANON_KEY)"
+                "SUPABASE_ANON_KEY": "$(SUPABASE_ANON_KEY)",
+                "UIAppFonts": [
+                    "Pretendard-Thin.otf",
+                    "Pretendard-ExtraLight.otf",
+                    "Pretendard-Light.otf",
+                    "Pretendard-Regular.otf",
+                    "Pretendard-Medium.otf",
+                    "Pretendard-SemiBold.otf",
+                    "Pretendard-Bold.otf",
+                    "Pretendard-ExtraBold.otf",
+                    "Pretendard-Black.otf"
+                ]
             ]),
             sources: ["Sources/**"],
             resources: ["Resources/**"],
-            dependencies: [.feature, .domain],
+            dependencies: [.feature, .domain, .designSystem],
             settings: .settings(
                 configurations: [
                     .debug(name: "Debug", xcconfig: "Secrets.xcconfig"),

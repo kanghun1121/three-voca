@@ -11,6 +11,7 @@ let project = Project.makeModule(
             dependencies: [
                 .feature(interface: .Home),
                 .dependencies,
+                .designSystem,
             ]
         )),
         .feature(testing: .Home, factory: .init(
@@ -41,6 +42,7 @@ let project = Project.makeModule(
                 .feature(implements: .Home),
                 .feature(testing: .Home),
                 .dependencies,
+                .designSystem,
             ]
         )),
     ],

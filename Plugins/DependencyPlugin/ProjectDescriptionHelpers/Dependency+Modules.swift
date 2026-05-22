@@ -30,6 +30,19 @@ public extension TargetDependency {
     )
 }
 
+// MARK: - Shared sub-module shorthands
+
+public extension TargetDependency {
+    static func shared(implements module: ModulePath.Shared) -> TargetDependency {
+        .project(
+            target: module.rawValue,
+            path: .relativeToRoot("Projects/Shared/\(module.rawValue)")
+        )
+    }
+
+    static let designSystem: TargetDependency = .shared(implements: .designSystem)
+}
+
 // MARK: - Feature sub-module shorthands
 
 public extension TargetDependency {
