@@ -1,5 +1,5 @@
 import Dependencies
-import FeatureVoca
+import FeatureSession
 import SwiftUI
 
 @main

@@ -2,7 +2,7 @@ import Dependencies
 import DomainInterface
 import XCTest
 
-@testable import FeatureVoca
+@testable import FeatureSession
 
 @MainActor
 final class SessionDetailViewModelTests: XCTestCase {

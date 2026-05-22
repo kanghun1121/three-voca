@@ -16,5 +16,6 @@ let package = Package(
     name: "FiveVoca",
     dependencies: [
         .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.3.0"),
+        .package(url: "https://github.com/pointfreeco/swiftui-navigation", from: "1.5.0"),
     ]
 )
