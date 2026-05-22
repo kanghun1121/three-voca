@@ -8,4 +8,11 @@ public extension Target {
         f.sources = nil
         return make(factory: f)
     }
+
+    // Shared 레이어 sub-module
+    static func shared(implements module: ModulePath.Shared, factory: TargetFactory) -> Self {
+        var f = factory
+        f.name = module.rawValue
+        return make(factory: f)
+    }
 }
