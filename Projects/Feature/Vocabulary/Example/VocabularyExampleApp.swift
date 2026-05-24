@@ -18,10 +18,9 @@ struct VocabularyExampleApp: App {
 }
 
 private struct ContentView: View {
-    @State private var viewModel = VocabularyListViewModel(sessionID: "demo")
-
     var body: some View {
-        Text("VocabularyFeature Example")
-            .task { await viewModel.load() }
+        NavigationStack {
+            VocabularyListView(viewModel: VocabularyListViewModel(sessionID: "demo"))
+        }
     }
 }

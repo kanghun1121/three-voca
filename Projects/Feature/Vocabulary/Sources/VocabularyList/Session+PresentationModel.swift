@@ -8,7 +8,7 @@ extension Session {
         return VocabularyListPresentationModel(
             modeLabel: "단어 보기 모드",
             wordCountText: "\(words.count)개 단어",
-            sessionInfoText: "Level \(level) · Session \(sessionNumber) · \(scoreText)",
+            sessionInfoText: "Level \(level) · Session \(sessionNumber)",
             bottomBarText: "청록 톤 — \(scoreText)",
             words: words.map { word in
                 VocabularyListPresentationModel.WordRow(
