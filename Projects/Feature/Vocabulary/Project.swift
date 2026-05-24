@@ -11,6 +11,7 @@ let project = Project.makeModule(
             dependencies: [
                 .feature(interface: .vocabulary),
                 .dependencies,
+                .designSystem,
             ]
         )),
         .feature(testing: .vocabulary, factory: .init(
@@ -40,6 +41,7 @@ let project = Project.makeModule(
                 .feature(implements: .vocabulary),
                 .feature(testing: .vocabulary),
                 .dependencies,
+                .designSystem,
             ]
         )),
     ],
