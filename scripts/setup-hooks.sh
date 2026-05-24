@@ -7,7 +7,7 @@ HOOKS_DIR="$PROJECT_ROOT/.git/hooks"
 
 install_hook() {
   local name="$1"
-  local source="$PROJECT_ROOT/.claude/hooks/${name}.sh"
+  local source="$PROJECT_ROOT/hooks/${name}.sh"
   local target="$HOOKS_DIR/$name"
 
   if [ ! -f "$source" ]; then

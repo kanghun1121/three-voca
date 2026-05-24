@@ -1,6 +1,6 @@
 #!/bin/bash
 # pre-commit hook — Swift 파일 변경 시 테스트를 실행하고 실패하면 커밋을 차단한다.
-# 설치: 이 파일은 .git/hooks/pre-commit 에서 호출된다.
+# 설치: 이 파일은 .git/hooks/pre-commit 에서 호출된다. (bash scripts/setup-hooks.sh)
 # 건너뛰기: git commit --no-verify
 
 PROJECT_ROOT="$(git rev-parse --show-toplevel)"
