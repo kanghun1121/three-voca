@@ -25,6 +25,7 @@ bash scripts/start-task.sh <task-id> <description>
 | 격리 브랜치 | `.claude/worktrees/<task-id>/` |
 | 로그 디렉토리 | `logs/<task-id>/` |
 
+계획서를 작성하기 전에 **`AGENTS.md`를 확인**하고, 이번 작업에 필요한 문서를 읽는다.  
 **계획서를 먼저 작성한다.** 계획 없이 코드를 먼저 작성하지 않는다.
 
 ---
@@ -37,7 +38,6 @@ bash scripts/start-task.sh <task-id> <description>
 cd .claude/worktrees/<task-id>
 ```
 
-- `ARCHITECTURE.md` → 관련 `docs/` 문서를 순서대로 읽는다.
 - `master`, `dev` 브랜치에서 직접 코드를 수정하지 않는다.
 - 계획서(`PLAN.md`)에 없는 코드는 추가하지 않는다.
 
