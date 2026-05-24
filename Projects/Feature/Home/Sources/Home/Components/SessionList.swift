@@ -8,7 +8,7 @@ struct SessionList: View {
             ForEach(sessions) { session in
                 SessionRow(presentationModel: session)
                     .padding(.horizontal, 16)
-                    .padding(.vertical, 12)
+                    .padding(.vertical, 10)
             }
         }
         .padding(.bottom, 8)
