@@ -75,7 +75,7 @@ public extension VocabularyLibrary {
     static let previewFixture: VocabularyLibrary = {
         let level1Completed: [SessionProgress] = [
             SessionProgress(
-                id: "session_l1_s1",
+                id: "1",
                 sessionNumber: 1,
                 totalWords: 20,
                 status: .completed,
@@ -84,7 +84,7 @@ public extension VocabularyLibrary {
                 wordsCompleted: 20
             ),
             SessionProgress(
-                id: "session_l1_s2",
+                id: "2",
                 sessionNumber: 2,
                 totalWords: 20,
                 status: .completed,
@@ -93,7 +93,7 @@ public extension VocabularyLibrary {
                 wordsCompleted: 20
             ),
             SessionProgress(
-                id: "session_l1_s3",
+                id: "3",
                 sessionNumber: 3,
                 totalWords: 20,
                 status: .completed,
@@ -102,7 +102,7 @@ public extension VocabularyLibrary {
                 wordsCompleted: 20
             ),
             SessionProgress(
-                id: "session_l1_s4",
+                id: "4",
                 sessionNumber: 4,
                 totalWords: 20,
                 status: .completed,
@@ -113,7 +113,7 @@ public extension VocabularyLibrary {
         ]
         let level1Sessions: [SessionProgress] = level1Completed + (5...42).map { i in
             SessionProgress(
-                id: "session_l1_s\(i)",
+                id: "\(i)",
                 sessionNumber: i,
                 totalWords: i == 42 ? 5 : 20,
                 status: .notStarted,
@@ -142,7 +142,7 @@ public extension VocabularyLibrary {
                 completedSessions: 0,
                 sessions: (1...39).map { i in
                     SessionProgress(
-                        id: "session_l2_s\(i)",
+                        id: "\(42 + i)",
                         sessionNumber: i,
                         totalWords: i == 39 ? 12 : 20,
                         status: .notStarted,
@@ -161,7 +161,7 @@ public extension VocabularyLibrary {
                 completedSessions: 0,
                 sessions: (1...99).map { i in
                     SessionProgress(
-                        id: "session_l3_s\(i)",
+                        id: "\(81 + i)",
                         sessionNumber: i,
                         totalWords: i == 99 ? 7 : 20,
                         status: .notStarted,
@@ -180,7 +180,7 @@ public extension VocabularyLibrary {
                 completedSessions: 0,
                 sessions: (1...64).map { i in
                     SessionProgress(
-                        id: "session_l4_s\(i)",
+                        id: "\(180 + i)",
                         sessionNumber: i,
                         totalWords: i == 64 ? 11 : 20,
                         status: .notStarted,
