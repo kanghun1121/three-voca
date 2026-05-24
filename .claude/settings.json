@@ -5,7 +5,6 @@
       "Read(**/.env)",
       "Read(*.env)",
       "Bash(rm -rf *)",
-      "Bash(git push *)",
       "Write(**/*.sh)",
       "Edit(**/*.sh)"
     ]

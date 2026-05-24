@@ -75,6 +75,7 @@ shrimp_data/
 .claude/settings.local.json
 .claude/worktrees/
 .claude/logs/
+.claude/exec-plans/
 
 ### 시크릿 ###
 Projects/Core/Example/Secrets.xcconfig
