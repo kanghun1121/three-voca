@@ -1,3 +1,4 @@
+import DesignSystem
 import SwiftUI
 
 struct SessionInfo: View {
@@ -7,10 +8,11 @@ struct SessionInfo: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 2) {
             Text(title)
-                .font(.headline)
+                .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 14))
+                .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
             Text(subtitle)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .font(DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 12))
+                .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
         }
     }
 }
