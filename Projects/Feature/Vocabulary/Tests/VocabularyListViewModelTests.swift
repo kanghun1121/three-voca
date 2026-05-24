@@ -1,0 +1,93 @@
+import Dependencies
+import XCTest
+
+@testable import FeatureVocabulary
+
+@MainActor
+final class VocabularyListViewModelTests: XCTestCase {
+    func test_load_성공시_viewState가_loaded로_전환된다() async {
+        let vm = withDependencies {
+            $0.sessionClient = .previewValue
+        } operation: {
+            VocabularyListViewModel(sessionID: "t")
+        }
+
+        await vm.load()
+
+        guard case .loaded = vm.viewState else {
+            XCTFail("viewState가 .loaded여야 합니다. 실제: \(vm.viewState)")
+            return
+        }
+    }
+
+    func test_load_실패시_viewState가_error로_전환된다() async {
+        let vm = withDependencies {
+            $0.sessionClient.fetchSessionDetail = { _ in throw MockError.stub }
+        } operation: {
+            VocabularyListViewModel(sessionID: "t")
+        }
+
+        await vm.load()
+
+        guard case .error = vm.viewState else {
+            XCTFail("viewState가 .error여야 합니다. 실제: \(vm.viewState)")
+            return
+        }
+    }
+
+    func test_load_성공시_단어목록이_비어있지_않다() async {
+        let vm = withDependencies {
+            $0.sessionClient = .previewValue
+        } operation: {
+            VocabularyListViewModel(sessionID: "t")
+        }
+
+        await vm.load()
+
+        if case .loaded(let pm) = vm.viewState {
+            XCTAssertFalse(pm.words.isEmpty)
+            XCTAssertTrue(pm.wordCountText.contains("개 단어"))
+        } else {
+            XCTFail("viewState가 .loaded여야 합니다.")
+        }
+    }
+
+    func test_세션_단어수_텍스트가_올바르게_표시된다() async {
+        let vm = withDependencies {
+            $0.sessionClient = .previewValue
+        } operation: {
+            VocabularyListViewModel(sessionID: "t")
+        }
+
+        await vm.load()
+
+        if case .loaded(let pm) = vm.viewState {
+            // previewWithRecord는 15개 단어를 가짐
+            XCTAssertEqual(pm.wordCountText, "15개 단어")
+            XCTAssertEqual(pm.words.count, 15)
+        } else {
+            XCTFail("viewState가 .loaded여야 합니다.")
+        }
+    }
+
+    func test_세션정보_텍스트가_Level_Session을_포함한다() async {
+        let vm = withDependencies {
+            $0.sessionClient = .previewValue
+        } operation: {
+            VocabularyListViewModel(sessionID: "t")
+        }
+
+        await vm.load()
+
+        if case .loaded(let pm) = vm.viewState {
+            XCTAssertTrue(pm.sessionInfoText.contains("Level"))
+            XCTAssertTrue(pm.sessionInfoText.contains("Session"))
+        } else {
+            XCTFail("viewState가 .loaded여야 합니다.")
+        }
+    }
+}
+
+private enum MockError: Error {
+    case stub
+}
