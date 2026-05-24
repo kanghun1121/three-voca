@@ -38,10 +38,10 @@ final class SessionMappingTests: XCTestCase {
         XCTAssertEqual(state.title, "15개 단어")
     }
 
-    func test_moreText_shows_remaining_after_preview() {
+    func test_words_contains_all_words() {
         let session = Session.previewWithRecord(id: "t")
-        let state = session.toSessionDetailViewState(previewLimit: 4)
-        XCTAssertEqual(state.moreText, "+ 11 more")
+        let state = session.toSessionDetailViewState()
+        XCTAssertEqual(state.words.count, 15)
     }
 
     func test_nilRecord_returns_nilRecordViewState() {
@@ -60,8 +60,8 @@ final class SessionMappingTests: XCTestCase {
         let session = Session.previewWithRecord(id: "t")
         let inevitableWord = session.words.first { $0.term == "inevitable" }!
         XCTAssertEqual(inevitableWord.definitions.count, 2)
-        let state = session.toSessionDetailViewState(previewLimit: 15)
-        let item = state.previewItems.first { $0.id == "word_004" }!
+        let state = session.toSessionDetailViewState()
+        let item = state.words.first { $0.id == "word_004" }!
         XCTAssertEqual(item.primaryMeaning, "불가피한, 필연적인")
     }
 }

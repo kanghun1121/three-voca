@@ -1,3 +1,4 @@
+import DesignSystem
 import SwiftUI
 
 struct RecordCard: View {
@@ -6,8 +7,8 @@ struct RecordCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("학습 기록")
-                .font(.subheadline)
-                .fontWeight(.semibold)
+                .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 14))
+                .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
 
             if let record {
                 RecordGrid(record: record)
@@ -41,8 +42,8 @@ private struct RecordGrid: View {
 private struct EmptyRecordPlaceholder: View {
     var body: some View {
         Text("아직 학습 기록이 없습니다.")
-            .font(.subheadline)
-            .foregroundStyle(.secondary)
+            .font(DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 14))
+            .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
             .frame(maxWidth: .infinity, alignment: .center)
             .padding(.vertical, 8)
     }
@@ -55,11 +56,11 @@ private struct RecordCell: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(label)
-                .font(.caption)
-                .foregroundStyle(.secondary)
+                .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 12))
+                .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
             Text(value)
-                .font(.subheadline)
-                .fontWeight(.semibold)
+                .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 16))
+                .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
         }
     }
 }

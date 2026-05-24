@@ -1,0 +1,37 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(**/*.xcconfig)",
+      "Read(**/.env)",
+      "Read(*.env)",
+      "Bash(rm -rf *)",
+      "Bash(git push *)",
+      "Write(**/*.sh)",
+      "Edit(**/*.sh)"
+    ]
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/kanghun/Desktop/FiveVoca/.claude/hooks/verify-build.sh",
+            "timeout": 120
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/kanghun/Desktop/FiveVoca/.claude/hooks/phase-guard.sh"
+          }
+        ]
+      }
+    ]
+  }
+}

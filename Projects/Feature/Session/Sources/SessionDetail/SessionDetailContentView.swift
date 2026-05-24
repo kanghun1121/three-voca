@@ -14,12 +14,12 @@ struct SessionDetailContentView: View {
                 RecordCard(record: state.record)
                 WordPreviewSection(
                     title: state.wordsSectionTitle,
-                    items: state.previewItems,
-                    moreText: state.moreText
+                    words: state.words
                 )
                 ActionButtonsSection()
             }
-            .padding()
+            .padding(.horizontal, 20)
+            .padding(.vertical)
         }
         .scrollIndicators(.hidden)
     }

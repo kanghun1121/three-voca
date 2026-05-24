@@ -2,23 +2,20 @@ import DomainInterface
 import Foundation
 
 extension Session {
-    func toSessionDetailViewState(previewLimit: Int = 4) -> SessionDetailViewState {
-        let preview = Array(words.prefix(previewLimit))
-        let remaining = words.count - preview.count
+    func toSessionDetailViewState() -> SessionDetailViewState {
         return SessionDetailViewState(
             levelHeader: "LEVEL \(level) · SESSION \(sessionNumber)",
             title: "\(words.count)개 단어",
             subtitle: "약 \(estimatedDurationMinutes)분 소요 · \(cefrLevel) 수준",
             record: record?.toRecordViewState(),
             wordsSectionTitle: "이번 세션의 단어 (\(words.count))",
-            previewItems: preview.map {
+            words: words.map {
                 SessionDetailViewState.WordPreview(
                     id: $0.id,
                     term: $0.term,
                     primaryMeaning: $0.definitions.first?.meaning ?? ""
                 )
-            },
-            moreText: remaining > 0 ? "+ \(remaining) more" : nil
+            }
         )
     }
 

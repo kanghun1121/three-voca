@@ -19,6 +19,5 @@ struct SessionDetailViewState: Equatable {
     let subtitle: String
     let record: Record?
     let wordsSectionTitle: String
-    let previewItems: [WordPreview]
-    let moreText: String?
+    let words: [WordPreview]
 }

@@ -1,0 +1,54 @@
+# SwiftUINavigation — pointfreeco/swift-navigation
+# https://github.com/pointfreeco/swift-navigation
+
+## 핵심 개념
+
+`enum Destination`으로 내비게이션 상태를 단일 프로퍼티로 관리한다.
+`@CasePathable`이 있어야 View에서 특정 case만 바인딩으로 꺼낼 수 있다.
+
+## ViewModel 선언
+
+```swift
+@Observable
+final class HomeViewModel {
+    var destination: Destination?
+
+    @CasePathable
+    enum Destination {
+        case session(SessionDetailViewModel)  // push
+        case deleteAlert                      // alert
+        case editSheet(EditViewModel)         // sheet
+    }
+
+    func sessionTapped(id: Int) {
+        destination = .session(SessionDetailViewModel(sessionID: String(id)))
+    }
+}
+```
+
+## View 연결
+
+```swift
+// Push 내비게이션
+.navigationDestination(item: $viewModel.destination.session) { detailVM in
+    SessionDetailView(viewModel: detailVM)
+}
+
+// Sheet
+.sheet(item: $viewModel.destination.editSheet) { editVM in
+    EditView(viewModel: editVM)
+}
+
+// Alert
+.alert("삭제할까요?", isPresented: Binding($viewModel.destination.deleteAlert)) {
+    Button("삭제", role: .destructive) { viewModel.confirmDelete() }
+    Button("취소", role: .cancel) {}
+}
+```
+
+## 주의사항
+
+- `@CasePathable` 없이 `$viewModel.destination.session` 문법을 쓰면 컴파일 에러가 아닌 **런타임 오작동**이 발생한다. 반드시 붙인다.
+- 다음 화면의 ViewModel을 case 연관값으로 넘긴다. View가 ViewModel을 직접 생성하지 않는다.
+- `destination = nil`로 설정하면 해당 내비게이션이 dismiss된다. 별도 dismiss 로직 불필요.
+- 한 ViewModel에 여러 내비게이션이 있어도 `destination` 하나로 관리 — 동시에 두 화면이 열리는 상태가 불가능하게 강제된다.

@@ -1,3 +1,4 @@
+import DesignSystem
 import SwiftUI
 
 struct SessionHeaderSection: View {
@@ -8,15 +9,14 @@ struct SessionHeaderSection: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(levelHeader)
-                .font(.caption)
-                .fontWeight(.semibold)
-                .foregroundStyle(.indigo)
+                .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 14))
+                .foregroundStyle(DesignSystemAsset.primary.swiftUIColor)
             Text(title)
-                .font(.largeTitle)
-                .fontWeight(.bold)
+                .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 33))
+                .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
             Text(subtitle)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .font(DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 15))
+                .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
         }
     }
 }

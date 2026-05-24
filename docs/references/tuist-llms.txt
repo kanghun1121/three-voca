@@ -1,0 +1,113 @@
+# Tuist — tuist/tuist
+# https://github.com/tuist/tuist
+
+## 이 프로젝트의 Manifest 구조
+
+```
+Workspace.swift          ← 워크스페이스 루트
+Tuist.swift              ← Tuist 버전, 플러그인 선언
+Plugins/DependencyPlugin ← 커스텀 타겟/의존성 헬퍼
+Projects/
+  App/Project.swift
+  Feature/Project.swift         ← Feature aggregator
+  Feature/Home/Project.swift    ← 모듈별 5-target 선언
+  Feature/Session/Project.swift
+  Domain/Project.swift
+  Core/Project.swift
+  Shared/Project.swift
+  Shared/DesignSystem/Project.swift
+```
+
+## 새 Feature 모듈 추가 시 필수 수정 파일
+
+1. `Plugins/DependencyPlugin/ProjectDescriptionHelpers/ModulePath/ModulePath+Feature.swift` — enum case 추가
+2. `Plugins/DependencyPlugin/ProjectDescriptionHelpers/Dependency+Modules.swift` — shorthand 추가
+3. `Projects/Feature/<ModuleName>/Project.swift` — 5-target 선언 (신규 생성)
+4. `Projects/Feature/Project.swift` — aggregator에 새 모듈 추가
+
+**수정 후 반드시 `tuist generate` 실행.**
+
+## Target 선언 — 이 프로젝트 패턴
+
+DependencyPlugin의 헬퍼 함수를 사용한다. 직접 `Target.target()`을 쓰지 않는다.
+
+```swift
+// Projects/Feature/Home/Project.swift
+import ProjectDescription
+import DependencyPlugin
+
+let project = Project.makeModule(
+    name: ModulePath.Feature.name + ModulePath.Feature.home.rawValue,
+    targets: [
+        .feature(interface: .home, factory: .init(
+            dependencies: [.domainInterface]
+        )),
+        .feature(implements: .home, factory: .init(
+            dependencies: [
+                .feature(interface: .home),
+                .dependencies,
+                .designSystem,
+            ]
+        )),
+        .feature(testing: .home, factory: .init(
+            dependencies: [.feature(interface: .home)]
+        )),
+        .feature(tests: .home, factory: .init(
+            dependencies: [
+                .feature(testing: .home),
+                .feature(implements: .home),
+                .dependencies,
+            ]
+        )),
+        .feature(example: .home, factory: .init(
+            dependencies: [
+                .feature(implements: .home),
+                .feature(testing: .home),
+                .dependencies,
+            ]
+        )),
+    ]
+)
+```
+
+## TargetDependency 레퍼런스
+
+```swift
+// 레이어 aggregator
+.feature          // Projects/Feature 전체
+.domain           // Domain Implements
+.domainInterface  // Domain Interface만
+.core
+.shared
+
+// Feature 서브모듈
+.feature(interface: .home)    // FeatureHomeInterface
+.feature(implements: .home)   // FeatureHome
+.feature(testing: .home)      // FeatureHomeTesting
+
+// Shared 서브모듈
+.designSystem                 // DesignSystem
+
+// SPM External
+.dependencies                 // swift-dependencies
+.swiftUINavigation            // SwiftUINavigation
+
+// 프로젝트 간 참조 (직접 사용 시)
+.project(target: "TargetName", path: .relativeToRoot("Projects/..."))
+
+// 외부 패키지 (직접 사용 시)
+.external(name: "PackageName")
+```
+
+## xcconfig로 시크릿 주입
+
+```swift
+settings: .settings(
+    configurations: [
+        .debug(name: "Debug", xcconfig: "Secrets.xcconfig"),
+        .release(name: "Release", xcconfig: "Secrets.xcconfig"),
+    ]
+)
+```
+
+`Secrets.xcconfig`는 `.gitignore`에 포함되며 Claude는 읽지 않는다.
