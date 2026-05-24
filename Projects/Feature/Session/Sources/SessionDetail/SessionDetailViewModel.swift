@@ -5,9 +5,13 @@ import Foundation
 @Observable
 @MainActor
 public final class SessionDetailViewModel {
-    private(set) var state: SessionDetailPresentationModel?
-    private(set) var isLoading: Bool = true
-    private(set) var errorMessage: String?
+    enum ViewState {
+        case loading
+        case loaded(SessionDetailPresentationModel)
+        case error(String)
+    }
+
+    private(set) var viewState: ViewState = .loading
 
     @ObservationIgnored @Dependency(\.sessionClient) private var sessionClient
     private let sessionID: String
@@ -17,13 +21,12 @@ public final class SessionDetailViewModel {
     }
 
     public func load() async {
-        isLoading = true
-        defer { isLoading = false }
+        viewState = .loading
         do {
             let session = try await sessionClient.fetchSessionDetail(sessionID)
-            state = session.toSessionDetailPresentationModel()
+            viewState = .loaded(session.toSessionDetailPresentationModel())
         } catch {
-            errorMessage = "세션 정보를 불러오지 못했습니다."
+            viewState = .error("세션 정보를 불러오지 못했습니다.")
         }
     }
 }

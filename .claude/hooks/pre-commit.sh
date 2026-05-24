@@ -3,7 +3,12 @@
 # 설치: 이 파일은 .git/hooks/pre-commit 에서 호출된다. (bash scripts/setup-hooks.sh)
 # 건너뛰기: git commit --no-verify
 
-PROJECT_ROOT="$(git rev-parse --show-toplevel)"
+  GIT_COMMON="$(git rev-parse --git-common-dir)"
+  if [ "$GIT_COMMON" = ".git" ]; then
+    PROJECT_ROOT="$(git rev-parse --show-toplevel)"
+  else
+    PROJECT_ROOT="$(cd "$GIT_COMMON/.." && pwd)"
+  fi
 
 # Swift 파일 변경이 없으면 스킵
 git diff --cached --name-only | grep -q "\.swift$" || exit 0
