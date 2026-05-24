@@ -10,7 +10,7 @@ PROJECT_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 LOG_DIR="$PROJECT_ROOT/.claude/logs/$TASK_ID"
 WORKSPACE="$PROJECT_ROOT/FiveVoca.xcworkspace"
 SCHEME="FiveVoca"
-TEST_SCHEME="FeatureSession"
+TEST_SCHEME="AllTest"
 DESTINATION="platform=iOS Simulator,OS=18.6,name=iPhone 16"
 FAILED=0
 

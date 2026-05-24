@@ -13,7 +13,7 @@ echo "   (건너뛰려면: git commit --no-verify)"
 echo ""
 
 WORKSPACE="$PROJECT_ROOT/FiveVoca.xcworkspace"
-SCHEME="FeatureSession"
+SCHEME="AllTest"
 DESTINATION="platform=iOS Simulator,OS=18.6,name=iPhone 16"
 
 TEST_OUTPUT=$(xcodebuild test \
