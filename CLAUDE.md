@@ -21,11 +21,11 @@ bash scripts/start-task.sh <task-id> <description>
 
 | 산출물 | 경로 |
 |---|---|
-| 계획서 | `exec-plans/active/<task-id>/PLAN.md` |
+| 계획서 | `.claude/exec-plans/active/<task-id>/PLAN.md` |
 | 격리 브랜치 | `.claude/worktrees/<task-id>/` |
-| 로그 디렉토리 | `logs/<task-id>/` |
+| 로그 디렉토리 | `.claude/logs/<task-id>/` |
 
-계획서를 작성하기 전에 **`AGENTS.md`를 확인**하고, 이번 작업에 필요한 문서를 읽는다.  
+계획서를 작성하기 전에 **`AGENTS.md`를 확인**하고, 이번 작업에 필요한 문서를 읽는다.
 **계획서를 먼저 작성한다.** 계획 없이 코드를 먼저 작성하지 않는다.
 
 ---
@@ -67,7 +67,7 @@ bash scripts/verify-task.sh <task-id>
 - [ ] 단위 테스트 전체 통과
 - [ ] 아키텍처 의존성 (역방향 import 없음)
 
-검증을 통과하지 못하면 커밋하지 않는다. 원인을 수정한 뒤 재시도한다.  
+검증을 통과하지 못하면 커밋하지 않는다. 원인을 수정한 뒤 재시도한다.
 상세 검증은 `docs/VERIFICATION.md`의 3-Layer 프로세스를 따른다.
 
 ---
@@ -77,6 +77,5 @@ bash scripts/verify-task.sh <task-id>
 `git:commit` 스킬 또는 컨벤셔널 커밋 메시지로 커밋한다.
 
 **pre-commit 훅이 Swift 파일 변경 시 테스트를 자동 실행한다.** 실패 시 커밋이 차단된다.  
-긴급 건너뛰기: `git commit --no-verify` (남용 금지)
 
-완료 후 `exec-plans/active/<task-id>/PLAN.md` 를 `exec-plans/completed/` 로 이동한다.
+완료 후 `.claude/exec-plans/active/<task-id>/PLAN.md` 를 `.claude/exec-plans/completed/` 로 이동한다.

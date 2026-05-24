@@ -8,7 +8,7 @@
 
 | 문서 | 내용 |
 |---|---|
-| `ARCHITECTURE.md` | 레이어 구조, 의존성 방향, 3-Layer 데이터 모델, Navigation / DI 패턴 |
+| `docs/ARCHITECTURE.md` | 레이어 구조, 의존성 방향, 3-Layer 데이터 모델, Navigation / DI 패턴 |
 
 ---
 

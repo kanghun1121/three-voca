@@ -30,7 +30,7 @@ else
 fi
 
 # ── 2. EXEC_PLAN 생성 ──────────────────────────────────────────
-PLAN_DIR="$PROJECT_ROOT/exec-plans/active/$TASK_ID"
+PLAN_DIR="$PROJECT_ROOT/.claude/exec-plans/active/$TASK_ID"
 mkdir -p "$PLAN_DIR"
 
 if [ ! -f "$PLAN_DIR/PLAN.md" ]; then
@@ -52,7 +52,7 @@ $DESCRIPTION
 
 ## 사전 검토
 
-- [ ] ARCHITECTURE.md 검토 완료
+- [ ] docs/ARCHITECTURE.md 검토 완료
 - [ ] 관련 docs/ 문서 검토 완료
 - [ ] 영향받는 모듈/파일 파악 완료
 
@@ -88,7 +88,7 @@ else
 fi
 
 # ── 3. 로그 디렉토리 생성 ──────────────────────────────────────
-LOG_DIR="$PROJECT_ROOT/logs/$TASK_ID"
+LOG_DIR="$PROJECT_ROOT/.claude/logs/$TASK_ID"
 mkdir -p "$LOG_DIR"
 
 # ── 완료 안내 ──────────────────────────────────────────────────
@@ -97,12 +97,12 @@ echo "✅ 작업 환경 생성 완료"
 echo ""
 echo "  브랜치   : $TASK_ID  (← $BASE_BRANCH)"
 echo "  worktree : $WORKTREE_PATH"
-echo "  exec-plan: exec-plans/active/$TASK_ID/PLAN.md"
-echo "  logs     : logs/$TASK_ID/"
+echo "  exec-plan: .claude/exec-plans/active/$TASK_ID/PLAN.md"
+echo "  logs     : .claude/logs/$TASK_ID/"
 echo ""
 echo "▶ 다음 단계:"
-echo "  1. exec-plans/active/$TASK_ID/PLAN.md 에 단계별 계획을 작성한다"
-echo "  2. ARCHITECTURE.md → 관련 docs/ 문서를 순서대로 읽는다"
+echo "  1. .claude/exec-plans/active/$TASK_ID/PLAN.md 에 단계별 계획을 작성한다"
+echo "  2. AGENTS.md 를 확인하고 필요한 문서를 읽는다"
 echo "  3. Worktree에서 구현한다:"
 echo "       cd $WORKTREE_PATH"
 echo "  4. 검증:"

@@ -7,7 +7,7 @@
 
 TASK_ID="${1:-unknown}"
 PROJECT_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-LOG_DIR="$PROJECT_ROOT/logs/$TASK_ID"
+LOG_DIR="$PROJECT_ROOT/.claude/logs/$TASK_ID"
 WORKSPACE="$PROJECT_ROOT/FiveVoca.xcworkspace"
 SCHEME="FiveVoca"
 DESTINATION="platform=iOS Simulator,OS=latest,name=iPhone 16"
