@@ -4,13 +4,13 @@ import XCTest
 
 @testable import FeatureHome
 
-final class HomeViewStateTests: XCTestCase {
+final class HomePresentationModelTests: XCTestCase {
 
-    // MARK: - ViewState 매핑
+    // MARK: - PresentationModel 매핑
 
-    func test_toViewState_lowAccuracyIcon() {
-        let viewState = VocabularyLibrary.previewFixture.toHomeViewState()
-        let sessions = viewState.levels[0].sessions
+    func test_toPresentationModel_lowAccuracyIcon() {
+        let model = VocabularyLibrary.previewFixture.toHomePresentationModel()
+        let sessions = model.levels[0].sessions
         XCTAssertEqual(sessions[0].icon, .completedHigh)   // 92%
         XCTAssertEqual(sessions[1].icon, .completedHigh)   // 87%
         XCTAssertEqual(sessions[2].icon, .completedLow)    // 58%
@@ -18,17 +18,48 @@ final class HomeViewStateTests: XCTestCase {
         XCTAssertEqual(sessions[4].icon, .notStarted)
     }
 
-    func test_toViewState_difficultyFormat() {
-        let viewState = VocabularyLibrary.previewFixture.toHomeViewState()
-        XCTAssertEqual(viewState.levels[0].subtitle, "A1·A2 · 4/13")
-        XCTAssertFalse(viewState.levels[0].subtitle.contains("-"))
+    func test_toPresentationModel_difficulty_rawValue() {
+        let model = VocabularyLibrary.previewFixture.toHomePresentationModel()
+        XCTAssertEqual(model.levels[0].difficulty, "A1-A2")
     }
 
-    func test_toViewState_progressRatio() {
-        let viewState = VocabularyLibrary.previewFixture.toHomeViewState()
-        let ratio = viewState.levels[0].progressRatio
+    func test_toPresentationModel_completedAndTotalSessions() {
+        let model = VocabularyLibrary.previewFixture.toHomePresentationModel()
+        XCTAssertEqual(model.levels[0].completedSessions, 4)
+        XCTAssertEqual(model.levels[0].totalSessions, 13)
+    }
+
+    func test_toPresentationModel_progressRatio() {
+        let model = VocabularyLibrary.previewFixture.toHomePresentationModel()
+        let ratio = model.levels[0].progressRatio
         XCTAssertEqual(ratio, 4.0 / 13.0, accuracy: 0.001)
-        XCTAssertEqual(viewState.levels[1].progressRatio, 0.0)
+        XCTAssertEqual(model.levels[1].progressRatio, 0.0)
+    }
+
+    func test_toPresentationModel_level_mapped() {
+        let model = VocabularyLibrary.previewFixture.toHomePresentationModel()
+        XCTAssertEqual(model.levels[0].level, 1)
+        XCTAssertEqual(model.levels[1].level, 2)
+    }
+
+    func test_toPresentationModel_sessionNumber_mapped() {
+        let model = VocabularyLibrary.previewFixture.toHomePresentationModel()
+        let sessions = model.levels[0].sessions
+        XCTAssertEqual(sessions[0].sessionNumber, 1)
+        XCTAssertEqual(sessions[1].sessionNumber, 2)
+    }
+
+    func test_toPresentationModel_accuracyPercent_completed() {
+        let model = VocabularyLibrary.previewFixture.toHomePresentationModel()
+        let sessions = model.levels[0].sessions
+        XCTAssertEqual(sessions[0].accuracyPercent, 92)
+        XCTAssertEqual(sessions[2].accuracyPercent, 58)
+    }
+
+    func test_toPresentationModel_accuracyPercent_notStarted_isNil() {
+        let model = VocabularyLibrary.previewFixture.toHomePresentationModel()
+        let sessions = model.levels[0].sessions
+        XCTAssertNil(sessions[4].accuracyPercent)
     }
 
     // MARK: - ViewModel

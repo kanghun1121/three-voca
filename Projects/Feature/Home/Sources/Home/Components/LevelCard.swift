@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct LevelCard: View {
-    let viewState: LevelCardViewState
+    let presentationModel: LevelCardPresentationModel
     let isExpanded: Bool
     let action: () -> Void
     let onSessionTapped: (Int) -> Void
@@ -9,14 +9,14 @@ struct LevelCard: View {
     var body: some View {
         Button(action: action) {
             VStack(spacing: 0) {
-                HeaderRow(viewState: viewState, isExpanded: isExpanded)
-                ProgressBar(ratio: viewState.progressRatio)
+                HeaderRow(presentationModel: presentationModel, isExpanded: isExpanded)
+                ProgressBar(ratio: presentationModel.progressRatio)
                     .padding(.horizontal, 16)
                     .padding(.bottom, 12)
                 if isExpanded {
                     Divider()
                         .padding(.horizontal, 16)
-                    SessionList(sessions: viewState.sessions, onSessionTapped: onSessionTapped)
+                    SessionList(sessions: presentationModel.sessions, onSessionTapped: onSessionTapped)
                 }
             }
             .background(Color(.systemBackground))
@@ -33,20 +33,19 @@ struct LevelCard: View {
     }
 
     struct HeaderRow: View {
-        let viewState: LevelCardViewState
+        let presentationModel: LevelCardPresentationModel
         let isExpanded: Bool
+
+        private var badgeText: String { "L\(presentationModel.level)" }
+        private var subtitle: String {
+            let diff = presentationModel.difficulty.replacingOccurrences(of: "-", with: "·")
+            return "\(diff) · \(presentationModel.completedSessions)/\(presentationModel.totalSessions)"
+        }
 
         var body: some View {
             HStack(spacing: 10) {
-                LevelBadge(text: viewState.levelBadgeText, color: viewState.levelBadgeColor)
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(viewState.name)
-                        .font(.subheadline)
-                        .bold()
-                    Text(viewState.subtitle)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
+                LevelBadge(text: badgeText, color: presentationModel.levelBadgeColor)
+                LevelInfo(name: presentationModel.name, subtitle: subtitle)
                 Spacer()
                 Image(systemName: isExpanded ? "chevron.down" : "chevron.right")
                     .font(.caption)
@@ -83,7 +82,7 @@ struct LevelCard: View {
     }
 
     struct SessionList: View {
-        let sessions: [SessionRowViewState]
+        let sessions: [SessionRowPresentationModel]
         let onSessionTapped: (Int) -> Void
 
         var body: some View {
@@ -92,7 +91,7 @@ struct LevelCard: View {
                     Button {
                         onSessionTapped(session.id)
                     } label: {
-                        SessionRow(viewState: session)
+                        SessionRow(presentationModel: session)
                             .padding(.horizontal, 16)
                             .padding(.vertical, 10)
                     }
