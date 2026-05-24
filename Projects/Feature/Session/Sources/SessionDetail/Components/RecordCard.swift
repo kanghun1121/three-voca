@@ -2,7 +2,7 @@ import DesignSystem
 import SwiftUI
 
 struct RecordCard: View {
-    let record: SessionDetailViewState.Record?
+    let record: SessionDetailPresentationModel.Record?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -23,7 +23,7 @@ struct RecordCard: View {
 }
 
 private struct RecordGrid: View {
-    let record: SessionDetailViewState.Record
+    let record: SessionDetailPresentationModel.Record
 
     var body: some View {
         LazyVGrid(
@@ -33,8 +33,8 @@ private struct RecordGrid: View {
         ) {
             RecordCell(label: "처음 완료", value: record.firstCompletedDateText)
             RecordCell(label: "마지막 학습", value: record.lastStudiedRelativeText)
-            RecordCell(label: "복습 횟수", value: record.reviewCountText)
-            RecordCell(label: "평균 정답률", value: record.averageAccuracyText)
+            RecordCell(label: "복습 횟수", value: "\(record.reviewCount)회")
+            RecordCell(label: "평균 정답률", value: "\(record.averageAccuracyPercent)%")
         }
     }
 }

@@ -1,11 +1,11 @@
 import Foundation
 
-struct SessionDetailViewState: Equatable {
+struct SessionDetailPresentationModel: Equatable {
     struct Record: Equatable {
         let firstCompletedDateText: String
         let lastStudiedRelativeText: String
-        let reviewCountText: String
-        let averageAccuracyText: String
+        let reviewCount: Int
+        let averageAccuracyPercent: Int
     }
 
     struct WordPreview: Equatable, Identifiable {
@@ -14,10 +14,11 @@ struct SessionDetailViewState: Equatable {
         let primaryMeaning: String
     }
 
-    let levelHeader: String
-    let title: String
-    let subtitle: String
+    let level: Int
+    let sessionNumber: Int
+    let wordCount: Int
+    let estimatedDurationMinutes: Int
+    let cefrLevel: String
     let record: Record?
-    let wordsSectionTitle: String
     let words: [WordPreview]
 }

@@ -1,24 +1,26 @@
 import Foundation
 
-struct HomeViewState: Equatable {
+struct HomePresentationModel: Equatable {
     let streakDays: Int
-    let levels: [LevelCardViewState]
+    let levels: [LevelCardPresentationModel]
 }
 
-struct LevelCardViewState: Equatable, Identifiable {
+struct LevelCardPresentationModel: Equatable, Identifiable {
     let id: String
-    let levelBadgeText: String
+    let level: Int
     let levelBadgeColor: LevelBadgeColor
     let name: String
-    let subtitle: String
+    let difficulty: String
+    let completedSessions: Int
+    let totalSessions: Int
     let progressRatio: Double
-    let sessions: [SessionRowViewState]
+    let sessions: [SessionRowPresentationModel]
 }
 
-struct SessionRowViewState: Equatable, Identifiable {
+struct SessionRowPresentationModel: Equatable, Identifiable {
     let id: Int
-    let title: String
-    let subtitle: String
+    let sessionNumber: Int
+    let accuracyPercent: Int?
     let icon: SessionIconKind
 }
 

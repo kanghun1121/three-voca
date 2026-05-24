@@ -4,43 +4,35 @@ import Foundation
 private let lowAccuracyThreshold: Double = 0.7
 
 extension VocabularyLibrary {
-    func toHomeViewState() -> HomeViewState {
-        HomeViewState(streakDays: 0, levels: levels.map { $0.toLevelCardViewState() })
+    func toHomePresentationModel() -> HomePresentationModel {
+        HomePresentationModel(streakDays: 0, levels: levels.map { $0.toLevelCardPresentationModel() })
     }
 }
 
 private extension LevelSummary {
-    func toLevelCardViewState() -> LevelCardViewState {
-        LevelCardViewState(
+    func toLevelCardPresentationModel() -> LevelCardPresentationModel {
+        LevelCardPresentationModel(
             id: id,
-            levelBadgeText: "L\(level)",
+            level: level,
             levelBadgeColor: LevelBadgeColor(level: level),
             name: name,
-            subtitle: "\(difficulty.replacingOccurrences(of: "-", with: "·")) · \(completedSessions)/\(totalSessions)",
+            difficulty: difficulty,
+            completedSessions: completedSessions,
+            totalSessions: totalSessions,
             progressRatio: totalSessions == 0 ? 0 : Double(completedSessions) / Double(totalSessions),
-            sessions: sessions.map { $0.toSessionRowViewState() }
+            sessions: sessions.map { $0.toSessionRowPresentationModel() }
         )
     }
 }
 
 private extension SessionProgress {
-    func toSessionRowViewState() -> SessionRowViewState {
-        SessionRowViewState(
+    func toSessionRowPresentationModel() -> SessionRowPresentationModel {
+        SessionRowPresentationModel(
             id: Int(id) ?? 0,
-            title: "Session \(sessionNumber)",
-            subtitle: subtitle,
+            sessionNumber: sessionNumber,
+            accuracyPercent: accuracy.map { Int(round($0 * 100)) },
             icon: iconKind
         )
-    }
-
-    private var subtitle: String {
-        switch status {
-        case .completed:
-            let pct = accuracy.map { Int(round($0 * 100)) } ?? 0
-            return "완료 · \(pct)%"
-        case .notStarted:
-            return "시작 전"
-        }
     }
 
     private var iconKind: SessionIconKind {

@@ -7,7 +7,7 @@ import SwiftUINavigation
 @Observable
 @MainActor
 public final class HomeViewModel {
-    private(set) var state: HomeViewState?
+    private(set) var state: HomePresentationModel?
     private(set) var isLoading: Bool = true
     private(set) var errorMessage: String?
     private(set) var expandedLevelIDs: Set<String> = []
@@ -29,7 +29,7 @@ public final class HomeViewModel {
         defer { isLoading = false }
         do {
             let library = try await homeClient.fetchHomeOverview()
-            state = library.toHomeViewState()
+            state = library.toHomePresentationModel()
         } catch {
             errorMessage = "홈 정보를 불러오지 못했습니다."
         }

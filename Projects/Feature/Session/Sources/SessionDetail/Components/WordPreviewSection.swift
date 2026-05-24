@@ -2,15 +2,15 @@ import DesignSystem
 import SwiftUI
 
 struct WordPreviewSection: View {
-    let title: String
-    let words: [SessionDetailViewState.WordPreview]
+    let wordCount: Int
+    let words: [SessionDetailPresentationModel.WordPreview]
 
     @State private var isExpanded = false
     private let previewLimit = 4
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text(title)
+            Text("이번 세션의 단어 (\(wordCount))")
                 .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 14))
                 .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
                 .tracking(0.26)
@@ -47,7 +47,7 @@ struct WordPreviewSection: View {
 }
 
 private struct WordPreviewRow: View {
-    let item: SessionDetailViewState.WordPreview
+    let item: SessionDetailPresentationModel.WordPreview
 
     var body: some View {
         VStack(spacing: 0) {
@@ -58,7 +58,7 @@ private struct WordPreviewRow: View {
 }
 
 private struct WordPreviewRowContent: View {
-    let item: SessionDetailViewState.WordPreview
+    let item: SessionDetailPresentationModel.WordPreview
 
     var body: some View {
         HStack {

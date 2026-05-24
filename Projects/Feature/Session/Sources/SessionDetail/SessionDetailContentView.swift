@@ -1,21 +1,20 @@
 import SwiftUI
 
 struct SessionDetailContentView: View {
-    let state: SessionDetailViewState
+    let state: SessionDetailPresentationModel
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
                 SessionHeaderSection(
-                    levelHeader: state.levelHeader,
-                    title: state.title,
-                    subtitle: state.subtitle
+                    level: state.level,
+                    sessionNumber: state.sessionNumber,
+                    wordCount: state.wordCount,
+                    estimatedDurationMinutes: state.estimatedDurationMinutes,
+                    cefrLevel: state.cefrLevel
                 )
                 RecordCard(record: state.record)
-                WordPreviewSection(
-                    title: state.wordsSectionTitle,
-                    words: state.words
-                )
+                WordPreviewSection(wordCount: state.wordCount, words: state.words)
                 ActionButtonsSection()
             }
             .padding(.horizontal, 20)

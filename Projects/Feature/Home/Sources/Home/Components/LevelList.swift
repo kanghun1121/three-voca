@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct LevelList: View {
-    let levels: [LevelCardViewState]
+    let levels: [LevelCardPresentationModel]
     let expandedLevelIDs: Set<String>
     let onLevelTapped: (String) -> Void
     let onSessionTapped: (Int) -> Void
@@ -10,7 +10,7 @@ struct LevelList: View {
         LazyVStack(spacing: 12) {
             ForEach(levels) { level in
                 LevelCard(
-                    viewState: level,
+                    presentationModel: level,
                     isExpanded: expandedLevelIDs.contains(level.id),
                     action: { onLevelTapped(level.id) },
                     onSessionTapped: onSessionTapped

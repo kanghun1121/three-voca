@@ -1,12 +1,20 @@
 import SwiftUI
 
 struct SessionRow: View {
-    let viewState: SessionRowViewState
+    let presentationModel: SessionRowPresentationModel
+
+    private var title: String { "Session \(presentationModel.sessionNumber)" }
+    private var subtitle: String {
+        if let pct = presentationModel.accuracyPercent {
+            return "완료 · \(pct)%"
+        }
+        return "시작 전"
+    }
 
     var body: some View {
         HStack(spacing: 12) {
-            SessionStatusIcon(kind: viewState.icon)
-            SessionInfo(title: viewState.title, subtitle: viewState.subtitle)
+            SessionStatusIcon(kind: presentationModel.icon)
+            SessionInfo(title: title, subtitle: subtitle)
             Spacer()
             Image(systemName: "chevron.right")
                 .font(.caption)
@@ -18,28 +26,28 @@ struct SessionRow: View {
 
 #Preview {
     VStack(spacing: 12) {
-        SessionRow(viewState: SessionRowViewState(
+        SessionRow(presentationModel: SessionRowPresentationModel(
             id: 1,
-            title: "Session 1",
-            subtitle: "완료 · 9일 전 · 정답률 92%",
+            sessionNumber: 1,
+            accuracyPercent: 92,
             icon: .completedHigh
         ))
-        SessionRow(viewState: SessionRowViewState(
+        SessionRow(presentationModel: SessionRowPresentationModel(
             id: 2,
-            title: "Session 3",
-            subtitle: "완료 · 6일 전 · 정답률 58%",
+            sessionNumber: 3,
+            accuracyPercent: 58,
             icon: .completedLow
         ))
-        SessionRow(viewState: SessionRowViewState(
+        SessionRow(presentationModel: SessionRowPresentationModel(
             id: 3,
-            title: "Session 5",
-            subtitle: "시작 전",
+            sessionNumber: 5,
+            accuracyPercent: nil,
             icon: .notStarted
         ))
-        SessionRow(viewState: SessionRowViewState(
+        SessionRow(presentationModel: SessionRowPresentationModel(
             id: 4,
-            title: "Session 6",
-            subtitle: "시작 전",
+            sessionNumber: 6,
+            accuracyPercent: nil,
             icon: .notStarted
         ))
     }

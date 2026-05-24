@@ -2,19 +2,21 @@ import DesignSystem
 import SwiftUI
 
 struct SessionHeaderSection: View {
-    let levelHeader: String
-    let title: String
-    let subtitle: String
+    let level: Int
+    let sessionNumber: Int
+    let wordCount: Int
+    let estimatedDurationMinutes: Int
+    let cefrLevel: String
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text(levelHeader)
+            Text("LEVEL \(level) · SESSION \(sessionNumber)")
                 .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 14))
                 .foregroundStyle(DesignSystemAsset.primary.swiftUIColor)
-            Text(title)
+            Text("\(wordCount)개 단어")
                 .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 33))
                 .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
-            Text(subtitle)
+            Text("약 \(estimatedDurationMinutes)분 소요 · \(cefrLevel) 수준")
                 .font(DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 15))
                 .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
         }
