@@ -10,7 +10,8 @@ PROJECT_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 LOG_DIR="$PROJECT_ROOT/.claude/logs/$TASK_ID"
 WORKSPACE="$PROJECT_ROOT/FiveVoca.xcworkspace"
 SCHEME="FiveVoca"
-DESTINATION="platform=iOS Simulator,OS=latest,name=iPhone 16"
+TEST_SCHEME="FeatureSession"
+DESTINATION="platform=iOS Simulator,OS=18.6,name=iPhone 16"
 FAILED=0
 
 mkdir -p "$LOG_DIR"
@@ -52,7 +53,7 @@ log "[ 2/3 ] 테스트 검증..."
 
 TEST_OUTPUT=$(xcodebuild test \
   -workspace "$WORKSPACE" \
-  -scheme "$SCHEME" \
+  -scheme "$TEST_SCHEME" \
   -destination "$DESTINATION" \
   -quiet 2>&1)
 TEST_EXIT=$?
