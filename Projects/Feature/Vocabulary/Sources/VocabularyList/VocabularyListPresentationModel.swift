@@ -11,6 +11,5 @@ struct VocabularyListPresentationModel: Equatable {
     let level: Int
     let sessionNumber: Int
     let wordCount: Int
-    let hasRecord: Bool
     let words: [WordRow]
 }

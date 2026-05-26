@@ -6,7 +6,6 @@ extension Session {
             level: level,
             sessionNumber: sessionNumber,
             wordCount: words.count,
-            hasRecord: record != nil,
             words: words.map { word in
                 VocabularyListPresentationModel.WordRow(
                     id: word.id,
