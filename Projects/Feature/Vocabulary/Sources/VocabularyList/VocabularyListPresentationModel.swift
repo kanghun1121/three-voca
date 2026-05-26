@@ -8,9 +8,9 @@ struct VocabularyListPresentationModel: Equatable {
         let primaryMeaning: String
     }
 
-    let modeLabel: String
-    let wordCountText: String
-    let sessionInfoText: String
-    let bottomBarText: String
+    let level: Int
+    let sessionNumber: Int
+    let wordCount: Int
+    let hasRecord: Bool
     let words: [WordRow]
 }

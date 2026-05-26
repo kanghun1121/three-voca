@@ -46,7 +46,7 @@ final class VocabularyListViewModelTests: XCTestCase {
 
         if case .loaded(let pm) = vm.viewState {
             XCTAssertFalse(pm.words.isEmpty)
-            XCTAssertTrue(pm.wordCountText.contains("개 단어"))
+            XCTAssertGreaterThan(pm.wordCount, 0)
         } else {
             XCTFail("viewState가 .loaded여야 합니다.")
         }
@@ -63,14 +63,14 @@ final class VocabularyListViewModelTests: XCTestCase {
 
         if case .loaded(let pm) = vm.viewState {
             // previewWithRecord는 15개 단어를 가짐
-            XCTAssertEqual(pm.wordCountText, "15개 단어")
+            XCTAssertEqual(pm.wordCount, 15)
             XCTAssertEqual(pm.words.count, 15)
         } else {
             XCTFail("viewState가 .loaded여야 합니다.")
         }
     }
 
-    func test_세션정보_텍스트가_Level_Session을_포함한다() async {
+    func test_세션정보_level과_sessionNumber가_올바르게_매핑된다() async {
         let vm = withDependencies {
             $0.sessionClient = .previewValue
         } operation: {
@@ -80,8 +80,9 @@ final class VocabularyListViewModelTests: XCTestCase {
         await vm.load()
 
         if case .loaded(let pm) = vm.viewState {
-            XCTAssertTrue(pm.sessionInfoText.contains("Level"))
-            XCTAssertTrue(pm.sessionInfoText.contains("Session"))
+            // previewWithRecord: level 1, sessionNumber 2
+            XCTAssertEqual(pm.level, 1)
+            XCTAssertEqual(pm.sessionNumber, 2)
         } else {
             XCTFail("viewState가 .loaded여야 합니다.")
         }

@@ -2,17 +2,17 @@ import DesignSystem
 import SwiftUI
 
 struct VocabularyListHeaderView: View {
-    let modeLabel: String
-    let wordCountText: String
-    let sessionInfoText: String
+    let level: Int
+    let sessionNumber: Int
+    let wordCount: Int
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            ModeLabelBadge(text: modeLabel)
-            Text(wordCountText)
+            ModeLabelBadge()
+            Text("\(wordCount)개 단어")
                 .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 33))
                 .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
-            Text(sessionInfoText)
+            Text("Level \(level) · Session \(sessionNumber)")
                 .font(DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 14))
                 .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
         }
@@ -20,10 +20,8 @@ struct VocabularyListHeaderView: View {
 }
 
 private struct ModeLabelBadge: View {
-    let text: String
-
     var body: some View {
-        Text(text)
+        Text("단어 보기 모드")
             .font(DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 12))
             .foregroundStyle(DesignSystemAsset.primary.swiftUIColor)
             .padding(.horizontal, 10)

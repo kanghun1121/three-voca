@@ -2,11 +2,11 @@ import DesignSystem
 import SwiftUI
 
 struct VocabularyListBottomBar: View {
-    let text: String
+    let hasRecord: Bool
 
     var body: some View {
         HStack {
-            Text(text)
+            Text("청록 톤 — \(hasRecord ? "점수 측정 있음" : "점수 측정 없음")")
                 .font(DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 12))
                 .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
             Spacer()

@@ -8,9 +8,9 @@ struct VocabularyListContentView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
                     VocabularyListHeaderView(
-                        modeLabel: state.modeLabel,
-                        wordCountText: state.wordCountText,
-                        sessionInfoText: state.sessionInfoText
+                        level: state.level,
+                        sessionNumber: state.sessionNumber,
+                        wordCount: state.wordCount
                     )
                     LazyVStack(spacing: 10) {
                         ForEach(state.words) { word in
@@ -22,7 +22,7 @@ struct VocabularyListContentView: View {
                 .padding(.vertical, 16)
             }
             .scrollIndicators(.hidden)
-            VocabularyListBottomBar(text: state.bottomBarText)
+            VocabularyListBottomBar(hasRecord: state.hasRecord)
         }
     }
 }
