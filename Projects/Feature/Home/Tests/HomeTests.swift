@@ -20,19 +20,19 @@ final class HomePresentationModelTests: XCTestCase {
 
     func test_toPresentationModel_difficulty_rawValue() {
         let model = VocabularyLibrary.previewFixture.toHomePresentationModel()
-        XCTAssertEqual(model.levels[0].difficulty, "A1-A2")
+        XCTAssertEqual(model.levels[0].difficulty, "A1")
     }
 
     func test_toPresentationModel_completedAndTotalSessions() {
         let model = VocabularyLibrary.previewFixture.toHomePresentationModel()
         XCTAssertEqual(model.levels[0].completedSessions, 4)
-        XCTAssertEqual(model.levels[0].totalSessions, 13)
+        XCTAssertEqual(model.levels[0].totalSessions, 42)
     }
 
     func test_toPresentationModel_progressRatio() {
         let model = VocabularyLibrary.previewFixture.toHomePresentationModel()
         let ratio = model.levels[0].progressRatio
-        XCTAssertEqual(ratio, 4.0 / 13.0, accuracy: 0.001)
+        XCTAssertEqual(ratio, 4.0 / 42.0, accuracy: 0.001)
         XCTAssertEqual(model.levels[1].progressRatio, 0.0)
     }
 
@@ -74,7 +74,7 @@ final class HomePresentationModelTests: XCTestCase {
         XCTAssertNil(viewModel.state)
         await viewModel.load()
         XCTAssertNotNil(viewModel.state)
-        XCTAssertEqual(viewModel.state?.levels.count, 3)
+        XCTAssertEqual(viewModel.state?.levels.count, 4)
     }
 
     @MainActor
