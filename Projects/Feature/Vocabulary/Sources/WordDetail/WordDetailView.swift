@@ -1,10 +1,10 @@
 import SwiftUI
 
-public struct VocabularyListView: View {
-    @Bindable private var viewModel: VocabularyListViewModel
+public struct WordDetailView: View {
+    @State private var viewModel: WordDetailViewModel
 
-    public init(viewModel: VocabularyListViewModel) {
-        self.viewModel = viewModel
+    public init(viewModel: WordDetailViewModel) {
+        _viewModel = State(initialValue: viewModel)
     }
 
     public var body: some View {
@@ -14,7 +14,7 @@ public struct VocabularyListView: View {
                 ProgressView()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             case .loaded(let state):
-                VocabularyListContentView(state: state, onWordTapped: viewModel.wordTapped)
+                WordDetailContentView(state: state)
             case .error(let message):
                 Text(message)
                     .foregroundStyle(.secondary)
@@ -23,8 +23,5 @@ public struct VocabularyListView: View {
         }
         .task { await viewModel.load() }
         .navigationBarTitleDisplayMode(.inline)
-        .navigationDestination(item: $viewModel.destination.wordDetail) { wordDetailVM in
-            WordDetailView(viewModel: wordDetailVM)
-        }
     }
 }

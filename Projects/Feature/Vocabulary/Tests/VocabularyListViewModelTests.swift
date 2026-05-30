@@ -87,6 +87,32 @@ final class VocabularyListViewModelTests: XCTestCase {
             XCTFail("viewState가 .loaded여야 합니다.")
         }
     }
+
+    func test_wordTapped_호출시_destination이_wordDetail로_설정된다() {
+        let vm = withDependencies {
+            $0.sessionClient = .previewValue
+        } operation: {
+            VocabularyListViewModel(sessionID: "t")
+        }
+
+        vm.wordTapped(id: "word_1")
+
+        guard case .wordDetail(let detailVM) = vm.destination else {
+            XCTFail("destination이 .wordDetail이어야 합니다. 실제: \(String(describing: vm.destination))")
+            return
+        }
+        _ = detailVM
+    }
+
+    func test_wordTapped_초기에는_destination이_nil이다() {
+        let vm = withDependencies {
+            $0.sessionClient = .previewValue
+        } operation: {
+            VocabularyListViewModel(sessionID: "t")
+        }
+
+        XCTAssertNil(vm.destination)
+    }
 }
 
 private enum MockError: Error {

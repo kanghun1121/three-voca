@@ -2,6 +2,7 @@ import SwiftUI
 
 struct VocabularyListContentView: View {
     let state: VocabularyListPresentationModel
+    let onWordTapped: (String) -> Void
 
     var body: some View {
         ScrollView {
@@ -13,7 +14,7 @@ struct VocabularyListContentView: View {
                 )
                 LazyVStack(spacing: 10) {
                     ForEach(state.words) { word in
-                        VocabularyWordRow(word: word)
+                        VocabularyWordRow(word: word, onTapped: { onWordTapped(word.id) })
                     }
                 }
             }
