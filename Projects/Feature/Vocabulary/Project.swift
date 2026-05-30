@@ -12,6 +12,7 @@ let project = Project.makeModule(
                 .feature(interface: .vocabulary),
                 .dependencies,
                 .designSystem,
+                .swiftUINavigation,
             ]
         )),
         .feature(testing: .vocabulary, factory: .init(
