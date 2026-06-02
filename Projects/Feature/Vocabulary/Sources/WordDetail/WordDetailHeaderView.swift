@@ -8,23 +8,28 @@ struct WordDetailHeaderView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             WordModeBadge()
-
             Text(term)
                 .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 32))
                 .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
+            PronunciationRow(pronunciation: pronunciation)
+        }
+    }
+}
 
-            HStack(spacing: 8) {
-                Text(pronunciation)
-                    .font(DesignSystemFontFamily.Pretendard.regular.swiftUIFont(size: 15))
+private struct PronunciationRow: View {
+    let pronunciation: String
+
+    var body: some View {
+        HStack(spacing: 8) {
+            Text(pronunciation)
+                .font(DesignSystemFontFamily.Pretendard.regular.swiftUIFont(size: 15))
+                .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
+            Button(action: {}) {
+                Image(systemName: "speaker.wave.2.fill")
+                    .font(.system(size: 14))
                     .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
-
-                Button(action: {}) {
-                    Image(systemName: "speaker.wave.2.fill")
-                        .font(.system(size: 14))
-                        .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
-                }
-                .buttonStyle(.plain)
             }
+            .buttonStyle(.plain)
         }
     }
 }
