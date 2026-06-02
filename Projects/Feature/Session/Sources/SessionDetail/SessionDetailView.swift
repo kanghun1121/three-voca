@@ -16,10 +16,7 @@ public struct SessionDetailView: View {
                 ProgressView()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             case .loaded(let state):
-                SessionDetailContentView(
-                    state: state,
-                    onVocabularyListTapped: viewModel.vocabularyListTapped
-                )
+                SessionDetailContentView(state: state, onVocabularyListTapped: viewModel.didTapVocabularyList)
             case .error(let message):
                 Text(message)
                     .foregroundStyle(.secondary)

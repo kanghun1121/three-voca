@@ -38,7 +38,7 @@ public final class SessionDetailViewModel {
         }
     }
 
-    public func vocabularyListTapped() {
+    public func didTapVocabularyList() {
         destination = .vocabularyList(VocabularyListViewModel(sessionID: sessionID))
     }
 }
