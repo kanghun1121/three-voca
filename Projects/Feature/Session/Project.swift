@@ -10,8 +10,10 @@ let project = Project.makeModule(
         .feature(implements: .session, factory: .init(
             dependencies: [
                 .feature(interface: .session),
+                .feature(implements: .vocabulary),
                 .dependencies,
                 .designSystem,
+                .swiftUINavigation,
             ]
         )),
         .feature(testing: .session, factory: .init(

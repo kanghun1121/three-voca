@@ -1,6 +1,8 @@
 import Dependencies
 import DomainInterface
+import FeatureVocabulary
 import Foundation
+import SwiftUINavigation
 
 @Observable
 @MainActor
@@ -11,7 +13,13 @@ public final class SessionDetailViewModel {
         case error(String)
     }
 
+    @CasePathable
+    public enum Destination {
+        case vocabularyList(VocabularyListViewModel)
+    }
+
     private(set) var viewState: ViewState = .loading
+    var destination: Destination?
 
     @ObservationIgnored @Dependency(\.sessionClient) private var sessionClient
     private let sessionID: String
@@ -28,5 +36,9 @@ public final class SessionDetailViewModel {
         } catch {
             viewState = .error("세션 정보를 불러오지 못했습니다.")
         }
+    }
+
+    public func vocabularyListTapped() {
+        destination = .vocabularyList(VocabularyListViewModel(sessionID: sessionID))
     }
 }

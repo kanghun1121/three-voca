@@ -1,10 +1,12 @@
+import FeatureVocabulary
 import SwiftUI
+import SwiftUINavigation
 
 public struct SessionDetailView: View {
-    @State private var viewModel: SessionDetailViewModel
+    @Bindable private var viewModel: SessionDetailViewModel
 
     public init(viewModel: SessionDetailViewModel) {
-        _viewModel = State(initialValue: viewModel)
+        _viewModel = Bindable(viewModel)
     }
 
     public var body: some View {
@@ -14,7 +16,10 @@ public struct SessionDetailView: View {
                 ProgressView()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             case .loaded(let state):
-                SessionDetailContentView(state: state)
+                SessionDetailContentView(
+                    state: state,
+                    onVocabularyListTapped: viewModel.vocabularyListTapped
+                )
             case .error(let message):
                 Text(message)
                     .foregroundStyle(.secondary)
@@ -23,5 +28,8 @@ public struct SessionDetailView: View {
         }
         .task { await viewModel.load() }
         .navigationBarTitleDisplayMode(.inline)
+        .navigationDestination(item: $viewModel.destination.vocabularyList) { vocabularyListVM in
+            VocabularyListView(viewModel: vocabularyListVM)
+        }
     }
 }
