@@ -12,15 +12,24 @@ struct VocabularyListContentView: View {
                     sessionNumber: state.sessionNumber,
                     wordCount: state.wordCount
                 )
-                LazyVStack(spacing: 10) {
-                    ForEach(state.words) { word in
-                        VocabularyWordRow(word: word, onTapped: { onWordTapped(word.id) })
-                    }
-                }
+                WordList(words: state.words, onTapped: onWordTapped)
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 16)
         }
         .scrollIndicators(.hidden)
+    }
+}
+
+private struct WordList: View {
+    let words: [VocabularyListPresentationModel.WordRow]
+    let onTapped: (String) -> Void
+
+    var body: some View {
+        LazyVStack(spacing: 10) {
+            ForEach(words) { word in
+                VocabularyWordRow(word: word, onTapped: { onTapped(word.id) })
+            }
+        }
     }
 }

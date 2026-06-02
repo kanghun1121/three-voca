@@ -19,19 +19,32 @@ private struct WordDetailDefinitionGroupView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             PartOfSpeechChip(label: group.partOfSpeech)
+            MeaningList(meanings: group.meanings)
+        }
+    }
+}
 
-            VStack(alignment: .leading, spacing: 4) {
-                ForEach(group.meanings, id: \.self) { meaning in
-                    HStack(alignment: .top, spacing: 6) {
-                        Text("•")
-                            .font(DesignSystemFontFamily.Pretendard.regular.swiftUIFont(size: 15))
-                            .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
-                        Text(meaning)
-                            .font(DesignSystemFontFamily.Pretendard.regular.swiftUIFont(size: 15))
-                            .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
-                    }
-                }
-            }
+private struct MeaningList: View {
+    let meanings: [String]
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            ForEach(meanings, id: \.self) { MeaningRow(meaning: $0) }
+        }
+    }
+}
+
+private struct MeaningRow: View {
+    let meaning: String
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 6) {
+            Text("•")
+                .font(DesignSystemFontFamily.Pretendard.regular.swiftUIFont(size: 15))
+                .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
+            Text(meaning)
+                .font(DesignSystemFontFamily.Pretendard.regular.swiftUIFont(size: 15))
+                .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
         }
     }
 }
