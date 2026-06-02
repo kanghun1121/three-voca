@@ -7,6 +7,7 @@ struct VocabularyExampleApp: App {
     init() {
         prepareDependencies {
             $0.sessionClient = .previewValue
+            $0.wordClient = .previewValue
         }
     }
 

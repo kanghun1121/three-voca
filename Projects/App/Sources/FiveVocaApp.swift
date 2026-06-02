@@ -11,6 +11,7 @@ struct FiveVocaApp: App {
                 viewModel: withDependencies {
                     $0.homeClient = .liveValue
                     $0.sessionClient = .liveValue
+                    $0.wordClient = .liveValue
                 } operation: {
                     HomeViewModel()
                 }
