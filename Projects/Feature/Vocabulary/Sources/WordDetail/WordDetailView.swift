@@ -1,10 +1,10 @@
 import SwiftUI
 
 public struct WordDetailView: View {
-    @State private var viewModel: WordDetailViewModel
+    @Bindable private var viewModel: WordDetailViewModel
 
     public init(viewModel: WordDetailViewModel) {
-        _viewModel = State(initialValue: viewModel)
+        self.viewModel = viewModel
     }
 
     public var body: some View {

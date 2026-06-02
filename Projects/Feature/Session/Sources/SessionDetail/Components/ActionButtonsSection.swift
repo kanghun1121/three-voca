@@ -13,7 +13,7 @@ struct ActionButtonsSection: View {
                     .frame(maxWidth: .infinity)
                     .frame(height: 56)
                     .background(DesignSystemAsset.game.swiftUIColor)
-                    .clipShape(RoundedRectangle(cornerRadius: 14))
+                    .clipShape(.rect(cornerRadius: 14))
             }
             .buttonStyle(.plain)
 
@@ -24,11 +24,11 @@ struct ActionButtonsSection: View {
                     .frame(maxWidth: .infinity)
                     .frame(height: 56)
                     .background(DesignSystemAsset.white.swiftUIColor)
-                    .clipShape(RoundedRectangle(cornerRadius: 14))
-                    .overlay(
+                    .clipShape(.rect(cornerRadius: 14))
+                    .overlay {
                         RoundedRectangle(cornerRadius: 14)
                             .stroke(DesignSystemAsset.border.swiftUIColor, lineWidth: 1)
-                    )
+                    }
             }
             .buttonStyle(.plain)
         }
