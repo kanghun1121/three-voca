@@ -37,7 +37,7 @@ public final class VocabularyListViewModel {
         }
     }
 
-    public func wordTapped(id: String) {
+    public func didTapWord(id: String) {
         destination = .wordDetail(WordDetailViewModel(wordID: id))
     }
 }

@@ -14,7 +14,7 @@ public struct VocabularyListView: View {
                 ProgressView()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             case .loaded(let state):
-                VocabularyListContentView(state: state, onWordTapped: viewModel.wordTapped)
+                VocabularyListContentView(state: state, onWordTapped: viewModel.didTapWord)
             case .error(let message):
                 Text(message)
                     .foregroundStyle(.secondary)

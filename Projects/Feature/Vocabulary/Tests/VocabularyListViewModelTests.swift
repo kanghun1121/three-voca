@@ -88,14 +88,14 @@ final class VocabularyListViewModelTests: XCTestCase {
         }
     }
 
-    func test_wordTapped_호출시_destination이_wordDetail로_설정된다() {
+    func test_didTapWord_호출시_destination이_wordDetail로_설정된다() {
         let vm = withDependencies {
             $0.sessionClient = .previewValue
         } operation: {
             VocabularyListViewModel(sessionID: "t")
         }
 
-        vm.wordTapped(id: "word_1")
+        vm.didTapWord(id: "word_1")
 
         guard case .wordDetail(let detailVM) = vm.destination else {
             XCTFail("destination이 .wordDetail이어야 합니다. 실제: \(String(describing: vm.destination))")
@@ -104,7 +104,7 @@ final class VocabularyListViewModelTests: XCTestCase {
         _ = detailVM
     }
 
-    func test_wordTapped_초기에는_destination이_nil이다() {
+    func test_didTapWord_초기에는_destination이_nil이다() {
         let vm = withDependencies {
             $0.sessionClient = .previewValue
         } operation: {
