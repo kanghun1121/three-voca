@@ -16,13 +16,8 @@ let project = Project.makeModule(
                 .swiftUINavigation,
             ]
         )),
-        .feature(testing: .home, factory: .init(
-            resources: ["Testing/Resources/**"],
-            dependencies: [.feature(interface: .home)]
-        )),
         .feature(tests: .home, factory: .init(
             dependencies: [
-                .feature(testing: .home),
                 .feature(implements: .home),
                 .domainInterface,
                 .dependencies,
@@ -42,7 +37,6 @@ let project = Project.makeModule(
             dependencies: [
                 .feature(interface: .home),
                 .feature(implements: .home),
-                .feature(testing: .home),
                 .dependencies,
                 .designSystem,
             ]
