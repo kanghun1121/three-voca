@@ -8,6 +8,4 @@ public extension Target {
         f.sources = .sources
         return make(factory: f)
     }
-
-
 }
