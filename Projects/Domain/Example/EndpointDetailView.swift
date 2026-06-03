@@ -1,6 +1,8 @@
-import Dependencies
-import DomainInterface
 import SwiftUI
+
+import Dependencies
+
+import DomainInterface
 
 struct EndpointDetailView: View {
     enum Endpoint {
@@ -23,7 +25,7 @@ struct EndpointDetailView: View {
             }
         }
 
-        var randomID: String {
+        var randomId: String {
             switch self {
             case .homeOverview: ""
             case .sessionDetail: String(Int.random(in: 1...244))
@@ -34,9 +36,9 @@ struct EndpointDetailView: View {
 
     let endpoint: Endpoint
 
-    @State private var idInput: String = ""
-    @State private var response: String = ""
-    @State private var isLoading: Bool = false
+    @State private var idInput = ""
+    @State private var response = ""
+    @State private var isLoading = false
     @State private var errorMessage: String?
 
     @Dependency(\.homeClient) private var homeClient
@@ -72,7 +74,7 @@ struct EndpointDetailView: View {
 
                 if endpoint.hasIdParam {
                     Button {
-                        Task { await callWithRandomID() }
+                        Task { await callWithRandomId() }
                     } label: {
                         HStack {
                             Spacer()
@@ -111,8 +113,8 @@ struct EndpointDetailView: View {
     }
 
     @MainActor
-    private func callWithRandomID() async {
-        idInput = endpoint.randomID
+    private func callWithRandomId() async {
+        idInput = endpoint.randomId
         await call()
     }
 
