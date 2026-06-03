@@ -16,12 +16,8 @@ let project = Project.makeModule(
                 .swiftUINavigation,
             ]
         )),
-        .feature(testing: .session, factory: .init(
-            dependencies: [.feature(interface: .session)]
-        )),
         .feature(tests: .session, factory: .init(
             dependencies: [
-                .feature(testing: .session),
                 .feature(implements: .session),
                 .domainInterface,
                 .dependencies,
@@ -41,7 +37,6 @@ let project = Project.makeModule(
             dependencies: [
                 .feature(interface: .session),
                 .feature(implements: .session),
-                .feature(testing: .session),
                 .dependencies,
                 .designSystem,
             ]

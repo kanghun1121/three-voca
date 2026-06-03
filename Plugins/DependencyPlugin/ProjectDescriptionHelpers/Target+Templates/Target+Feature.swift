@@ -25,14 +25,6 @@ public extension Target {
         return make(factory: f)
     }
 
-    /// Testing 타겟 — Mock, Fixture. 다른 모듈 테스트에서 import
-    static func feature(testing module: ModulePath.Feature, factory: TargetFactory) -> Self {
-        var f = factory
-        f.name = "Feature\(module.rawValue)Testing"
-        f.sources = .testing
-        return make(factory: f)
-    }
-
     /// Tests 타겟 — 단위 테스트. 외부에 노출 안 됨
     static func feature(tests module: ModulePath.Feature, factory: TargetFactory) -> Self {
         var f = factory

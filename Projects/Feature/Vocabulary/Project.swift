@@ -15,12 +15,8 @@ let project = Project.makeModule(
                 .swiftUINavigation,
             ]
         )),
-        .feature(testing: .vocabulary, factory: .init(
-            dependencies: [.feature(interface: .vocabulary)]
-        )),
         .feature(tests: .vocabulary, factory: .init(
             dependencies: [
-                .feature(testing: .vocabulary),
                 .feature(implements: .vocabulary),
                 .domainInterface,
                 .dependencies,
@@ -40,7 +36,6 @@ let project = Project.makeModule(
             dependencies: [
                 .feature(interface: .vocabulary),
                 .feature(implements: .vocabulary),
-                .feature(testing: .vocabulary),
                 .dependencies,
                 .designSystem,
             ]

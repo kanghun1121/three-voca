@@ -58,10 +58,4 @@ public extension TargetDependency {
             path: .relativeToRoot("Projects/Feature/\(module.rawValue)")
         )
     }
-    static func feature(testing module: ModulePath.Feature) -> TargetDependency {
-        .project(
-            target: "Feature\(module.rawValue)Testing",
-            path: .relativeToRoot("Projects/Feature/\(module.rawValue)")
-        )
-    }
 }
