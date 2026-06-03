@@ -22,6 +22,14 @@ struct EndpointDetailView: View {
             case .sessionDetail, .wordDetail: true
             }
         }
+
+        var randomID: String {
+            switch self {
+            case .homeOverview: ""
+            case .sessionDetail: String(Int.random(in: 1...244))
+            case .wordDetail: "word_\(Int.random(in: 1...800))"
+            }
+        }
     }
 
     let endpoint: Endpoint
@@ -61,6 +69,21 @@ struct EndpointDetailView: View {
                     }
                 }
                 .disabled(isLoading || (endpoint.hasIdParam && idInput.isEmpty))
+
+                if endpoint.hasIdParam {
+                    Button {
+                        Task { await callWithRandomID() }
+                    } label: {
+                        HStack {
+                            Spacer()
+                            Text("랜덤 호출")
+                                .bold()
+                                .foregroundStyle(.orange)
+                            Spacer()
+                        }
+                    }
+                    .disabled(isLoading)
+                }
             }
 
             if let error = errorMessage {
@@ -85,6 +108,12 @@ struct EndpointDetailView: View {
         }
         .navigationTitle(endpoint.title)
         .navigationBarTitleDisplayMode(.inline)
+    }
+
+    @MainActor
+    private func callWithRandomID() async {
+        idInput = endpoint.randomID
+        await call()
     }
 
     @MainActor
