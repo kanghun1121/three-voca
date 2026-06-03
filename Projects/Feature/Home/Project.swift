@@ -11,6 +11,7 @@ let project = Project.makeModule(
             dependencies: [
                 .feature(interface: .home),
                 .feature(interface: .session),
+                .feature(implements: .session),
                 .dependencies,
                 .designSystem,
                 .swiftUINavigation,
