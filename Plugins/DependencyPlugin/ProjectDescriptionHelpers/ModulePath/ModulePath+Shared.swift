@@ -4,6 +4,6 @@ public extension ModulePath {
     enum Shared: String, CaseIterable {
         case designSystem = "DesignSystem"
 
-        public static let name: String = "Shared"
+        public static let name = "Shared"
     }
 }

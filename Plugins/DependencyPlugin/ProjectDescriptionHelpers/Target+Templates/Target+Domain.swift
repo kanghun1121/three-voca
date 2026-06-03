@@ -1,7 +1,7 @@
 import ProjectDescription
 
 public extension Target {
-    // Interface — Client struct, DependencyKey, Model
+    /// Interface 타겟 — Client struct, DependencyKey, Model
     static func domain(interface factory: TargetFactory) -> Self {
         var f = factory
         f.name = "DomainInterface"
@@ -9,7 +9,7 @@ public extension Target {
         return make(factory: f)
     }
 
-    // Implements — liveValue, DTO, Mapping
+    /// Implements 타겟 — liveValue, DTO, Mapping
     static func domain(implements factory: TargetFactory) -> Self {
         var f = factory
         f.name = ModulePath.Domain.name
