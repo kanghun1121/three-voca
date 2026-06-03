@@ -16,4 +16,13 @@ public extension Target {
         f.sources = .sources
         return make(factory: f)
     }
+
+    /// Example 타겟 — 독립 실행 앱. 실제 네트워크 호출 확인용
+    static func domain(example factory: TargetFactory) -> Self {
+        var f = factory
+        f.name = "DomainExample"
+        f.sources = .exampleSources
+        f.product = .app
+        return make(factory: f)
+    }
 }
