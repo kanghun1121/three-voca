@@ -8,6 +8,7 @@ final class VocabularyListViewModelTests: XCTestCase {
     func test_load_성공시_viewState가_loaded로_전환된다() async {
         let vm = withDependencies {
             $0.sessionClient = .previewValue
+            $0.wordClient.prefetchWordDetails = { _ in }
         } operation: {
             VocabularyListViewModel(sessionID: "t")
         }
@@ -38,6 +39,7 @@ final class VocabularyListViewModelTests: XCTestCase {
     func test_load_성공시_단어목록이_비어있지_않다() async {
         let vm = withDependencies {
             $0.sessionClient = .previewValue
+            $0.wordClient.prefetchWordDetails = { _ in }
         } operation: {
             VocabularyListViewModel(sessionID: "t")
         }
@@ -55,6 +57,7 @@ final class VocabularyListViewModelTests: XCTestCase {
     func test_세션_단어수_텍스트가_올바르게_표시된다() async {
         let vm = withDependencies {
             $0.sessionClient = .previewValue
+            $0.wordClient.prefetchWordDetails = { _ in }
         } operation: {
             VocabularyListViewModel(sessionID: "t")
         }
@@ -73,6 +76,7 @@ final class VocabularyListViewModelTests: XCTestCase {
     func test_세션정보_level과_sessionNumber가_올바르게_매핑된다() async {
         let vm = withDependencies {
             $0.sessionClient = .previewValue
+            $0.wordClient.prefetchWordDetails = { _ in }
         } operation: {
             VocabularyListViewModel(sessionID: "t")
         }
@@ -88,14 +92,16 @@ final class VocabularyListViewModelTests: XCTestCase {
         }
     }
 
-    func test_didTapWord_호출시_destination이_wordDetail로_설정된다() {
+    func test_didTapWord_호출시_destination이_wordDetail로_설정된다() async {
         let vm = withDependencies {
             $0.sessionClient = .previewValue
+            $0.wordClient.prefetchWordDetails = { _ in }
         } operation: {
             VocabularyListViewModel(sessionID: "t")
         }
 
-        vm.didTapWord(id: "word_1")
+        await vm.load()
+        vm.didTapWord(id: "word_001")
 
         guard case .wordDetail(let detailVM) = vm.destination else {
             XCTFail("destination이 .wordDetail이어야 합니다. 실제: \(String(describing: vm.destination))")

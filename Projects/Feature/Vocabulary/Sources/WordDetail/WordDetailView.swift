@@ -8,20 +8,29 @@ public struct WordDetailView: View {
     }
 
     public var body: some View {
-        Group {
-            switch viewModel.viewState {
-            case .loading:
-                ProgressView()
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-            case .loaded(let state):
-                WordDetailContentView(state: state)
-            case .error(let message):
-                Text(message)
-                    .foregroundStyle(.secondary)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+        TabView(selection: $viewModel.currentIndex) {
+            ForEach(viewModel.wordIDs.indices, id: \.self) { index in
+                pageContent(at: index)
+                    .tag(index)
+                    .task { await viewModel.loadIfNeeded(at: index) }
             }
         }
-        .task { await viewModel.load() }
+        .tabViewStyle(.page(indexDisplayMode: .never))
         .navigationBarTitleDisplayMode(.inline)
+    }
+
+    @ViewBuilder
+    private func pageContent(at index: Int) -> some View {
+        switch viewModel.viewStates[index] {
+        case .loaded(let state):
+            WordDetailContentView(state: state)
+        case .error(let message):
+            Text(message)
+                .foregroundStyle(.secondary)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+        case .loading, nil:
+            ProgressView()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
     }
 }

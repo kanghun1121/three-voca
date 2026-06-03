@@ -41,6 +41,9 @@ public final class VocabularyListViewModel {
     }
 
     public func didTapWord(id: String) {
-        destination = .wordDetail(WordDetailViewModel(wordID: id))
+        guard case .loaded(let state) = viewState else { return }
+        let wordIDs = state.words.map(\.id)
+        guard let index = wordIDs.firstIndex(of: id) else { return }
+        destination = .wordDetail(WordDetailViewModel(wordIDs: wordIDs, initialIndex: index))
     }
 }

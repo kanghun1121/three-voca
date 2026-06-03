@@ -11,22 +11,25 @@ public final class WordDetailViewModel {
         case error(String)
     }
 
-    private(set) var viewState: ViewState = .loading
+    private(set) var viewStates: [Int: ViewState] = [:]
+    var currentIndex: Int
+    let wordIDs: [String]
 
     @ObservationIgnored @Dependency(\.wordClient) private var wordClient
-    private let wordID: String
 
-    public init(wordID: String) {
-        self.wordID = wordID
+    public init(wordIDs: [String], initialIndex: Int) {
+        self.wordIDs = wordIDs
+        self.currentIndex = initialIndex
     }
 
-    public func load() async {
-        viewState = .loading
+    func loadIfNeeded(at index: Int) async {
+        guard wordIDs.indices.contains(index), viewStates[index] == nil else { return }
+        viewStates[index] = .loading
         do {
-            let detail = try await wordClient.fetchWordDetail(wordID)
-            viewState = .loaded(detail.toWordDetailPresentationModel())
+            let detail = try await wordClient.fetchWordDetail(wordIDs[index])
+            viewStates[index] = .loaded(detail.toWordDetailPresentationModel())
         } catch {
-            viewState = .error("단어 정보를 불러오지 못했습니다.")
+            viewStates[index] = .error("단어 정보를 불러오지 못했습니다.")
         }
     }
 }
