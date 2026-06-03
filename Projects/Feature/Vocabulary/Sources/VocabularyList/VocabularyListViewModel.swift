@@ -21,6 +21,7 @@ public final class VocabularyListViewModel {
     var destination: Destination?
 
     @ObservationIgnored @Dependency(\.sessionClient) private var sessionClient
+    @ObservationIgnored @Dependency(\.wordClient) private var wordClient
     private let sessionID: String
 
     public init(sessionID: String) {
@@ -32,6 +33,8 @@ public final class VocabularyListViewModel {
         do {
             let session = try await sessionClient.fetchSessionDetail(sessionID)
             viewState = .loaded(session.toVocabularyListPresentationModel())
+            let wordIDs = session.words.map(\.id)
+            Task { await wordClient.prefetchWordDetails(wordIDs) }
         } catch {
             viewState = .error("단어 목록을 불러오지 못했습니다.")
         }
