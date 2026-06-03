@@ -1,7 +1,7 @@
 import ProjectDescription
 
 public extension Target {
-    // Shared 레이어 aggregator
+    /// Shared 레이어 aggregator
     static func shared(factory: TargetFactory) -> Self {
         var f = factory
         f.name = ModulePath.Shared.name
@@ -9,7 +9,7 @@ public extension Target {
         return make(factory: f)
     }
 
-    // Shared 레이어 sub-module
+    /// Shared 서브모듈 구현 타겟
     static func shared(implements module: ModulePath.Shared, factory: TargetFactory) -> Self {
         var f = factory
         f.name = module.rawValue
