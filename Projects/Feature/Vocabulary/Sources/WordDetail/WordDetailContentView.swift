@@ -3,13 +3,15 @@ import SwiftUI
 
 struct WordDetailContentView: View {
     let state: WordDetailPresentationModel
+    let onPronunciationTapped: (String) -> Void
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
                 WordDetailHeaderView(
                     term: state.term,
-                    pronunciation: state.pronunciation
+                    pronunciation: state.pronunciation,
+                    onPronunciationTapped: { onPronunciationTapped(state.term) }
                 )
                 .padding(.bottom, 22)
 
