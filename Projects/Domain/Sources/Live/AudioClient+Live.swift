@@ -15,7 +15,7 @@ extension AudioClient: DependencyKey {
                             guard await cache.get(term) == nil else { return }
                             guard let mp3URL = await fetchMP3URL(term: term, http: http) else { return }
                             await cache.set(term, mp3URL)
-                            _ = try? await URLSession.shared.data(from: mp3URL)
+                            let data = try? await URLSession.shared.data(from: mp3URL)
                         }
                     }
                 }
@@ -30,18 +30,18 @@ extension AudioClient: DependencyKey {
     }()
 }
 
-private func fetchMP3URL(term: String, http: HTTPClient) async -> URL? {
-    guard let entries: [MWEntryResponseDTO] = try? await http.request(GetMWAudioRequest(term: term)),
-          let audio = entries.first?.hwi?.prs?.first?.sound?.audio,
-          !audio.isEmpty else { return nil }
+private extension AudioClient {
+    static func fetchMP3URL(term: String, http: HTTPClient) async -> URL? {
+        guard let entries: [MWEntryResponseDTO] = try? await http.request(GetMWAudioRequest(term: term)),
+              let audio = entries.first?.hwi?.prs?.first?.sound?.audio,
+              !audio.isEmpty else { return nil }
 
-    let subdir = audioSubdir(audio)
-    return URL(string: "https://media.merriam-webster.com/audio/prons/en/us/mp3/\(subdir)/\(audio).mp3")
-}
+        let subdir: String
+        if audio.hasPrefix("bix") { subdir = "bix" }
+        else if audio.hasPrefix("gg") { subdir = "gg" }
+        else if let first = audio.first, first.isNumber || first.isPunctuation { subdir = "number" }
+        else { subdir = String(audio.prefix(1)) }
 
-private func audioSubdir(_ audio: String) -> String {
-    if audio.hasPrefix("bix") { return "bix" }
-    if audio.hasPrefix("gg") { return "gg" }
-    if let first = audio.first, first.isNumber || first.isPunctuation { return "number" }
-    return String(audio.prefix(1))
+        return URL(string: "https://media.merriam-webster.com/audio/prons/en/us/mp3/\(subdir)/\(audio).mp3")
+    }
 }
