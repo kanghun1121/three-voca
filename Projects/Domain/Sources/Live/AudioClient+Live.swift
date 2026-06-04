@@ -6,12 +6,15 @@ import Foundation
 extension AudioClient: DependencyKey {
     public static let liveValue: AudioClient = {
         let http = HTTPClient()
+        let cache = AudioCache()
         return AudioClient(
             prefetchAudio: { terms in
                 await withTaskGroup(of: Void.self) { group in
                     for term in terms {
                         group.addTask {
+                            guard await cache.get(term) == nil else { return }
                             guard let mp3URL = await fetchMP3URL(term: term, http: http) else { return }
+                            await cache.set(term, mp3URL)
                             _ = try? await URLSession.shared.data(from: mp3URL)
                         }
                     }
