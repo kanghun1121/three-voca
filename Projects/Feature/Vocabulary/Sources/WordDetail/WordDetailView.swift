@@ -12,9 +12,14 @@ public struct WordDetailView: View {
     public var body: some View {
         TabView(selection: $viewModel.currentIndex) {
             ForEach(viewModel.wordIDs.indices, id: \.self) { index in
-                WordDetailPageView(viewState: viewModel.viewStates[index])
-                    .tag(index)
-                    .task { await viewModel.requestIfNeeded(at: index) }
+                WordDetailPageView(
+                    viewState: viewModel.viewStates[index],
+                    onPronunciationTapped: { term in
+                        Task { await viewModel.pronunciationButtonTapped(term: term) }
+                    }
+                )
+                .tag(index)
+                .task { await viewModel.requestIfNeeded(at: index) }
             }
         }
         .tabViewStyle(.page(indexDisplayMode: .never))
@@ -31,11 +36,12 @@ public struct WordDetailView: View {
 
 private struct WordDetailPageView: View {
     let viewState: WordDetailViewModel.ViewState?
+    let onPronunciationTapped: (String) -> Void
 
     var body: some View {
         switch viewState {
         case .loaded(let state):
-            WordDetailContentView(state: state)
+            WordDetailContentView(state: state, onPronunciationTapped: onPronunciationTapped)
         case .error(let message):
             Text(message)
                 .foregroundStyle(.secondary)

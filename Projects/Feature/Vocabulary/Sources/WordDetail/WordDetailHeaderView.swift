@@ -4,6 +4,7 @@ import SwiftUI
 struct WordDetailHeaderView: View {
     let term: String
     let pronunciation: String
+    let onPronunciationTapped: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -13,7 +14,7 @@ struct WordDetailHeaderView: View {
                 .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 40))
                 .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
                 .kerning(-0.025 * 40)
-            PronunciationRow(pronunciation: pronunciation)
+            PronunciationRow(pronunciation: pronunciation, onPronunciationTapped: onPronunciationTapped)
                 .padding(.top, 8)
         }
     }
@@ -21,20 +22,23 @@ struct WordDetailHeaderView: View {
 
 private struct PronunciationRow: View {
     let pronunciation: String
+    let onPronunciationTapped: () -> Void
 
     var body: some View {
         HStack(spacing: 10) {
             Text(pronunciation)
                 .font(.system(size: 14, design: .monospaced))
                 .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
-            AudioButton()
+            AudioButton(action: onPronunciationTapped)
         }
     }
 }
 
 private struct AudioButton: View {
+    let action: () -> Void
+
     var body: some View {
-        Button(action: {}) {
+        Button(action: action) {
             Image(systemName: "speaker.wave.2")
                 .font(.system(size: 14))
                 .foregroundStyle(DesignSystemAsset.study300.swiftUIColor)
