@@ -27,12 +27,10 @@ public struct VocabularyListView: View {
         .task { await viewModel.load() }
         .navigationBarBackButtonHidden(true)
         .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button(action: dismiss.callAsFunction) {
-                    Image(systemName: "chevron.left")
-                        .fontWeight(.semibold)
-                        .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
-                }
+            ToolbarItem(placement: .topBarLeading) {
+                Button("뒤로", systemImage: "chevron.left", action: dismiss.callAsFunction)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
             }
         }
         .navigationDestination(item: $viewModel.destination.wordDetail) { wordDetailVM in

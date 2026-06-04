@@ -17,10 +17,10 @@ struct VocabularyWordRow: View {
             .padding(16)
             .background(DesignSystemAsset.background.swiftUIColor)
             .clipShape(.rect(cornerRadius: 14))
-            .overlay(
+            .overlay {
                 RoundedRectangle(cornerRadius: 14)
                     .stroke(DesignSystemAsset.border.swiftUIColor, lineWidth: 1)
-            )
+            }
         }
         .buttonStyle(.plain)
     }
@@ -31,18 +31,27 @@ private struct WordTextStack: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 2) {
-            HStack(alignment: .lastTextBaseline, spacing: 8) {
-                Text(word.term)
-                    .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 18))
-                    .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
-                    .kerning(-0.012 * 18)
-                Text(word.pronunciation)
-                    .font(.system(size: 12, design: .monospaced))
-                    .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
-            }
+            WordNameRow(term: word.term, pronunciation: word.pronunciation)
             Text(word.primaryMeaning)
                 .font(DesignSystemFontFamily.Pretendard.regular.swiftUIFont(size: 13))
                 .foregroundStyle(DesignSystemAsset.fg.swiftUIColor)
+        }
+    }
+}
+
+private struct WordNameRow: View {
+    let term: String
+    let pronunciation: String
+
+    var body: some View {
+        HStack(alignment: .lastTextBaseline, spacing: 8) {
+            Text(term)
+                .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 18))
+                .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
+                .kerning(-0.012 * 18)
+            Text(pronunciation)
+                .font(.system(size: 12, design: .monospaced))
+                .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
         }
     }
 }

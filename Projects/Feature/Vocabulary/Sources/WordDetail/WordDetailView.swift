@@ -20,12 +20,10 @@ public struct WordDetailView: View {
         .tabViewStyle(.page(indexDisplayMode: .never))
         .navigationBarBackButtonHidden(true)
         .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button(action: dismiss.callAsFunction) {
-                    Image(systemName: "chevron.left")
-                        .fontWeight(.semibold)
-                        .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
-                }
+            ToolbarItem(placement: .topBarLeading) {
+                Button("뒤로", systemImage: "chevron.left", action: dismiss.callAsFunction)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
             }
         }
     }
