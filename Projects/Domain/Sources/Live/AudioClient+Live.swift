@@ -19,6 +19,12 @@ extension AudioClient: DependencyKey {
                         }
                     }
                 }
+            },
+            audioURL: { term in
+                if let cached = await cache.get(term) { return cached }
+                guard let mp3URL = await fetchMP3URL(term: term, http: http) else { return nil }
+                await cache.set(term, mp3URL)
+                return mp3URL
             }
         )
     }()
