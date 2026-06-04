@@ -45,9 +45,18 @@ extension AudioClient: DependencyKey {
 
 private extension AudioClient {
     static func fetchMP3URL(term: String, http: HTTPClient) async -> URL? {
-        guard let entries: [MWEntryResponseDTO] = try? await http.request(GetMWAudioRequest(term: term)),
-              let audio = entries.first?.hwi?.prs?.first?.sound?.audio,
-              !audio.isEmpty else { return nil }
+        let entries: [MWEntryResponseDTO]?
+        do {
+            entries = try await http.request(GetMWAudioRequest(term: term))
+        } catch {
+            print("[AudioClient] HTTP 실패 — \(term): \(error)")
+            return nil
+        }
+
+        guard let entries, let audio = entries.first?.hwi?.prs?.first?.sound?.audio, !audio.isEmpty else {
+            print("[AudioClient] audio 필드 없음 — \(term), entries: \(entries?.count ?? 0)개")
+            return nil
+        }
 
         guard let subdir = audio.first.map(String.init) else { return nil }
         return URL(string: "https://media.merriam-webster.com/audio/prons/en/us/mp3/\(subdir)/\(audio).mp3")
