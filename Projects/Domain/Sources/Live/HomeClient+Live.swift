@@ -8,7 +8,7 @@ extension HomeClient: DependencyKey {
         fetchHomeOverview: {
             let client = HTTPClient()
             let request = GetAllLevelsWithSessionsRequest()
-            let dto: VocabularyLibraryResponseDTO = try await client.request(request, accessToken: nil)
+            let dto: VocabularyLibraryResponseDTO = try await client.request(request)
             return dto.toDomain()
         }
     )

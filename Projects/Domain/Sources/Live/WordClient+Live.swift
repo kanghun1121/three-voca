@@ -11,7 +11,7 @@ extension WordClient: DependencyKey {
             fetchWordDetail: { id in
                 if let cached = await cache.get(id) { return cached }
                 let request = GetWordDetailRequest(wordID: id)
-                let dto: WordDetailResponseDTO = try await http.request(request, accessToken: nil)
+                let dto: WordDetailResponseDTO = try await http.request(request)
                 let detail = dto.toDomain()
                 await cache.set(id, detail)
                 return detail
@@ -22,8 +22,7 @@ extension WordClient: DependencyKey {
                         group.addTask {
                             guard await cache.get(id) == nil else { return }
                             guard let dto: WordDetailResponseDTO = try? await http.request(
-                                GetWordDetailRequest(wordID: id),
-                                accessToken: nil
+                                GetWordDetailRequest(wordID: id)
                             ) else { return }
                             await cache.set(id, dto.toDomain())
                         }
