@@ -9,7 +9,7 @@ extension SessionClient: DependencyKey {
         return SessionClient(
             fetchSessionDetail: { id in
                 let request = GetSessionDetailRequest(sessionID: id)
-                let dto: SessionDetailResponseDTO = try await http.request(request, accessToken: nil)
+                let dto: SessionDetailResponseDTO = try await http.request(request)
                 return dto.toDomain()
             }
         )

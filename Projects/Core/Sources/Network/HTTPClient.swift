@@ -13,8 +13,8 @@ public struct HTTPClient: HTTPClienting {
         }()
     }
 
-    public func request<T: Decodable>(_ requestable: any Requestable, accessToken: String?) async throws -> T {
-        let (data, response) = try await perform(requestable, accessToken: accessToken)
+    public func request<T: Decodable>(_ requestable: any Requestable) async throws -> T {
+        let (data, response) = try await perform(requestable)
         try validate(response, data: data)
         do {
             return try decoder.decode(T.self, from: data)
@@ -23,15 +23,15 @@ public struct HTTPClient: HTTPClienting {
         }
     }
 
-    public func request(_ requestable: any Requestable, accessToken: String?) async throws {
-        let (data, response) = try await perform(requestable, accessToken: accessToken)
+    public func request(_ requestable: any Requestable) async throws {
+        let (data, response) = try await perform(requestable)
         try validate(response, data: data)
         _ = data
     }
 
     // MARK: - Private
 
-    private func perform(_ requestable: any Requestable, accessToken: String?) async throws -> (Data, URLResponse) {
+    private func perform(_ requestable: any Requestable) async throws -> (Data, URLResponse) {
         var urlRequest: URLRequest
         do {
             urlRequest = try requestable.makeURLRequest()
@@ -39,10 +39,6 @@ public struct HTTPClient: HTTPClienting {
             throw error
         } catch {
             throw NetworkError.invalidRequest
-        }
-
-        if let token = accessToken {
-            urlRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         }
 
         do {
