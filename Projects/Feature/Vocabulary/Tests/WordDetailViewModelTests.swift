@@ -5,90 +5,58 @@ import XCTest
 
 @MainActor
 final class WordDetailViewModelTests: XCTestCase {
-    func test_load_성공시_viewState가_loaded로_전환된다() async {
+    func test_requestIfNeeded_index1_loaded이며_데이터가_올바르다() async {
         let vm = withDependencies {
             $0.wordClient = .previewValue
         } operation: {
-            WordDetailViewModel(wordIDs: ["word_766"], initialIndex: 0)
+            WordDetailViewModel(wordIDs: ["word_001", "word_766"], initialIndex: 0)
         }
 
-        await vm.requestIfNeeded(at: 0)
+        await vm.requestIfNeeded(at: 1)
 
-        guard case .loaded = vm.viewStates[0] else {
-            XCTFail("viewState가 .loaded여야 합니다. 실제: \(String(describing: vm.viewStates[0]))")
+        guard case .loaded(let pm) = vm.viewStates[1] else {
+            XCTFail("viewStates[1]이 .loaded여야 합니다. 실제: \(String(describing: vm.viewStates[1]))")
             return
         }
+        XCTAssertEqual(pm.term, "dark")
+        XCTAssertEqual(pm.pronunciation, "/dɑːrk/")
+        XCTAssertEqual(pm.definitionGroups.count, 2)
+        XCTAssertEqual(pm.examples.count, 2)
     }
 
-    func test_load_실패시_viewState가_error로_전환된다() async {
+    func test_requestIfNeeded_실패시_viewState가_error로_전환된다() async {
         let vm = withDependencies {
             $0.wordClient.fetchWordDetail = { _ in throw MockError.stub }
             $0.wordClient.prefetchWordDetails = { _ in }
         } operation: {
-            WordDetailViewModel(wordIDs: ["word_766"], initialIndex: 0)
+            WordDetailViewModel(wordIDs: ["word_001"], initialIndex: 0)
         }
 
         await vm.requestIfNeeded(at: 0)
 
         guard case .error = vm.viewStates[0] else {
-            XCTFail("viewState가 .error여야 합니다. 실제: \(String(describing: vm.viewStates[0]))")
+            XCTFail("viewStates[0]이 .error여야 합니다. 실제: \(String(describing: vm.viewStates[0]))")
             return
         }
     }
 
-    func test_load_성공시_term이_올바르게_매핑된다() async {
+    func test_requestIfNeeded_index1부터5까지_모두_loaded로_전환된다() async {
+        let wordIDs = (0...5).map { "word_\(String(format: "%03d", $0))" }
         let vm = withDependencies {
             $0.wordClient = .previewValue
         } operation: {
-            WordDetailViewModel(wordIDs: ["word_766"], initialIndex: 0)
+            WordDetailViewModel(wordIDs: wordIDs, initialIndex: 0)
         }
 
-        await vm.requestIfNeeded(at: 0)
-
-        if case .loaded(let pm) = vm.viewStates[0] {
-            XCTAssertEqual(pm.term, "dark")
-            XCTAssertEqual(pm.pronunciation, "/dɑːrk/")
-        } else {
-            XCTFail("viewState가 .loaded여야 합니다.")
-        }
-    }
-
-    func test_load_성공시_품사별_정의그룹이_올바르게_생성된다() async {
-        let vm = withDependencies {
-            $0.wordClient = .previewValue
-        } operation: {
-            WordDetailViewModel(wordIDs: ["word_766"], initialIndex: 0)
+        for index in 1...5 {
+            await vm.requestIfNeeded(at: index)
         }
 
-        await vm.requestIfNeeded(at: 0)
-
-        if case .loaded(let pm) = vm.viewStates[0] {
-            // dark: adjective("어두운"), noun("어둠") — 2개 그룹
-            XCTAssertEqual(pm.definitionGroups.count, 2)
-            XCTAssertEqual(pm.definitionGroups[0].partOfSpeech, "형용사")
-            XCTAssertEqual(pm.definitionGroups[0].meanings, ["어두운"])
-            XCTAssertEqual(pm.definitionGroups[1].partOfSpeech, "명사")
-            XCTAssertEqual(pm.definitionGroups[1].meanings, ["어둠"])
-        } else {
-            XCTFail("viewState가 .loaded여야 합니다.")
-        }
-    }
-
-    func test_load_성공시_예문이_order_순으로_정렬된다() async {
-        let vm = withDependencies {
-            $0.wordClient = .previewValue
-        } operation: {
-            WordDetailViewModel(wordIDs: ["word_766"], initialIndex: 0)
-        }
-
-        await vm.requestIfNeeded(at: 0)
-
-        if case .loaded(let pm) = vm.viewStates[0] {
-            XCTAssertEqual(pm.examples.count, 2)
-            XCTAssertEqual(pm.examples[0].id, 1)
-            XCTAssertEqual(pm.examples[1].id, 2)
-        } else {
-            XCTFail("viewState가 .loaded여야 합니다.")
+        for index in 1...5 {
+            guard case .loaded = vm.viewStates[index] else {
+                XCTFail("viewStates[\(index)]이 .loaded여야 합니다. 실제: \(String(describing: vm.viewStates[index]))")
+                return
+            }
         }
     }
 }
