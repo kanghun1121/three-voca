@@ -17,10 +17,17 @@ public final class WordDetailViewModel {
     let wordIDs: [String]
 
     @ObservationIgnored @Dependency(\.wordClient) private var wordClient
+    @ObservationIgnored @Dependency(\.audioClient) private var audioClient
+    @ObservationIgnored @Dependency(\.audioPlayerClient) private var audioPlayerClient
 
     public init(wordIDs: [String], initialIndex: Int) {
         self.wordIDs = wordIDs
         self.currentIndex = initialIndex
+    }
+
+    func playAudio(term: String) async {
+        guard let url = await audioClient.audioURL(term) else { return }
+        await audioPlayerClient.play(url)
     }
 
     func requestIfNeeded(at index: Int) async {
