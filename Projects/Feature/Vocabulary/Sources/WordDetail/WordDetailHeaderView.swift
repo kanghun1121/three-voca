@@ -39,10 +39,11 @@ private struct AudioButton: View {
                 .font(.system(size: 14))
                 .foregroundStyle(DesignSystemAsset.study300.swiftUIColor)
         }
+        .accessibilityLabel("발음 듣기")
         .frame(width: 32, height: 32)
         .background(DesignSystemAsset.background.swiftUIColor)
         .clipShape(Circle())
-        .overlay(Circle().stroke(DesignSystemAsset.border.swiftUIColor, lineWidth: 1))
+        .overlay { Circle().stroke(DesignSystemAsset.border.swiftUIColor, lineWidth: 1) }
         .buttonStyle(.plain)
     }
 }

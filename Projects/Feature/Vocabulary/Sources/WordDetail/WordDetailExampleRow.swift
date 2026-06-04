@@ -34,10 +34,10 @@ struct WordDetailExampleRow: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(DesignSystemAsset.study100.swiftUIColor.opacity(0.5))
         .clipShape(.rect(cornerRadius: 14))
-        .overlay(
+        .overlay {
             RoundedRectangle(cornerRadius: 14)
                 .stroke(DesignSystemAsset.study100.swiftUIColor, lineWidth: 1)
-        )
+        }
     }
 
     // TODO: - NLTagger 파이프라인(lemma/tokenRanges/phraseRanges)이 View에 혼재함. 별도 타입으로 분리 필요
