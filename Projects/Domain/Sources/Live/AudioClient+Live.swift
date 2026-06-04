@@ -12,31 +12,17 @@ extension AudioClient: DependencyKey {
                 await withTaskGroup(of: Void.self) { group in
                     for term in terms {
                         group.addTask {
-                            guard await cache.get(term) == nil else {
-                                print("[AudioCache] HIT (prefetch) — \(term)")
-                                return
-                            }
-                            guard let mp3URL = await fetchMP3URL(term: term, http: http) else {
-                                print("[AudioCache] MISS (prefetch, no URL) — \(term)")
-                                return
-                            }
+                            guard await cache.get(term) == nil else { return }
+                            guard let mp3URL = await fetchMP3URL(term: term, http: http) else { return }
                             await cache.set(term, mp3URL)
-                            print("[AudioCache] STORED — \(term): \(mp3URL)")
                         }
                     }
                 }
             },
             audioURL: { term in
-                if let cached = await cache.get(term) {
-                    print("[AudioCache] HIT — \(term): \(cached)")
-                    return cached
-                }
-                guard let mp3URL = await fetchMP3URL(term: term, http: http) else {
-                    print("[AudioCache] MISS (no URL) — \(term)")
-                    return nil
-                }
+                if let cached = await cache.get(term) { return cached }
+                guard let mp3URL = await fetchMP3URL(term: term, http: http) else { return nil }
                 await cache.set(term, mp3URL)
-                print("[AudioCache] STORED — \(term): \(mp3URL)")
                 return mp3URL
             }
         )
@@ -45,18 +31,9 @@ extension AudioClient: DependencyKey {
 
 private extension AudioClient {
     static func fetchMP3URL(term: String, http: HTTPClient) async -> URL? {
-        let entries: [MWEntryResponseDTO]?
-        do {
-            entries = try await http.request(GetMWAudioRequest(term: term))
-        } catch {
-            print("[AudioClient] HTTP 실패 — \(term): \(error)")
-            return nil
-        }
-
-        guard let entries, let audio = entries.first?.hwi?.prs?.first?.sound?.audio, !audio.isEmpty else {
-            print("[AudioClient] audio 필드 없음 — \(term), entries: \(entries?.count ?? 0)개")
-            return nil
-        }
+        guard let entries: [MWEntryResponseDTO] = try? await http.request(GetMWAudioRequest(term: term)),
+              let audio = entries.first?.hwi?.prs?.first?.sound?.audio,
+              !audio.isEmpty else { return nil }
 
         guard let subdir = audio.first.map(String.init) else { return nil }
         return URL(string: "https://media.merriam-webster.com/audio/prons/en/us/mp3/\(subdir)/\(audio).mp3")
