@@ -1,7 +1,9 @@
+import DesignSystem
 import SwiftUI
 
 public struct VocabularyListView: View {
     @Bindable private var viewModel: VocabularyListViewModel
+    @Environment(\.dismiss) private var dismiss
 
     public init(viewModel: VocabularyListViewModel) {
         self.viewModel = viewModel
@@ -23,7 +25,16 @@ public struct VocabularyListView: View {
             }
         }
         .task { await viewModel.load() }
-        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: dismiss.callAsFunction) {
+                    Image(systemName: "chevron.left")
+                        .fontWeight(.semibold)
+                        .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
+                }
+            }
+        }
         .navigationDestination(item: $viewModel.destination.wordDetail) { wordDetailVM in
             WordDetailView(viewModel: wordDetailVM)
         }
