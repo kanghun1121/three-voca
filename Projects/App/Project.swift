@@ -17,6 +17,7 @@ let project = Project.makeModule(
                     "UISceneConfigurations": [:]
                 ],
                 "SUPABASE_ANON_KEY": "$(SUPABASE_ANON_KEY)",
+                "MW_DICTIONARY_API_KEY": "$(MW_DICTIONARY_API_KEY)",
                 "UIAppFonts": [
                     "Pretendard-Thin.otf",
                     "Pretendard-ExtraLight.otf",
