@@ -6,12 +6,18 @@ struct WordDetailExamplesView: View {
     let examples: [WordDetailPresentationModel.ExampleRow]
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("예문")
-                .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 16))
-                .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
-            ExampleList(term: term, examples: examples)
+        VStack(alignment: .leading, spacing: 0) {
+            Divider()
+                .background(DesignSystemAsset.borderSubtle.swiftUIColor)
+                .padding(.bottom, 22)
+            VStack(alignment: .leading, spacing: 12) {
+                Text("예문")
+                    .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 13))
+                    .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
+                ExampleList(term: term, examples: examples)
+            }
         }
+        .padding(.bottom, 24)
     }
 }
 

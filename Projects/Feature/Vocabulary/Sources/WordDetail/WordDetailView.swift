@@ -1,7 +1,9 @@
+import DesignSystem
 import SwiftUI
 
 public struct WordDetailView: View {
     @Bindable private var viewModel: WordDetailViewModel
+    @Environment(\.dismiss) private var dismiss
 
     public init(viewModel: WordDetailViewModel) {
         self.viewModel = viewModel
@@ -16,12 +18,14 @@ public struct WordDetailView: View {
             }
         }
         .tabViewStyle(.page(indexDisplayMode: .never))
-        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
         .toolbar {
-            ToolbarItem(placement: .principal) {
-                Text("\(viewModel.currentIndex + 1)/\(viewModel.wordIDs.count)")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: dismiss.callAsFunction) {
+                    Image(systemName: "chevron.left")
+                        .fontWeight(.semibold)
+                        .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
+                }
             }
         }
     }
