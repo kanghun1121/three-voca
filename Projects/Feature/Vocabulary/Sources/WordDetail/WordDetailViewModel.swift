@@ -1,6 +1,7 @@
+import Foundation
+
 import Dependencies
 import DomainInterface
-import Foundation
 
 @Observable
 @MainActor
@@ -22,13 +23,14 @@ public final class WordDetailViewModel {
         self.currentIndex = initialIndex
     }
 
-    func loadIfNeeded(at index: Int) async {
+    func requestIfNeeded(at index: Int) async {
         guard wordIDs.indices.contains(index), viewStates[index] == nil else { return }
         viewStates[index] = .loading
         do {
             let detail = try await wordClient.fetchWordDetail(wordIDs[index])
             viewStates[index] = .loaded(detail.toWordDetailPresentationModel())
         } catch {
+            print("[WordDetail] 단어 로드 실패 (index: \(index)):", error)
             viewStates[index] = .error("단어 정보를 불러오지 못했습니다.")
         }
     }

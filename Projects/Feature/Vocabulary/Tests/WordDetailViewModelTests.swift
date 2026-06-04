@@ -12,7 +12,7 @@ final class WordDetailViewModelTests: XCTestCase {
             WordDetailViewModel(wordIDs: ["word_766"], initialIndex: 0)
         }
 
-        await vm.loadIfNeeded(at: 0)
+        await vm.requestIfNeeded(at: 0)
 
         guard case .loaded = vm.viewStates[0] else {
             XCTFail("viewState가 .loaded여야 합니다. 실제: \(String(describing: vm.viewStates[0]))")
@@ -28,7 +28,7 @@ final class WordDetailViewModelTests: XCTestCase {
             WordDetailViewModel(wordIDs: ["word_766"], initialIndex: 0)
         }
 
-        await vm.loadIfNeeded(at: 0)
+        await vm.requestIfNeeded(at: 0)
 
         guard case .error = vm.viewStates[0] else {
             XCTFail("viewState가 .error여야 합니다. 실제: \(String(describing: vm.viewStates[0]))")
@@ -43,7 +43,7 @@ final class WordDetailViewModelTests: XCTestCase {
             WordDetailViewModel(wordIDs: ["word_766"], initialIndex: 0)
         }
 
-        await vm.loadIfNeeded(at: 0)
+        await vm.requestIfNeeded(at: 0)
 
         if case .loaded(let pm) = vm.viewStates[0] {
             XCTAssertEqual(pm.term, "dark")
@@ -60,7 +60,7 @@ final class WordDetailViewModelTests: XCTestCase {
             WordDetailViewModel(wordIDs: ["word_766"], initialIndex: 0)
         }
 
-        await vm.loadIfNeeded(at: 0)
+        await vm.requestIfNeeded(at: 0)
 
         if case .loaded(let pm) = vm.viewStates[0] {
             // dark: adjective("어두운"), noun("어둠") — 2개 그룹
@@ -81,7 +81,7 @@ final class WordDetailViewModelTests: XCTestCase {
             WordDetailViewModel(wordIDs: ["word_766"], initialIndex: 0)
         }
 
-        await vm.loadIfNeeded(at: 0)
+        await vm.requestIfNeeded(at: 0)
 
         if case .loaded(let pm) = vm.viewStates[0] {
             XCTAssertEqual(pm.examples.count, 2)

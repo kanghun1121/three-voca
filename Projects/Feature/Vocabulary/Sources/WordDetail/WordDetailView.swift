@@ -10,18 +10,28 @@ public struct WordDetailView: View {
     public var body: some View {
         TabView(selection: $viewModel.currentIndex) {
             ForEach(viewModel.wordIDs.indices, id: \.self) { index in
-                pageContent(at: index)
+                WordDetailPageView(viewState: viewModel.viewStates[index])
                     .tag(index)
-                    .task { await viewModel.loadIfNeeded(at: index) }
+                    .task { await viewModel.requestIfNeeded(at: index) }
             }
         }
         .tabViewStyle(.page(indexDisplayMode: .never))
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                Text("\(viewModel.currentIndex + 1)/\(viewModel.wordIDs.count)")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+        }
     }
+}
 
-    @ViewBuilder
-    private func pageContent(at index: Int) -> some View {
-        switch viewModel.viewStates[index] {
+private struct WordDetailPageView: View {
+    let viewState: WordDetailViewModel.ViewState?
+
+    var body: some View {
+        switch viewState {
         case .loaded(let state):
             WordDetailContentView(state: state)
         case .error(let message):
@@ -31,6 +41,7 @@ public struct WordDetailView: View {
         case .loading, nil:
             ProgressView()
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .accessibilityLabel("단어 정보 불러오는 중")
         }
     }
 }

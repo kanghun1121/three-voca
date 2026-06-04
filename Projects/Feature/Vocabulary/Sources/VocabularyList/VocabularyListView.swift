@@ -13,6 +13,7 @@ public struct VocabularyListView: View {
             case .loading:
                 ProgressView()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .accessibilityLabel("단어 목록 불러오는 중")
             case .loaded(let state):
                 VocabularyListContentView(state: state, onWordTapped: viewModel.didTapWord)
             case .error(let message):

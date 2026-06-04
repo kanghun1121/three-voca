@@ -1,6 +1,7 @@
+import Foundation
+
 import Dependencies
 import DomainInterface
-import Foundation
 import SwiftUINavigation
 
 @Observable
@@ -36,6 +37,7 @@ public final class VocabularyListViewModel {
             let wordIDs = session.words.map(\.id)
             Task { await wordClient.prefetchWordDetails(wordIDs) }
         } catch {
+            print("[VocabularyList] 세션 로드 실패:", error)
             viewState = .error("단어 목록을 불러오지 못했습니다.")
         }
     }
