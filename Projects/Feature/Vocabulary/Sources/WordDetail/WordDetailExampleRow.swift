@@ -1,7 +1,6 @@
+import DesignSystem
 import NaturalLanguage
 import SwiftUI
-
-import DesignSystem
 
 struct WordDetailExampleRow: View {
     let term: String
@@ -18,7 +17,7 @@ struct WordDetailExampleRow: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             highlightedEnText
-                .font(DesignSystemFontFamily.Pretendard.regular.swiftUIFont(size: 15))
+                .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 16))
                 .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
 
             Text(example.ko)
@@ -29,11 +28,16 @@ struct WordDetailExampleRow: View {
                 GrammarAnalysisLabel()
             }
             .buttonStyle(.plain)
+            .padding(.top, 4)
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(DesignSystemAsset.bgSubtle.swiftUIColor)
-        .clipShape(.rect(cornerRadius: 12))
+        .background(DesignSystemAsset.study100.swiftUIColor.opacity(0.5))
+        .clipShape(.rect(cornerRadius: 14))
+        .overlay(
+            RoundedRectangle(cornerRadius: 14)
+                .stroke(DesignSystemAsset.study100.swiftUIColor, lineWidth: 1)
+        )
     }
 
     // TODO: - NLTagger 파이프라인(lemma/tokenRanges/phraseRanges)이 View에 혼재함. 별도 타입으로 분리 필요
@@ -46,22 +50,20 @@ struct WordDetailExampleRow: View {
             return Text(sentence)
         }
 
-        var result = Text("")
-        var cursor = sentence.startIndex
+        var attributed = AttributedString(sentence)
+        let boldFont = DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 16)
 
-        for range in matchRanges {
-            let before = String(sentence[cursor..<range.lowerBound])
-            let match = String(sentence[range])
-            // SwiftUI Text는 background를 Text 연결에서 지원하지 않으므로
-            // bold + cautionary 색상으로 키워드를 강조 표시
-            result = result + Text(before) + Text(match)
-                .bold()
-                .foregroundStyle(DesignSystemAsset.cautionary.swiftUIColor)
-            cursor = range.upperBound
+        for strRange in matchRanges {
+            let startOffset = sentence.distance(from: sentence.startIndex, to: strRange.lowerBound)
+            let endOffset = sentence.distance(from: sentence.startIndex, to: strRange.upperBound)
+            let attrStart = attributed.index(attributed.startIndex, offsetByCharacters: startOffset)
+            let attrEnd = attributed.index(attributed.startIndex, offsetByCharacters: endOffset)
+            attributed[attrStart..<attrEnd].swiftUI.foregroundColor = DesignSystemAsset.study300.swiftUIColor
+            attributed[attrStart..<attrEnd].swiftUI.backgroundColor = DesignSystemAsset.highlightBg.swiftUIColor
+            attributed[attrStart..<attrEnd].swiftUI.font = boldFont
         }
 
-        result = result + Text(String(sentence[cursor...]))
-        return result
+        return Text(attributed)
     }
 
     private static func lemma(of word: String) -> String {

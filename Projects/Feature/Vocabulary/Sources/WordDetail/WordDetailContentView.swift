@@ -11,17 +11,18 @@ struct WordDetailContentView: View {
                     term: state.term,
                     pronunciation: state.pronunciation
                 )
-                .padding(.bottom, 24)
+                .padding(.bottom, 22)
 
                 WordDetailDefinitionsView(groups: state.definitionGroups)
-                    .padding(.bottom, 32)
+                    .padding(.bottom, 28)
 
                 if !state.examples.isEmpty {
                     WordDetailExamplesView(term: state.term, examples: state.examples)
                 }
             }
             .padding(.horizontal, 20)
-            .padding(.vertical, 16)
+            .padding(.top, 8)
+            .padding(.bottom, 32)
         }
         .scrollIndicators(.hidden)
         .background(DesignSystemAsset.background.swiftUIColor)
