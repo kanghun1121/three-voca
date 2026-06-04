@@ -12,18 +12,31 @@ extension AudioClient: DependencyKey {
                 await withTaskGroup(of: Void.self) { group in
                     for term in terms {
                         group.addTask {
-                            guard await cache.get(term) == nil else { return }
-                            guard let mp3URL = await fetchMP3URL(term: term, http: http) else { return }
+                            guard await cache.get(term) == nil else {
+                                print("[AudioCache] HIT (prefetch) — \(term)")
+                                return
+                            }
+                            guard let mp3URL = await fetchMP3URL(term: term, http: http) else {
+                                print("[AudioCache] MISS (prefetch, no URL) — \(term)")
+                                return
+                            }
                             await cache.set(term, mp3URL)
-                            let data = try? await URLSession.shared.data(from: mp3URL)
+                            print("[AudioCache] STORED — \(term): \(mp3URL)")
                         }
                     }
                 }
             },
             audioURL: { term in
-                if let cached = await cache.get(term) { return cached }
-                guard let mp3URL = await fetchMP3URL(term: term, http: http) else { return nil }
+                if let cached = await cache.get(term) {
+                    print("[AudioCache] HIT — \(term): \(cached)")
+                    return cached
+                }
+                guard let mp3URL = await fetchMP3URL(term: term, http: http) else {
+                    print("[AudioCache] MISS (no URL) — \(term)")
+                    return nil
+                }
                 await cache.set(term, mp3URL)
+                print("[AudioCache] STORED — \(term): \(mp3URL)")
                 return mp3URL
             }
         )
