@@ -23,6 +23,7 @@ public final class VocabularyListViewModel {
 
     @ObservationIgnored @Dependency(\.sessionClient) private var sessionClient
     @ObservationIgnored @Dependency(\.wordClient) private var wordClient
+    @ObservationIgnored @Dependency(\.audioClient) private var audioClient
     private let sessionID: String
 
     public init(sessionID: String) {
@@ -35,7 +36,9 @@ public final class VocabularyListViewModel {
             let session = try await sessionClient.fetchSessionDetail(sessionID)
             viewState = .loaded(session.toVocabularyListPresentationModel())
             let wordIDs = session.words.map(\.id)
+            let terms = session.words.map(\.term)
             Task { await wordClient.prefetchWordDetails(wordIDs) }
+            Task { await audioClient.prefetchAudio(terms) }
         } catch {
             print("[VocabularyList] 세션 로드 실패:", error)
             viewState = .error("단어 목록을 불러오지 못했습니다.")
