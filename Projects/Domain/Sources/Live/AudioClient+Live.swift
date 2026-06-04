@@ -36,12 +36,7 @@ private extension AudioClient {
               let audio = entries.first?.hwi?.prs?.first?.sound?.audio,
               !audio.isEmpty else { return nil }
 
-        let subdir: String
-        if audio.hasPrefix("bix") { subdir = "bix" }
-        else if audio.hasPrefix("gg") { subdir = "gg" }
-        else if let first = audio.first, first.isNumber || first.isPunctuation { subdir = "number" }
-        else { subdir = String(audio.prefix(1)) }
-
+        guard let subdir = audio.first.map(String.init) else { return nil }
         return URL(string: "https://media.merriam-webster.com/audio/prons/en/us/mp3/\(subdir)/\(audio).mp3")
     }
 }
