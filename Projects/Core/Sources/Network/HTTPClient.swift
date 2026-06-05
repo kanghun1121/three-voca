@@ -29,6 +29,12 @@ public struct HTTPClient: HTTPClienting {
         _ = data
     }
 
+    public func requestData(_ requestable: any Requestable) async throws -> Data {
+        let (data, response) = try await perform(requestable)
+        try validate(response, data: data)
+        return data
+    }
+
     // MARK: - Private
 
     private func perform(_ requestable: any Requestable) async throws -> (Data, URLResponse) {
