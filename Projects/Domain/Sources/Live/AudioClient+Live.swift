@@ -49,8 +49,8 @@ private extension AudioClient {
     // AVPlayer는 URLCache를 사용하지 않으므로 file:// URL을 직접 전달해야 즉시 재생된다.
     static func downloadMP3(from url: URL, term: String) async -> URL? {
         guard let (data, _) = try? await URLSession.shared.data(from: url) else { return nil }
-        let fileURL = FileManager.default.temporaryDirectory
-            .appendingPathComponent("\(term).mp3")
+        let fileURL = URL.temporaryDirectory
+            .appending(path: "\(term).mp3")
         try? data.write(to: fileURL)
         return fileURL
     }
