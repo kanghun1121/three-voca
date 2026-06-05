@@ -12,36 +12,21 @@ extension AudioClient: DependencyKey {
                 await withTaskGroup(of: Void.self) { group in
                     for term in terms {
                         group.addTask {
-                            guard await cache.get(term) == nil else {
-                                print("[Audio] HIT (prefetch) — \(term)")
-                                return
-                            }
-                            guard let remoteURL = await fetchMP3URL(term: term, http: http) else {
-                                print("[Audio] URL 조립 실패 — \(term)")
-                                return
-                            }
-                            print("[Audio] URL 조립 성공 — \(term): \(remoteURL)")
+                            guard await cache.get(term) == nil else { return }
+                            guard let remoteURL = await fetchMP3URL(term: term, http: http) else { return }
                             // MP3를 임시 디렉토리에 미리 다운로드해두어
                             // 재생 버튼 탭 시 AVPlayer가 네트워크 요청 없이 즉시 재생할 수 있게 한다.
-                            guard let localURL = await downloadMP3(from: remoteURL, term: term, http: http) else {
-                                print("[Audio] 다운로드 실패 — \(term)")
-                                return
-                            }
+                            guard let localURL = await downloadMP3(from: remoteURL, term: term) else { return }
                             await cache.set(term, localURL)
-                            print("[Audio] STORED — \(term): \(localURL)")
                         }
                     }
                 }
             },
             audioURL: { term in
-                if let cached = await cache.get(term) {
-                    print("[Audio] HIT — \(term): \(cached)")
-                    return cached
-                }
+                if let cached = await cache.get(term) { return cached }
                 // prefetch가 완료되지 않은 상태에서 탭한 경우 — 직접 다운로드 후 캐싱
-                print("[Audio] MISS — \(term), 직접 다운로드 시작")
                 guard let remoteURL = await fetchMP3URL(term: term, http: http) else { return nil }
-                guard let localURL = await downloadMP3(from: remoteURL, term: term, http: http) else { return nil }
+                guard let localURL = await downloadMP3(from: remoteURL, term: term) else { return nil }
                 await cache.set(term, localURL)
                 return localURL
             }
@@ -61,14 +46,8 @@ private extension AudioClient {
 
     // 앱 재시작 전까지 유효한 임시 디렉토리에 저장한다.
     // AVPlayer는 URLCache를 사용하지 않으므로 file:// URL을 직접 전달해야 즉시 재생된다.
-    static func downloadMP3(from url: URL, term: String, http: HTTPClient) async -> URL? {
-        let data: Data
-        do {
-            data = try await http.requestData(DownloadMP3Request(url: url))
-        } catch {
-            print("[Audio] 다운로드 에러 — \(term): \(error)")
-            return nil
-        }
+    static func downloadMP3(from url: URL, term: String) async -> URL? {
+        guard let (data, _) = try? await URLSession.shared.data(from: url) else { return nil }
         let fileURL = FileManager.default.temporaryDirectory
             .appendingPathComponent("\(term).mp3")
         try? data.write(to: fileURL)
