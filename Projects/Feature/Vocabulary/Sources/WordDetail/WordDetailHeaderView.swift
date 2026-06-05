@@ -25,10 +25,12 @@ private struct PronunciationRow: View {
     let pronunciation: String
     let onPronunciationTapped: () -> Void
 
+    @ScaledMetric private var fontSize: CGFloat = 14
+
     var body: some View {
         HStack(spacing: 10) {
             Text(pronunciation)
-                .font(.system(size: 14, design: .monospaced))
+                .font(.system(size: fontSize, design: .monospaced))
                 .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
             AudioButton(action: onPronunciationTapped)
         }
@@ -38,10 +40,12 @@ private struct PronunciationRow: View {
 private struct AudioButton: View {
     let action: () -> Void
 
+    @ScaledMetric private var iconSize: CGFloat = 14
+
     var body: some View {
         Button(action: action) {
             Image(systemName: "speaker.wave.2")
-                .font(.system(size: 14))
+                .font(.system(size: iconSize))
                 .foregroundStyle(DesignSystemAsset.study300.swiftUIColor)
         }
         .accessibilityLabel("발음 듣기")
@@ -54,12 +58,14 @@ private struct AudioButton: View {
 }
 
 private struct WordModeBadge: View {
+    @ScaledMetric private var fontSize: CGFloat = 11
+
     var body: some View {
         HStack(spacing: 6) {
             Image(systemName: "book")
-                .font(.system(size: 11))
+                .font(.system(size: fontSize))
             Text("단어 보기")
-                .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 11))
+                .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: fontSize))
         }
         .foregroundStyle(DesignSystemAsset.study300.swiftUIColor)
         .padding(.horizontal, 10)
