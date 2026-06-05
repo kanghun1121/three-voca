@@ -1,5 +1,6 @@
-import Core
 import Foundation
+
+import Core
 
 struct GetMWAudioRequest: Requestable {
     let term: String

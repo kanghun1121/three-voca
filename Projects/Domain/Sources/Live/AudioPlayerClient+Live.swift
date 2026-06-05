@@ -1,7 +1,8 @@
 import AVFoundation
+import Foundation
+
 import Dependencies
 import DomainInterface
-import Foundation
 
 extension AudioPlayerClient: DependencyKey {
     public static let liveValue: AudioPlayerClient = {

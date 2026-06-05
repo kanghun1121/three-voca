@@ -1,5 +1,6 @@
-import DesignSystem
 import SwiftUI
+
+import DesignSystem
 
 public struct WordDetailView: View {
     @Bindable private var viewModel: WordDetailViewModel
@@ -12,12 +13,9 @@ public struct WordDetailView: View {
     public var body: some View {
         TabView(selection: $viewModel.currentIndex) {
             ForEach(viewModel.wordIDs.indices, id: \.self) { index in
-                WordDetailPageView(
-                    viewState: viewModel.viewStates[index],
-                    onPronunciationTapped: { term in
-                        Task { await viewModel.pronunciationButtonTapped(term: term) }
-                    }
-                )
+                WordDetailPageView(viewState: viewModel.viewStates[index]) { term in
+                    Task { await viewModel.didTapPronunciationButton(term: term) }
+                }
                 .tag(index)
                 .task { await viewModel.requestIfNeeded(at: index) }
             }

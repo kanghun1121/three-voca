@@ -3,7 +3,7 @@ import Foundation
 actor AudioCache {
     private var storage: [String: URL] = [:]
 
-    func get(_ term: String) -> URL? {
+    func fetch(_ term: String) -> URL? {
         storage[term]
     }
 

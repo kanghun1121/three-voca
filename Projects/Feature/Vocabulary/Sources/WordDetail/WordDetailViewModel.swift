@@ -25,7 +25,7 @@ public final class WordDetailViewModel {
         self.currentIndex = initialIndex
     }
 
-    func pronunciationButtonTapped(term: String) async {
+    func didTapPronunciationButton(term: String) async {
         guard let url = await audioClient.audioURL(term) else { return }
         await audioPlayerClient.play(url)
     }
