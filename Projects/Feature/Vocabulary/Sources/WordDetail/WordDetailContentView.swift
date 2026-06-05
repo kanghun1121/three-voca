@@ -1,5 +1,6 @@
-import DesignSystem
 import SwiftUI
+
+import DesignSystem
 
 struct WordDetailContentView: View {
     let state: WordDetailPresentationModel
@@ -10,9 +11,10 @@ struct WordDetailContentView: View {
             VStack(alignment: .leading, spacing: 0) {
                 WordDetailHeaderView(
                     term: state.term,
-                    pronunciation: state.pronunciation,
-                    onPronunciationTapped: { onPronunciationTapped(state.term) }
-                )
+                    pronunciation: state.pronunciation
+                ) {
+                    onPronunciationTapped(state.term)
+                }
                 .padding(.bottom, 22)
 
                 WordDetailDefinitionsView(groups: state.definitionGroups)
