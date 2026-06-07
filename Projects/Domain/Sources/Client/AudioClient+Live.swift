@@ -51,7 +51,7 @@ private extension AudioClient {
         guard let (data, _) = try? await URLSession.shared.data(from: url) else { return nil }
         let fileURL = URL.temporaryDirectory
             .appending(path: "\(term).mp3")
-        try? data.write(to: fileURL)
+        try? data.write(to: fileURL, options: .atomic)
         return fileURL
     }
 }
