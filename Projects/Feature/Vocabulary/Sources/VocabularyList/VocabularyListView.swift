@@ -1,6 +1,21 @@
 import SwiftUI
 
 import DesignSystem
+import Dependencies
+
+#Preview("로딩") {
+    let vm = withDependencies {
+        $0.sessionClient.fetchSessionDetail = { _ in
+            try await Task.sleep(for: .seconds(3600))
+            throw CancellationError()
+        }
+    } operation: {
+        VocabularyListViewModel(sessionID: "preview")
+    }
+    NavigationStack {
+        VocabularyListView(viewModel: vm)
+    }
+}
 
 public struct VocabularyListView: View {
     @Bindable private var viewModel: VocabularyListViewModel

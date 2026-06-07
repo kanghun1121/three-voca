@@ -3,6 +3,12 @@ import SwiftUI
 import DesignSystem
 import Shimmer
 
+#Preview {
+    NavigationStack {
+        VocabularyListSkeletonView()
+    }
+}
+
 struct VocabularyListSkeletonView: View {
     private let rowCount = 8
 
