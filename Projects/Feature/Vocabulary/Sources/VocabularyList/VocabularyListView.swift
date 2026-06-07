@@ -1,5 +1,6 @@
-import DesignSystem
 import SwiftUI
+
+import DesignSystem
 
 public struct VocabularyListView: View {
     @Bindable private var viewModel: VocabularyListViewModel

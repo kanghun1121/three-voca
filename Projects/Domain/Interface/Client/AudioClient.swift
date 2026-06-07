@@ -1,5 +1,6 @@
-import Dependencies
 import Foundation
+
+import Dependencies
 
 public struct AudioClient: Sendable {
     public var prefetchAudio: @Sendable (_ terms: [String]) async -> Void

@@ -1,8 +1,8 @@
 import SwiftUI
 
-import Dependencies
-
 import DomainInterface
+
+import Dependencies
 
 struct EndpointDetailView: View {
     enum Endpoint {

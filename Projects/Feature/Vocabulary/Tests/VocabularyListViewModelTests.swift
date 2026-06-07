@@ -25,6 +25,7 @@ final class VocabularyListViewModelTests: XCTestCase {
         let vm = withDependencies {
             $0.sessionClient = .previewValue
             $0.wordClient.prefetchWordDetails = { _ in }
+            $0.audioClient.prefetchAudio = { _ in }
         } operation: {
             VocabularyListViewModel(sessionID: "t")
         }
@@ -45,6 +46,7 @@ final class VocabularyListViewModelTests: XCTestCase {
         let vm = withDependencies {
             $0.sessionClient = .previewValue
             $0.wordClient.prefetchWordDetails = { _ in }
+            $0.audioClient.prefetchAudio = { _ in }
         } operation: {
             VocabularyListViewModel(sessionID: "t")
         }
@@ -59,6 +61,7 @@ final class VocabularyListViewModelTests: XCTestCase {
         let vm = withDependencies {
             $0.sessionClient = .previewValue
             $0.wordClient.prefetchWordDetails = { _ in }
+            $0.audioClient.prefetchAudio = { _ in }
         } operation: {
             VocabularyListViewModel(sessionID: "t")
         }

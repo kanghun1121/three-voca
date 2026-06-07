@@ -1,5 +1,6 @@
-import Dependencies
 import XCTest
+
+import Dependencies
 
 @testable import FeatureSession
 

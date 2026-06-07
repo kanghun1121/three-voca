@@ -1,6 +1,8 @@
-import Dependencies
-import FeatureSession
 import SwiftUI
+
+import FeatureSession
+
+import Dependencies
 
 @main
 struct VocaExampleApp: App {

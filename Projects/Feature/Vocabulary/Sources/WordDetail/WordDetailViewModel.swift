@@ -1,7 +1,8 @@
 import Foundation
 
-import Dependencies
 import DomainInterface
+
+import Dependencies
 
 @Observable
 @MainActor

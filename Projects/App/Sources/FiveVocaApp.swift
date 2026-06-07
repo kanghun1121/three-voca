@@ -1,9 +1,9 @@
 import SwiftUI
 
-import Dependencies
-
 import Domain
 import FeatureHome
+
+import Dependencies
 
 @main
 struct FiveVocaApp: App {

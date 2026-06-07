@@ -1,5 +1,6 @@
-import Dependencies
 import Foundation
+
+import Dependencies
 
 public struct HomeClient: Sendable {
     public var fetchHomeOverview: @Sendable () async throws -> VocabularyLibrary

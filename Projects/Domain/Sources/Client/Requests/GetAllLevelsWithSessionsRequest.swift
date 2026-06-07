@@ -1,5 +1,6 @@
-import Core
 import Foundation
+
+import Core
 
 struct GetAllLevelsWithSessionsRequest: Requestable {
     var baseURL: URL { SupabaseConfig.baseURL }

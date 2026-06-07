@@ -1,5 +1,6 @@
-import DesignSystem
 import SwiftUI
+
+import DesignSystem
 
 struct LevelInfo: View {
     let name: String

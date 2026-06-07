@@ -1,6 +1,8 @@
-import Dependencies
-import DomainInterface
 import XCTest
+
+import DomainInterface
+
+import Dependencies
 
 @testable import FeatureHome
 

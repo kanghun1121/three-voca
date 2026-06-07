@@ -1,5 +1,7 @@
-import FeatureSession
 import SwiftUI
+
+import FeatureSession
+
 import SwiftUINavigation
 
 public struct HomeView: View {
