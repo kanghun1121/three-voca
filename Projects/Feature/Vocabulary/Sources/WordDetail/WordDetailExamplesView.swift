@@ -1,5 +1,6 @@
-import DesignSystem
 import SwiftUI
+
+import DesignSystem
 
 struct WordDetailExamplesView: View {
     let term: String

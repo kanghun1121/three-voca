@@ -1,5 +1,6 @@
-import Dependencies
 import Foundation
+
+import Dependencies
 
 public struct WordClient: Sendable {
     public var fetchWordDetail: @Sendable (_ id: String) async throws -> WordDetail

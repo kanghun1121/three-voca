@@ -1,5 +1,6 @@
-import DomainInterface
 import Foundation
+
+import DomainInterface
 
 extension SessionDetailResponseDTO {
     func toDomain() -> Session {

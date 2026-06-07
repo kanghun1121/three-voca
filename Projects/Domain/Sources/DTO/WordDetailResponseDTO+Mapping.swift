@@ -1,5 +1,6 @@
-import DomainInterface
 import Foundation
+
+import DomainInterface
 
 extension WordDetailResponseDTO {
     func toDomain() -> WordDetail {

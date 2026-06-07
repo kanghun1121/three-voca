@@ -1,7 +1,9 @@
-import Dependencies
+import Foundation
+
 import DomainInterface
 import FeatureSession
-import Foundation
+
+import Dependencies
 import SwiftUINavigation
 
 @Observable

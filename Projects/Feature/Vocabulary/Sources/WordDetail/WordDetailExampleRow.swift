@@ -1,6 +1,7 @@
-import DesignSystem
 import NaturalLanguage
 import SwiftUI
+
+import DesignSystem
 
 struct WordDetailExampleRow: View {
     let term: String

@@ -1,6 +1,8 @@
-import Dependencies
-import FeatureVocabulary
 import SwiftUI
+
+import FeatureVocabulary
+
+import Dependencies
 
 @main
 struct VocabularyExampleApp: App {

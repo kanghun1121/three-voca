@@ -1,5 +1,6 @@
-import Core
 import Foundation
+
+import Core
 
 struct GetSessionDetailRequest: Requestable {
     let sessionID: String

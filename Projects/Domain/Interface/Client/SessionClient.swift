@@ -1,5 +1,6 @@
-import Dependencies
 import Foundation
+
+import Dependencies
 
 public struct SessionClient: Sendable {
     public var fetchSessionDetail: @Sendable (_ id: String) async throws -> Session

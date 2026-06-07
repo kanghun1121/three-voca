@@ -1,5 +1,6 @@
-import DomainInterface
 import Foundation
+
+import DomainInterface
 
 extension VocabularyLibraryResponseDTO {
     func toDomain() -> VocabularyLibrary {

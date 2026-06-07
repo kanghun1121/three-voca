@@ -1,9 +1,9 @@
 import SwiftUI
 
-import Dependencies
-
 import Domain
 import DomainInterface
+
+import Dependencies
 
 @main
 struct DomainExampleApp: App {

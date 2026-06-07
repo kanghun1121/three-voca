@@ -1,5 +1,6 @@
-import Core
 import Foundation
+
+import Core
 
 struct GetWordDetailRequest: Requestable {
     let wordID: String

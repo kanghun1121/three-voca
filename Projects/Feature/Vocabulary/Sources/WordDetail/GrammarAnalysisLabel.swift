@@ -1,5 +1,6 @@
-import DesignSystem
 import SwiftUI
+
+import DesignSystem
 
 struct GrammarAnalysisLabel: View {
     var body: some View {

@@ -1,5 +1,6 @@
-import DesignSystem
 import SwiftUI
+
+import DesignSystem
 
 struct VocabularyListHeaderView: View {
     let level: Int

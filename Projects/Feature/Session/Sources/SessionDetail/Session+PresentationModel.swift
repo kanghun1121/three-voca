@@ -1,5 +1,6 @@
-import DomainInterface
 import Foundation
+
+import DomainInterface
 
 extension Session {
     func toSessionDetailPresentationModel() -> SessionDetailPresentationModel {

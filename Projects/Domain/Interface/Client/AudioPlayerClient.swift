@@ -1,5 +1,6 @@
-import Dependencies
 import Foundation
+
+import Dependencies
 
 public struct AudioPlayerClient: Sendable {
     public var play: @Sendable (_ url: URL) async -> Void

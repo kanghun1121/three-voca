@@ -1,5 +1,6 @@
-import DesignSystem
 import SwiftUI
+
+import DesignSystem
 
 struct WordDetailDefinitionsView: View {
     let groups: [WordDetailPresentationModel.DefinitionGroup]

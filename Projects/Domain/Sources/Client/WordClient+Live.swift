@@ -1,7 +1,9 @@
-import Core
-import Dependencies
-import DomainInterface
 import Foundation
+
+import Core
+import DomainInterface
+
+import Dependencies
 
 extension WordClient: DependencyKey {
     public static let liveValue: WordClient = {

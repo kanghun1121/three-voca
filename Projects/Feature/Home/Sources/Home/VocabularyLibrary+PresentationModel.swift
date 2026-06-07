@@ -1,5 +1,6 @@
-import DomainInterface
 import Foundation
+
+import DomainInterface
 
 private let lowAccuracyThreshold: Double = 0.7
 

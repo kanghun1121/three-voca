@@ -1,5 +1,6 @@
-import DesignSystem
 import SwiftUI
+
+import DesignSystem
 
 struct WordPreviewSection: View {
     let wordCount: Int

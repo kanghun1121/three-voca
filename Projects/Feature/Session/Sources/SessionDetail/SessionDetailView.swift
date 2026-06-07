@@ -1,5 +1,7 @@
-import FeatureVocabulary
 import SwiftUI
+
+import FeatureVocabulary
+
 import SwiftUINavigation
 
 public struct SessionDetailView: View {

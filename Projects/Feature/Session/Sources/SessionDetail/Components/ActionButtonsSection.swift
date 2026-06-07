@@ -1,5 +1,6 @@
-import DesignSystem
 import SwiftUI
+
+import DesignSystem
 
 struct ActionButtonsSection: View {
     let onVocabularyListTapped: () -> Void

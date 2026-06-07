@@ -1,6 +1,8 @@
-import Dependencies
-import FeatureHome
 import SwiftUI
+
+import FeatureHome
+
+import Dependencies
 
 @main
 struct HomeExampleApp: App {
