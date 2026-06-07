@@ -192,13 +192,18 @@ loadUser(
 ## 4. Import 정렬 ⭐ 사용자 커스텀 (강조)
 
 ### 룰
-- 모든 import는 **알파벳 오름차순**
+- **그룹 순서**: Apple Framework → Module → Third Party (3그룹 고정)
+- **각 그룹 내**: 알파벳 오름차순
 - **중복 제거**
-- 그룹 분리는 다음 순서 권장 (각 그룹 안에서 알파벳 정렬):
-  1. 시스템 import (Foundation, UIKit, SwiftUI 등)
-  2. 외부 라이브러리 (Alamofire, SnapKit 등)
-  3. 내부 모듈 (FeatureXxx, DomainXxx 등)
-- 그룹 사이 빈 줄 1개
+- **그룹 사이 빈 줄 1개**
+
+#### 그룹 분류 기준
+
+| 그룹 | 포함되는 것 | 예시 |
+|------|-----------|------|
+| **Apple Framework** | Apple이 제공하는 모든 프레임워크 | `Foundation`, `UIKit`, `SwiftUI`, `Combine`, `CoreData` |
+| **Module** | 이 프로젝트 내부 모듈 | `DomainAuth`, `FeatureHome`, `SharedUI` |
+| **Third Party** | 외부 라이브러리 (SPM/CocoaPods) | `Alamofire`, `SnapKit`, `ComposableArchitecture` |
 
 ### 예시
 
@@ -208,35 +213,47 @@ import Foundation
 import SwiftUI
 import UIKit
 
+import DomainAuth
+import FeatureHomeInterface
+
 import Alamofire
+import SnapKit
+```
+
+**Good ✅** — Apple Framework만 있는 경우
+```swift
+import Combine
+import Foundation
+import SwiftUI
+```
+
+**Bad ❌** — 그룹 순서 위반 (Third Party가 Module 앞에 옴)
+```swift
+import Foundation
+import SwiftUI
+
+import Alamofire       // Third Party가 Module보다 먼저 → 위반
 import SnapKit
 
 import DomainAuth
 import FeatureHomeInterface
 ```
 
-**Good ✅** — 그룹 구분 없이 단순 알파벳 (가이드 기본형)
+**Bad ❌** — 정렬 안 됨 / 중복 / 키워드 오타
 ```swift
-import Alamofire
-import Foundation
-import SnapKit
-```
+import UIKit
+import Foundation      // 알파벳 역순 → 위반
 
-**Bad ❌**
-```swift
-import Foundation              // 정렬 안 됨
-import Alamofire
-import SnapKit
-
-importFoundation               // 띄어쓰기 누락
-import Alamofire               // 중복
+importFoundation       // 띄어쓰기 누락
+import Alamofire       // 중복
 ```
 
 ### 검토 포인트
-- 알파벳 순서 위반 → 재정렬 제안
-- 중복 import → 제거
-- `import` 키워드 뒤 공백 누락 → 수정 (`importFoundation` ❌)
-- 그룹 분리되지 않음 → P2로 그룹 분리 제안 (선호 사항)
+- 그룹 순서(Apple → Module → Third Party) 위반 → P1로 재정렬 제안
+- 각 그룹 내 알파벳 순서 위반 → P1로 재정렬 제안
+- 그룹 사이 빈 줄 없거나 2개 이상 → P1로 수정 제안
+- 중복 import → P0으로 제거
+- `import` 키워드 뒤 공백 누락 → P0으로 수정 (`importFoundation` ❌)
 
 ---
 
@@ -354,7 +371,9 @@ class Earth {
 - [ ] 함수 파라미터 1~2개는 한 줄인가?
 - [ ] 함수 파라미터 3개 이상은 한 줄에 하나씩 줄바꿈됐는가?
 - [ ] 함수 호출도 같은 룰 적용됐는가?
-- [ ] Import가 알파벳 순서인가?
+- [ ] Import 그룹 순서가 Apple Framework → Module → Third Party인가?
+- [ ] 각 그룹 내 Import가 알파벳 오름차순인가?
+- [ ] 그룹 사이 빈 줄이 정확히 1개인가?
 - [ ] Import에 중복은 없는가?
 - [ ] 함수 doc comment가 `///`인가?
 - [ ] Stored property가 computed/observer property보다 먼저 오는가?
