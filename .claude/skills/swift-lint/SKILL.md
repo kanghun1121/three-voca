@@ -1,6 +1,6 @@
 ---
 name: swift-lint
-description: POSTECH Apple Developer Academy의 Swift Style Guide + 커스텀 룰(파라미터 3개 이상일 때만 줄바꿈, import 알파벳 순서)을 기반으로 Swift 코드를 검토하고 스타일 위반을 지적하는 린트 스킬. 사용자가 'Swift 코드 린트', '스타일 체크해줘', '컨벤션 검사', '코드 리뷰', '코드 봐줘', 'lint this Swift file', 'review this code', '이 코드 스타일 가이드 따르는지 봐줘'처럼 Swift 코드의 스타일/컨벤션 점검을 요청하면 — 'lint'나 '린트'라는 단어가 없어도 — 무조건 트리거한다. Swift 파일을 첨부하며 '이거 괜찮아?', '문제 있어?', '개선할 점?'처럼 평가성 질문을 던져도 사용한다. 네이밍/형식/import/들여쓰기/클로저/타입/메모리/주석/SwiftUI 9개 카테고리를 모두 점검하고 파일별로 위반 사항 위치 + 수정안을 제시한다. 단순 코드 작성이나 새 기능 구현에는 사용하지 않는다 — 그건 일반 코딩 작업이다.
+description: POSTECH Apple Developer Academy의 Swift Style Guide + 커스텀 룰(파라미터 3개 이상일 때만 줄바꿈, import Apple Framework→Module→Third Party 그룹 순서 + 각 그룹 내 알파벳 정렬)을 기반으로 Swift 코드를 검토하고 스타일 위반을 지적하는 린트 스킬. 사용자가 'Swift 코드 린트', '스타일 체크해줘', '컨벤션 검사', '코드 리뷰', '코드 봐줘', 'lint this Swift file', 'review this code', '이 코드 스타일 가이드 따르는지 봐줘'처럼 Swift 코드의 스타일/컨벤션 점검을 요청하면 — 'lint'나 '린트'라는 단어가 없어도 — 무조건 트리거한다. Swift 파일을 첨부하며 '이거 괜찮아?', '문제 있어?', '개선할 점?'처럼 평가성 질문을 던져도 사용한다. 네이밍/형식/import/들여쓰기/클로저/타입/메모리/주석/SwiftUI 9개 카테고리를 모두 점검하고 파일별로 위반 사항 위치 + 수정안을 제시한다. 단순 코드 작성이나 새 기능 구현에는 사용하지 않는다 — 그건 일반 코딩 작업이다.
 ---
 
 # swift-lint
@@ -23,7 +23,7 @@ POSTECH Apple Developer Academy Swift Style Guide + 사용자 커스텀 룰 기�
 POSTECH 가이드에 더해 본 프로젝트는 다음 2개를 추가한다:
 
 1. **파라미터 3개 이상일 때만 줄바꿈** — 1~2개는 한 줄, 3개 이상은 한 줄에 하나씩.
-2. **Import 알파벳 순서** — 가이드 §파일관리에도 있지만 본 룰셋은 더 엄격하게 강제한다.
+2. **Import 그룹 순서 + 알파벳 정렬** — Apple Framework → Module(내부) → Third Party(외부) 순으로 그룹을 나누고, 각 그룹 안에서 알파벳 오름차순. 그룹 사이 빈 줄 1개.
 
 상세는 `references/format-rules.md` §파라미터 줄바꿈 / §Import 정렬 참조.
 
@@ -171,7 +171,7 @@ POSTECH 가이드에 더해 본 프로젝트는 다음 2개를 추가한다:
 
 | 함정 | 방지법 |
 |------|--------|
-| Import 정렬을 라이브러리/내부 모듈 구분 안 하고 통째로 정렬 | 시스템 import / 외부 / 내부 구분 후 각 그룹 안에서만 알파벳 정렬 |
+| Import 그룹 순서를 틀림 (Third Party를 Module보다 앞에 배치) | Apple Framework → Module(내부) → Third Party(외부) 순서를 반드시 지킨다 |
 | 파라미터 줄바꿈 룰을 함수 호출에만 적용 | 함수 선언/호출/이니셜라이저 모두 동일 적용 |
 | `get` 함수를 모두 `fetch`로 바꿈 | 비동기/실패 가능 → `request`, 즉시 반환 → `fetch`. 구분해서 제안 |
 | Bool 변수 이름 검증 누락 | `isXxx`, `hasXxx`, `shouldXxx` 형태 권장 (가이드에 명시 안 됐어도 일반적) |
