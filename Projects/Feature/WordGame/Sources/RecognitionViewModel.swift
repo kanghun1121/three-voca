@@ -33,7 +33,7 @@ public final class RecognitionViewModel {
     private(set) var wordIndex: Int = 0
     private(set) var totalWords: Int = 0
     var destination: Destination?
-    var shouldDismiss = false
+    var dismiss = false
 
     @ObservationIgnored @Dependency(\.sessionClient) private var sessionClient
     @ObservationIgnored @Dependency(\.audioClient) private var audioClient
@@ -84,7 +84,7 @@ public final class RecognitionViewModel {
 
     // 완료/에러 화면 닫기 버튼
     func doneButtonTapped() {
-        shouldDismiss = true
+        dismiss = true
     }
 
     func alertButtonTapped(_ action: AlertAction?) {
@@ -92,7 +92,7 @@ public final class RecognitionViewModel {
         case .confirmSave, .confirmDiscard:
             revealTask?.cancel()
             audioTask?.cancel()
-            shouldDismiss = true
+            dismiss = true
         case .none:
             startCountdown(remaining: remainingSeconds)
         }
