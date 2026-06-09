@@ -12,7 +12,6 @@ let project = Project.makeModule(
                 .feature(interface: .vocabulary),
                 .dependencies,
                 .designSystem,
-                .shimmer,
                 .swiftUINavigation,
             ]
         )),
