@@ -27,8 +27,27 @@ struct SpellingView: View {
                     .padding(.bottom, 36)
 
                 SpellingSlotRow(slots: slots, viewState: viewState, reduceMotion: reduceMotion)
+
+                // 오답 시 정답 카드
+                if viewState == .revealing {
+                    Text(word.term)
+                        .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 18))
+                        .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 32)
+                        .padding(.vertical, 14)
+                        .background(DesignSystemAsset.white.swiftUIColor.opacity(0.12))
+                        .clipShape(.rect(cornerRadius: 16))
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 16)
+                                .stroke(DesignSystemAsset.white.swiftUIColor.opacity(0.28), lineWidth: 1)
+                        }
+                        .padding(.top, 24)
+                        .transition(.opacity.combined(with: .move(edge: .bottom)))
+                }
             }
             .padding(.horizontal, 24)
+            .animation(.easeOut(duration: 0.2), value: viewState == .revealing)
 
             Spacer()
         }
@@ -48,7 +67,7 @@ struct SpellingSlotRow: View {
                 SpellingSlotCell(slot: slot, viewState: viewState)
             }
         }
-        .modifier(ShakeModifier(trigger: viewState == .incorrect, reduceMotion: reduceMotion))
+        .modifier(ShakeModifier(trigger: viewState == .incorrect || viewState == .revealing, reduceMotion: reduceMotion))
     }
 }
 
@@ -91,7 +110,7 @@ private struct SpellingSlotCell: View {
         switch viewState {
         case .correct:
             return DesignSystemAsset.white.swiftUIColor.opacity(0.28)
-        case .incorrect:
+        case .incorrect, .revealing:
             return DesignSystemAsset.negative.swiftUIColor.opacity(0.20)
         default:
             if case .filled = slot {
@@ -108,7 +127,7 @@ private struct SpellingSlotCell: View {
         switch viewState {
         case .correct:
             return DesignSystemAsset.white.swiftUIColor.opacity(0.55)
-        case .incorrect:
+        case .incorrect, .revealing:
             return DesignSystemAsset.negative.swiftUIColor.opacity(0.55)
         default:
             if case .cursor = slot {
