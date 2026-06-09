@@ -7,6 +7,7 @@ let targets: [Target] = [
             .feature(implements: .home),
             .feature(implements: .session),
             .feature(implements: .vocabulary),
+            .feature(implements: .wordGame),
         ]
     ))
 ]
