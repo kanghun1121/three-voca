@@ -3,11 +3,12 @@ import SwiftUI
 import DesignSystem
 
 struct ActionButtonsSection: View {
+    let onGameTapped: () -> Void
     let onVocabularyListTapped: () -> Void
 
     var body: some View {
         VStack(spacing: 10) {
-            Button(action: {}) {
+            Button(action: onGameTapped) {
                 Label("학습 시작 — 4-Phase 게임", systemImage: "play.fill")
                     .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 17))
                     .foregroundStyle(DesignSystemAsset.white.swiftUIColor)

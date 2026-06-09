@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SessionDetailContentView: View {
     let state: SessionDetailPresentationModel
+    let onGameTapped: () -> Void
     let onVocabularyListTapped: () -> Void
 
     var body: some View {
@@ -16,7 +17,10 @@ struct SessionDetailContentView: View {
                 )
                 RecordCard(record: state.record)
                 WordPreviewSection(wordCount: state.wordCount, words: state.words)
-                ActionButtonsSection(onVocabularyListTapped: onVocabularyListTapped)
+                ActionButtonsSection(
+                    onGameTapped: onGameTapped,
+                    onVocabularyListTapped: onVocabularyListTapped
+                )
             }
             .padding(.horizontal, 20)
             .padding(.vertical)
