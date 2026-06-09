@@ -12,12 +12,9 @@ public final class RecognitionViewModel {
         case loading
         case active
         case revealing
-        case completed
-        case error(String)
     }
 
     enum AlertAction {
-        case confirmSave
         case confirmDiscard
     }
 
@@ -33,37 +30,33 @@ public final class RecognitionViewModel {
     private(set) var wordIndex: Int = 0
     private(set) var totalWords: Int = 0
     var destination: Destination?
-    var dismiss = false
 
-    @ObservationIgnored @Dependency(\.sessionClient) private var sessionClient
     @ObservationIgnored @Dependency(\.audioClient) private var audioClient
     @ObservationIgnored @Dependency(\.audioPlayerClient) private var audioPlayerClient
 
-    private let sessionID: String
-    private var words: [GameWord] = []
+    private let words: [GameWord]
+    private let onCompleted: () -> Void
+    private let onClose: () -> Void
+
     private var countdownTask: Task<Void, Never>?
     private var revealTask: Task<Void, Never>?
     private var audioTask: Task<Void, Never>?
     private let totalCountdown: Double = 5.0
     private var remainingSeconds: Double = 5.0
 
-    public init(sessionID: String) {
-        self.sessionID = sessionID
+    init(words: [GameWord], onCompleted: @escaping () -> Void, onClose: @escaping () -> Void) {
+        self.words = words
+        self.totalWords = words.count
+        self.onCompleted = onCompleted
+        self.onClose = onClose
     }
 
-    func load() async {
-        do {
-            let session = try await sessionClient.fetchSessionDetail(sessionID)
-            words = session.words.map { GameWord(from: $0) }
-            totalWords = words.count
-            if words.isEmpty {
-                viewState = .completed
-                return
-            }
-            showWord(at: 0)
-        } catch {
-            viewState = .error("단어를 불러오지 못했습니다.")
+    func start() {
+        guard !words.isEmpty else {
+            onCompleted()
+            return
         }
+        showWord(at: 0)
     }
 
     // X 버튼 — 남은 시간을 저장하고 타이머 Task를 즉시 cancel한 뒤 알럿 표시
@@ -82,17 +75,12 @@ public final class RecognitionViewModel {
         )
     }
 
-    // 완료/에러 화면 닫기 버튼
-    func doneButtonTapped() {
-        dismiss = true
-    }
-
     func alertButtonTapped(_ action: AlertAction?) {
         switch action {
-        case .confirmSave, .confirmDiscard:
+        case .confirmDiscard:
             revealTask?.cancel()
             audioTask?.cancel()
-            dismiss = true
+            onClose()
         case .none:
             startCountdown(remaining: remainingSeconds)
         }
@@ -112,7 +100,7 @@ public final class RecognitionViewModel {
 
     private func showWord(at index: Int) {
         guard index < words.count else {
-            viewState = .completed
+            onCompleted()
             return
         }
 

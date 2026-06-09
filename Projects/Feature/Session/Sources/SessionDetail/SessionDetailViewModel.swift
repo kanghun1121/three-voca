@@ -19,7 +19,7 @@ public final class SessionDetailViewModel {
     @CasePathable
     public enum Destination {
         case vocabularyList(VocabularyListViewModel)
-        case wordGame(RecognitionViewModel)
+        case wordGame(WordGameViewModel)
     }
 
     private(set) var viewState: ViewState = .loading
@@ -47,6 +47,6 @@ public final class SessionDetailViewModel {
     }
 
     public func didTapGame() {
-        destination = .wordGame(RecognitionViewModel(sessionID: sessionID))
+        destination = .wordGame(WordGameViewModel(sessionID: sessionID))
     }
 }
