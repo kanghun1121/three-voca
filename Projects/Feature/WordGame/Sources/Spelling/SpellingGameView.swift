@@ -40,14 +40,6 @@ public struct SpellingGameView: View {
                 .textInputAutocapitalization(.never)
                 .keyboardType(.asciiCapable)
         }
-        .toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                Spacer()
-                Button("확인") { viewModel.confirmTapped() }
-                    .fontWeight(.semibold)
-                    .disabled(!viewModel.isConfirmEnabled)
-            }
-        }
         .onAppear {
             viewModel.start()
             isKeyboardFocused = true
