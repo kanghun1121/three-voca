@@ -105,11 +105,12 @@ public final class RecognitionViewModel {
             for remaining in stride(from: 5, through: 0, by: -1) {
                 guard !Task.isCancelled else { return }
                 countdown = remaining
+                try? await Task.sleep(for: .seconds(1))
+                guard !Task.isCancelled else { return }
                 if remaining == 0 {
                     revealAndAdvance()
                     return
                 }
-                try? await Task.sleep(for: .seconds(1))
             }
         }
     }
