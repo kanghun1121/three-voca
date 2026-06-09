@@ -18,6 +18,13 @@ extension SessionClient: TestDependencyKey {
     public static let previewValue = SessionClient(
         fetchSessionDetail: { id in .previewWithRecord(id: id) }
     )
+
+    public static let previewLoading = SessionClient(
+        fetchSessionDetail: { _ in
+            try await Task.sleep(for: .seconds(3600))
+            throw CancellationError()
+        }
+    )
 }
 
 public extension DependencyValues {

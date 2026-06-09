@@ -3,20 +3,6 @@ import SwiftUI
 import DesignSystem
 import Dependencies
 
-#Preview("로딩") {
-    let vm = withDependencies {
-        $0.sessionClient.fetchSessionDetail = { _ in
-            try await Task.sleep(for: .seconds(3600))
-            throw CancellationError()
-        }
-    } operation: {
-        VocabularyListViewModel(sessionID: "preview")
-    }
-    NavigationStack {
-        VocabularyListView(viewModel: vm)
-    }
-}
-
 public struct VocabularyListView: View {
     @Bindable private var viewModel: VocabularyListViewModel
     @Environment(\.dismiss) private var dismiss
@@ -42,13 +28,28 @@ public struct VocabularyListView: View {
         .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
-                Button("뒤로", systemImage: "chevron.left", action: dismiss.callAsFunction)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
+                Button(
+                    "뒤로",
+                    systemImage: "chevron.left",
+                    action: dismiss.callAsFunction
+                )
+                .fontWeight(.semibold)
+                .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
             }
         }
         .navigationDestination(item: $viewModel.destination.wordDetail) { wordDetailVM in
             WordDetailView(viewModel: wordDetailVM)
         }
+    }
+}
+
+#Preview("로딩") {
+    let vm = withDependencies {
+        $0.sessionClient = .previewLoading
+    } operation: {
+        VocabularyListViewModel(sessionID: "preview")
+    }
+    NavigationStack {
+        VocabularyListView(viewModel: vm)
     }
 }
