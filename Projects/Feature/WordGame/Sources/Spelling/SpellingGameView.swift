@@ -22,8 +22,7 @@ public struct SpellingGameView: View {
                         word: word,
                         slots: viewModel.slots,
                         viewState: viewModel.viewState,
-                        onDismiss: viewModel.closeButtonTapped,
-                        onFocusKeyboard: { isKeyboardFocused = true }
+                        onDismiss: viewModel.closeButtonTapped
                     )
                 }
 
@@ -68,15 +67,12 @@ private struct SpellingActivePhaseView: View {
     let slots: [SpellingViewModel.SlotState]
     let viewState: SpellingViewModel.ViewState
     let onDismiss: () -> Void
-    let onFocusKeyboard: () -> Void
 
     var body: some View {
         VStack(spacing: 0) {
             SpellingGameHeader(onDismiss: onDismiss)
 
             SpellingView(word: word, slots: slots, viewState: viewState)
-                .contentShape(Rectangle())
-                .onTapGesture { onFocusKeyboard() }
         }
     }
 }
