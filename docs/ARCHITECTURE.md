@@ -21,20 +21,17 @@ App
 
 ---
 
-## 5-Target 패턴
+## 4-Target 패턴
 
-Feature 모듈 하나는 항상 5개 타겟으로 구성된다.
+Feature 모듈 하나는 4개 타겟으로 구성된다.
 
 | 타겟 | 네이밍 예시 | 역할 |
 |---|---|---|
-| Interface | `FeatureHomeInterface` | ViewState, Action 등 공개 계약. 다른 Feature가 참조하는 것은 이것 |
-| Implements | `FeatureHome` | 실제 View, ViewState 구현 |
-| Testing | `FeatureHomeTesting` | Mock, Fixture. 다른 모듈의 테스트에서 import |
+| Implements | `FeatureHome` | 실제 View, ViewModel 구현 |
 | Tests | `FeatureHomeTests` | 단위 테스트. 외부에 노출 안 됨 |
 | Example | `FeatureHomeExample` | 독립 실행 앱. Xcode Preview 대신 실제 기기로 격리 확인 |
 
-**Interface와 Implements를 나눈 이유**:  
-Feature 간 참조 시 Implements 전체를 가져오면 컴파일 의존성이 과도하게 커진다. Interface만 참조하면 Implements가 바뀌어도 참조하는 쪽은 재빌드되지 않는다.
+> Interface 타겟은 모듈 간 컴파일 의존성을 끊어야 할 시점에 재도입한다.
 
 ---
 

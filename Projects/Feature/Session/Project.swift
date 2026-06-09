@@ -4,13 +4,8 @@ import DependencyPlugin
 let project = Project.makeModule(
     name: ModulePath.Feature.name + ModulePath.Feature.session.rawValue,
     targets: [
-        .feature(interface: .session, factory: .init(
-            dependencies: [.domainInterface]
-        )),
         .feature(implements: .session, factory: .init(
             dependencies: [
-                .feature(interface: .session),
-                .feature(interface: .vocabulary),
                 .feature(implements: .vocabulary),
                 .feature(implements: .wordGame),
                 .dependencies,
@@ -37,7 +32,6 @@ let project = Project.makeModule(
             ]),
             resources: ["Example/Resources/**"],
             dependencies: [
-                .feature(interface: .session),
                 .feature(implements: .session),
                 .dependencies,
                 .designSystem,

@@ -4,12 +4,8 @@ import DependencyPlugin
 let project = Project.makeModule(
     name: ModulePath.Feature.name + ModulePath.Feature.vocabulary.rawValue,
     targets: [
-        .feature(interface: .vocabulary, factory: .init(
-            dependencies: [.domainInterface]
-        )),
         .feature(implements: .vocabulary, factory: .init(
             dependencies: [
-                .feature(interface: .vocabulary),
                 .dependencies,
                 .designSystem,
                 .swiftUINavigation,
@@ -34,7 +30,6 @@ let project = Project.makeModule(
             ]),
             resources: ["Example/Resources/**"],
             dependencies: [
-                .feature(interface: .vocabulary),
                 .feature(implements: .vocabulary),
                 .dependencies,
                 .designSystem,
