@@ -5,7 +5,6 @@ import SwiftUINavigation
 
 public struct RecognitionGameView: View {
     @Bindable private var viewModel: RecognitionViewModel
-    @Environment(\.dismiss) private var dismiss
 
     public init(viewModel: RecognitionViewModel) {
         self.viewModel = viewModel
@@ -32,39 +31,13 @@ public struct RecognitionGameView: View {
                         onForgot: viewModel.forgotButtonTapped
                     )
                 }
-
-            case .completed:
-                RecognitionCompletedView(onDismiss: viewModel.doneButtonTapped)
-
-            case .error(let message):
-                RecognitionErrorView(message: message, onDismiss: viewModel.doneButtonTapped)
             }
         }
-        .task { await viewModel.load() }
-        .onChange(of: viewModel.dismiss) {
-            if viewModel.dismiss { dismiss() }
-        }
+        .onAppear { viewModel.start() }
         .toolbar(.hidden, for: .navigationBar)
         .alert($viewModel.destination.alert) { action in
             viewModel.alertButtonTapped(action)
         }
-    }
-}
-
-// MARK: - 배경
-
-private struct GameBackground: View {
-    var body: some View {
-        LinearGradient(
-            stops: [
-                .init(color: DesignSystemAsset.game.swiftUIColor, location: 0),
-                .init(color: DesignSystemAsset.gameDark.swiftUIColor, location: 0.55),
-                .init(color: DesignSystemAsset.gameDeep.swiftUIColor, location: 1),
-            ],
-            startPoint: .topTrailing,
-            endPoint: .bottomLeading
-        )
-        .ignoresSafeArea()
     }
 }
 
@@ -139,55 +112,3 @@ private struct RecognitionCloseRow: View {
     }
 }
 
-// MARK: - 완료 화면
-
-private struct RecognitionCompletedView: View {
-    let onDismiss: () -> Void
-
-    var body: some View {
-        VStack(spacing: 24) {
-            Image(systemName: "checkmark.circle.fill")
-                .font(.system(size: 64))
-                .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
-
-            Text("완료!")
-                .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 32))
-                .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
-
-            Button(action: onDismiss) {
-                Text("닫기")
-                    .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 16))
-                    .foregroundStyle(DesignSystemAsset.game.swiftUIColor)
-                    .frame(width: 200, height: 60)
-                    .background(DesignSystemAsset.white.swiftUIColor)
-                    .clipShape(.rect(cornerRadius: 18))
-            }
-        }
-    }
-}
-
-// MARK: - 에러 화면
-
-private struct RecognitionErrorView: View {
-    let message: String
-    let onDismiss: () -> Void
-
-    var body: some View {
-        VStack(spacing: 16) {
-            Text(message)
-                .font(DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 16))
-                .foregroundStyle(DesignSystemAsset.white.swiftUIColor.opacity(0.70))
-                .multilineTextAlignment(.center)
-
-            Button(action: onDismiss) {
-                Text("닫기")
-                    .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 16))
-                    .foregroundStyle(DesignSystemAsset.game.swiftUIColor)
-                    .frame(width: 200, height: 60)
-                    .background(DesignSystemAsset.white.swiftUIColor)
-                    .clipShape(.rect(cornerRadius: 18))
-            }
-        }
-        .padding(.horizontal, 32)
-    }
-}

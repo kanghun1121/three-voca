@@ -14,9 +14,7 @@ struct WordGameExampleApp: App {
 
     var body: some Scene {
         WindowGroup {
-            NavigationStack {
-                RecognitionGameView(viewModel: RecognitionViewModel(sessionID: "demo"))
-            }
+            WordGameView(viewModel: WordGameViewModel(sessionID: "demo"))
         }
     }
 }

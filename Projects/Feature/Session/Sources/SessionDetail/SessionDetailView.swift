@@ -35,8 +35,8 @@ public struct SessionDetailView: View {
         .navigationDestination(item: $viewModel.destination.vocabularyList) { vocabularyListVM in
             VocabularyListView(viewModel: vocabularyListVM)
         }
-        .navigationDestination(item: $viewModel.destination.wordGame) { recognitionVM in
-            RecognitionGameView(viewModel: recognitionVM)
+        .navigationDestination(item: $viewModel.destination.wordGame) { wordGameVM in
+            WordGameView(viewModel: wordGameVM)
         }
     }
 }
