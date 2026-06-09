@@ -46,12 +46,6 @@ public extension TargetDependency {
 // MARK: - Feature sub-module shorthands
 
 public extension TargetDependency {
-    static func feature(interface module: ModulePath.Feature) -> TargetDependency {
-        .project(
-            target: "Feature\(module.rawValue)Interface",
-            path: .relativeToRoot("Projects/Feature/\(module.rawValue)")
-        )
-    }
     static func feature(implements module: ModulePath.Feature) -> TargetDependency {
         .project(
             target: "Feature\(module.rawValue)",

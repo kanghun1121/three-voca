@@ -4,13 +4,8 @@ import DependencyPlugin
 let project = Project.makeModule(
     name: ModulePath.Feature.name + ModulePath.Feature.home.rawValue,
     targets: [
-        .feature(interface: .home, factory: .init(
-            dependencies: [.domainInterface]
-        )),
         .feature(implements: .home, factory: .init(
             dependencies: [
-                .feature(interface: .home),
-                .feature(interface: .session),
                 .feature(implements: .session),
                 .dependencies,
                 .designSystem,
@@ -36,7 +31,6 @@ let project = Project.makeModule(
             ]),
             resources: ["Example/Resources/**"],
             dependencies: [
-                .feature(interface: .home),
                 .feature(implements: .home),
                 .dependencies,
                 .designSystem,

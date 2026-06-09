@@ -1,8 +1,6 @@
 import SwiftUI
 import UIKit
 
-import FeatureHomeInterface
-
 enum HomeColors {
     static let cardBackground = Color(.secondarySystemGroupedBackground)
     static let progressTrack  = Color(.systemGray5)

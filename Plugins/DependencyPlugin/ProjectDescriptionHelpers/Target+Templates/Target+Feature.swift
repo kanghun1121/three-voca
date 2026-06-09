@@ -9,14 +9,6 @@ public extension Target {
         return make(factory: f)
     }
 
-    /// Interface 타겟 — 외부 Feature가 참조하는 공개 계약
-    static func feature(interface module: ModulePath.Feature, factory: TargetFactory) -> Self {
-        var f = factory
-        f.name = "Feature\(module.rawValue)Interface"
-        f.sources = .interface
-        return make(factory: f)
-    }
-
     /// Implements 타겟 — 실제 View, ViewModel 구현
     static func feature(implements module: ModulePath.Feature, factory: TargetFactory) -> Self {
         var f = factory
