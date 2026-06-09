@@ -1,13 +1,14 @@
 import Foundation
 
 import DomainInterface
+import FeatureWordGameInterface
 import Dependencies
 
 @Observable
 @MainActor
 public final class RecognitionViewModel {
 
-    public enum Phase: Equatable {
+    enum Phase: Equatable {
         case loading
         case active
         case revealing
@@ -15,13 +16,13 @@ public final class RecognitionViewModel {
         case error(String)
     }
 
-    // MARK: - Public State
+    // MARK: - State
 
-    public private(set) var phase: Phase = .loading
-    public private(set) var currentWord: GameWord?
-    public private(set) var countdown: Int = 5
-    public private(set) var wordIndex: Int = 0
-    public private(set) var totalWords: Int = 0
+    private(set) var phase: Phase = .loading
+    private(set) var currentWord: GameWord?
+    private(set) var countdown: Int = 5
+    private(set) var wordIndex: Int = 0
+    private(set) var totalWords: Int = 0
 
     // MARK: - Private
 
@@ -42,7 +43,7 @@ public final class RecognitionViewModel {
 
     // MARK: - Lifecycle
 
-    public func start() async {
+    func start() async {
         do {
             let session = try await sessionClient.fetchSessionDetail(sessionID)
             words = session.words.map { GameWord(from: $0) }
@@ -57,7 +58,7 @@ public final class RecognitionViewModel {
         }
     }
 
-    public func dismiss() {
+    func dismiss() {
         countdownTask?.cancel()
         revealTask?.cancel()
         phase = .completed
@@ -65,19 +66,19 @@ public final class RecognitionViewModel {
 
     // MARK: - 사용자 액션
 
-    public func didTapRemembered() {
+    func didTapRemembered() {
         guard case .active = phase else { return }
         countdownTask?.cancel()
         revealAndAdvance()
     }
 
-    public func didTapForgot() {
+    func didTapForgot() {
         guard case .active = phase else { return }
         countdownTask?.cancel()
         revealAndAdvance()
     }
 
-    public func didTapAudio() async {
+    func didTapAudio() async {
         guard let word = currentWord else { return }
         guard let url = await audioClient.audioURL(word.term) else { return }
         await audioPlayerClient.play(url)
