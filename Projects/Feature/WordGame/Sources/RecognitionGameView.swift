@@ -3,11 +3,11 @@ import SwiftUI
 import DesignSystem
 import FeatureWordGameInterface
 
-public struct WordGameView: View {
-    @Bindable private var viewModel: WordGameViewModel
+public struct RecognitionGameView: View {
+    @Bindable private var viewModel: RecognitionViewModel
     @Environment(\.dismiss) private var dismiss
 
-    public init(viewModel: WordGameViewModel) {
+    public init(viewModel: RecognitionViewModel) {
         self.viewModel = viewModel
     }
 
@@ -15,20 +15,39 @@ public struct WordGameView: View {
         ZStack {
             gameBackground
 
-            if viewModel.isCompleted {
-                completionView
-            } else if let word = viewModel.currentWord {
-                VStack(spacing: 0) {
-                    header(word: word)
-                    stageContent(word: word)
+            switch viewModel.phase {
+            case .loading:
+                ProgressView()
+                    .tint(DesignSystemAsset.white.swiftUIColor)
+
+            case .active, .revealing:
+                if let word = viewModel.currentWord {
+                    VStack(spacing: 0) {
+                        header
+                        RecognitionView(
+                            word: word,
+                            countdown: viewModel.countdown,
+                            isRevealing: viewModel.phase == .revealing,
+                            onRemembered: viewModel.didTapRemembered,
+                            onForgot: viewModel.didTapForgot,
+                            onAudio: { Task { await viewModel.didTapAudio() } }
+                        )
+                    }
+                    .animation(.easeInOut(duration: 0.2), value: viewModel.phase == .revealing)
                 }
+
+            case .completed:
+                completedView
+
+            case .error(let message):
+                errorView(message: message)
             }
         }
-        .task { viewModel.start() }
+        .task { await viewModel.start() }
         .navigationBarHidden(true)
     }
 
-    // MARK: - Background
+    // MARK: - 배경
 
     private var gameBackground: some View {
         LinearGradient(
@@ -43,15 +62,15 @@ public struct WordGameView: View {
         .ignoresSafeArea()
     }
 
-    // MARK: - Header
+    // MARK: - 헤더
 
-    private func header(word: GameWord) -> some View {
+    private var header: some View {
         VStack(spacing: 0) {
-            StageSegmentBar(currentStage: viewModel.currentStage.rawValue)
+            StageSegmentBar(currentStage: 0)
                 .padding(.top, 6)
 
             HStack {
-                Button(action: viewModel.dismissGame) {
+                Button(action: viewModel.dismiss) {
                     Image(systemName: "xmark")
                         .font(.system(size: 16, weight: .semibold))
                         .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
@@ -62,7 +81,7 @@ public struct WordGameView: View {
 
                 Spacer()
 
-                Text(stageLabel)
+                Text("인식")
                     .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 12))
                     .tracking(0.12 * 12)
                     .foregroundStyle(DesignSystemAsset.white.swiftUIColor.opacity(0.70))
@@ -76,63 +95,15 @@ public struct WordGameView: View {
         }
     }
 
-    private var stageLabel: String {
-        switch viewModel.currentStage {
-        case .recognition: "인식"
-        case .meaning: "뜻"
-        case .spelling: "스펠링"
-        case .pronunciation: "발음"
-        }
-    }
+    // MARK: - 완료 화면
 
-    // MARK: - Stage Content
-
-    @ViewBuilder
-    private func stageContent(word: GameWord) -> some View {
-        switch viewModel.currentStage {
-        case .recognition:
-            RecognitionView(
-                word: word,
-                countdown: viewModel.recognitionCountdown,
-                onRemembered: { viewModel.recognitionDidTap(remembered: true) },
-                onForgot: { viewModel.recognitionDidTap(remembered: false) },
-                onAudio: { }
-            )
-
-        case .meaning:
-            MeaningView(
-                word: word,
-                choices: viewModel.meaningChoices,
-                selectedIndex: viewModel.selectedMeaningIndex,
-                correctIndex: viewModel.correctMeaningIndex,
-                onSelect: viewModel.meaningDidSelect
-            )
-
-        case .spelling:
-            SpellingView(
-                word: word,
-                input: $viewModel.spellingInput,
-                onConfirm: viewModel.spellingDidConfirm
-            )
-
-        case .pronunciation:
-            PronunciationView(
-                word: word,
-                isListening: viewModel.isMicListening,
-                onMicTap: viewModel.micDidTap
-            )
-        }
-    }
-
-    // MARK: - Completion
-
-    private var completionView: some View {
+    private var completedView: some View {
         VStack(spacing: 24) {
             Image(systemName: "checkmark.circle.fill")
                 .font(.system(size: 64))
                 .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
 
-            Text("게임 완료!")
+            Text("완료!")
                 .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 32))
                 .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
 
@@ -145,5 +116,26 @@ public struct WordGameView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 18))
             }
         }
+    }
+
+    // MARK: - 에러 화면
+
+    private func errorView(message: String) -> some View {
+        VStack(spacing: 16) {
+            Text(message)
+                .font(DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 16))
+                .foregroundStyle(DesignSystemAsset.white.swiftUIColor.opacity(0.70))
+                .multilineTextAlignment(.center)
+
+            Button(action: dismiss.callAsFunction) {
+                Text("닫기")
+                    .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 16))
+                    .foregroundStyle(DesignSystemAsset.game.swiftUIColor)
+                    .frame(width: 200, height: 60)
+                    .background(DesignSystemAsset.white.swiftUIColor)
+                    .clipShape(RoundedRectangle(cornerRadius: 18))
+            }
+        }
+        .padding(.horizontal, 32)
     }
 }

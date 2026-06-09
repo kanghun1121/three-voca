@@ -6,6 +6,7 @@ import FeatureWordGameInterface
 struct RecognitionView: View {
     let word: GameWord
     let countdown: Int
+    let isRevealing: Bool
     let onRemembered: () -> Void
     let onForgot: () -> Void
     let onAudio: () -> Void
@@ -14,9 +15,59 @@ struct RecognitionView: View {
         VStack(spacing: 0) {
             Spacer()
 
+            if isRevealing {
+                revealingCenterContent
+            } else {
+                activeCenterContent
+            }
+
+            Spacer()
+
+            footer
+        }
+    }
+
+    // MARK: - 카운트다운 상태
+
+    private var activeCenterContent: some View {
+        VStack(spacing: 0) {
             CountdownRingView(value: countdown, total: 5)
                 .padding(.bottom, 40)
 
+            wordBlock
+
+            audioButton
+                .padding(.top, 22)
+        }
+    }
+
+    // MARK: - 뜻 공개 상태
+
+    private var revealingCenterContent: some View {
+        VStack(spacing: 0) {
+            wordBlock
+
+            Text(word.primaryMeaning)
+                .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 18))
+                .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 32)
+                .padding(.vertical, 14)
+                .background(DesignSystemAsset.white.swiftUIColor.opacity(0.12))
+                .clipShape(RoundedRectangle(cornerRadius: 16))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(DesignSystemAsset.white.swiftUIColor.opacity(0.28), lineWidth: 1)
+                )
+                .padding(.top, 24)
+                .transition(.opacity.combined(with: .scale(scale: 0.95)))
+        }
+    }
+
+    // MARK: - 공통 컴포넌트
+
+    private var wordBlock: some View {
+        VStack(spacing: 0) {
             Text(word.term)
                 .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 52))
                 .tracking(-0.03 * 52)
@@ -26,13 +77,6 @@ struct RecognitionView: View {
                 .font(.system(.body, design: .monospaced))
                 .foregroundStyle(DesignSystemAsset.white.swiftUIColor.opacity(0.65))
                 .padding(.top, 12)
-
-            audioButton
-                .padding(.top, 22)
-
-            Spacer()
-
-            footer
         }
     }
 
@@ -72,6 +116,7 @@ struct RecognitionView: View {
                                 .stroke(DesignSystemAsset.white.swiftUIColor.opacity(0.28), lineWidth: 1)
                         )
                 }
+                .disabled(isRevealing)
 
                 Button(action: onRemembered) {
                     Text("떠올랐어요")
@@ -82,9 +127,11 @@ struct RecognitionView: View {
                         .background(DesignSystemAsset.white.swiftUIColor)
                         .clipShape(RoundedRectangle(cornerRadius: 18))
                 }
+                .disabled(isRevealing)
             }
         }
         .padding(.horizontal, 22)
         .padding(.bottom, 40)
+        .opacity(isRevealing ? 0.4 : 1)
     }
 }

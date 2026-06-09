@@ -5,7 +5,7 @@ let project = Project.makeModule(
     name: ModulePath.Feature.name + ModulePath.Feature.wordGame.rawValue,
     targets: [
         .feature(interface: .wordGame, factory: .init(
-            dependencies: [.domainInterface]
+            dependencies: [.domainInterface, .dependencies]
         )),
         .feature(implements: .wordGame, factory: .init(
             dependencies: [
