@@ -45,7 +45,7 @@ public struct SpellingGameView: View {
             isKeyboardFocused = true
         }
         .onChange(of: viewModel.viewState) { _, state in
-            isKeyboardFocused = (state == .active)
+            if state == .completed { isKeyboardFocused = false }
         }
         .toolbar(.hidden, for: .navigationBar)
         .alert($viewModel.destination.alert) { action in
