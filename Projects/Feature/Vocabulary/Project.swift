@@ -10,8 +10,6 @@ let project = Project.makeModule(
         .feature(implements: .vocabulary, factory: .init(
             dependencies: [
                 .feature(interface: .vocabulary),
-                .feature(interface: .wordGame),
-                .feature(implements: .wordGame),
                 .dependencies,
                 .designSystem,
                 .swiftUINavigation,

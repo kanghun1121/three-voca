@@ -1,6 +1,7 @@
 import SwiftUI
 
 import FeatureVocabulary
+import FeatureWordGame
 
 import SwiftUINavigation
 
@@ -18,7 +19,11 @@ public struct SessionDetailView: View {
                 ProgressView()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             case .loaded(let state):
-                SessionDetailContentView(state: state, onVocabularyListTapped: viewModel.didTapVocabularyList)
+                SessionDetailContentView(
+                    state: state,
+                    onGameTapped: viewModel.didTapGame,
+                    onVocabularyListTapped: viewModel.didTapVocabularyList
+                )
             case .error(let message):
                 Text(message)
                     .foregroundStyle(.secondary)
@@ -29,6 +34,9 @@ public struct SessionDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationDestination(item: $viewModel.destination.vocabularyList) { vocabularyListVM in
             VocabularyListView(viewModel: vocabularyListVM)
+        }
+        .navigationDestination(item: $viewModel.destination.wordGame) { recognitionVM in
+            RecognitionGameView(viewModel: recognitionVM)
         }
     }
 }

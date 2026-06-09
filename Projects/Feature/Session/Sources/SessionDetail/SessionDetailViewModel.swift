@@ -2,6 +2,7 @@ import Foundation
 
 import DomainInterface
 import FeatureVocabulary
+import FeatureWordGameInterface
 
 import Dependencies
 import SwiftUINavigation
@@ -18,6 +19,7 @@ public final class SessionDetailViewModel {
     @CasePathable
     public enum Destination {
         case vocabularyList(VocabularyListViewModel)
+        case wordGame(RecognitionViewModel)
     }
 
     private(set) var viewState: ViewState = .loading
@@ -42,5 +44,9 @@ public final class SessionDetailViewModel {
 
     public func didTapVocabularyList() {
         destination = .vocabularyList(VocabularyListViewModel(sessionID: sessionID))
+    }
+
+    public func didTapGame() {
+        destination = .wordGame(RecognitionViewModel(sessionID: sessionID))
     }
 }
