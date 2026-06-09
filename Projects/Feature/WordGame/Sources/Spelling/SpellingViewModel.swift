@@ -75,7 +75,7 @@ public final class SpellingViewModel {
         }
     }
 
-    var isConfirmEnabled: Bool {
+    private var isConfirmEnabled: Bool {
         guard let word = currentWord else { return false }
         return inputText.count == word.term.count
     }
@@ -109,11 +109,6 @@ public final class SpellingViewModel {
         case .none:
             break
         }
-    }
-
-    func confirmTapped() {
-        guard viewState == .active, isConfirmEnabled else { return }
-        validateAnswer()
     }
 
     private func validateAnswer() {
