@@ -109,7 +109,7 @@ private struct SpellingSlotCell: View {
         }
         switch viewState {
         case .correct:
-            return DesignSystemAsset.white.swiftUIColor.opacity(0.28)
+            return DesignSystemAsset.positive.swiftUIColor.opacity(0.20)
         case .incorrect, .revealing:
             return DesignSystemAsset.negative.swiftUIColor.opacity(0.20)
         default:
@@ -126,7 +126,7 @@ private struct SpellingSlotCell: View {
         }
         switch viewState {
         case .correct:
-            return DesignSystemAsset.white.swiftUIColor.opacity(0.55)
+            return DesignSystemAsset.positive.swiftUIColor.opacity(0.55)
         case .incorrect, .revealing:
             return DesignSystemAsset.negative.swiftUIColor.opacity(0.55)
         default:
