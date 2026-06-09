@@ -4,12 +4,9 @@ import DependencyPlugin
 let project = Project.makeModule(
     name: ModulePath.Feature.name + ModulePath.Feature.wordGame.rawValue,
     targets: [
-        .feature(interface: .wordGame, factory: .init(
-            dependencies: [.domainInterface, .dependencies]
-        )),
         .feature(implements: .wordGame, factory: .init(
             dependencies: [
-                .feature(interface: .wordGame),
+                .domainInterface,
                 .dependencies,
                 .designSystem,
                 .swiftUINavigation,
@@ -33,7 +30,6 @@ let project = Project.makeModule(
             ]),
             resources: ["Example/Resources/**"],
             dependencies: [
-                .feature(interface: .wordGame),
                 .feature(implements: .wordGame),
                 .dependencies,
                 .designSystem,
