@@ -49,7 +49,7 @@ public struct SpellingGameView: View {
             case .revealing, .completed:
                 isKeyboardFocused = false
             case .active:
-                isKeyboardFocused = true
+                if !isKeyboardFocused { isKeyboardFocused = true }
             default:
                 break
             }
