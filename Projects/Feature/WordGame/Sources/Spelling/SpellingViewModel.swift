@@ -32,7 +32,20 @@ public final class SpellingViewModel {
     private(set) var currentWord: GameWord?
     private(set) var wordIndex: Int = 0
     private(set) var totalWords: Int = 0
-    private(set) var inputLetters: [Character] = []
+    var inputText: String = "" {
+        didSet {
+            guard viewState == .active else { return }
+            let limit = currentWord?.term.count ?? 0
+            let filtered = String(inputText.filter { $0.isLetter }.prefix(limit).lowercased())
+            guard inputText == filtered else {
+                inputText = filtered
+                return
+            }
+            if inputText.count == limit {
+                validateAnswer()
+            }
+        }
+    }
     var destination: Destination?
 
     private let words: [GameWord]
@@ -51,9 +64,10 @@ public final class SpellingViewModel {
     var slots: [SlotState] {
         guard let word = currentWord else { return [] }
         return word.term.enumerated().map { index, _ in
-            if index < inputLetters.count {
-                return .filled(inputLetters[index])
-            } else if index == inputLetters.count {
+            if index < inputText.count {
+                let char = inputText[inputText.index(inputText.startIndex, offsetBy: index)]
+                return .filled(char)
+            } else if index == inputText.count {
                 return .cursor
             } else {
                 return .empty
@@ -63,7 +77,7 @@ public final class SpellingViewModel {
 
     var isConfirmEnabled: Bool {
         guard let word = currentWord else { return false }
-        return inputLetters.count == word.term.count
+        return inputText.count == word.term.count
     }
 
     func start() {
@@ -97,34 +111,16 @@ public final class SpellingViewModel {
         }
     }
 
-    func letterTapped(_ letter: Character) {
-        guard case .active = viewState,
-              let word = currentWord,
-              inputLetters.count < word.term.count else { return }
-
-        inputLetters.append(letter)
-
-        if inputLetters.count == word.term.count {
-            validateAnswer()
-        }
-    }
-
-    func deleteTapped() {
-        guard case .active = viewState, !inputLetters.isEmpty else { return }
-        inputLetters.removeLast()
-    }
-
     func confirmTapped() {
-        guard case .active = viewState, isConfirmEnabled else { return }
+        guard viewState == .active, isConfirmEnabled else { return }
         validateAnswer()
     }
 
     private func validateAnswer() {
-        guard let word = currentWord else { return }
-        let input = String(inputLetters).lowercased()
+        guard viewState == .active, let word = currentWord else { return }
         let answer = word.term.lowercased()
 
-        if input == answer {
+        if inputText == answer {
             viewState = .correct
             advanceTask = Task {
                 try? await Task.sleep(for: .milliseconds(600))
@@ -136,7 +132,7 @@ public final class SpellingViewModel {
             advanceTask = Task {
                 try? await Task.sleep(for: .milliseconds(800))
                 guard !Task.isCancelled else { return }
-                inputLetters = []
+                inputText = ""
                 viewState = .active
             }
         }
@@ -152,7 +148,7 @@ public final class SpellingViewModel {
             }
             return
         }
-        inputLetters = []
+        inputText = ""
         wordIndex = index
         currentWord = words[index]
         viewState = .active

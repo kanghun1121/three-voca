@@ -5,6 +5,7 @@ import SwiftUINavigation
 
 public struct SpellingGameView: View {
     @Bindable private var viewModel: SpellingViewModel
+    @FocusState private var isKeyboardFocused: Bool
 
     public init(viewModel: SpellingViewModel) {
         self.viewModel = viewModel
@@ -21,19 +22,39 @@ public struct SpellingGameView: View {
                         word: word,
                         slots: viewModel.slots,
                         viewState: viewModel.viewState,
-                        isConfirmEnabled: viewModel.isConfirmEnabled,
                         onDismiss: viewModel.closeButtonTapped,
-                        onLetter: viewModel.letterTapped,
-                        onDelete: viewModel.deleteTapped,
-                        onConfirm: viewModel.confirmTapped
+                        onFocusKeyboard: { isKeyboardFocused = true }
                     )
                 }
 
             case .completed:
                 SpellingCompletedView()
             }
+
+            // 시스템 키보드 진입점 — 화면에 보이지 않음
+            TextField("", text: $viewModel.inputText)
+                .frame(width: 1, height: 1)
+                .opacity(0.001)
+                .focused($isKeyboardFocused)
+                .autocorrectionDisabled()
+                .textInputAutocapitalization(.never)
+                .keyboardType(.asciiCapable)
         }
-        .onAppear { viewModel.start() }
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("확인") { viewModel.confirmTapped() }
+                    .fontWeight(.semibold)
+                    .disabled(!viewModel.isConfirmEnabled)
+            }
+        }
+        .onAppear {
+            viewModel.start()
+            isKeyboardFocused = true
+        }
+        .onChange(of: viewModel.viewState) { _, state in
+            isKeyboardFocused = (state == .active)
+        }
         .toolbar(.hidden, for: .navigationBar)
         .alert($viewModel.destination.alert) { action in
             viewModel.alertButtonTapped(action)
@@ -47,24 +68,16 @@ private struct SpellingActivePhaseView: View {
     let word: GameWord
     let slots: [SpellingViewModel.SlotState]
     let viewState: SpellingViewModel.ViewState
-    let isConfirmEnabled: Bool
     let onDismiss: () -> Void
-    let onLetter: (Character) -> Void
-    let onDelete: () -> Void
-    let onConfirm: () -> Void
+    let onFocusKeyboard: () -> Void
 
     var body: some View {
         VStack(spacing: 0) {
             SpellingGameHeader(onDismiss: onDismiss)
 
             SpellingView(word: word, slots: slots, viewState: viewState)
-
-            SpellingKeyboardView(
-                onLetter: onLetter,
-                onDelete: onDelete,
-                onConfirm: onConfirm,
-                isConfirmEnabled: isConfirmEnabled
-            )
+                .contentShape(Rectangle())
+                .onTapGesture { onFocusKeyboard() }
         }
     }
 }
