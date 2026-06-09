@@ -8,23 +8,18 @@ public struct LoginView: View {
     public init() {}
 
     public var body: some View {
+        @Bindable var viewModel = viewModel
         VStack(spacing: 0) {
             HeroView()
-
-            VStack(spacing: 0) {
-                ValueSectionView()
-
-                LegalTextView(
-                    onTermsTapped: viewModel.termsTapped,
-                    onPrivacyTapped: viewModel.privacyTapped
-                )
-                .padding(.top, 24)
-                .padding(.bottom, 20)
-            }
-            .padding(.horizontal, 28)
-            .padding(.top, 8)
+            LoginContentView(viewModel: viewModel)
         }
         .ignoresSafeArea(edges: .top)
-        .background(.white)
+        .background(DesignSystemAsset.white.swiftUIColor)
+        .sheet(isPresented: $viewModel.isTermsPresented) {
+            Text("이용약관")
+        }
+        .sheet(isPresented: $viewModel.isPrivacyPresented) {
+            Text("개인정보 처리방침")
+        }
     }
 }
