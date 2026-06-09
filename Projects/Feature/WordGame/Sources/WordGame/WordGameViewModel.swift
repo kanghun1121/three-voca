@@ -15,22 +15,32 @@ public final class WordGameViewModel {
         case error(String)
     }
 
+    public enum StartingStage {
+        case recognition
+        case spelling
+    }
+
     private(set) var activeStage: ActiveStage = .loading
     var dismiss = false
 
     @ObservationIgnored @Dependency(\.sessionClient) private var sessionClient
 
     private let sessionID: String
+    private let startingStage: StartingStage
 
-    public init(sessionID: String) {
+    public init(sessionID: String, startingFrom: StartingStage = .recognition) {
         self.sessionID = sessionID
+        self.startingStage = startingFrom
     }
 
     func load() async {
         do {
             let session = try await sessionClient.fetchSessionDetail(sessionID)
             let words = session.words.map { GameWord(from: $0) }
-            startRecognition(words: words)
+            switch startingStage {
+            case .recognition: startRecognition(words: words)
+            case .spelling:    startSpelling(words: words)
+            }
         } catch {
             activeStage = .error("단어를 불러오지 못했습니다.")
         }
