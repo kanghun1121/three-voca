@@ -14,7 +14,27 @@ struct WordGameExampleApp: App {
 
     var body: some Scene {
         WindowGroup {
-            WordGameView(viewModel: WordGameViewModel(sessionID: "demo"))
+            ExampleRootView()
+        }
+    }
+}
+
+struct ExampleRootView: View {
+    @State private var destination: WordGameViewModel?
+
+    var body: some View {
+        NavigationStack {
+            VStack(spacing: 20) {
+                Button("Recognition 부터") {
+                    destination = WordGameViewModel(sessionID: "demo", startingFrom: .recognition)
+                }
+                Button("Spelling 부터") {
+                    destination = WordGameViewModel(sessionID: "demo", startingFrom: .spelling)
+                }
+            }
+            .navigationDestination(item: $destination) { vm in
+                WordGameView(viewModel: vm)
+            }
         }
     }
 }
