@@ -1,7 +1,6 @@
 import SwiftUI
 
 import DesignSystem
-import Shimmer
 
 #Preview {
     NavigationStack {
@@ -10,72 +9,88 @@ import Shimmer
 }
 
 struct VocabularyListSkeletonView: View {
-    private let rowCount = 8
-
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
                 SkeletonHeaderView()
                     .padding(.bottom, 22)
-                SkeletonWordList(rowCount: rowCount)
+                SkeletonWordList()
             }
             .padding(.horizontal, 20)
             .padding(.top, 8)
             .padding(.bottom, 24)
+            .redacted(reason: .placeholder)
         }
         .scrollIndicators(.hidden)
-        .shimmering()
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("단어 목록 불러오는 중")
     }
 }
+
+// MARK: - Header
 
 private struct SkeletonHeaderView: View {
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            RoundedRectangle(cornerRadius: 6)
-                .fill(DesignSystemAsset.bgSubtle.swiftUIColor)
-                .frame(width: 120, height: 16)
-            RoundedRectangle(cornerRadius: 6)
-                .fill(DesignSystemAsset.bgSubtle.swiftUIColor)
-                .frame(width: 80, height: 14)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(16)
-        .background(DesignSystemAsset.background.swiftUIColor)
-        .clipShape(.rect(cornerRadius: 14))
-        .overlay {
-            RoundedRectangle(cornerRadius: 14)
-                .stroke(DesignSystemAsset.border.swiftUIColor, lineWidth: 1)
+        VStack(alignment: .leading, spacing: 0) {
+            ModeLabelBadge()
+                .unredacted()
+                .padding(.bottom, 10)
+            Text("15개 단어")
+                .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 28))
+                .kerning(-0.025 * 28)
+            Text("Level 1 · Session 2")
+                .font(DesignSystemFontFamily.Pretendard.regular.swiftUIFont(size: 14))
+                .padding(.top, 4)
         }
     }
 }
 
+private struct ModeLabelBadge: View {
+    var body: some View {
+        HStack(spacing: 6) {
+            Image(systemName: "book")
+                .font(.system(size: 12))
+            Text("단어 보기 모드")
+                .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 12))
+        }
+        .foregroundStyle(DesignSystemAsset.study300.swiftUIColor)
+        .padding(.horizontal, 10)
+        .padding(.vertical, 4)
+        .background(DesignSystemAsset.study100.swiftUIColor)
+        .clipShape(Capsule())
+    }
+}
+
+// MARK: - Word List
+
 private struct SkeletonWordList: View {
-    let rowCount: Int
+    private let enPool = ["abandon", "beautiful", "calculator"]
+    private let koPool = ["버리다, 포기하다", "아름다운, 매력적인", "계산기, 계산하다", "의사소통, 전달하다"]
 
     var body: some View {
         LazyVStack(spacing: 8) {
-            ForEach(0..<rowCount, id: \.self) { _ in
-                SkeletonWordRow()
+            ForEach(0..<8, id: \.self) { i in
+                SkeletonWordRow(
+                    en: enPool[i % enPool.count],
+                    ko: koPool[i % koPool.count]
+                )
             }
         }
     }
 }
 
+// MARK: - Word Row
+
 private struct SkeletonWordRow: View {
+    let en: String
+    let ko: String
+
     var body: some View {
         HStack(alignment: .center, spacing: 12) {
-            VStack(alignment: .leading, spacing: 6) {
-                RoundedRectangle(cornerRadius: 4)
-                    .fill(DesignSystemAsset.bgSubtle.swiftUIColor)
-                    .frame(width: 100, height: 18)
-                RoundedRectangle(cornerRadius: 4)
-                    .fill(DesignSystemAsset.bgSubtle.swiftUIColor)
-                    .frame(width: 160, height: 13)
-            }
+            SkeletonWordTextStack(en: en, ko: ko)
             Spacer()
-            RoundedRectangle(cornerRadius: 4)
-                .fill(DesignSystemAsset.bgSubtle.swiftUIColor)
-                .frame(width: 8, height: 14)
+            Image(systemName: "chevron.right")
+                .font(.system(size: 16))
         }
         .padding(16)
         .background(DesignSystemAsset.background.swiftUIColor)
@@ -83,6 +98,33 @@ private struct SkeletonWordRow: View {
         .overlay {
             RoundedRectangle(cornerRadius: 14)
                 .stroke(DesignSystemAsset.border.swiftUIColor, lineWidth: 1)
+        }
+    }
+}
+
+private struct SkeletonWordTextStack: View {
+    let en: String
+    let ko: String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            SkeletonWordNameRow(en: en)
+            Text(ko)
+                .font(DesignSystemFontFamily.Pretendard.regular.swiftUIFont(size: 13))
+        }
+    }
+}
+
+private struct SkeletonWordNameRow: View {
+    let en: String
+
+    var body: some View {
+        HStack(alignment: .lastTextBaseline, spacing: 8) {
+            Text(en)
+                .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 18))
+                .kerning(-0.012 * 18)
+            Text("/ˈpɹɒm.ɪs/")
+                .font(.system(size: 12, design: .monospaced))
         }
     }
 }
