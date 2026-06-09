@@ -10,10 +10,12 @@ public final class SpellingViewModel {
         case active
         case correct
         case incorrect
+        case revealing   // 오답 후 정답 단어 공개
         case completed
     }
 
     enum SlotState: Equatable {
+        case hint(Character)   // 복습 라운드 첫 글자 고정 힌트
         case filled(Character)
         case cursor
         case empty
@@ -32,11 +34,21 @@ public final class SpellingViewModel {
     private(set) var currentWord: GameWord?
     private(set) var wordIndex: Int = 0
     private(set) var totalWords: Int = 0
+    private(set) var isReviewRound: Bool = false
     var inputText: String = "" {
         didSet {
             guard viewState == .active else { return }
             let limit = currentWord?.term.count ?? 0
-            let filtered = String(inputText.filter { $0.isLetter }.prefix(limit).lowercased())
+            var filtered = String(inputText.filter { $0.isLetter }.prefix(limit).lowercased())
+
+            // 복습 라운드: 첫 글자 힌트가 삭제되지 않도록 고정
+            if isReviewRound, let firstChar = currentWord?.term.first {
+                let hint = String(firstChar).lowercased()
+                if !filtered.hasPrefix(hint) {
+                    filtered = hint
+                }
+            }
+
             guard inputText == filtered else {
                 inputText = filtered
                 return
@@ -52,6 +64,8 @@ public final class SpellingViewModel {
     private let onCompleted: () -> Void
     private let onClose: () -> Void
 
+    private var reviewWords: [GameWord] = []
+    private var incorrectWordIDs: Set<String> = []
     private var advanceTask: Task<Void, Never>?
 
     init(words: [GameWord], onCompleted: @escaping () -> Void, onClose: @escaping () -> Void) {
@@ -64,6 +78,11 @@ public final class SpellingViewModel {
     var slots: [SlotState] {
         guard let word = currentWord else { return [] }
         return word.term.enumerated().map { index, _ in
+            // 복습 라운드 첫 번째 슬롯은 힌트
+            if isReviewRound && index == 0 {
+                let char = word.term[word.term.startIndex]
+                return .hint(char.lowercased().first ?? char)
+            }
             if index < inputText.count {
                 let char = inputText[inputText.index(inputText.startIndex, offsetBy: index)]
                 return .filled(char)
@@ -73,11 +92,6 @@ public final class SpellingViewModel {
                 return .empty
             }
         }
-    }
-
-    private var isConfirmEnabled: Bool {
-        guard let word = currentWord else { return false }
-        return inputText.count == word.term.count
     }
 
     func start() {
@@ -123,29 +137,49 @@ public final class SpellingViewModel {
                 showWord(at: wordIndex + 1)
             }
         } else {
-            viewState = .incorrect
+            // 복습 라운드가 아닐 때만 복습 목록에 추가 (중복 제외)
+            if !isReviewRound && !incorrectWordIDs.contains(word.id) {
+                incorrectWordIDs.insert(word.id)
+                reviewWords.append(word)
+            }
+            viewState = .revealing
             advanceTask = Task {
-                try? await Task.sleep(for: .milliseconds(800))
+                try? await Task.sleep(for: .milliseconds(1500))
                 guard !Task.isCancelled else { return }
-                inputText = ""
-                viewState = .active
+                showWord(at: wordIndex + 1)
             }
         }
     }
 
     private func showWord(at index: Int) {
-        guard index < words.count else {
-            viewState = .completed
-            advanceTask = Task {
-                try? await Task.sleep(for: .milliseconds(800))
-                guard !Task.isCancelled else { return }
-                onCompleted()
+        let currentWords = isReviewRound ? reviewWords : words
+        guard index < currentWords.count else {
+            if !isReviewRound && !reviewWords.isEmpty {
+                // 복습 라운드 시작 — 별도 안내 없이 바로 진행
+                isReviewRound = true
+                totalWords = reviewWords.count
+                showWord(at: 0)
+            } else {
+                viewState = .completed
+                advanceTask = Task {
+                    try? await Task.sleep(for: .milliseconds(800))
+                    guard !Task.isCancelled else { return }
+                    onCompleted()
+                }
             }
             return
         }
-        inputText = ""
+
+        let word = currentWords[index]
+        // viewState가 .active가 아닌 상태에서 inputText를 먼저 세팅해야
+        // didSet의 guard가 조기 리턴하여 검증 로직을 건너뜀
+        if isReviewRound, let firstChar = word.term.first {
+            inputText = String(firstChar).lowercased()
+        } else {
+            inputText = ""
+        }
         wordIndex = index
-        currentWord = words[index]
+        currentWord = word
         viewState = .active
     }
 }

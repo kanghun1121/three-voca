@@ -72,6 +72,11 @@ private struct SpellingSlotCell: View {
                     .font(.system(size: 22, weight: .bold, design: .monospaced))
                     .tracking(-0.01 * 22)
                     .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
+            } else if case .hint(let char) = slot {
+                Text(String(char).uppercased())
+                    .font(.system(size: 22, weight: .bold, design: .monospaced))
+                    .tracking(-0.01 * 22)
+                    .foregroundStyle(DesignSystemAsset.white.swiftUIColor.opacity(0.90))
             }
         }
         .frame(width: 30, height: 42)
@@ -80,6 +85,9 @@ private struct SpellingSlotCell: View {
     }
 
     private var fillColor: Color {
+        if case .hint = slot {
+            return DesignSystemAsset.white.swiftUIColor.opacity(0.22)
+        }
         switch viewState {
         case .correct:
             return DesignSystemAsset.white.swiftUIColor.opacity(0.28)
@@ -94,6 +102,9 @@ private struct SpellingSlotCell: View {
     }
 
     private var borderColor: Color {
+        if case .hint = slot {
+            return DesignSystemAsset.white.swiftUIColor.opacity(0.50)
+        }
         switch viewState {
         case .correct:
             return DesignSystemAsset.white.swiftUIColor.opacity(0.55)

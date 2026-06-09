@@ -27,6 +27,11 @@ public struct SpellingGameView: View {
                     )
                 }
 
+            case .revealing:
+                if let word = viewModel.currentWord {
+                    SpellingRevealPhaseView(word: word, onDismiss: viewModel.closeButtonTapped)
+                }
+
             case .completed:
                 SpellingCompletedView()
             }
@@ -45,7 +50,14 @@ public struct SpellingGameView: View {
             isKeyboardFocused = true
         }
         .onChange(of: viewModel.viewState) { _, state in
-            if state == .completed { isKeyboardFocused = false }
+            switch state {
+            case .revealing, .completed:
+                isKeyboardFocused = false
+            case .active:
+                isKeyboardFocused = true
+            default:
+                break
+            }
         }
         .toolbar(.hidden, for: .navigationBar)
         .alert($viewModel.destination.alert) { action in
@@ -70,6 +82,51 @@ private struct SpellingActivePhaseView: View {
             SpellingView(word: word, slots: slots, viewState: viewState)
                 .contentShape(Rectangle())
                 .onTapGesture { onFocusKeyboard() }
+        }
+    }
+}
+
+// MARK: - 정답 공개 단계
+
+private struct SpellingRevealPhaseView: View {
+    let word: GameWord
+    let onDismiss: () -> Void
+
+    var body: some View {
+        VStack(spacing: 0) {
+            SpellingGameHeader(onDismiss: onDismiss)
+
+            VStack(spacing: 0) {
+                Spacer()
+
+                VStack(spacing: 0) {
+                    Text(word.term)
+                        .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 52))
+                        .tracking(-0.03 * 52)
+                        .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
+
+                    Text(word.pronunciation)
+                        .font(.system(.body, design: .monospaced))
+                        .foregroundStyle(DesignSystemAsset.white.swiftUIColor.opacity(0.65))
+                        .padding(.top, 12)
+
+                    Text(word.primaryMeaning)
+                        .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 18))
+                        .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 32)
+                        .padding(.vertical, 14)
+                        .background(DesignSystemAsset.white.swiftUIColor.opacity(0.12))
+                        .clipShape(.rect(cornerRadius: 16))
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 16)
+                                .stroke(DesignSystemAsset.white.swiftUIColor.opacity(0.28), lineWidth: 1)
+                        }
+                        .padding(.top, 24)
+                }
+
+                Spacer()
+            }
         }
     }
 }
