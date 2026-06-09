@@ -1,6 +1,7 @@
 import Foundation
 
 import DomainInterface
+import FeatureWordGameInterface
 
 import Dependencies
 import SwiftUINavigation
@@ -17,6 +18,7 @@ public final class VocabularyListViewModel {
     @CasePathable
     enum Destination {
         case wordDetail(WordDetailViewModel)
+        case wordGame(WordGameViewModel)
     }
 
     private(set) var viewState: ViewState = .loading
@@ -26,6 +28,7 @@ public final class VocabularyListViewModel {
     @ObservationIgnored @Dependency(\.wordClient) private var wordClient
     @ObservationIgnored @Dependency(\.audioClient) private var audioClient
     private let sessionID: String
+    private var sessionWords: [Session.Word] = []
 
     public init(sessionID: String) {
         self.sessionID = sessionID
@@ -35,6 +38,7 @@ public final class VocabularyListViewModel {
         viewState = .loading
         do {
             let session = try await sessionClient.fetchSessionDetail(sessionID)
+            sessionWords = session.words
             viewState = .loaded(session.toVocabularyListPresentationModel())
             let wordIDs = session.words.map(\.id)
             let terms = session.words.map(\.term)
@@ -51,5 +55,10 @@ public final class VocabularyListViewModel {
         let wordIDs = state.words.map(\.id)
         guard let index = wordIDs.firstIndex(of: id) else { return }
         destination = .wordDetail(WordDetailViewModel(wordIDs: wordIDs, initialIndex: index))
+    }
+
+    public func didTapGame() {
+        guard !sessionWords.isEmpty else { return }
+        destination = .wordGame(WordGameViewModel(words: sessionWords))
     }
 }

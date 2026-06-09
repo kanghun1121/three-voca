@@ -2,6 +2,7 @@ import SwiftUI
 
 import DesignSystem
 import Dependencies
+import FeatureWordGame
 
 public struct VocabularyListView: View {
     @Bindable private var viewModel: VocabularyListViewModel
@@ -17,7 +18,11 @@ public struct VocabularyListView: View {
             case .loading:
                 VocabularyListSkeletonView()
             case .loaded(let state):
-                VocabularyListContentView(state: state, onWordTapped: viewModel.didTapWord)
+                VocabularyListContentView(
+                    state: state,
+                    onWordTapped: viewModel.didTapWord,
+                    onGameTapped: viewModel.didTapGame
+                )
             case .error(let message):
                 Text(message)
                     .foregroundStyle(.secondary)
@@ -39,6 +44,9 @@ public struct VocabularyListView: View {
         }
         .navigationDestination(item: $viewModel.destination.wordDetail) { wordDetailVM in
             WordDetailView(viewModel: wordDetailVM)
+        }
+        .navigationDestination(item: $viewModel.destination.wordGame) { wordGameVM in
+            WordGameView(viewModel: wordGameVM)
         }
     }
 }

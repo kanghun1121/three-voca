@@ -5,35 +5,54 @@ import DesignSystem
 struct VocabularyListContentView: View {
     let state: VocabularyListPresentationModel
     let onWordTapped: (String) -> Void
+    let onGameTapped: () -> Void
 
     @State private var blurMode: BlurMode = .off
     @State private var revealedIDs: Set<String> = []
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 0) {
-                VocabularyListHeaderView(
-                    level: state.level,
-                    sessionNumber: state.sessionNumber,
-                    wordCount: state.wordCount
-                )
-                .padding(.bottom, 14)
-                BlurModeSelector(selected: $blurMode)
-                    .padding(.bottom, 16)
-                WordList(
-                    words: state.words,
-                    blurMode: blurMode,
-                    revealedIDs: revealedIDs,
-                    onTapped: onWordTapped,
-                    onReveal: { revealedIDs.insert($0) }
-                )
+        ZStack(alignment: .bottom) {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 0) {
+                    VocabularyListHeaderView(
+                        level: state.level,
+                        sessionNumber: state.sessionNumber,
+                        wordCount: state.wordCount
+                    )
+                    .padding(.bottom, 14)
+                    BlurModeSelector(selected: $blurMode)
+                        .padding(.bottom, 16)
+                    WordList(
+                        words: state.words,
+                        blurMode: blurMode,
+                        revealedIDs: revealedIDs,
+                        onTapped: onWordTapped,
+                        onReveal: { revealedIDs.insert($0) }
+                    )
+                }
+                .padding(.horizontal, 20)
+                .padding(.top, 8)
+                .padding(.bottom, 100)
             }
-            .padding(.horizontal, 20)
-            .padding(.top, 8)
-            .padding(.bottom, 24)
+            .scrollIndicators(.hidden)
+            .onChange(of: blurMode) { revealedIDs = [] }
+
+            gameButton
         }
-        .scrollIndicators(.hidden)
-        .onChange(of: blurMode) { revealedIDs = [] }
+    }
+
+    private var gameButton: some View {
+        Button(action: onGameTapped) {
+            Label("게임 시작", systemImage: "gamecontroller.fill")
+                .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 16))
+                .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
+                .frame(maxWidth: .infinity)
+                .frame(height: 56)
+                .background(DesignSystemAsset.game.swiftUIColor)
+                .clipShape(RoundedRectangle(cornerRadius: 16))
+        }
+        .padding(.horizontal, 20)
+        .padding(.bottom, 24)
     }
 }
 

@@ -2,29 +2,26 @@ import ProjectDescription
 import DependencyPlugin
 
 let project = Project.makeModule(
-    name: ModulePath.Feature.name + ModulePath.Feature.vocabulary.rawValue,
+    name: ModulePath.Feature.name + ModulePath.Feature.wordGame.rawValue,
     targets: [
-        .feature(interface: .vocabulary, factory: .init(
+        .feature(interface: .wordGame, factory: .init(
             dependencies: [.domainInterface]
         )),
-        .feature(implements: .vocabulary, factory: .init(
+        .feature(implements: .wordGame, factory: .init(
             dependencies: [
-                .feature(interface: .vocabulary),
                 .feature(interface: .wordGame),
-                .feature(implements: .wordGame),
                 .dependencies,
                 .designSystem,
                 .swiftUINavigation,
             ]
         )),
-        .feature(tests: .vocabulary, factory: .init(
+        .feature(tests: .wordGame, factory: .init(
             dependencies: [
-                .feature(implements: .vocabulary),
-                .domainInterface,
+                .feature(implements: .wordGame),
                 .dependencies,
             ]
         )),
-        .feature(example: .vocabulary, factory: .init(
+        .feature(example: .wordGame, factory: .init(
             infoPlist: .extendingDefault(with: [
                 "CFBundleShortVersionString": "1.0",
                 "CFBundleVersion": "1",
@@ -36,8 +33,8 @@ let project = Project.makeModule(
             ]),
             resources: ["Example/Resources/**"],
             dependencies: [
-                .feature(interface: .vocabulary),
-                .feature(implements: .vocabulary),
+                .feature(interface: .wordGame),
+                .feature(implements: .wordGame),
                 .dependencies,
                 .designSystem,
             ]
@@ -45,9 +42,9 @@ let project = Project.makeModule(
     ],
     schemes: [
         .scheme(
-            name: "FeatureVocabularyExample",
-            buildAction: .buildAction(targets: [.target("FeatureVocabularyExample")]),
-            runAction: .runAction(executable: .target("FeatureVocabularyExample"))
+            name: "FeatureWordGameExample",
+            buildAction: .buildAction(targets: [.target("FeatureWordGameExample")]),
+            runAction: .runAction(executable: .target("FeatureWordGameExample"))
         )
     ]
 )
