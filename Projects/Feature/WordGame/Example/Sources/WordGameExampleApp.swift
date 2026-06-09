@@ -1,17 +1,21 @@
 import SwiftUI
 
-import Dependencies
-import DomainInterface
 import FeatureWordGame
-import FeatureWordGameInterface
+
+import Dependencies
 
 @main
 struct WordGameExampleApp: App {
+    init() {
+        prepareDependencies {
+            $0.sessionClient = .previewValue
+        }
+    }
+
     var body: some Scene {
         WindowGroup {
             NavigationStack {
-                let viewModel = WordGameViewModel(words: Session.previewWords)
-                WordGameView(viewModel: viewModel)
+                RecognitionGameView(viewModel: RecognitionViewModel(sessionID: "demo"))
             }
         }
     }
