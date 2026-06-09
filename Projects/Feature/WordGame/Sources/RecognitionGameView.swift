@@ -41,8 +41,8 @@ public struct RecognitionGameView: View {
             }
         }
         .task { await viewModel.load() }
-        .onChange(of: viewModel.shouldDismiss) {
-            if viewModel.shouldDismiss { dismiss() }
+        .onChange(of: viewModel.dismiss) {
+            if viewModel.dismiss { dismiss() }
         }
         .toolbar(.hidden, for: .navigationBar)
         .alert($viewModel.destination.alert) { action in
