@@ -2,7 +2,7 @@ import Foundation
 
 import DomainInterface
 import FeatureVocabulary
-import FeatureWordGameInterface
+import FeatureWordGame
 
 import Dependencies
 import SwiftUINavigation
