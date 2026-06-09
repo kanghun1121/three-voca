@@ -45,8 +45,8 @@ public struct VocabularyListView: View {
         .navigationDestination(item: $viewModel.destination.wordDetail) { wordDetailVM in
             WordDetailView(viewModel: wordDetailVM)
         }
-        .navigationDestination(item: $viewModel.destination.wordGame) { wordGameVM in
-            WordGameView(viewModel: wordGameVM)
+        .navigationDestination(item: $viewModel.destination.wordGame) { recognitionVM in
+            RecognitionGameView(viewModel: recognitionVM)
         }
     }
 }
