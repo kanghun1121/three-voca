@@ -87,12 +87,12 @@ private struct SpellingSlotCell: View {
                 }
 
             if case .filled(let char) = slot {
-                Text(String(char).uppercased())
+                Text(String(char).lowercased())
                     .font(.system(size: 22, weight: .bold, design: .monospaced))
                     .tracking(-0.01 * 22)
                     .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
             } else if case .hint(let char) = slot {
-                Text(String(char).uppercased())
+                Text(String(char).lowercased())
                     .font(.system(size: 22, weight: .bold, design: .monospaced))
                     .tracking(-0.01 * 22)
                     .foregroundStyle(DesignSystemAsset.white.swiftUIColor.opacity(0.90))
