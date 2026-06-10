@@ -47,7 +47,7 @@ public final class SpellingViewModel {
 
     var slots: [SlotState] {
         guard let word = currentWord else { return [] }
-        return word.term.enumerated().map { index, _ in makeSlot(at: index, for: word) }
+        return word.term.enumerated().map { index, char in makeSlot(at: index, char: char) }
     }
     
     var inputText: String = "" {
@@ -62,10 +62,6 @@ public final class SpellingViewModel {
     }
 
     func load() {
-        guard !words.isEmpty else {
-            onCompleted()
-            return
-        }
         showWord(at: 0)
     }
 
@@ -117,9 +113,8 @@ public final class SpellingViewModel {
     /// 오답 시 복습 목록에 단어를 추가한다 (복습 라운드 중에는 추가하지 않는다).
     private func validateAnswer() {
         guard viewState == .active, let word = currentWord else { return }
-        let answer = word.term.lowercased()
 
-        if inputText == answer {
+        if isCorrectAnswer(for: word) {
             viewState = .correct
             
             advanceTask = Task {
@@ -127,12 +122,12 @@ public final class SpellingViewModel {
                 showWord(at: wordIndex + 1)
             }
         } else {
-            if !isReviewRound && !incorrectWordIDs.contains(word.id) {
+            viewState = .revealing
+            
+            if shouldAddToReview(word) {
                 incorrectWordIDs.insert(word.id)
                 reviewWords.append(word)
             }
-            
-            viewState = .revealing
             
             advanceTask = Task {
                 try? await Task.sleep(for: .seconds(1))
@@ -141,53 +136,73 @@ public final class SpellingViewModel {
         }
     }
 
-    /// 지정 인덱스의 단어를 표시한다. 라운드 종료 시 복습 라운드를 시작하거나 완료 처리한다.
+    /// 지정 인덱스의 단어를 표시한다. 라운드 종료 시 handleRoundEnd()를 호출한다.
     private func showWord(at index: Int) {
         let currentWords = isReviewRound ? reviewWords : words
         guard index < currentWords.count else {
-            if !isReviewRound && !reviewWords.isEmpty {
-                isReviewRound = true
-                totalWords = reviewWords.count
-                showWord(at: 0)
-            } else {
-                viewState = .completed
-                advanceTask = Task {
-                    try? await Task.sleep(for: .milliseconds(800))
-                    guard !Task.isCancelled else { return }
-                    onCompleted()
-                }
-            }
+            handleRoundEnd()
             return
         }
 
         let word = currentWords[index]
-        // viewState가 .active가 아닌 상태에서 inputText를 먼저 세팅해야
-        // didSet의 guard가 조기 리턴하여 검증 로직을 건너뜀
-        if isReviewRound, let firstChar = word.term.first {
-            inputText = String(firstChar).lowercased()
-        } else {
-            inputText = ""
-        }
+        resetInput(for: word)
+        
         wordIndex = index
         currentWord = word
         viewState = .active
     }
     
-    /// 인덱스와 현재 inputText를 기반으로 슬롯 상태를 결정한다.
-    /// 복습 라운드의 첫 번째 슬롯은 항상 힌트로 반환한다.
-    private func makeSlot(at index: Int, for word: GameWord) -> SlotState {
-        if isReviewRound && index == 0 {
-            let char = word.term[word.term.startIndex]
-            return .hint(char.lowercased().first ?? char)
-        }
-        if index < inputText.count {
-            let char = inputText[inputText.index(inputText.startIndex, offsetBy: index)]
-            return .filled(char)
-        } else if index == inputText.count {
-            return .cursor
+    private func isCorrectAnswer(for word: GameWord) -> Bool {
+        inputText == word.term.lowercased()
+    }
+
+    /// 메인 라운드에서 처음 틀린 단어인지 확인한다.
+    private func shouldAddToReview(_ word: GameWord) -> Bool {
+        !isReviewRound && !incorrectWordIDs.contains(word.id)
+    }
+
+    /// 복습 라운드면 첫 글자를 힌트로 채우고, 아니면 빈 문자열로 초기화한다.
+    private func resetInput(for word: GameWord) {
+        if isReviewRound, let firstChar = word.term.first {
+            inputText = String(firstChar).lowercased()
         } else {
-            return .empty
+            inputText = ""
         }
     }
 
+    /// 메인 라운드 종료 시 오답이 있으면 복습 라운드를 시작하고, 없으면 완료 처리한다.
+    private func handleRoundEnd() {
+        if !isReviewRound && !reviewWords.isEmpty {
+            isReviewRound = true
+            totalWords = reviewWords.count
+            showWord(at: 0)
+        } else {
+            viewState = .completed
+            advanceTask = Task {
+                try? await Task.sleep(for: .milliseconds(800))
+                guard !Task.isCancelled else { return }
+                onCompleted()
+            }
+        }
+    }
+
+    /// 인덱스와 현재 inputText를 기반으로 슬롯 상태를 결정한다.
+    /// 복습 라운드의 첫 번째 슬롯은 항상 힌트로 반환한다.
+    private func makeSlot(at index: Int, char: Character) -> SlotState {
+        // 복습 라운드 첫 번째 슬롯: 힌트 글자 고정
+        guard !isReviewRound || index != 0 else {
+            return .hint(char.lowercased().first ?? char)
+        }
+        // 이미 입력된 슬롯
+        guard index >= inputText.count else {
+            let inputChar = inputText[inputText.index(inputText.startIndex, offsetBy: index)]
+            return .filled(inputChar)
+        }
+        // 현재 커서 위치
+        guard index > inputText.count else {
+            return .cursor
+        }
+        // 아직 입력되지 않은 슬롯
+        return .empty
+    }
 }
