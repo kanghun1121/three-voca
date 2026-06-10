@@ -10,12 +10,12 @@ public final class SpellingViewModel {
         case active
         case correct
         case incorrect
-        case revealing   // 오답 후 정답 단어 공개
+        case revealing
         case completed
     }
 
     enum SlotState: Equatable {
-        case hint(Character)   // 복습 라운드 첫 글자 고정 힌트
+        case hint(Character)
         case filled(Character)
         case cursor
         case empty
@@ -36,27 +36,7 @@ public final class SpellingViewModel {
     private(set) var totalWords: Int = 0
     private(set) var isReviewRound: Bool = false
     var inputText: String = "" {
-        didSet {
-            guard viewState == .active else { return }
-            let limit = currentWord?.term.count ?? 0
-            var filtered = String(inputText.filter { $0.isLetter }.prefix(limit).lowercased())
-
-            // 복습 라운드: 첫 글자 힌트가 삭제되지 않도록 고정
-            if isReviewRound, let firstChar = currentWord?.term.first {
-                let hint = String(firstChar).lowercased()
-                if !filtered.hasPrefix(hint) {
-                    filtered = hint
-                }
-            }
-
-            guard inputText == filtered else {
-                inputText = filtered
-                return
-            }
-            if inputText.count == limit {
-                validateAnswer()
-            }
-        }
+        didSet { handleInputChange() }
     }
     var destination: Destination?
 
@@ -123,6 +103,24 @@ public final class SpellingViewModel {
         case .none:
             break
         }
+    }
+
+    private func handleInputChange() {
+        guard viewState == .active else { return }
+        let limit = currentWord?.term.count ?? 0
+        var filtered = String(inputText.filter { $0.isLetter }.prefix(limit).lowercased())
+
+        // 복습 라운드: 첫 글자 힌트가 삭제되지 않도록 고정
+        if isReviewRound, let firstChar = currentWord?.term.first {
+            let hint = String(firstChar).lowercased()
+            if !filtered.hasPrefix(hint) { filtered = hint }
+        }
+
+        guard inputText == filtered else {
+            inputText = filtered
+            return
+        }
+        if inputText.count == limit { validateAnswer() }
     }
 
     private func validateAnswer() {
