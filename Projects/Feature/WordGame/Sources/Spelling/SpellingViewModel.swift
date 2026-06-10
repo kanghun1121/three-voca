@@ -83,6 +83,14 @@ public final class SpellingViewModel {
         }
     }
 
+    func load() {
+        guard !words.isEmpty else {
+            onCompleted()
+            return
+        }
+        showWord(at: 0)
+    }
+
     /// 입력값을 영문자·최대 길이·소문자로 정규화하고, 복습 라운드 힌트 글자를 보호한다.
     /// 정규화 후 단어 길이와 일치하면 validateAnswer()를 호출한다.
     private func handleInputChange() {
@@ -181,11 +189,4 @@ public final class SpellingViewModel {
         }
     }
 
-    func start() {
-        guard !words.isEmpty else {
-            onCompleted()
-            return
-        }
-        showWord(at: 0)
-    }
 }

@@ -40,7 +40,7 @@ public struct SpellingGameView: View {
                 .keyboardType(.asciiCapable)
         }
         .onAppear {
-            viewModel.start()
+            viewModel.load()
             isKeyboardFocused = true
         }
         .onChange(of: viewModel.viewState) { _, state in
