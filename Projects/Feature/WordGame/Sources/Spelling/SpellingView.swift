@@ -6,6 +6,7 @@ struct SpellingView: View {
     let word: GameWord
     let slots: [SpellingViewModel.SlotState]
     let viewState: SpellingViewModel.ViewState
+    let onSkip: () -> Void
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
@@ -27,6 +28,14 @@ struct SpellingView: View {
                     .padding(.bottom, 36)
 
                 SpellingSlotRow(slots: slots, viewState: viewState, reduceMotion: reduceMotion)
+
+                // 건너뛰기 버튼 (입력 중에만 표시)
+                if viewState == .active {
+                    Button("건너뛰기", action: onSkip)
+                        .font(DesignSystemFontFamily.Pretendard.regular.swiftUIFont(size: 14))
+                        .foregroundStyle(DesignSystemAsset.white.swiftUIColor.opacity(0.40))
+                        .padding(.top, 20)
+                }
 
                 // 오답 시 정답 카드
                 if viewState == .revealing {
