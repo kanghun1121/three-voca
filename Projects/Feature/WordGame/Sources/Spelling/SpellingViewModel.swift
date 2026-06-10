@@ -60,29 +60,6 @@ public final class SpellingViewModel {
         return word.term.enumerated().map { index, _ in makeSlot(at: index, for: word) }
     }
 
-    private func makeSlot(at index: Int, for word: GameWord) -> SlotState {
-        if isReviewRound && index == 0 {
-            let char = word.term[word.term.startIndex]
-            return .hint(char.lowercased().first ?? char)
-        }
-        if index < inputText.count {
-            let char = inputText[inputText.index(inputText.startIndex, offsetBy: index)]
-            return .filled(char)
-        } else if index == inputText.count {
-            return .cursor
-        } else {
-            return .empty
-        }
-    }
-
-    func start() {
-        guard !words.isEmpty else {
-            onCompleted()
-            return
-        }
-        showWord(at: 0)
-    }
-
     func closeButtonTapped() {
         destination = .alert(
             AlertState(
@@ -106,6 +83,8 @@ public final class SpellingViewModel {
         }
     }
 
+    /// 입력값을 영문자·최대 길이·소문자로 정규화하고, 복습 라운드 힌트 글자를 보호한다.
+    /// 정규화 후 단어 길이와 일치하면 validateAnswer()를 호출한다.
     private func handleInputChange() {
         guard viewState == .active else { return }
         let limit = currentWord?.term.count ?? 0
@@ -121,40 +100,43 @@ public final class SpellingViewModel {
             inputText = filtered
             return
         }
+        
         if inputText.count == limit { validateAnswer() }
     }
 
+    /// 현재 inputText와 정답을 비교해 정답/오답 상태로 전환하고, 다음 단어로 자동 진행한다.
+    /// 오답 시 복습 목록에 단어를 추가한다 (복습 라운드 중에는 추가하지 않는다).
     private func validateAnswer() {
         guard viewState == .active, let word = currentWord else { return }
         let answer = word.term.lowercased()
 
         if inputText == answer {
             viewState = .correct
+            
             advanceTask = Task {
-                try? await Task.sleep(for: .milliseconds(600))
-                guard !Task.isCancelled else { return }
+                try? await Task.sleep(for: .seconds(0.5))
                 showWord(at: wordIndex + 1)
             }
         } else {
-            // 복습 라운드가 아닐 때만 복습 목록에 추가 (중복 제외)
             if !isReviewRound && !incorrectWordIDs.contains(word.id) {
                 incorrectWordIDs.insert(word.id)
                 reviewWords.append(word)
             }
+            
             viewState = .revealing
+            
             advanceTask = Task {
-                try? await Task.sleep(for: .milliseconds(1500))
-                guard !Task.isCancelled else { return }
+                try? await Task.sleep(for: .seconds(1))
                 showWord(at: wordIndex + 1)
             }
         }
     }
 
+    /// 지정 인덱스의 단어를 표시한다. 라운드 종료 시 복습 라운드를 시작하거나 완료 처리한다.
     private func showWord(at index: Int) {
         let currentWords = isReviewRound ? reviewWords : words
         guard index < currentWords.count else {
             if !isReviewRound && !reviewWords.isEmpty {
-                // 복습 라운드 시작 — 별도 안내 없이 바로 진행
                 isReviewRound = true
                 totalWords = reviewWords.count
                 showWord(at: 0)
@@ -180,5 +162,30 @@ public final class SpellingViewModel {
         wordIndex = index
         currentWord = word
         viewState = .active
+    }
+    
+    /// 인덱스와 현재 inputText를 기반으로 슬롯 상태를 결정한다.
+    /// 복습 라운드의 첫 번째 슬롯은 항상 힌트로 반환한다.
+    private func makeSlot(at index: Int, for word: GameWord) -> SlotState {
+        if isReviewRound && index == 0 {
+            let char = word.term[word.term.startIndex]
+            return .hint(char.lowercased().first ?? char)
+        }
+        if index < inputText.count {
+            let char = inputText[inputText.index(inputText.startIndex, offsetBy: index)]
+            return .filled(char)
+        } else if index == inputText.count {
+            return .cursor
+        } else {
+            return .empty
+        }
+    }
+
+    func start() {
+        guard !words.isEmpty else {
+            onCompleted()
+            return
+        }
+        showWord(at: 0)
     }
 }
