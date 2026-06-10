@@ -57,20 +57,21 @@ public final class SpellingViewModel {
 
     var slots: [SlotState] {
         guard let word = currentWord else { return [] }
-        return word.term.enumerated().map { index, _ in
-            // 복습 라운드 첫 번째 슬롯은 힌트
-            if isReviewRound && index == 0 {
-                let char = word.term[word.term.startIndex]
-                return .hint(char.lowercased().first ?? char)
-            }
-            if index < inputText.count {
-                let char = inputText[inputText.index(inputText.startIndex, offsetBy: index)]
-                return .filled(char)
-            } else if index == inputText.count {
-                return .cursor
-            } else {
-                return .empty
-            }
+        return word.term.enumerated().map { index, _ in makeSlot(at: index, for: word) }
+    }
+
+    private func makeSlot(at index: Int, for word: GameWord) -> SlotState {
+        if isReviewRound && index == 0 {
+            let char = word.term[word.term.startIndex]
+            return .hint(char.lowercased().first ?? char)
+        }
+        if index < inputText.count {
+            let char = inputText[inputText.index(inputText.startIndex, offsetBy: index)]
+            return .filled(char)
+        } else if index == inputText.count {
+            return .cursor
+        } else {
+            return .empty
         }
     }
 
