@@ -80,12 +80,15 @@ public final class SpellingViewModel {
 
     func skipButtonTapped() {
         guard viewState == .active, let word = currentWord else { return }
-        advanceTask?.cancel()
+        viewState = .revealing
         if shouldAddToReview(word) {
             incorrectWordIDs.insert(word.id)
             reviewWords.append(word)
         }
-        showWord(at: wordIndex + 1)
+        advanceTask = Task {
+            try? await Task.sleep(for: .seconds(1))
+            showWord(at: wordIndex + 1)
+        }
     }
 
     func alertButtonTapped(_ action: AlertAction?) {
