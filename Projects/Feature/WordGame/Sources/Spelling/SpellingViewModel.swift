@@ -35,9 +35,6 @@ public final class SpellingViewModel {
     private(set) var wordIndex: Int = 0
     private(set) var totalWords: Int = 0
     private(set) var isReviewRound: Bool = false
-    var inputText: String = "" {
-        didSet { handleInputChange() }
-    }
     var destination: Destination?
 
     private let words: [GameWord]
@@ -48,6 +45,15 @@ public final class SpellingViewModel {
     private var incorrectWordIDs: Set<String> = []
     private var advanceTask: Task<Void, Never>?
 
+    var slots: [SlotState] {
+        guard let word = currentWord else { return [] }
+        return word.term.enumerated().map { index, _ in makeSlot(at: index, for: word) }
+    }
+    
+    var inputText: String = "" {
+        didSet { handleInputChange() }
+    }
+
     init(words: [GameWord], onCompleted: @escaping () -> Void, onClose: @escaping () -> Void) {
         self.words = words
         self.totalWords = words.count
@@ -55,9 +61,12 @@ public final class SpellingViewModel {
         self.onClose = onClose
     }
 
-    var slots: [SlotState] {
-        guard let word = currentWord else { return [] }
-        return word.term.enumerated().map { index, _ in makeSlot(at: index, for: word) }
+    func load() {
+        guard !words.isEmpty else {
+            onCompleted()
+            return
+        }
+        showWord(at: 0)
     }
 
     func closeButtonTapped() {
@@ -81,14 +90,6 @@ public final class SpellingViewModel {
         case .none:
             break
         }
-    }
-
-    func load() {
-        guard !words.isEmpty else {
-            onCompleted()
-            return
-        }
-        showWord(at: 0)
     }
 
     /// 입력값을 영문자·최대 길이·소문자로 정규화하고, 복습 라운드 힌트 글자를 보호한다.
