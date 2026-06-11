@@ -3,18 +3,18 @@ import Foundation
 import Dependencies
 
 public struct AuthSessionClient: Sendable {
-    public var getAccessToken: @Sendable () -> String?
-    public var setAccessToken: @Sendable (String) -> Void
+    public var getAccessToken: @Sendable () async -> String?
+    public var setAccessToken: @Sendable (String) async -> Void
     public var getRefreshToken: @Sendable () throws -> String
     public var setRefreshToken: @Sendable (String) throws -> Void
-    public var clearSession: @Sendable () throws -> Void
+    public var clearSession: @Sendable () async throws -> Void
 
     public init(
-        getAccessToken: @escaping @Sendable () -> String?,
-        setAccessToken: @escaping @Sendable (String) -> Void,
+        getAccessToken: @escaping @Sendable () async -> String?,
+        setAccessToken: @escaping @Sendable (String) async -> Void,
         getRefreshToken: @escaping @Sendable () throws -> String,
         setRefreshToken: @escaping @Sendable (String) throws -> Void,
-        clearSession: @escaping @Sendable () throws -> Void
+        clearSession: @escaping @Sendable () async throws -> Void
     ) {
         self.getAccessToken = getAccessToken
         self.setAccessToken = setAccessToken
@@ -38,7 +38,7 @@ extension AuthSessionClient: TestDependencyKey {
         setAccessToken: { _ in },
         getRefreshToken: { AuthToken.previewFixture.refreshToken },
         setRefreshToken: { _ in },
-        clearSession: { }
+        clearSession: {}
     )
 }
 
