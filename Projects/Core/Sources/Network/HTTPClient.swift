@@ -1,10 +1,12 @@
 import Foundation
 
-public struct HTTPClient: HTTPClienting {
+public struct HTTPClient<I: HTTPInterceptor>: HTTPClienting {
     private let session: URLSession
     private let decoder: JSONDecoder
+    private let interceptor: I
 
-    public init(session: URLSession = .shared, decoder: JSONDecoder? = nil) {
+    public init(interceptor: I, session: URLSession = .shared, decoder: JSONDecoder? = nil) {
+        self.interceptor = interceptor
         self.session = session
         self.decoder = decoder ?? {
             let d = JSONDecoder()
@@ -32,6 +34,17 @@ public struct HTTPClient: HTTPClienting {
     // MARK: - Private
 
     private func perform(_ requestable: any Requestable) async throws -> (Data, URLResponse) {
+        let (data, response) = try await execute(requestable)
+
+        if let http = response as? HTTPURLResponse, http.statusCode == 401,
+           await interceptor.retry(dueTo: NetworkError.httpError(statusCode: 401, data: data), response: http) {
+            return try await execute(requestable)
+        }
+
+        return (data, response)
+    }
+
+    private func execute(_ requestable: any Requestable) async throws -> (Data, URLResponse) {
         var urlRequest: URLRequest
         do {
             urlRequest = try requestable.makeURLRequest()
@@ -41,9 +54,16 @@ public struct HTTPClient: HTTPClienting {
             throw NetworkError.invalidRequest
         }
 
+        if requestable.requiresAuthentication {
+            do {
+                urlRequest = try await interceptor.adapt(urlRequest)
+            } catch {
+                throw NetworkError.invalidRequest
+            }
+        }
+
         do {
-            let (data, response) = try await session.data(for: urlRequest)
-            return (data, response)
+            return try await session.data(for: urlRequest)
         } catch {
             throw NetworkError.requestFailed(error)
         }
@@ -56,5 +76,13 @@ public struct HTTPClient: HTTPClienting {
         guard (200..<300).contains(http.statusCode) else {
             throw NetworkError.httpError(statusCode: http.statusCode, data: data)
         }
+    }
+}
+
+// MARK: - NoopInterceptor 기본 편의 이니셜라이저
+
+public extension HTTPClient where I == NoopInterceptor {
+    init(session: URLSession = .shared, decoder: JSONDecoder? = nil) {
+        self.init(interceptor: NoopInterceptor(), session: session, decoder: decoder)
     }
 }

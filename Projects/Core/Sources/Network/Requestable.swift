@@ -7,12 +7,14 @@ public protocol Requestable {
     var queryParameters: (any Encodable)? { get }
     var bodyParameters: HTTPBody { get }
     var headers: [String: String] { get }
+    var requiresAuthentication: Bool { get }
 }
 
 public extension Requestable {
     var queryParameters: (any Encodable)? { nil }
     var bodyParameters: HTTPBody { .none }
     var headers: [String: String] { [:] }
+    var requiresAuthentication: Bool { true }
 
     func makeURLRequest() throws -> URLRequest {
         var components = URLComponents(url: baseURL.appendingPathComponent(path), resolvingAgainstBaseURL: false)
