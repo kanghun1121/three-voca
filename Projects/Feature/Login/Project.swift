@@ -4,11 +4,10 @@ import DependencyPlugin
 let project = Project.makeModule(
     name: ModulePath.Feature.name + ModulePath.Feature.login.rawValue,
     targets: [
-        .feature(interface: .login, factory: .init()),
         .feature(implements: .login, factory: .init(
             dependencies: [
-                .feature(interface: .login),
                 .designSystem,
+                .sdk(name: "AuthenticationServices", type: .framework, status: .required),
             ]
         )),
         .feature(tests: .login, factory: .init(
@@ -28,7 +27,6 @@ let project = Project.makeModule(
             ]),
             resources: ["Example/Resources/**"],
             dependencies: [
-                .feature(interface: .login),
                 .feature(implements: .login),
                 .designSystem,
             ]

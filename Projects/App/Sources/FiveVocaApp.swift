@@ -2,6 +2,7 @@ import SwiftUI
 
 import Domain
 import FeatureHome
+import FeatureLogin
 
 import Dependencies
 
