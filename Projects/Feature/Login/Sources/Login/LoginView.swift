@@ -5,7 +5,9 @@ import DesignSystem
 public struct LoginView: View {
     @State private var viewModel = LoginViewModel()
 
-    public init() {}
+    public init(viewModel: LoginViewModel) {
+        _viewModel = State(initialValue: viewModel)
+    }
 
     public var body: some View {
         @Bindable var viewModel = viewModel

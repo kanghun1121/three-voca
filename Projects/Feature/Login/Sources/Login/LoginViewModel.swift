@@ -7,11 +7,13 @@ import Dependencies
 
 @Observable
 @MainActor
-final class LoginViewModel {
+public final class LoginViewModel {
     var isTermsPresented = false
     var isPrivacyPresented = false
 
     @ObservationIgnored @Dependency(\.authClient) private var authClient
+    
+    public init() {}
 
     func termsTapped() {
         isTermsPresented = true
@@ -33,8 +35,7 @@ final class LoginViewModel {
                   let identityToken = String(data: tokenData, encoding: .utf8) else { return }
             Task {
                 do {
-                    let token = try await authClient.signInWithApple(identityToken)
-                    print("[AuthClient] AuthToken:", token)
+                    _ = try await authClient.signInWithApple(identityToken)
                 } catch {
                     print("[AuthClient] error:", error.localizedDescription)
                 }

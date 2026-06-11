@@ -11,7 +11,7 @@ extension AuthClient: DependencyKey {
             let client = HTTPClient()
             let request = ExchangeAppleTokenRequest(identityToken: identityToken)
             let dto: AuthTokenResponseDTO = try await client.request(request)
-            print("[AuthClient] AuthTokenResponseDTO:", dto)
+            dump(dto)
             return dto.toDomain()
         }
     )
