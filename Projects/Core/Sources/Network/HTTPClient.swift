@@ -1,11 +1,15 @@
 import Foundation
 
-public struct HTTPClient<I: HTTPInterceptor>: HTTPClienting {
+public struct HTTPClient<Interceptor: HTTPInterceptor>: HTTPClienting {
     private let session: URLSession
     private let decoder: JSONDecoder
-    private let interceptor: I
+    private let interceptor: Interceptor
 
-    public init(interceptor: I, session: URLSession = .shared, decoder: JSONDecoder? = nil) {
+    public init(
+        interceptor: Interceptor,
+        session: URLSession = .shared,
+        decoder: JSONDecoder? = nil
+    ) {
         self.interceptor = interceptor
         self.session = session
         self.decoder = decoder ?? {
@@ -30,8 +34,6 @@ public struct HTTPClient<I: HTTPInterceptor>: HTTPClienting {
         try validate(response, data: data)
         _ = data
     }
-
-    // MARK: - Private
 
     private func perform(_ requestable: any Requestable) async throws -> (Data, URLResponse) {
         let (data, response) = try await execute(requestable)
@@ -81,7 +83,7 @@ public struct HTTPClient<I: HTTPInterceptor>: HTTPClienting {
 
 // MARK: - NoopInterceptor 기본 편의 이니셜라이저
 
-public extension HTTPClient where I == NoopInterceptor {
+public extension HTTPClient where Interceptor == NoopInterceptor {
     init(session: URLSession = .shared, decoder: JSONDecoder? = nil) {
         self.init(interceptor: NoopInterceptor(), session: session, decoder: decoder)
     }

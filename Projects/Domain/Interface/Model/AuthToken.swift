@@ -6,7 +6,12 @@ public struct AuthToken: Sendable {
     public let expiresAt: Int
     public let refreshToken: String
     
-    public init(accessToken: String, expiresIn: Int, expiresAt: Int, refreshToken: String) {
+    public init(
+        accessToken: String,
+        expiresIn: Int,
+        expiresAt: Int,
+        refreshToken: String
+    ) {
         self.accessToken = accessToken
         self.expiresIn = expiresIn
         self.expiresAt = expiresAt

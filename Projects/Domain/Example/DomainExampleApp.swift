@@ -13,6 +13,7 @@ struct DomainExampleApp: App {
             $0.sessionClient = .liveValue
             $0.wordClient = .liveValue
             $0.authClient = .liveValue
+            $0.authSessionClient = .liveValue
         }
     }
 
