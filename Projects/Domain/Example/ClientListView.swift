@@ -19,6 +19,11 @@ struct ClientListView: View {
                         EndpointDetailView(endpoint: .wordDetail)
                     }
                 }
+                Section("AuthClient") {
+                    NavigationLink("signInWithApple(identityToken:)") {
+                        EndpointDetailView(endpoint: .authSignIn)
+                    }
+                }
             }
             .navigationTitle("Domain API Explorer")
         }

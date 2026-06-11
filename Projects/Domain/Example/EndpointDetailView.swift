@@ -9,19 +9,29 @@ struct EndpointDetailView: View {
         case homeOverview
         case sessionDetail
         case wordDetail
+        case authSignIn
 
         var title: String {
             switch self {
             case .homeOverview: "fetchHomeOverview()"
             case .sessionDetail: "fetchSessionDetail(id:)"
             case .wordDetail: "fetchWordDetail(id:)"
+            case .authSignIn: "signInWithApple(identityToken:)"
             }
         }
 
         var hasIdParam: Bool {
             switch self {
             case .homeOverview: false
-            case .sessionDetail, .wordDetail: true
+            case .sessionDetail, .wordDetail, .authSignIn: true
+            }
+        }
+
+        var paramLabel: String {
+            switch self {
+            case .sessionDetail, .wordDetail: "id"
+            case .authSignIn: "identityToken"
+            default: "id"
             }
         }
 
@@ -30,6 +40,7 @@ struct EndpointDetailView: View {
             case .homeOverview: ""
             case .sessionDetail: String(Int.random(in: 1...244))
             case .wordDetail: "word_\(Int.random(in: 1...800))"
+            case .authSignIn: ""
             }
         }
     }
@@ -44,12 +55,13 @@ struct EndpointDetailView: View {
     @Dependency(\.homeClient) private var homeClient
     @Dependency(\.sessionClient) private var sessionClient
     @Dependency(\.wordClient) private var wordClient
+    @Dependency(\.authClient) private var authClient
 
     var body: some View {
         Form {
             if endpoint.hasIdParam {
                 Section("파라미터") {
-                    TextField("id", text: $idInput)
+                    TextField(endpoint.paramLabel, text: $idInput)
                         .autocorrectionDisabled()
                         .textInputAutocapitalization(.never)
                 }
@@ -135,6 +147,9 @@ struct EndpointDetailView: View {
                 response = dumpString(result)
             case .wordDetail:
                 let result = try await wordClient.fetchWordDetail(idInput)
+                response = dumpString(result)
+            case .authSignIn:
+                let result = try await authClient.signInWithApple(idInput)
                 response = dumpString(result)
             }
         } catch {
