@@ -15,7 +15,10 @@ struct ExchangeAppleTokenRequest: Requestable {
 }
 
 private struct GrantTypeQuery: Encodable {
-    let grant_type = "id_token"
+    let grantType = "id_token"
+    enum CodingKeys: String, CodingKey {
+        case grantType = "grant_type"
+    }
 }
 
 private struct Body: Encodable {

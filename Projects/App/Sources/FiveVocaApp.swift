@@ -2,7 +2,6 @@ import SwiftUI
 
 import Domain
 import FeatureHome
-import FeatureLogin
 
 import Dependencies
 
@@ -10,22 +9,17 @@ import Dependencies
 struct FiveVocaApp: App {
     var body: some Scene {
         WindowGroup {
-            LoginView(viewModel: withDependencies {
-                $0.authClient = .liveValue
-            } operation: {
-                LoginViewModel()
-            })
-//            HomeView(
-//                viewModel: withDependencies {
-//                    $0.homeClient = .liveValue
-//                    $0.sessionClient = .liveValue
-//                    $0.wordClient = .liveValue
-//                    $0.audioClient = .liveValue
-//                    $0.audioPlayerClient = .liveValue
-//                } operation: {
-//                    HomeViewModel()
-//                }
-//            )
+            HomeView(
+                viewModel: withDependencies {
+                    $0.homeClient = .liveValue
+                    $0.sessionClient = .liveValue
+                    $0.wordClient = .liveValue
+                    $0.audioClient = .liveValue
+                    $0.audioPlayerClient = .liveValue
+                } operation: {
+                    HomeViewModel()
+                }
+            )
         }
     }
 }

@@ -15,7 +15,10 @@ struct RefreshTokenRequest: Requestable {
 }
 
 private struct GrantTypeQuery: Encodable {
-    let grant_type = "refresh_token"
+    let grantType = "refresh_token"
+    enum CodingKeys: String, CodingKey {
+        case grantType = "grant_type"
+    }
 }
 
 private struct Body: Encodable {

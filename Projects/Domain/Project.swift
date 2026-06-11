@@ -14,6 +14,14 @@ let project = Project.makeModule(
                 .dependencies,
             ]
         )),
+        .domain(tests: .init(
+            dependencies: [
+                .domain,
+                .domainInterface,
+                .core,
+                .dependencies,
+            ]
+        )),
         .domain(example: .init(
             infoPlist: .extendingDefault(with: [
                 "CFBundleShortVersionString": "1.0",
