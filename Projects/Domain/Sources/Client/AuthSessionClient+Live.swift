@@ -5,14 +5,10 @@ import DomainInterface
 
 import Dependencies
 
-private final class AccessTokenStore: @unchecked Sendable {
-    private var _value: String?
-    private let lock = NSLock()
-
-    var value: String? {
-        get { lock.withLock { _value } }
-        set { lock.withLock { _value = newValue } }
-    }
+private actor AccessTokenStore {
+    var value: String?
+    func set(_ token: String) { value = token }
+    func clear() { value = nil }
 }
 
 extension AuthSessionClient: DependencyKey {
@@ -20,12 +16,12 @@ extension AuthSessionClient: DependencyKey {
         let store = AccessTokenStore()
         let keychain = KeychainClient.live
         return AuthSessionClient(
-            getAccessToken: { store.value },
-            setAccessToken: { store.value = $0 },
+            getAccessToken: { await store.value },
+            setAccessToken: { await store.set($0) },
             getRefreshToken: { try keychain.load(.refreshToken) },
             setRefreshToken: { try keychain.save(.refreshToken, $0) },
             clearSession: {
-                store.value = nil
+                await store.clear()
                 try keychain.delete(.refreshToken)
             }
         )
