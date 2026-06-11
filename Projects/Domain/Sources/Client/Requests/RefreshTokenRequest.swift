@@ -2,28 +2,25 @@ import Foundation
 
 import Core
 
-struct ExchangeAppleTokenRequest: Requestable {
-    let identityToken: String
+struct RefreshTokenRequest: Requestable {
+    let refreshToken: String
 
     var baseURL: URL { SupabaseConfig.baseURL }
     var path: String { "/auth/v1/token" }
     var method: HTTPMethod { .post }
     var queryParameters: (any Encodable)? { GrantTypeQuery() }
-    var bodyParameters: HTTPBody { .json(Body(idToken: identityToken)) }
+    var bodyParameters: HTTPBody { .json(Body(refreshToken: refreshToken)) }
     var headers: [String: String] { ["apikey": SupabaseConfig.anonKey] }
     var requiresAuthentication: Bool { false }
 }
 
 private struct GrantTypeQuery: Encodable {
-    let grant_type = "id_token"
+    let grant_type = "refresh_token"
 }
 
 private struct Body: Encodable {
-    let provider = "apple"
-    let idToken: String
-
+    let refreshToken: String
     enum CodingKeys: String, CodingKey {
-        case provider
-        case idToken = "id_token"
+        case refreshToken = "refresh_token"
     }
 }

@@ -37,7 +37,7 @@ extension AudioClient: DependencyKey {
 }
 
 private extension AudioClient {
-    static func requestMP3URL(term: String, http: HTTPClient) async -> URL? {
+    static func requestMP3URL(term: String, http: any HTTPClienting) async -> URL? {
         guard let entries: [MWEntryResponseDTO] = try? await http.request(GetMWAudioRequest(term: term)),
               let audio = entries.first?.hwi?.prs?.first?.sound?.audio,
               !audio.isEmpty else { return nil }
