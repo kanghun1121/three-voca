@@ -12,8 +12,11 @@ final class AppViewModel {
     @ObservationIgnored @Dependency(\.authSessionClient) private var authSessionClient
     @ObservationIgnored @Dependency(\.authClient) private var authClient
 
+    private var streamTask: Task<Void, Never>?
+
     func onAppear() {
-        Task {
+        guard streamTask == nil else { return }
+        streamTask = Task {
             for await state in authSessionClient.authStateStream() {
                 authState = state
             }
