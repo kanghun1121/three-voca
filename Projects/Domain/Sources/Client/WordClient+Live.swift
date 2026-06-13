@@ -7,7 +7,8 @@ import Dependencies
 
 extension WordClient: DependencyKey {
     public static let liveValue: WordClient = {
-        let http = HTTPClient()
+        let authSessionClient = AuthSessionClient.liveValue
+        let http = HTTPClient(interceptor: TokenRefreshInterceptor(authSessionClient: authSessionClient))
         let cache = WordDetailCache()
         return WordClient(
             fetchWordDetail: { id in
