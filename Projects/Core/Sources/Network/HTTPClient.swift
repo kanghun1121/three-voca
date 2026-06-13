@@ -4,6 +4,7 @@ public struct HTTPClient<Interceptor: HTTPInterceptor>: HTTPClienting {
     private let session: URLSession
     private let decoder: JSONDecoder
     private let interceptor: Interceptor
+    private let logger = NetworkLogger()
 
     public init(
         interceptor: Interceptor,
@@ -64,9 +65,15 @@ public struct HTTPClient<Interceptor: HTTPInterceptor>: HTTPClienting {
             }
         }
 
+        logger.logRequest(urlRequest)
+
         do {
-            return try await session.data(for: urlRequest)
+            let (data, response) = try await session.data(for: urlRequest)
+            let statusCode = (response as? HTTPURLResponse)?.statusCode ?? 0
+            logger.logResponse(response, statusCode: statusCode, data: data)
+            return (data, response)
         } catch {
+            logger.logError(error, context: urlRequest.url?.absoluteString ?? "unknown")
             throw NetworkError.requestFailed(error)
         }
     }
