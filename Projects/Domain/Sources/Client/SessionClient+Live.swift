@@ -14,6 +14,10 @@ extension SessionClient: DependencyKey {
                 let request = GetSessionDetailRequest(sessionID: id)
                 let dto: SessionDetailResponseDTO = try await http.request(request)
                 return dto.toDomain()
+            },
+            completeSession: { sessionID in
+                let request = CompleteSessionRequest(sessionID: sessionID)
+                let _: CompleteSessionResponseDTO = try await http.request(request)
             }
         )
     }()

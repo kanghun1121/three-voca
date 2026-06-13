@@ -2,6 +2,7 @@ import Foundation
 import SwiftUI
 
 import DomainInterface
+
 import Dependencies
 
 @Observable
@@ -60,11 +61,21 @@ public final class WordGameViewModel {
     private func startSpelling(words: [GameWord]) {
         let vm = SpellingViewModel(
             words: words,
-            onCompleted: { [weak self] in self?.dismiss = true },
+            onCompleted: { [weak self] in self?.finishGame() },
             onClose: { [weak self] in self?.dismiss = true }
         )
         withAnimation(.easeInOut(duration: 0.3)) {
             activeStage = .spelling(vm)
+        }
+    }
+
+    private func finishGame() {
+        Task { [weak self] in
+            guard let self else { return }
+            if let id = Int(sessionID) {
+                try? await sessionClient.completeSession(id)
+            }
+            dismiss = true
         }
     }
 }
