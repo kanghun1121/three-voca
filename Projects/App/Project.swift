@@ -43,5 +43,24 @@ let project = Project.makeModule(
                 ]
             )
         ))
+    ],
+    schemes: [
+        .scheme(
+            name: env.appName,
+            buildAction: .buildAction(targets: [.target(env.appName)]),
+            runAction: .runAction(
+                configuration: .debug,
+                arguments: .arguments(
+                    environmentVariables: [
+                        "ENABLE_NETWORK_LOG": .environmentVariable(value: "1", isEnabled: true)
+                    ]
+                )
+            )
+        ),
+        .scheme(
+            name: "\(env.appName)-Release",
+            buildAction: .buildAction(targets: [.target(env.appName)]),
+            runAction: .runAction(configuration: .release)
+        )
     ]
 )
