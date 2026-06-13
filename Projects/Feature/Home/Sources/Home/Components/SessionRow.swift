@@ -11,7 +11,7 @@ struct SessionRow: View {
         HStack(spacing: 11) {
             circularBadge
             Text("\(presentationModel.sessionNumber)번째 세션")
-                .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 13.5))
+                .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 15.5))
                 .foregroundStyle(
                     isCompleted
                         ? DesignSystemAsset.fgStrong.swiftUIColor
@@ -20,7 +20,7 @@ struct SessionRow: View {
             Spacer()
             if isCompleted {
                 Text("완료")
-                    .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 11.5))
+                    .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 13.5))
                     .foregroundStyle(DesignSystemAsset.fgSubtle.swiftUIColor)
             }
         }
@@ -34,15 +34,15 @@ struct SessionRow: View {
                         ? DesignSystemAsset.positive.swiftUIColor
                         : DesignSystemAsset.progressTrack.swiftUIColor
                 )
-                .frame(width: 24, height: 24)
+                .frame(width: 26, height: 26)
             if isCompleted {
                 Image(systemName: "checkmark")
-                    .font(.system(size: 13, weight: .bold))
+                    .font(.system(size: 15, weight: .bold))
                     .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
                     .accessibilityHidden(true)
             } else {
                 Text("\(presentationModel.sessionNumber)")
-                    .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 11))
+                    .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 13))
                     .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
             }
         }
