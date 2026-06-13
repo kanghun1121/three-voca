@@ -7,7 +7,7 @@ struct HeatmapCard: View {
     let activities: [DailyActivity]
 
     private let totalWeeks = 18
-    private let cellSize: CGFloat = 13
+    private let cellSize: CGFloat = 15
     private let cellGap: CGFloat = 3
     private let dayGutterWidth: CGFloat = 12
 
