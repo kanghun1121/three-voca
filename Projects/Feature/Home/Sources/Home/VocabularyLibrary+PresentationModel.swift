@@ -2,22 +2,26 @@ import Foundation
 
 import DomainInterface
 
-private let lowAccuracyThreshold: Double = 0.7
-
 extension VocabularyLibrary {
     func toHomePresentationModel() -> HomePresentationModel {
-        HomePresentationModel(streakDays: 0, levels: levels.map { $0.toLevelCardPresentationModel() })
+        HomePresentationModel(levels: levels.map { $0.toLevelCardPresentationModel() })
     }
 }
 
 private extension LevelSummary {
     func toLevelCardPresentationModel() -> LevelCardPresentationModel {
-        LevelCardPresentationModel(
+        let status: LevelStatus
+        if completedSessions == 0 {
+            status = .notStarted
+        } else if completedSessions >= totalSessions {
+            status = .completed
+        } else {
+            status = .active
+        }
+        return LevelCardPresentationModel(
             id: id,
-            level: level,
-            levelBadgeColor: LevelBadgeColor(level: level),
             name: name,
-            difficulty: difficulty,
+            status: status,
             completedSessions: completedSessions,
             totalSessions: totalSessions,
             progressRatio: totalSessions == 0 ? 0 : Double(completedSessions) / Double(totalSessions),
@@ -31,31 +35,7 @@ private extension SessionProgress {
         SessionRowPresentationModel(
             id: Int(id) ?? 0,
             sessionNumber: sessionNumber,
-            accuracyPercent: accuracy.map { Int(round($0 * 100)) },
-            icon: iconKind
+            icon: status == .completed ? .completedHigh : .notStarted
         )
-    }
-
-    private var iconKind: SessionIconKind {
-        switch status {
-        case .completed:
-            if let acc = accuracy, acc < lowAccuracyThreshold {
-                return .completedLow
-            }
-            return .completedHigh
-        case .notStarted:
-            return .notStarted
-        }
-    }
-}
-
-private extension LevelBadgeColor {
-    init(level: Int) {
-        switch level {
-        case 1: self = .level1
-        case 2: self = .level2
-        case 3: self = .level3
-        default: self = .unknown
-        }
     }
 }
