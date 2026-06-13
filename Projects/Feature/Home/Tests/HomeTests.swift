@@ -10,19 +10,20 @@ final class HomePresentationModelTests: XCTestCase {
 
     // MARK: - PresentationModel 매핑
 
-    func test_toPresentationModel_lowAccuracyIcon() {
+    func test_toPresentationModel_icon_completed() {
         let model = VocabularyLibrary.previewFixture.toHomePresentationModel()
         let sessions = model.levels[0].sessions
-        XCTAssertEqual(sessions[0].icon, .completedHigh)   // 92%
-        XCTAssertEqual(sessions[1].icon, .completedHigh)   // 87%
-        XCTAssertEqual(sessions[2].icon, .completedLow)    // 58%
-        XCTAssertEqual(sessions[3].icon, .completedHigh)   // 88%
+        XCTAssertEqual(sessions[0].icon, .completedHigh)
+        XCTAssertEqual(sessions[1].icon, .completedHigh)
+        XCTAssertEqual(sessions[2].icon, .completedHigh)
+        XCTAssertEqual(sessions[3].icon, .completedHigh)
         XCTAssertEqual(sessions[4].icon, .notStarted)
     }
 
-    func test_toPresentationModel_difficulty_rawValue() {
+    func test_toPresentationModel_status_active() {
         let model = VocabularyLibrary.previewFixture.toHomePresentationModel()
-        XCTAssertEqual(model.levels[0].difficulty, "A1")
+        XCTAssertEqual(model.levels[0].status, .active)
+        XCTAssertEqual(model.levels[1].status, .notStarted)
     }
 
     func test_toPresentationModel_completedAndTotalSessions() {
@@ -38,30 +39,11 @@ final class HomePresentationModelTests: XCTestCase {
         XCTAssertEqual(model.levels[1].progressRatio, 0.0)
     }
 
-    func test_toPresentationModel_level_mapped() {
-        let model = VocabularyLibrary.previewFixture.toHomePresentationModel()
-        XCTAssertEqual(model.levels[0].level, 1)
-        XCTAssertEqual(model.levels[1].level, 2)
-    }
-
     func test_toPresentationModel_sessionNumber_mapped() {
         let model = VocabularyLibrary.previewFixture.toHomePresentationModel()
         let sessions = model.levels[0].sessions
         XCTAssertEqual(sessions[0].sessionNumber, 1)
         XCTAssertEqual(sessions[1].sessionNumber, 2)
-    }
-
-    func test_toPresentationModel_accuracyPercent_completed() {
-        let model = VocabularyLibrary.previewFixture.toHomePresentationModel()
-        let sessions = model.levels[0].sessions
-        XCTAssertEqual(sessions[0].accuracyPercent, 92)
-        XCTAssertEqual(sessions[2].accuracyPercent, 58)
-    }
-
-    func test_toPresentationModel_accuracyPercent_notStarted_isNil() {
-        let model = VocabularyLibrary.previewFixture.toHomePresentationModel()
-        let sessions = model.levels[0].sessions
-        XCTAssertNil(sessions[4].accuracyPercent)
     }
 
     // MARK: - ViewModel
@@ -80,9 +62,32 @@ final class HomePresentationModelTests: XCTestCase {
     }
 
     @MainActor
+    func test_viewModel_load_setsHeatmapData() async {
+        let viewModel = withDependencies {
+            $0.homeClient = .previewValue
+        } operation: {
+            HomeViewModel()
+        }
+        await viewModel.load()
+        XCTAssertFalse(viewModel.heatmapData.isEmpty)
+    }
+
+    @MainActor
+    func test_viewModel_load_autoExpandsFirstActiveLevel() async {
+        let viewModel = withDependencies {
+            $0.homeClient = .previewValue
+        } operation: {
+            HomeViewModel()
+        }
+        await viewModel.load()
+        XCTAssertEqual(viewModel.expandedLevelID, "level_1")
+    }
+
+    @MainActor
     func test_viewModel_load_failure_setsErrorMessage() async {
         let viewModel = withDependencies {
             $0.homeClient.fetchHomeOverview = { throw TestError.mock }
+            $0.homeClient.fetchHeatmapData = { [] }
         } operation: {
             HomeViewModel()
         }
@@ -92,7 +97,7 @@ final class HomePresentationModelTests: XCTestCase {
     }
 
     @MainActor
-    func test_levelTapped_expandsAndCollapses() async {
+    func test_levelTapped_togglesExpansion() async {
         let viewModel = withDependencies {
             $0.homeClient = .previewValue
         } operation: {
@@ -101,13 +106,27 @@ final class HomePresentationModelTests: XCTestCase {
         await viewModel.load()
 
         let id = "level_1"
-        XCTAssertFalse(viewModel.expandedLevelIDs.contains(id))
+        XCTAssertEqual(viewModel.expandedLevelID, id)
 
         viewModel.levelTapped(id: id)
-        XCTAssertTrue(viewModel.expandedLevelIDs.contains(id))
+        XCTAssertNil(viewModel.expandedLevelID)
 
         viewModel.levelTapped(id: id)
-        XCTAssertFalse(viewModel.expandedLevelIDs.contains(id))
+        XCTAssertEqual(viewModel.expandedLevelID, id)
+    }
+
+    @MainActor
+    func test_levelTapped_onlyOneExpanded() async {
+        let viewModel = withDependencies {
+            $0.homeClient = .previewValue
+        } operation: {
+            HomeViewModel()
+        }
+        await viewModel.load()
+
+        viewModel.levelTapped(id: "level_2")
+        XCTAssertEqual(viewModel.expandedLevelID, "level_2")
+        XCTAssertNotEqual(viewModel.expandedLevelID, "level_1")
     }
 }
 

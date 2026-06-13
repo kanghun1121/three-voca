@@ -1,107 +1,143 @@
 import SwiftUI
 
+import DesignSystem
+
 struct LevelCard: View {
     let presentationModel: LevelCardPresentationModel
     let isExpanded: Bool
     let action: () -> Void
     let onSessionTapped: (Int) -> Void
 
+    private let maxVisibleSessions = 6
+
+    private var visibleSessions: [SessionRowPresentationModel] {
+        Array(presentationModel.sessions.prefix(maxVisibleSessions))
+    }
+
+    private var overflowCount: Int {
+        max(0, presentationModel.sessions.count - maxVisibleSessions)
+    }
+
     var body: some View {
-        Button(action: action) {
-            VStack(spacing: 0) {
-                HeaderRow(presentationModel: presentationModel, isExpanded: isExpanded)
-                ProgressBar(ratio: presentationModel.progressRatio)
+        VStack(spacing: 0) {
+            Button(action: action) {
+                headerRow
+            }
+            .buttonStyle(.plain)
+            progressBar
+            if isExpanded {
+                Divider()
                     .padding(.horizontal, 16)
-                    .padding(.bottom, 12)
-                if isExpanded {
-                    Divider()
-                        .padding(.horizontal, 16)
-                    SessionList(sessions: presentationModel.sessions, onSessionTapped: onSessionTapped)
-                }
+                sessionListRows
             }
-            .background(Color(.systemBackground))
-            .clipShape(.rect(cornerRadius: 12))
-            .shadow(
-                color: .black.opacity(0.06),
-                radius: 4,
-                x: 0,
-                y: 2
+        }
+        .background(DesignSystemAsset.white.swiftUIColor)
+        .clipShape(.rect(cornerRadius: 16))
+        .overlay {
+            RoundedRectangle(cornerRadius: 16)
+                .stroke(
+                    presentationModel.status == .active
+                        ? DesignSystemAsset.primary.swiftUIColor.opacity(0.18)
+                        : DesignSystemAsset.borderSubtle.swiftUIColor,
+                    lineWidth: 1
+                )
+        }
+        .animation(.easeOut(duration: 0.2), value: isExpanded)
+    }
+
+    private var headerRow: some View {
+        HStack(spacing: 13) {
+            Text(presentationModel.name)
+                .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 15.5))
+                .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
+            if let badge = presentationModel.status.badgeInfo {
+                statusBadge(badge)
+            }
+            Spacer()
+            Text("\(presentationModel.completedSessions)/\(presentationModel.totalSessions)")
+                .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 13))
+                .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
+            Image(systemName: isExpanded ? "chevron.down" : "chevron.right")
+                .font(.system(size: 17))
+                .foregroundStyle(DesignSystemAsset.fgSubtle.swiftUIColor)
+                .accessibilityHidden(true)
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 15)
+    }
+
+    private func statusBadge(_ info: (text: String, fg: Color, bg: Color)) -> some View {
+        Text(info.text)
+            .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 10.5))
+            .foregroundStyle(info.fg)
+            .padding(.horizontal, 7)
+            .padding(.vertical, 2)
+            .background(info.bg)
+            .clipShape(.rect(cornerRadius: 100))
+    }
+
+    private var progressBar: some View {
+        ZStack(alignment: .leading) {
+            RoundedRectangle(cornerRadius: 4)
+                .fill(DesignSystemAsset.progressTrack.swiftUIColor)
+            RoundedRectangle(cornerRadius: 4)
+                .fill(
+                    presentationModel.status == .notStarted
+                        ? DesignSystemAsset.fgMuted.swiftUIColor.opacity(0.3)
+                        : DesignSystemAsset.primary.swiftUIColor
+                )
+                .scaleEffect(
+                    x: max(0, min(1, presentationModel.progressRatio)),
+                    anchor: .leading
+                )
+        }
+        .frame(height: 4)
+        .padding(.horizontal, 16)
+        .padding(.bottom, 12)
+    }
+
+    private var sessionListRows: some View {
+        VStack(spacing: 0) {
+            ForEach(visibleSessions) { session in
+                Button {
+                    onSessionTapped(session.id)
+                } label: {
+                    SessionRow(presentationModel: session)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 9)
+                }
+                .buttonStyle(.plain)
+                .padding(.horizontal, 8)
+            }
+            if overflowCount > 0 {
+                Text("+ \(overflowCount)개 세션")
+                    .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 13))
+                    .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, 24)
+                    .padding(.vertical, 10)
+            }
+        }
+    }
+}
+
+private extension LevelStatus {
+    var badgeInfo: (text: String, fg: Color, bg: Color)? {
+        switch self {
+        case .active:
+            return (
+                "학습 중",
+                DesignSystemAsset.primary.swiftUIColor,
+                DesignSystemAsset.primary100.swiftUIColor
             )
-        }
-        .buttonStyle(.plain)
-        .animation(.snappy, value: isExpanded)
-    }
-
-    struct HeaderRow: View {
-        let presentationModel: LevelCardPresentationModel
-        let isExpanded: Bool
-
-        private var badgeText: String { "L\(presentationModel.level)" }
-        private var subtitle: String {
-            let diff = presentationModel.difficulty.replacingOccurrences(of: "-", with: "·")
-            return "\(diff) · \(presentationModel.completedSessions)/\(presentationModel.totalSessions)"
-        }
-
-        var body: some View {
-            HStack(spacing: 10) {
-                LevelBadge(text: badgeText, color: presentationModel.levelBadgeColor)
-                LevelInfo(name: presentationModel.name, subtitle: subtitle)
-                Spacer()
-                Image(systemName: isExpanded ? "chevron.down" : "chevron.right")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 14)
-        }
-    }
-
-    struct ProgressBar: View {
-        let ratio: Double
-
-        var body: some View {
-            ZStack(alignment: .leading) {
-                RoundedRectangle(cornerRadius: 2)
-                    .fill(Color(
-                        red: 0.93,
-                        green: 0.93,
-                        blue: 0.93
-                    ))
-                GeometryReader { geo in
-                    RoundedRectangle(cornerRadius: 2)
-                        .fill(Color(
-                            red: 0.20,
-                            green: 0.78,
-                            blue: 0.35
-                        ))
-                        .frame(width: geo.size.width * max(0, min(1, ratio)))
-                }
-            }
-            .frame(height: 4)
-        }
-    }
-
-    struct SessionList: View {
-        let sessions: [SessionRowPresentationModel]
-        let onSessionTapped: (Int) -> Void
-
-        var body: some View {
-            LazyVStack(spacing: 0) {
-                ForEach(sessions) { session in
-                    Button {
-                        onSessionTapped(session.id)
-                    } label: {
-                        SessionRow(presentationModel: session)
-                            .padding(.horizontal, 16)
-                            .padding(.vertical, 10)
-                    }
-                    .buttonStyle(.plain)
-                    if session.id != sessions.last?.id {
-                        Divider()
-                            .padding(.horizontal, 16)
-                    }
-                }
-            }
+        case .completed:
+            return (
+                "완료",
+                DesignSystemAsset.positive.swiftUIColor,
+                DesignSystemAsset.positive100.swiftUIColor
+            )
+        case .notStarted:
+            return nil
         }
     }
 }

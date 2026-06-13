@@ -1,16 +1,13 @@
 import Foundation
 
 struct HomePresentationModel: Equatable {
-    let streakDays: Int
     let levels: [LevelCardPresentationModel]
 }
 
 struct LevelCardPresentationModel: Equatable, Identifiable {
     let id: String
-    let level: Int
-    let levelBadgeColor: LevelBadgeColor
     let name: String
-    let difficulty: String
+    let status: LevelStatus
     let completedSessions: Int
     let totalSessions: Int
     let progressRatio: Double
@@ -20,14 +17,21 @@ struct LevelCardPresentationModel: Equatable, Identifiable {
 struct SessionRowPresentationModel: Equatable, Identifiable {
     let id: Int
     let sessionNumber: Int
-    let accuracyPercent: Int?
     let icon: SessionIconKind
+}
+
+enum LevelStatus: Equatable {
+    case active
+    case completed
+    case notStarted
 }
 
 enum SessionIconKind: Equatable {
     case completedHigh
     case completedLow
     case notStarted
+
+    var isCompleted: Bool { self != .notStarted }
 }
 
 enum LevelBadgeColor: Equatable {

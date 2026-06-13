@@ -1,25 +1,50 @@
 import SwiftUI
 
+import DesignSystem
+
 struct SessionRow: View {
     let presentationModel: SessionRowPresentationModel
 
-    private var title: String { "Session \(presentationModel.sessionNumber)" }
-    private var subtitle: String {
-        if let pct = presentationModel.accuracyPercent {
-            return "완료 · \(pct)%"
-        }
-        return "시작 전"
-    }
+    private var isCompleted: Bool { presentationModel.icon.isCompleted }
 
     var body: some View {
-        HStack(spacing: 12) {
-            SessionStatusIcon(kind: presentationModel.icon)
-            SessionInfo(title: title, subtitle: subtitle)
+        HStack(spacing: 11) {
+            circularBadge
+            Text("\(presentationModel.sessionNumber)번째 세션")
+                .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 13.5))
+                .foregroundStyle(
+                    isCompleted
+                        ? DesignSystemAsset.fgStrong.swiftUIColor
+                        : DesignSystemAsset.fgMuted.swiftUIColor
+                )
             Spacer()
-            Image(systemName: "chevron.right")
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .accessibilityHidden(true)
+            if isCompleted {
+                Text("완료")
+                    .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 11.5))
+                    .foregroundStyle(DesignSystemAsset.fgSubtle.swiftUIColor)
+            }
+        }
+    }
+
+    private var circularBadge: some View {
+        ZStack {
+            Circle()
+                .fill(
+                    isCompleted
+                        ? DesignSystemAsset.positive.swiftUIColor
+                        : DesignSystemAsset.progressTrack.swiftUIColor
+                )
+                .frame(width: 24, height: 24)
+            if isCompleted {
+                Image(systemName: "checkmark")
+                    .font(.system(size: 13, weight: .bold))
+                    .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
+                    .accessibilityHidden(true)
+            } else {
+                Text("\(presentationModel.sessionNumber)")
+                    .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 11))
+                    .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
+            }
         }
     }
 }
@@ -29,25 +54,21 @@ struct SessionRow: View {
         SessionRow(presentationModel: SessionRowPresentationModel(
             id: 1,
             sessionNumber: 1,
-            accuracyPercent: 92,
             icon: .completedHigh
         ))
         SessionRow(presentationModel: SessionRowPresentationModel(
             id: 2,
-            sessionNumber: 3,
-            accuracyPercent: 58,
+            sessionNumber: 2,
             icon: .completedLow
         ))
         SessionRow(presentationModel: SessionRowPresentationModel(
             id: 3,
             sessionNumber: 5,
-            accuracyPercent: nil,
             icon: .notStarted
         ))
         SessionRow(presentationModel: SessionRowPresentationModel(
             id: 4,
             sessionNumber: 6,
-            accuracyPercent: nil,
             icon: .notStarted
         ))
     }
