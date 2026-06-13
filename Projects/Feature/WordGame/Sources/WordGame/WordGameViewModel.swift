@@ -2,6 +2,7 @@ import Foundation
 import SwiftUI
 
 import DomainInterface
+
 import Dependencies
 
 @Observable
@@ -69,7 +70,8 @@ public final class WordGameViewModel {
     }
 
     private func finishGame() {
-        Task {
+        Task { [weak self] in
+            guard let self else { return }
             if let id = Int(sessionID) {
                 try? await sessionClient.completeSession(id)
             }
