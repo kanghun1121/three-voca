@@ -9,13 +9,16 @@ struct LevelCard: View {
     let onSessionTapped: (Int) -> Void
 
     private let maxVisibleSessions = 6
+    @State private var showAll = false
 
     private var visibleSessions: [SessionRowPresentationModel] {
-        Array(presentationModel.sessions.prefix(maxVisibleSessions))
+        showAll
+            ? presentationModel.sessions
+            : Array(presentationModel.sessions.prefix(maxVisibleSessions))
     }
 
-    private var overflowCount: Int {
-        max(0, presentationModel.sessions.count - maxVisibleSessions)
+    private var hasOverflow: Bool {
+        !showAll && presentationModel.sessions.count > maxVisibleSessions
     }
 
     var body: some View {
@@ -109,13 +112,18 @@ struct LevelCard: View {
                 .buttonStyle(.plain)
                 .padding(.horizontal, 8)
             }
-            if overflowCount > 0 {
-                Text("+ \(overflowCount)개 세션")
-                    .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 13))
-                    .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal, 24)
-                    .padding(.vertical, 10)
+            if hasOverflow {
+                Button {
+                    showAll = true
+                } label: {
+                    Text("+ 모두 보기")
+                        .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 13))
+                        .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 24)
+                        .padding(.vertical, 10)
+                }
+                .buttonStyle(.plain)
             }
         }
     }
