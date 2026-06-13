@@ -21,6 +21,7 @@ final class AppViewModel {
                 authState = state
             }
         }
+        
         Task {
             await authClient.checkSession()
         }
