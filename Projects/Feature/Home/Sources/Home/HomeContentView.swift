@@ -18,7 +18,6 @@ struct HomeContentView: View {
                 HeatmapCard(activities: heatmapData)
                     .padding(.horizontal, 18)
                     .padding(.bottom, 22)
-                sectionLabel
                 stageList
             }
         }
@@ -40,16 +39,6 @@ struct HomeContentView: View {
         .padding(.top, 10)
         .padding(.horizontal, 22)
         .padding(.bottom, 18)
-    }
-
-    private var sectionLabel: some View {
-        Text("전체 단계")
-            .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 12.5))
-            .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
-            .tracking(0.5)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, 22)
-            .padding(.bottom, 8)
     }
 
     private var stageList: some View {
