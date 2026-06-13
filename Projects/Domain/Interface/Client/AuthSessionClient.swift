@@ -8,19 +8,22 @@ public struct AuthSessionClient: Sendable {
     public var getRefreshToken: @Sendable () throws -> String
     public var setRefreshToken: @Sendable (String) throws -> Void
     public var clearSession: @Sendable () async throws -> Void
+    public var authStateStream: @Sendable () -> AsyncStream<AuthState>
 
     public init(
         getAccessToken: @escaping @Sendable () async -> String?,
         setAccessToken: @escaping @Sendable (String) async -> Void,
         getRefreshToken: @escaping @Sendable () throws -> String,
         setRefreshToken: @escaping @Sendable (String) throws -> Void,
-        clearSession: @escaping @Sendable () async throws -> Void
+        clearSession: @escaping @Sendable () async throws -> Void,
+        authStateStream: @escaping @Sendable () -> AsyncStream<AuthState>
     ) {
         self.getAccessToken = getAccessToken
         self.setAccessToken = setAccessToken
         self.getRefreshToken = getRefreshToken
         self.setRefreshToken = setRefreshToken
         self.clearSession = clearSession
+        self.authStateStream = authStateStream
     }
 }
 
@@ -30,7 +33,8 @@ extension AuthSessionClient: TestDependencyKey {
         setAccessToken: unimplemented("\(Self.self).setAccessToken"),
         getRefreshToken: unimplemented("\(Self.self).getRefreshToken"),
         setRefreshToken: unimplemented("\(Self.self).setRefreshToken"),
-        clearSession: unimplemented("\(Self.self).clearSession")
+        clearSession: unimplemented("\(Self.self).clearSession"),
+        authStateStream: unimplemented("\(Self.self).authStateStream")
     )
 
     public static let previewValue = AuthSessionClient(
@@ -38,7 +42,8 @@ extension AuthSessionClient: TestDependencyKey {
         setAccessToken: { _ in },
         getRefreshToken: { AuthToken.previewFixture.refreshToken },
         setRefreshToken: { _ in },
-        clearSession: {}
+        clearSession: {},
+        authStateStream: { AsyncStream { _ in } }
     )
 }
 
