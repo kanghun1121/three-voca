@@ -18,7 +18,11 @@ struct NetworkLogger {
         print(message)
     }
 
-    func logResponse(_ response: URLResponse, statusCode: Int, data: Data) {
+    func logResponse(
+        _ response: URLResponse,
+        statusCode: Int,
+        data: Data
+    ) {
         guard ProcessInfo.processInfo.environment["ENABLE_NETWORK_LOG"] == "1" else { return }
 
         let url = response.url?.absoluteString ?? "nil"
