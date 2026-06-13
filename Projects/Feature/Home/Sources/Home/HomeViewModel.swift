@@ -13,7 +13,7 @@ public final class HomeViewModel {
     private(set) var heatmapData: [DailyActivity] = []
     private(set) var isLoading: Bool = true
     private(set) var errorMessage: String?
-    private(set) var expandedLevelID: String?
+    private(set) var expandedLevelIDs: Set<String> = []
     var destination: Destination?
 
     @ObservationIgnored @Dependency(\.homeClient) private var homeClient
@@ -36,8 +36,8 @@ public final class HomeViewModel {
             let (library, activities) = try await (overview, heatmap)
             state = library.toHomePresentationModel()
             heatmapData = activities
-            if expandedLevelID == nil {
-                expandedLevelID = state?.levels.first(where: { $0.status == .active })?.id
+            if expandedLevelIDs.isEmpty {
+                expandedLevelIDs = Set(state?.levels.map(\.id) ?? [])
             }
         } catch {
             errorMessage = "홈 정보를 불러오지 못했습니다."
@@ -45,7 +45,11 @@ public final class HomeViewModel {
     }
 
     public func levelTapped(id: String) {
-        expandedLevelID = expandedLevelID == id ? nil : id
+        if expandedLevelIDs.contains(id) {
+            expandedLevelIDs.remove(id)
+        } else {
+            expandedLevelIDs.insert(id)
+        }
     }
 
     public func sessionTapped(id: Int) {

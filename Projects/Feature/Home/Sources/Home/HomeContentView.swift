@@ -7,7 +7,7 @@ import Dependencies
 struct HomeContentView: View {
     let state: HomePresentationModel
     let heatmapData: [DailyActivity]
-    let expandedLevelID: String?
+    let expandedLevelIDs: Set<String>
     let onLevelTapped: (String) -> Void
     let onSessionTapped: (Int) -> Void
 
@@ -57,7 +57,7 @@ struct HomeContentView: View {
             ForEach(state.levels) { level in
                 LevelCard(
                     presentationModel: level,
-                    isExpanded: expandedLevelID == level.id,
+                    isExpanded: expandedLevelIDs.contains(level.id),
                     action: { onLevelTapped(level.id) },
                     onSessionTapped: onSessionTapped
                 )
@@ -72,7 +72,7 @@ struct HomeContentView: View {
     HomeContentView(
         state: VocabularyLibrary.previewFixture.toHomePresentationModel(),
         heatmapData: DailyActivity.previewFixture,
-        expandedLevelID: nil,
+        expandedLevelIDs: [],
         onLevelTapped: { _ in },
         onSessionTapped: { _ in }
     )
