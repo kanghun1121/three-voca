@@ -14,46 +14,20 @@ struct HomeContentView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
-                greetingHeader
+                HomeGreetingHeader()
                 HeatmapCard(activities: heatmapData)
                     .padding(.horizontal, 18)
                     .padding(.bottom, 22)
-                stageList
-            }
-        }
-        .background(DesignSystemAsset.bg.swiftUIColor)
-        .toolbar(.hidden, for: .navigationBar)
-    }
-
-    private var greetingHeader: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text("오늘도 가볍게")
-                .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 13))
-                .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
-            Text("3초 안에 떠올려볼까요?")
-                .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 25))
-                .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
-                .tracking(-0.55)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.top, 10)
-        .padding(.horizontal, 22)
-        .padding(.bottom, 18)
-    }
-
-    private var stageList: some View {
-        LazyVStack(spacing: 9) {
-            ForEach(state.levels) { level in
-                LevelCard(
-                    presentationModel: level,
-                    isExpanded: expandedLevelIDs.contains(level.id),
-                    action: { onLevelTapped(level.id) },
+                HomeLevelList(
+                    levels: state.levels,
+                    expandedLevelIDs: expandedLevelIDs,
+                    onLevelTapped: onLevelTapped,
                     onSessionTapped: onSessionTapped
                 )
             }
         }
-        .padding(.horizontal, 18)
-        .padding(.bottom, 24)
+        .background(DesignSystemAsset.bg.swiftUIColor)
+        .toolbar(.hidden, for: .navigationBar)
     }
 }
 
