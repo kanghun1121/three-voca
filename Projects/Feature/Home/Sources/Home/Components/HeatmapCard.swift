@@ -1,7 +1,7 @@
 import SwiftUI
 
-import DomainInterface
 import DesignSystem
+import DomainInterface
 
 struct HeatmapCard: View {
     let activities: [DailyActivity]
@@ -37,10 +37,7 @@ struct HeatmapCard: View {
             Text("학습 기록")
                 .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 15.5))
                 .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
-            VStack(alignment: .leading, spacing: 4) {
-                HeatmapMonthLabelRow(grid: grid)
-                HeatmapGridRow(grid: grid, activityMap: activityMap)
-            }
+            HeatmapGridSection(grid: grid, activityMap: activityMap)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, 16)

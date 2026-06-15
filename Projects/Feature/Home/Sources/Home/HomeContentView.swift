@@ -1,8 +1,7 @@
 import SwiftUI
 
-import DomainInterface
 import DesignSystem
-import Dependencies
+import DomainInterface
 
 struct HomeContentView: View {
     let state: HomePresentationModel
