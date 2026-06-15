@@ -11,10 +11,12 @@ struct HomeLevelList: View {
             ForEach(levels) { level in
                 LevelCard(
                     presentationModel: level,
-                    isExpanded: expandedLevelIDs.contains(level.id),
-                    action: { onLevelTapped(level.id) },
-                    onSessionTapped: onSessionTapped
-                )
+                    isExpanded: expandedLevelIDs.contains(level.id)
+                ) {
+                    onLevelTapped(level.id)
+                } onSessionTapped: { id in
+                    onSessionTapped(id)
+                }
             }
         }
         .padding(.horizontal, 18)

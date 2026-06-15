@@ -15,7 +15,11 @@ struct HeatmapDayGutter: View {
                 Text(labels[row])
                     .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 8.5))
                     .foregroundStyle(DesignSystemAsset.fgSubtle.swiftUIColor)
-                    .frame(width: dayGutterWidth, height: cellSize, alignment: .leading)
+                    .frame(
+                        width: dayGutterWidth,
+                        height: cellSize,
+                        alignment: .leading
+                    )
             }
         }
     }
