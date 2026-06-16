@@ -29,7 +29,7 @@ struct SessionDetailResponseDTO: Decodable {
         let term: String
         let pronunciation: String
         let definitions: [Definition]
-        let distractors: [String]?
+        let distractors: [String]
     }
 
     let session: Metadata

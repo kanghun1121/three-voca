@@ -23,7 +23,7 @@ private extension SessionDetailResponseDTO.Word {
             term: term,
             pronunciation: pronunciation,
             definitions: definitions.map { $0.toDomain() },
-            distractors: distractors ?? []
+            distractors: distractors
         )
     }
 }
