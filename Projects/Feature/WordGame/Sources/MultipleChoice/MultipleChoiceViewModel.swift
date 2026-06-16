@@ -8,7 +8,6 @@ public final class MultipleChoiceViewModel {
 
     enum ViewState: Equatable {
         case active
-        case pendingReveal(selected: String)
         case revealed(selected: String)
     }
 
@@ -79,19 +78,15 @@ public final class MultipleChoiceViewModel {
         guard case .active = viewState else { return }
         guard let word = currentWord else { return }
 
-        viewState = .pendingReveal(selected: choice)
-
         let isCorrect = choice == word.primaryMeaning
         if !isCorrect, shouldAddToReview(word) {
             incorrectWordIDs.insert(word.id)
             reviewWords.append(word)
         }
 
-        advanceTask = Task {
-            try? await Task.sleep(for: .milliseconds(400))
-            guard !Task.isCancelled else { return }
-            viewState = .revealed(selected: choice)
+        viewState = .revealed(selected: choice)
 
+        advanceTask = Task {
             try? await Task.sleep(for: .milliseconds(1000))
             guard !Task.isCancelled else { return }
             showWord(at: wordIndex + 1)

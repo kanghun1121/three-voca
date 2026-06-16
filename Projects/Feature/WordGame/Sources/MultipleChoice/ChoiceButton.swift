@@ -52,7 +52,6 @@ struct ChoiceButton: View {
     private var backgroundColor: Color {
         switch state {
         case .idle:      DesignSystemAsset.white.swiftUIColor.opacity(0.05)
-        case .selected:  DesignSystemAsset.white.swiftUIColor.opacity(0.16)
         case .correct:   DesignSystemAsset.positive.swiftUIColor.opacity(0.15)
         case .incorrect: DesignSystemAsset.cautionary.swiftUIColor.opacity(0.15)
         }
@@ -61,7 +60,6 @@ struct ChoiceButton: View {
     private var borderColor: Color {
         switch state {
         case .idle:      DesignSystemAsset.white.swiftUIColor.opacity(0.22)
-        case .selected:  DesignSystemAsset.white.swiftUIColor
         case .correct:   DesignSystemAsset.positive.swiftUIColor
         case .incorrect: DesignSystemAsset.cautionary.swiftUIColor
         }
@@ -69,16 +67,16 @@ struct ChoiceButton: View {
 
     private var borderWidth: Double {
         switch state {
-        case .idle:                           1
-        case .selected, .correct, .incorrect: 2
+        case .idle:                1
+        case .correct, .incorrect: 2
         }
     }
 
     private var accessibilityLabel: String {
         switch state {
-        case .idle, .selected: text
-        case .correct:         "\(text), 정답"
-        case .incorrect:       "\(text), 오답"
+        case .idle:      text
+        case .correct:   "\(text), 정답"
+        case .incorrect: "\(text), 오답"
         }
     }
 }
