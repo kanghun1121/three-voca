@@ -10,7 +10,6 @@ public final class MultipleChoiceViewModel {
         case active
         case pendingReveal(selected: String)
         case revealed(selected: String)
-        case completed
     }
 
     enum AlertAction {
@@ -131,12 +130,7 @@ public final class MultipleChoiceViewModel {
             totalWords = reviewWords.count
             showWord(at: 0)
         } else {
-            viewState = .completed
-            advanceTask = Task {
-                try? await Task.sleep(for: .milliseconds(800))
-                guard !Task.isCancelled else { return }
-                onCompleted()
-            }
+            onCompleted()
         }
     }
 }
