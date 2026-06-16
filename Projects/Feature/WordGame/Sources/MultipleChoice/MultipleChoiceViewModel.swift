@@ -38,7 +38,11 @@ public final class MultipleChoiceViewModel {
     private var incorrectWordIDs: Set<String> = []
     private var advanceTask: Task<Void, Never>?
 
-    init(words: [GameWord], onCompleted: @escaping () -> Void, onClose: @escaping () -> Void) {
+    init(
+        words: [GameWord],
+        onCompleted: @escaping () -> Void,
+        onClose: @escaping () -> Void
+    ) {
         self.words = words
         self.totalWords = words.count
         self.onCompleted = onCompleted
@@ -94,6 +98,8 @@ public final class MultipleChoiceViewModel {
             showWord(at: wordIndex + 1)
         }
     }
+
+    // MARK: - Private
 
     private func showWord(at index: Int) {
         let currentWords = isReviewRound ? reviewWords : words

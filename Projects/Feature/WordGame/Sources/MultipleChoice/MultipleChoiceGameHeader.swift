@@ -1,7 +1,5 @@
 import SwiftUI
 
-import DesignSystem
-
 struct MultipleChoiceGameHeader: View {
     let onDismiss: () -> Void
 
@@ -9,30 +7,7 @@ struct MultipleChoiceGameHeader: View {
         VStack(spacing: 0) {
             StageSegmentBar(currentStage: 1)
                 .padding(.top, 6)
-
-            HStack {
-                Button(action: onDismiss) {
-                    Image(systemName: "xmark")
-                        .font(.system(size: 16, weight: .semibold))
-                        .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
-                        .frame(width: 40, height: 40)
-                }
-                .padding(.leading, 10)
-                .accessibilityLabel("닫기")
-
-                Spacer()
-
-                Text("뜻")
-                    .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 12))
-                    .tracking(0.12 * 12)
-                    .foregroundStyle(DesignSystemAsset.white.swiftUIColor.opacity(0.70))
-
-                Spacer()
-
-                Spacer().frame(width: 40)
-            }
-            .padding(.horizontal, 8)
-            .padding(.top, 10)
+            MultipleChoiceCloseRow(onDismiss: onDismiss)
         }
     }
 }
