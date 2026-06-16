@@ -34,8 +34,6 @@ struct MultipleChoiceChoiceList: View {
                 return .incorrect
             }
             return .idle
-        case .completed:
-            return .idle
         }
     }
 }

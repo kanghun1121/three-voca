@@ -15,20 +15,14 @@ public struct MultipleChoiceGameView: View {
         ZStack {
             GameBackground()
 
-            switch viewModel.viewState {
-            case .active, .pendingReveal, .revealed:
-                if let word = viewModel.currentWord {
-                    MultipleChoiceActivePhaseView(
-                        word: word,
-                        choices: viewModel.choices,
-                        viewState: viewModel.viewState,
-                        onDismiss: viewModel.closeButtonTapped,
-                        onChoiceTap: viewModel.choiceTapped
-                    )
-                }
-
-            case .completed:
-                MultipleChoiceCompletedView()
+            if let word = viewModel.currentWord {
+                MultipleChoiceActivePhaseView(
+                    word: word,
+                    choices: viewModel.choices,
+                    viewState: viewModel.viewState,
+                    onDismiss: viewModel.closeButtonTapped,
+                    onChoiceTap: viewModel.choiceTapped
+                )
             }
         }
         .onAppear { viewModel.load() }
