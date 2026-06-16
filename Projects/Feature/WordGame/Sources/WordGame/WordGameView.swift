@@ -24,6 +24,10 @@ public struct WordGameView: View {
                 RecognitionGameView(viewModel: vm)
                     .transition(.opacity)
 
+            case .multipleChoice(let vm):
+                MultipleChoiceGameView(viewModel: vm)
+                    .transition(.opacity)
+
             case .spelling(let vm):
                 SpellingGameView(viewModel: vm)
                     .transition(.opacity)
