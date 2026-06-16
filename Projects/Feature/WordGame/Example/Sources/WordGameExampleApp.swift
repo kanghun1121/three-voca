@@ -28,6 +28,9 @@ struct ExampleRootView: View {
                 Button("Recognition 부터") {
                     destination = WordGameViewModel(sessionID: "demo", startingFrom: .recognition)
                 }
+                Button("MultipleChoice 부터") {
+                    destination = WordGameViewModel(sessionID: "demo", startingFrom: .multipleChoice)
+                }
                 Button("Spelling 부터") {
                     destination = WordGameViewModel(sessionID: "demo", startingFrom: .spelling)
                 }
