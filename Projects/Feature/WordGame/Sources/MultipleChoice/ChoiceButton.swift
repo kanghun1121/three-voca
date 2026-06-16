@@ -16,7 +16,11 @@ struct ChoiceButton: View {
                 .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 18))
                 .tracking(-0.01 * 18)
                 .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
-                .frame(maxWidth: .infinity, minHeight: 64, alignment: .leading)
+                .frame(
+                    maxWidth: .infinity,
+                    minHeight: 64,
+                    alignment: .leading
+                )
                 .padding(.horizontal, 22)
         }
         .background(backgroundColor)
