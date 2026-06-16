@@ -28,7 +28,7 @@ struct NetworkLogger {
         let url = response.url?.absoluteString ?? "nil"
         let statusEmoji = (200..<300).contains(statusCode) ? "✅" : "❌"
         var message = "\(statusEmoji) [Response] [\(statusCode)] \(url)"
-        message += "\nBody:\n\(truncated(prettyJSON(data)))"
+        message += "\nBody:\n\(prettyJSON(data))"
 
         print(message)
     }
@@ -41,12 +41,6 @@ struct NetworkLogger {
 }
 
 private extension NetworkLogger {
-    func truncated(_ text: String, maxLines: Int = 5) -> String {
-        let lines = text.components(separatedBy: "\n")
-        guard lines.count > maxLines else { return text }
-        return lines.prefix(maxLines).joined(separator: "\n") + "\n... (\(lines.count - maxLines)줄 생략)"
-    }
-
     func prettyJSON(_ data: Data) -> String {
         guard
             let json = try? JSONSerialization.jsonObject(with: data),
