@@ -22,7 +22,8 @@ private extension SessionDetailResponseDTO.Word {
             id: id,
             term: term,
             pronunciation: pronunciation,
-            definitions: definitions.map { $0.toDomain() }
+            definitions: definitions.map { $0.toDomain() },
+            distractors: distractors ?? []
         )
     }
 }

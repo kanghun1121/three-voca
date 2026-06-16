@@ -34,17 +34,20 @@ public struct Session: Equatable {
         public let term: String
         public let pronunciation: String
         public let definitions: [Definition]
+        public let distractors: [String]
 
         public init(
             id: String,
             term: String,
             pronunciation: String,
-            definitions: [Definition]
+            definitions: [Definition],
+            distractors: [String]
         ) {
             self.id = id
             self.term = term
             self.pronunciation = pronunciation
             self.definitions = definitions
+            self.distractors = distractors
         }
     }
 
@@ -133,7 +136,8 @@ public extension Session {
             pronunciation: "/æmˈbɪɡjuəs/",
             definitions: [
                 Word.Definition(id: "def_001_1", partOfSpeech: .adjective, meaning: "모호한, 애매한")
-            ]
+            ],
+            distractors: []
         ),
         Word(
             id: "word_002",
@@ -141,7 +145,8 @@ public extension Session {
             pronunciation: "/ˌpɜːrsəˈvɪr/",
             definitions: [
                 Word.Definition(id: "def_002_1", partOfSpeech: .verb, meaning: "끈기 있게 계속하다, 인내하다")
-            ]
+            ],
+            distractors: []
         ),
         Word(
             id: "word_003",
@@ -149,7 +154,8 @@ public extension Session {
             pronunciation: "/ˈeləkwənt/",
             definitions: [
                 Word.Definition(id: "def_003_1", partOfSpeech: .adjective, meaning: "유창한, 능변의")
-            ]
+            ],
+            distractors: []
         ),
         Word(
             id: "word_004",
@@ -158,7 +164,8 @@ public extension Session {
             definitions: [
                 Word.Definition(id: "def_004_1", partOfSpeech: .adjective, meaning: "불가피한, 필연적인"),
                 Word.Definition(id: "def_004_2", partOfSpeech: .noun, meaning: "피할 수 없는 일"),
-            ]
+            ],
+            distractors: []
         ),
         Word(
             id: "word_005",
@@ -166,7 +173,8 @@ public extension Session {
             pronunciation: "/məˈtɪkjuləs/",
             definitions: [
                 Word.Definition(id: "def_005_1", partOfSpeech: .adjective, meaning: "꼼꼼한, 세심한")
-            ]
+            ],
+            distractors: []
         ),
         Word(
             id: "word_006",
@@ -174,7 +182,8 @@ public extension Session {
             pronunciation: "/bəˈnevələnt/",
             definitions: [
                 Word.Definition(id: "def_006_1", partOfSpeech: .adjective, meaning: "자비로운, 친절한")
-            ]
+            ],
+            distractors: []
         ),
         Word(
             id: "word_007",
@@ -182,7 +191,8 @@ public extension Session {
             pronunciation: "/ɪˈfemərəl/",
             definitions: [
                 Word.Definition(id: "def_007_1", partOfSpeech: .adjective, meaning: "덧없는, 단명하는")
-            ]
+            ],
+            distractors: []
         ),
         Word(
             id: "word_008",
@@ -190,7 +200,8 @@ public extension Session {
             pronunciation: "/rɪˈzɪliənt/",
             definitions: [
                 Word.Definition(id: "def_008_1", partOfSpeech: .adjective, meaning: "회복력 있는, 탄력적인")
-            ]
+            ],
+            distractors: []
         ),
         Word(
             id: "word_009",
@@ -198,7 +209,8 @@ public extension Session {
             pronunciation: "/təˈneɪʃəs/",
             definitions: [
                 Word.Definition(id: "def_009_1", partOfSpeech: .adjective, meaning: "끈질긴, 고집스러운")
-            ]
+            ],
+            distractors: []
         ),
         Word(
             id: "word_010",
@@ -206,7 +218,8 @@ public extension Session {
             pronunciation: "/səˈriːn/",
             definitions: [
                 Word.Definition(id: "def_010_1", partOfSpeech: .adjective, meaning: "고요한, 평온한")
-            ]
+            ],
+            distractors: []
         ),
         Word(
             id: "word_011",
@@ -214,7 +227,8 @@ public extension Session {
             pronunciation: "/ˈɑːrdjuəs/",
             definitions: [
                 Word.Definition(id: "def_011_1", partOfSpeech: .adjective, meaning: "힘든, 고된")
-            ]
+            ],
+            distractors: []
         ),
         Word(
             id: "word_012",
@@ -222,7 +236,8 @@ public extension Session {
             pronunciation: "/præɡˈmætɪk/",
             definitions: [
                 Word.Definition(id: "def_012_1", partOfSpeech: .adjective, meaning: "실용적인, 현실적인")
-            ]
+            ],
+            distractors: []
         ),
         Word(
             id: "word_013",
@@ -230,7 +245,8 @@ public extension Session {
             pronunciation: "/ˈvɪvɪd/",
             definitions: [
                 Word.Definition(id: "def_013_1", partOfSpeech: .adjective, meaning: "생생한, 선명한")
-            ]
+            ],
+            distractors: []
         ),
         Word(
             id: "word_014",
@@ -238,7 +254,8 @@ public extension Session {
             pronunciation: "/prəˈfaʊnd/",
             definitions: [
                 Word.Definition(id: "def_014_1", partOfSpeech: .adjective, meaning: "심오한, 깊은")
-            ]
+            ],
+            distractors: []
         ),
         Word(
             id: "word_015",
@@ -246,7 +263,8 @@ public extension Session {
             pronunciation: "/ˈsʌtl/",
             definitions: [
                 Word.Definition(id: "def_015_1", partOfSpeech: .adjective, meaning: "미묘한, 섬세한")
-            ]
+            ],
+            distractors: []
         ),
     ]
 
