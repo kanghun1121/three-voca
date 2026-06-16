@@ -86,19 +86,18 @@ public final class MultipleChoiceViewModel {
 
         viewState = .revealed(selected: choice)
 
-        advanceTask = Task {
+        advanceTask = Task { [weak self] in
             try? await Task.sleep(for: .milliseconds(1000))
             guard !Task.isCancelled else { return }
+            guard let self else { return }
             showWord(at: wordIndex + 1)
         }
     }
 
-    // MARK: - Private
-
     private func showWord(at index: Int) {
         let currentWords = isReviewRound ? reviewWords : words
         guard index < currentWords.count else {
-            handleRoundEnd()
+            finishRound()
             return
         }
 
@@ -119,7 +118,7 @@ public final class MultipleChoiceViewModel {
     }
 
     /// 메인 라운드 종료 시 오답이 있으면 복습 라운드를 시작하고, 없으면 완료 처리한다.
-    private func handleRoundEnd() {
+    private func finishRound() {
         if !isReviewRound && !reviewWords.isEmpty {
             isReviewRound = true
             totalWords = reviewWords.count
