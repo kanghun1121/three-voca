@@ -24,8 +24,6 @@ struct MultipleChoiceChoiceList: View {
         switch viewState {
         case .active:
             return .idle
-        case .pendingReveal(let selected):
-            return choice == selected ? .selected : .idle
         case .revealed(let selected):
             let correct = word.primaryMeaning
             if choice == correct {
