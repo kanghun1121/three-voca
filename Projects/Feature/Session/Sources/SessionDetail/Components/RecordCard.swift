@@ -11,42 +11,24 @@ struct RecordCard: View {
                 .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 14))
                 .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
 
-            if let record {
-                RecordGrid(record: record)
-            } else {
-                EmptyRecordPlaceholder()
+            HStack(spacing: 0) {
+                RecordCell(
+                    label: "처음 완료",
+                    value: record?.firstCompletedDateText ?? "-"
+                )
+                Divider()
+                    .frame(height: 36)
+                    .padding(.horizontal, 16)
+                RecordCell(
+                    label: "복습 횟수",
+                    value: record.map { "\($0.reviewCount)회" } ?? "-"
+                )
+                Spacer()
             }
         }
         .padding()
         .background(Color(.systemGray6))
         .clipShape(.rect(cornerRadius: 12))
-    }
-}
-
-private struct RecordGrid: View {
-    let record: SessionDetailPresentationModel.Record
-
-    var body: some View {
-        LazyVGrid(
-            columns: [GridItem(.flexible()), GridItem(.flexible())],
-            alignment: .leading,
-            spacing: 16
-        ) {
-            RecordCell(label: "처음 완료", value: record.firstCompletedDateText)
-            RecordCell(label: "마지막 학습", value: record.lastStudiedRelativeText)
-            RecordCell(label: "복습 횟수", value: "\(record.reviewCount)회")
-            RecordCell(label: "평균 정답률", value: "\(record.averageAccuracyPercent)%")
-        }
-    }
-}
-
-private struct EmptyRecordPlaceholder: View {
-    var body: some View {
-        Text("아직 학습 기록이 없습니다.")
-            .font(DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 14))
-            .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
-            .frame(maxWidth: .infinity, alignment: .center)
-            .padding(.vertical, 8)
     }
 }
 

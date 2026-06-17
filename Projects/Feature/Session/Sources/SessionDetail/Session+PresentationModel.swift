@@ -1,5 +1,3 @@
-import Foundation
-
 import DomainInterface
 
 extension Session {
@@ -21,28 +19,13 @@ extension Session {
         )
     }
 
-    fileprivate static let dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "ko_KR")
-        formatter.dateFormat = "yyyy.MM.dd"
-        return formatter
-    }()
-
-    fileprivate static let relativeFormatter: RelativeDateTimeFormatter = {
-        let formatter = RelativeDateTimeFormatter()
-        formatter.locale = Locale(identifier: "ko_KR")
-        formatter.unitsStyle = .full
-        return formatter
-    }()
 }
 
 private extension Session.Record {
     func toRecordPresentationModel() -> SessionDetailPresentationModel.Record {
         SessionDetailPresentationModel.Record(
-            firstCompletedDateText: Session.dateFormatter.string(from: firstCompletedAt),
-            lastStudiedRelativeText: Session.relativeFormatter.localizedString(for: lastStudiedAt, relativeTo: Date.now),
-            reviewCount: reviewCount,
-            averageAccuracyPercent: Int(round(averageAccuracy * 100))
+            firstCompletedDateText: firstCompletedAt,
+            reviewCount: reviewCount
         )
     }
 }
