@@ -2,12 +2,11 @@ import DomainInterface
 
 extension Session {
     func toSessionDetailPresentationModel() -> SessionDetailPresentationModel {
-        return SessionDetailPresentationModel(
+        SessionDetailPresentationModel(
             level: level,
             sessionNumber: sessionNumber,
             wordCount: words.count,
             estimatedDurationMinutes: estimatedDurationMinutes,
-            cefrLevel: cefrLevel,
             record: record?.toRecordPresentationModel(),
             words: words.map {
                 SessionDetailPresentationModel.WordPreview(
@@ -23,9 +22,6 @@ extension Session {
 
 private extension Session.Record {
     func toRecordPresentationModel() -> SessionDetailPresentationModel.Record {
-        SessionDetailPresentationModel.Record(
-            firstCompletedDateText: firstCompletedAt,
-            studyCount: studyCount
-        )
+        SessionDetailPresentationModel.Record(firstCompletedDateText: firstCompletedAt, studyCount: studyCount)
     }
 }

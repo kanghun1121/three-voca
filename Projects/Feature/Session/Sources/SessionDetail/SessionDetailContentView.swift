@@ -12,15 +12,11 @@ struct SessionDetailContentView: View {
                     level: state.level,
                     sessionNumber: state.sessionNumber,
                     wordCount: state.wordCount,
-                    estimatedDurationMinutes: state.estimatedDurationMinutes,
-                    cefrLevel: state.cefrLevel
+                    estimatedDurationMinutes: state.estimatedDurationMinutes
                 )
                 RecordCard(record: state.record)
                 WordPreviewSection(wordCount: state.wordCount, words: state.words)
-                ActionButtonsSection(
-                    onGameTapped: onGameTapped,
-                    onVocabularyListTapped: onVocabularyListTapped
-                )
+                ActionButtonsSection(onGameTapped: onGameTapped, onVocabularyListTapped: onVocabularyListTapped)
             }
             .padding(.horizontal, 20)
             .padding(.vertical)

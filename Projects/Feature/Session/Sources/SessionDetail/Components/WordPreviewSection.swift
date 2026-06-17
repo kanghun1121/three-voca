@@ -6,8 +6,9 @@ struct WordPreviewSection: View {
     let wordCount: Int
     let words: [SessionDetailPresentationModel.WordPreview]
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var isExpanded = false
-    private let previewLimit = 4
+    private let previewLimit = 6
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -20,7 +21,7 @@ struct WordPreviewSection: View {
             ForEach(Array(words.enumerated()), id: \.offset) { index, item in
                 if index < previewLimit || isExpanded {
                     WordPreviewRow(item: item)
-                        .transition(.opacity.combined(with: .move(edge: .top)))
+                        .transition(reduceMotion ? .opacity : .opacity.combined(with: .move(edge: .top)))
                         .animation(
                             .easeOut(duration: 0.2)
                                 .delay(Double(max(0, index - previewLimit)) * 0.04),
