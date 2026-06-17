@@ -40,7 +40,7 @@ private extension SessionDetailResponseDTO.LearningHistory {
     func toDomain() -> Session.Record {
         Session.Record(
             firstCompletedAt: firstCompletedAt,
-            reviewCount: reviewCount
+            studyCount: studyCount
         )
     }
 }

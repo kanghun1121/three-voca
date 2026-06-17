@@ -3,7 +3,7 @@ import Foundation
 struct SessionDetailPresentationModel: Equatable {
     struct Record: Equatable {
         let firstCompletedDateText: String
-        let reviewCount: Int
+        let studyCount: Int
     }
 
     struct WordPreview: Equatable, Identifiable {
