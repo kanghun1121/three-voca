@@ -16,14 +16,17 @@ struct RecordCard: View {
                     label: "처음 완료",
                     value: record?.firstCompletedDateText ?? "-"
                 )
+                .frame(maxWidth: .infinity, alignment: .leading)
+
                 Divider()
                     .frame(height: 36)
-                    .padding(.horizontal, 16)
+
                 RecordCell(
                     label: "복습 횟수",
                     value: record.map { "\($0.reviewCount)회" } ?? "-"
                 )
-                Spacer()
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.leading, 16)
             }
         }
         .padding()
