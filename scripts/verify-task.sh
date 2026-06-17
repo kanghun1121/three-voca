@@ -8,11 +8,19 @@
 TASK_ID="${1:-unknown}"
 PROJECT_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 LOG_DIR="$PROJECT_ROOT/.claude/logs/$TASK_ID"
-WORKSPACE="$PROJECT_ROOT/FiveVoca.xcworkspace"
 SCHEME="FiveVoca"
 TEST_SCHEME="AllTest"
 DESTINATION="platform=iOS Simulator,OS=18.6,name=iPhone 16"
 FAILED=0
+
+# Worktree가 있으면 Worktree 기준으로 빌드, 없으면 메인 레포 기준
+WORKTREE_PATH="$PROJECT_ROOT/.claude/worktrees/$TASK_ID"
+if [ -d "$WORKTREE_PATH" ]; then
+  SOURCE_ROOT="$WORKTREE_PATH"
+else
+  SOURCE_ROOT="$PROJECT_ROOT"
+fi
+WORKSPACE="$SOURCE_ROOT/FiveVoca.xcworkspace"
 
 mkdir -p "$LOG_DIR"
 LOG_FILE="$LOG_DIR/verify-$(date '+%Y%m%d-%H%M%S').log"
@@ -77,12 +85,12 @@ log "[ 3/3 ] 아키텍처 의존성 검사..."
 
 # Domain이 Feature를 import 하면 안 됨 (역방향 의존성)
 DOMAIN_VIOLATION=$(grep -rn "^import.*Feature" \
-  "$PROJECT_ROOT/Projects/Domain" \
+  "$SOURCE_ROOT/Projects/Domain" \
   --include="*.swift" 2>/dev/null | grep -v "^[[:space:]]*//" || true)
 
 # Core가 Domain/Feature를 import 하면 안 됨 (역방향 의존성)
 CORE_VIOLATION=$(grep -rn "^import.*\(Domain\|Feature\)" \
-  "$PROJECT_ROOT/Projects/Core" \
+  "$SOURCE_ROOT/Projects/Core" \
   --include="*.swift" 2>/dev/null | grep -v "^[[:space:]]*//" || true)
 
 if [ -z "$DOMAIN_VIOLATION" ] && [ -z "$CORE_VIOLATION" ]; then
