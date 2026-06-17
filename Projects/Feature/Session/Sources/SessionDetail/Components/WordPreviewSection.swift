@@ -17,7 +17,7 @@ struct WordPreviewSection: View {
                 .tracking(0.26)
                 .padding(.bottom, 12)
 
-            ForEach(Array(words.enumerated()), id: \.element.id) { index, item in
+            ForEach(Array(words.enumerated()), id: \.offset) { index, item in
                 if index < previewLimit || isExpanded {
                     WordPreviewRow(item: item)
                         .transition(.opacity.combined(with: .move(edge: .top)))
