@@ -16,8 +16,13 @@ public struct SessionDetailView: View {
         Group {
             switch viewModel.viewState {
             case .loading:
-                ProgressView()
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                SessionDetailContentView(
+                    state: .placeholder,
+                    onGameTapped: {},
+                    onVocabularyListTapped: {}
+                )
+                .redacted(reason: .placeholder)
+                .allowsHitTesting(false)
             case .loaded(let state):
                 SessionDetailContentView(
                     state: state,

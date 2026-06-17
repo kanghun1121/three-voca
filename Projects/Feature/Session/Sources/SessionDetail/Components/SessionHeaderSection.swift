@@ -7,7 +7,6 @@ struct SessionHeaderSection: View {
     let sessionNumber: Int
     let wordCount: Int
     let estimatedDurationMinutes: Int
-    let cefrLevel: String
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
@@ -17,7 +16,7 @@ struct SessionHeaderSection: View {
             Text("\(wordCount)개 단어")
                 .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 33))
                 .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
-            Text("약 \(estimatedDurationMinutes)분 소요 · \(cefrLevel) 수준")
+            Text("약 \(estimatedDurationMinutes)분 소요")
                 .font(DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 15))
                 .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
         }

@@ -11,27 +11,29 @@ struct RecordCard: View {
                 .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 14))
                 .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
 
-            HStack(spacing: 0) {
-                RecordCell(
-                    label: "처음 완료",
-                    value: record?.firstCompletedDateText ?? "-"
-                )
-                .frame(maxWidth: .infinity, alignment: .leading)
-
-                Divider()
-                    .frame(height: 36)
-
-                RecordCell(
-                    label: "학습 횟수",
-                    value: record.map { "\($0.studyCount)회" } ?? "-"
-                )
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.leading, 16)
-            }
+            RecordCellsRow(record: record)
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(DesignSystemAsset.bgMuted.swiftUIColor)
         .clipShape(.rect(cornerRadius: 12))
+    }
+}
+
+private struct RecordCellsRow: View {
+    let record: SessionDetailPresentationModel.Record?
+
+    var body: some View {
+        HStack(spacing: 0) {
+            RecordCell(label: "처음 완료", value: record?.firstCompletedDateText ?? "-")
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+            Divider()
+                .frame(height: 36)
+
+            RecordCell(label: "학습 횟수", value: record.map { "\($0.studyCount)회" } ?? "-")
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.leading, 16)
+        }
     }
 }
 

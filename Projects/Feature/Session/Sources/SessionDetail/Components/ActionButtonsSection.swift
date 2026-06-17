@@ -9,7 +9,7 @@ struct ActionButtonsSection: View {
     var body: some View {
         VStack(spacing: 10) {
             Button(action: onGameTapped) {
-                Label("학습 시작 — 4-Phase 게임", systemImage: "play.fill")
+                Label("학습 게임 시작", systemImage: "play.fill")
                     .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 17))
                     .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
                     .frame(maxWidth: .infinity)
@@ -20,7 +20,7 @@ struct ActionButtonsSection: View {
             .buttonStyle(.plain)
 
             Button(action: onVocabularyListTapped) {
-                Label("단어 보기 (게임 없이 깊이 학습)", systemImage: "book")
+                Label("단어 보기", systemImage: "book")
                     .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 17))
                     .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
                     .frame(maxWidth: .infinity)
