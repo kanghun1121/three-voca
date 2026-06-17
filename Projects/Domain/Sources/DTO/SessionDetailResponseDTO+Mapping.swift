@@ -1,5 +1,3 @@
-import Foundation
-
 import DomainInterface
 
 extension SessionDetailResponseDTO {
@@ -41,16 +39,8 @@ private extension SessionDetailResponseDTO.Word.Definition {
 private extension SessionDetailResponseDTO.LearningHistory {
     func toDomain() -> Session.Record {
         Session.Record(
-            firstCompletedAt: Self.iso8601.date(from: firstCompletedAt) ?? .distantPast,
-            lastStudiedAt: Self.iso8601.date(from: lastStudiedAt) ?? .distantPast,
-            reviewCount: reviewCount,
-            averageAccuracy: averageAccuracy
+            firstCompletedAt: firstCompletedAt,
+            reviewCount: reviewCount
         )
     }
-
-    private static let iso8601: ISO8601DateFormatter = {
-        let f = ISO8601DateFormatter()
-        f.formatOptions = [.withInternetDateTime]
-        return f
-    }()
 }

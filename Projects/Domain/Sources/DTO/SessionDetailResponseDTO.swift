@@ -13,9 +13,7 @@ struct SessionDetailResponseDTO: Decodable {
 
     struct LearningHistory: Decodable {
         let firstCompletedAt: String
-        let lastStudiedAt: String
         let reviewCount: Int
-        let averageAccuracy: Double
     }
 
     struct Word: Decodable {

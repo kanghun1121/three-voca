@@ -1,5 +1,3 @@
-import Foundation
-
 public struct Session: Equatable {
     public struct Word: Equatable, Identifiable {
         public struct Definition: Equatable, Identifiable {
@@ -52,21 +50,15 @@ public struct Session: Equatable {
     }
 
     public struct Record: Equatable {
-        public let firstCompletedAt: Date
-        public let lastStudiedAt: Date
+        public let firstCompletedAt: String
         public let reviewCount: Int
-        public let averageAccuracy: Double
 
         public init(
-            firstCompletedAt: Date,
-            lastStudiedAt: Date,
-            reviewCount: Int,
-            averageAccuracy: Double
+            firstCompletedAt: String,
+            reviewCount: Int
         ) {
             self.firstCompletedAt = firstCompletedAt
-            self.lastStudiedAt = lastStudiedAt
             self.reviewCount = reviewCount
-            self.averageAccuracy = averageAccuracy
         }
     }
 
@@ -109,10 +101,8 @@ public extension Session {
             cefrLevel: "A1-A2",
             words: previewWords,
             record: Record(
-                firstCompletedAt: iso.date(from: "2026-05-01T10:23:45Z") ?? .distantPast,
-                lastStudiedAt: iso.date(from: "2026-05-09T18:30:00Z") ?? .distantPast,
-                reviewCount: 3,
-                averageAccuracy: 0.87
+                firstCompletedAt: "2026.05.01",
+                reviewCount: 3
             )
         )
     }
@@ -268,9 +258,4 @@ public extension Session {
         ),
     ]
 
-    private static let iso: ISO8601DateFormatter = {
-        let f = ISO8601DateFormatter()
-        f.formatOptions = [.withInternetDateTime]
-        return f
-    }()
 }
