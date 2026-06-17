@@ -22,8 +22,8 @@ struct RecordCard: View {
                     .frame(height: 36)
 
                 RecordCell(
-                    label: "복습 횟수",
-                    value: record.map { "\($0.reviewCount)회" } ?? "-"
+                    label: "학습 횟수",
+                    value: record.map { "\($0.studyCount)회" } ?? "-"
                 )
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.leading, 16)

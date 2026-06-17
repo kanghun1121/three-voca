@@ -51,14 +51,14 @@ public struct Session: Equatable {
 
     public struct Record: Equatable {
         public let firstCompletedAt: String
-        public let reviewCount: Int
+        public let studyCount: Int
 
         public init(
             firstCompletedAt: String,
-            reviewCount: Int
+            studyCount: Int
         ) {
             self.firstCompletedAt = firstCompletedAt
-            self.reviewCount = reviewCount
+            self.studyCount = studyCount
         }
     }
 
@@ -102,7 +102,7 @@ public extension Session {
             words: previewWords,
             record: Record(
                 firstCompletedAt: "2026.05.01",
-                reviewCount: 3
+                studyCount: 3
             )
         )
     }

@@ -25,7 +25,7 @@ private extension Session.Record {
     func toRecordPresentationModel() -> SessionDetailPresentationModel.Record {
         SessionDetailPresentationModel.Record(
             firstCompletedDateText: firstCompletedAt,
-            reviewCount: reviewCount
+            studyCount: studyCount
         )
     }
 }

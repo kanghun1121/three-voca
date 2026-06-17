@@ -13,7 +13,7 @@ struct SessionDetailResponseDTO: Decodable {
 
     struct LearningHistory: Decodable {
         let firstCompletedAt: String
-        let reviewCount: Int
+        let studyCount: Int
     }
 
     struct Word: Decodable {
