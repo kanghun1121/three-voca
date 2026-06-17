@@ -28,6 +28,7 @@ else
   echo "▶ Worktree 생성 중 ($TASK_ID ← $BASE_BRANCH)..."
   git -C "$PROJECT_ROOT" worktree add "$WORKTREE_PATH" -b "$TASK_ID" "$BASE_BRANCH"
 fi
+  echo "$TASK_ID" > "$PROJECT_ROOT/.claude/active-task"
 
 # ── 2. EXEC_PLAN 생성 ──────────────────────────────────────────
 PLAN_DIR="$PROJECT_ROOT/.claude/exec-plans/active/$TASK_ID"
