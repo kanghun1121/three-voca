@@ -10,25 +10,29 @@ public struct MyPageView: View {
     }
 
     public var body: some View {
-        VStack(spacing: 0) {
-            MyPageHeaderView()
+        GeometryReader { geo in
+            ScrollView {
+                VStack(spacing: 0) {
+                    MyPageHeaderView()
 
-            MyPageAccountView(email: viewModel.email)
+                    MyPageAccountView(email: viewModel.email)
 
-            MyPageMenuView(
-                onInquiryTapped: viewModel.inquiryTapped,
-                onTermsTapped: viewModel.termsTapped,
-                onPrivacyTapped: viewModel.privacyTapped
-            )
+                    MyPageMenuView(
+                        onInquiryTapped: viewModel.inquiryTapped,
+                        onTermsTapped: viewModel.termsTapped,
+                        onPrivacyTapped: viewModel.privacyTapped
+                    )
 
-            Spacer()
+                    Spacer(minLength: 40)
 
-            MyPageActionsView(
-                onLogoutTapped: viewModel.logoutTapped,
-                onDeleteAccountTapped: viewModel.deleteAccountTapped
-            )
+                    MyPageActionsView(
+                        onLogoutTapped: viewModel.logoutTapped,
+                        onDeleteAccountTapped: viewModel.deleteAccountTapped
+                    )
+                }
+                .frame(maxWidth: .infinity, minHeight: geo.size.height)
+            }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(DesignSystemAsset.background.swiftUIColor)
     }
 }
