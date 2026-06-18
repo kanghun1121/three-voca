@@ -29,6 +29,6 @@ struct MyPageActionsView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, 26)
-        .padding(.bottom, 44)
+        .padding(.bottom, 22)
     }
 }
