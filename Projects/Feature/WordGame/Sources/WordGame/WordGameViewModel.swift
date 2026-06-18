@@ -11,9 +11,12 @@ public final class WordGameViewModel {
 
     enum ActiveStage {
         case loading
+        case launch(onStart: () -> Void)
         case recognition(RecognitionViewModel)
+        case stageEnd(title: String, onContinue: () -> Void)
         case multipleChoice(MultipleChoiceViewModel)
         case spelling(SpellingViewModel)
+        case gameComplete(wordCount: Int, onDismiss: () -> Void)
         case error(String)
     }
 
@@ -41,7 +44,7 @@ public final class WordGameViewModel {
             let session = try await sessionClient.fetchSessionDetail(sessionID)
             let words = session.words.map { GameWord(from: $0) }
             switch startingStage {
-            case .recognition:    startRecognition(words: words)
+            case .recognition:    showLaunch(words: words)
             case .multipleChoice: startMultipleChoice(words: words)
             case .spelling:       startSpelling(words: words)
             }
@@ -50,10 +53,16 @@ public final class WordGameViewModel {
         }
     }
 
+    private func showLaunch(words: [GameWord]) {
+        withAnimation(.easeInOut(duration: 0.3)) {
+            activeStage = .launch(onStart: { [weak self] in self?.startRecognition(words: words) })
+        }
+    }
+
     private func startRecognition(words: [GameWord]) {
         let vm = RecognitionViewModel(
             words: words,
-            onCompleted: { [weak self] in self?.startMultipleChoice(words: words) },
+            onCompleted: { [weak self] in self?.showStageEnd(title: "인식 단계 종료!", onContinue: { self?.startMultipleChoice(words: words) }) },
             onClose: { [weak self] in self?.dismiss = true }
         )
         withAnimation(.easeInOut(duration: 0.3)) {
@@ -64,7 +73,7 @@ public final class WordGameViewModel {
     private func startMultipleChoice(words: [GameWord]) {
         let vm = MultipleChoiceViewModel(
             words: words,
-            onCompleted: { [weak self] in self?.startSpelling(words: words) },
+            onCompleted: { [weak self] in self?.showStageEnd(title: "뜻 단계 종료!", onContinue: { self?.startSpelling(words: words) }) },
             onClose: { [weak self] in self?.dismiss = true }
         )
         withAnimation(.easeInOut(duration: 0.3)) {
@@ -75,11 +84,23 @@ public final class WordGameViewModel {
     private func startSpelling(words: [GameWord]) {
         let vm = SpellingViewModel(
             words: words,
-            onCompleted: { [weak self] in self?.finishGame() },
+            onCompleted: { [weak self] in self?.showGameComplete(wordCount: words.count) },
             onClose: { [weak self] in self?.dismiss = true }
         )
         withAnimation(.easeInOut(duration: 0.3)) {
             activeStage = .spelling(vm)
+        }
+    }
+
+    private func showGameComplete(wordCount: Int) {
+        withAnimation(.easeInOut(duration: 0.3)) {
+            activeStage = .gameComplete(wordCount: wordCount, onDismiss: { [weak self] in self?.finishGame() })
+        }
+    }
+
+    private func showStageEnd(title: String, onContinue: @escaping () -> Void) {
+        withAnimation(.easeInOut(duration: 0.3)) {
+            activeStage = .stageEnd(title: title, onContinue: onContinue)
         }
     }
 
