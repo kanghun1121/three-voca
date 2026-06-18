@@ -4,7 +4,7 @@ import DesignSystem
 
 struct StageSegmentBar: View {
     let currentStage: Int
-    private let totalStages: Int = 4
+    private let totalStages: Int = 3
 
     var body: some View {
         HStack(spacing: 6) {
