@@ -11,7 +11,6 @@ public final class SpellingViewModel {
         case correct
         case incorrect
         case revealing
-        case completed
     }
 
     enum SlotState: Equatable {
@@ -54,7 +53,11 @@ public final class SpellingViewModel {
         didSet { handleInputChange() }
     }
 
-    init(words: [GameWord], onCompleted: @escaping () -> Void, onClose: @escaping () -> Void) {
+    init(
+        words: [GameWord],
+        onCompleted: @escaping () -> Void,
+        onClose: @escaping () -> Void
+    ) {
         self.words = words
         self.totalWords = words.count
         self.onCompleted = onCompleted
@@ -190,12 +193,7 @@ public final class SpellingViewModel {
             totalWords = reviewWords.count
             showWord(at: 0)
         } else {
-            viewState = .completed
-            advanceTask = Task {
-                try? await Task.sleep(for: .milliseconds(800))
-                guard !Task.isCancelled else { return }
-                onCompleted()
-            }
+            onCompleted()
         }
     }
 
