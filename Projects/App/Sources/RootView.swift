@@ -2,7 +2,6 @@ import SwiftUI
 
 import Domain
 import DomainInterface
-import FeatureHome
 import FeatureLogin
 
 import Dependencies
@@ -22,15 +21,7 @@ struct RootView: View {
                     LoginViewModel()
                 })
             case .authenticated:
-                HomeView(viewModel: withDependencies {
-                    $0.homeClient = .liveValue
-                    $0.sessionClient = .liveValue
-                    $0.wordClient = .liveValue
-                    $0.audioClient = .liveValue
-                    $0.audioPlayerClient = .liveValue
-                } operation: {
-                    HomeViewModel()
-                })
+                MainTabView()
             }
         }
         .task { viewModel.onAppear() }
