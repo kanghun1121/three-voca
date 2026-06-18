@@ -20,8 +20,16 @@ public struct WordGameView: View {
                         .tint(DesignSystemAsset.white.swiftUIColor)
                 }
 
+            case .launch(let onStart):
+                WordGameLaunchView(onStart: onStart)
+                    .transition(.opacity)
+
             case .recognition(let vm):
                 RecognitionGameView(viewModel: vm)
+                    .transition(.opacity)
+
+            case .stageEnd(let title, let onContinue):
+                StageEndView(title: title, onContinue: onContinue)
                     .transition(.opacity)
 
             case .multipleChoice(let vm):
@@ -30,6 +38,10 @@ public struct WordGameView: View {
 
             case .spelling(let vm):
                 SpellingGameView(viewModel: vm)
+                    .transition(.opacity)
+
+            case .gameComplete(let wordCount, let onDismiss):
+                GameCompleteView(wordCount: wordCount, onDismiss: onDismiss)
                     .transition(.opacity)
 
             case .error(let message):
