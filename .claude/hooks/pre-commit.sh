@@ -14,7 +14,7 @@ echo ""
 
 WORKSPACE="$PROJECT_ROOT/FiveVoca.xcworkspace"
 SCHEME="AllTest"
-DESTINATION="platform=iOS Simulator,name=iPhone 16"
+DESTINATION="platform=iOS Simulator,OS=18.6,name=iPhone 16"
 
 TEST_OUTPUT=$(xcodebuild test \
   -workspace "$WORKSPACE" \
