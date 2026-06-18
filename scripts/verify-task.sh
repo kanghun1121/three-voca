@@ -22,6 +22,13 @@ else
 fi
 WORKSPACE="$SOURCE_ROOT/FiveVoca.xcworkspace"
 
+# tuist generate 전이면 중단
+if [ ! -d "$WORKSPACE" ]; then
+  echo "❌ xcworkspace 없음: $WORKSPACE"
+  echo "   먼저 tuist generate 를 실행하세요."
+  exit 1
+fi
+
 mkdir -p "$LOG_DIR"
 LOG_FILE="$LOG_DIR/verify-$(date '+%Y%m%d-%H%M%S').log"
 

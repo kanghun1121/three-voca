@@ -3,12 +3,7 @@
 # 설치: 이 파일은 .git/hooks/pre-commit 에서 호출된다. (bash scripts/setup-hooks.sh)
 # 건너뛰기: git commit --no-verify
 
-  GIT_COMMON="$(git rev-parse --git-common-dir)"
-  if [ "$GIT_COMMON" = ".git" ]; then
-    PROJECT_ROOT="$(git rev-parse --show-toplevel)"
-  else
-    PROJECT_ROOT="$(cd "$GIT_COMMON/.." && pwd)"
-  fi
+PROJECT_ROOT="$(git rev-parse --show-toplevel)"
 
 # Swift 파일 변경이 없으면 스킵
 git diff --cached --name-only | grep -q "\.swift$" || exit 0
@@ -19,7 +14,7 @@ echo ""
 
 WORKSPACE="$PROJECT_ROOT/FiveVoca.xcworkspace"
 SCHEME="AllTest"
-DESTINATION="platform=iOS Simulator,OS=18.6,name=iPhone 16"
+DESTINATION="platform=iOS Simulator,name=iPhone 16"
 
 TEST_OUTPUT=$(xcodebuild test \
   -workspace "$WORKSPACE" \
