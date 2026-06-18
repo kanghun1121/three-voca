@@ -9,6 +9,7 @@ let targets: [Target] = [
             .feature(implements: .session),
             .feature(implements: .vocabulary),
             .feature(implements: .wordGame),
+            .feature(implements: .myPage),
         ]
     ))
 ]
