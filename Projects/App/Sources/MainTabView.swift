@@ -1,9 +1,9 @@
 import SwiftUI
 
+import DesignSystem
 import FeatureHome
 import FeatureMyPage
 
-import DesignSystem
 import Dependencies
 
 struct MainTabView: View {

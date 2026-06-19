@@ -3,7 +3,7 @@ import Foundation
 @Observable
 @MainActor
 public final class MyPageViewModel {
-    public var email: String = "minji@example.com"
+    public var email = "minji@example.com"
 
     public init() {}
 
