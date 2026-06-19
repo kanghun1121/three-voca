@@ -27,20 +27,7 @@ struct MyPageMenuView: View {
     var body: some View {
         VStack(spacing: 0) {
             ForEach(Array(items.enumerated()), id: \.offset) { index, item in
-                Button(action: item.1) {
-                    HStack {
-                        Text(item.0)
-                            .font(DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 16))
-                            .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
-                            .kerning(16 * -0.01)
-
-                        Spacer()
-
-                        ChevronIcon()
-                    }
-                    .padding(.vertical, 18)
-                }
-                .buttonStyle(.plain)
+                MenuRow(title: item.0, action: item.1)
 
                 if index < items.count - 1 {
                     Rectangle()
@@ -50,6 +37,28 @@ struct MyPageMenuView: View {
             }
         }
         .padding(.horizontal, 26)
+    }
+}
+
+private struct MenuRow: View {
+    let title: String
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack {
+                Text(title)
+                    .font(DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 16))
+                    .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
+                    .kerning(16 * -0.01)
+
+                Spacer()
+
+                ChevronIcon()
+            }
+            .padding(.vertical, 18)
+        }
+        .buttonStyle(.plain)
     }
 }
 

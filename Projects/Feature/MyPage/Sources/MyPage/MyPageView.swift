@@ -25,10 +25,7 @@ public struct MyPageView: View {
 
                     Spacer(minLength: 40)
 
-                    MyPageActionsView(
-                        onLogoutTapped: viewModel.logoutTapped,
-                        onDeleteAccountTapped: viewModel.deleteAccountTapped
-                    )
+                    MyPageActionsView(onLogoutTapped: viewModel.logoutTapped, onDeleteAccountTapped: viewModel.deleteAccountTapped)
                 }
                 .frame(maxWidth: .infinity, minHeight: geo.size.height)
             }
