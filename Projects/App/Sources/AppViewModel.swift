@@ -1,4 +1,4 @@
-import Foundation
+import SwiftUI
 
 import DomainInterface
 
@@ -16,9 +16,12 @@ final class AppViewModel {
 
     func onAppear() {
         guard streamTask == nil else { return }
-        streamTask = Task {
+        streamTask = Task { [weak self] in
+            guard let self else { return }
             for await state in authSessionClient.authStateStream() {
-                authState = state
+                withAnimation(.easeInOut(duration: 0.4)) {
+                    authState = state
+                }
             }
         }
         

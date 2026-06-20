@@ -22,10 +22,14 @@ struct MainTabView: View {
                 Label("홈", systemImage: "house.fill")
             }
 
-            MyPageView(viewModel: MyPageViewModel())
-                .tabItem {
-                    Label("마이페이지", systemImage: "person.fill")
-                }
+            MyPageView(viewModel: withDependencies {
+                $0.authSessionClient = .liveValue
+            } operation: {
+                MyPageViewModel()
+            })
+            .tabItem {
+                Label("마이페이지", systemImage: "person.fill")
+            }
         }
         .tint(DesignSystemAsset.primary.swiftUIColor)
     }

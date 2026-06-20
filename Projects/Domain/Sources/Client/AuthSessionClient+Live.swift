@@ -30,6 +30,16 @@ extension AuthSessionClient: DependencyKey {
                 continuation.yield(.unauthenticated)
                 try keychain.delete(.refreshToken)
             },
+            deleteAccount: {
+                guard let token = await store.value else {
+                    throw NetworkError.invalidRequest
+                }
+                let httpClient = HTTPClient()
+                try await httpClient.request(DeleteAccountRequest(accessToken: token))
+                await store.clear()
+                continuation.yield(.unauthenticated)
+                try keychain.delete(.refreshToken)
+            },
             authStateStream: { stream }
         )
     }()
