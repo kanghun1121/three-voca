@@ -20,6 +20,7 @@ private extension LevelSummary {
         }
         return LevelCardPresentationModel(
             id: id,
+            level: level,
             name: name,
             status: status,
             completedSessions: completedSessions,

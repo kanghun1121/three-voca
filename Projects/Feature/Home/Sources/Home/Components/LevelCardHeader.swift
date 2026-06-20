@@ -3,6 +3,7 @@ import SwiftUI
 import DesignSystem
 
 struct LevelCardHeader: View {
+    let level: Int
     let name: String
     let status: LevelStatus
     let completedSessions: Int
@@ -11,6 +12,10 @@ struct LevelCardHeader: View {
 
     var body: some View {
         HStack(spacing: 13) {
+            levelIcon
+                .resizable()
+                .scaledToFit()
+                .frame(width: 24, height: 24)
             Text(name)
                 .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 15.5))
                 .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
@@ -34,6 +39,20 @@ struct LevelCardHeader: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 15)
+    }
+}
+
+private extension LevelCardHeader {
+    var levelIcon: SwiftUI.Image {
+        switch level {
+        case 1: DesignSystemAsset.levelIcon1.swiftUIImage
+        case 2: DesignSystemAsset.levelIcon2.swiftUIImage
+        case 3: DesignSystemAsset.levelIcon3.swiftUIImage
+        case 4: DesignSystemAsset.levelIcon4.swiftUIImage
+        case 5: DesignSystemAsset.levelIcon5.swiftUIImage
+        case 6: DesignSystemAsset.levelIcon6.swiftUIImage
+        default: DesignSystemAsset.levelIcon1.swiftUIImage
+        }
     }
 }
 

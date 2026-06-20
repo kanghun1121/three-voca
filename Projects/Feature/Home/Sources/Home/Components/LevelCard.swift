@@ -12,6 +12,7 @@ struct LevelCard: View {
         VStack(spacing: 0) {
             Button(action: action) {
                 LevelCardHeader(
+                    level: presentationModel.level,
                     name: presentationModel.name,
                     status: presentationModel.status,
                     completedSessions: presentationModel.completedSessions,

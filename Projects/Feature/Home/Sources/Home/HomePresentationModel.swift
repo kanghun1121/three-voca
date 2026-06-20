@@ -6,6 +6,7 @@ struct HomePresentationModel: Equatable {
 
 struct LevelCardPresentationModel: Equatable, Identifiable {
     let id: String
+    let level: Int
     let name: String
     let status: LevelStatus
     let completedSessions: Int
