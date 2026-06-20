@@ -2,35 +2,45 @@ import SwiftUI
 
 import DesignSystem
 
+import SwiftUINavigation
+
 public struct MyPageView: View {
     @State private var viewModel: MyPageViewModel
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     public init(viewModel: MyPageViewModel) {
         _viewModel = State(initialValue: viewModel)
     }
 
     public var body: some View {
-        GeometryReader { geo in
-            ScrollView {
-                VStack(spacing: 0) {
-                    MyPageHeaderView()
+        ZStack {
+            MyPageScrollContent(viewModel: viewModel)
 
-                    MyPageAccountView(email: viewModel.email)
-
-                    MyPageMenuView(
-                        onInquiryTapped: viewModel.inquiryTapped,
-                        onTermsTapped: viewModel.termsTapped,
-                        onPrivacyTapped: viewModel.privacyTapped
-                    )
-
-                    Spacer(minLength: 40)
-
-                    MyPageActionsView(onLogoutTapped: viewModel.logoutTapped, onDeleteAccountTapped: viewModel.deleteAccountTapped)
+            if viewModel.isShowingDeleteSheet {
+                Button {
+                    viewModel.closeDeleteSheet()
+                } label: {
+                    Color.black.opacity(0.4)
+                        .ignoresSafeArea()
                 }
-                .frame(maxWidth: .infinity, minHeight: geo.size.height)
+                .buttonStyle(.plain)
+                .accessibilityLabel("닫기")
+                .transition(.opacity)
+
+                DeleteAccountConfirmSheet(
+                    confirmText: $viewModel.deleteConfirmText,
+                    isConfirmed: viewModel.isDeleteConfirmed,
+                    onConfirm: viewModel.deleteAccountConfirmTapped,
+                    onCancel: viewModel.closeDeleteSheet
+                )
+                .padding(.horizontal, 30)
+                .transition(reduceMotion ? .opacity : .move(edge: .bottom))
             }
         }
-        .background(DesignSystemAsset.background.swiftUIColor)
+        .animation(.spring(response: 0.4, dampingFraction: 0.85), value: viewModel.isShowingDeleteSheet)
+        .alert($viewModel.destination.alert) { action in
+            viewModel.alertButtonTapped(action)
+        }
     }
 }
 
