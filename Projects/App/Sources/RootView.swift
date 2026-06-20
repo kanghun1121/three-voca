@@ -14,14 +14,17 @@ struct RootView: View {
             switch viewModel.authState {
             case .checking:
                 ProgressView()
+                    .transition(.opacity)
             case .unauthenticated:
                 LoginView(viewModel: withDependencies {
                     $0.authClient = .liveValue
                 } operation: {
                     LoginViewModel()
                 })
+                .transition(.opacity)
             case .authenticated:
                 MainTabView()
+                    .transition(.opacity)
             }
         }
         .task { viewModel.onAppear() }

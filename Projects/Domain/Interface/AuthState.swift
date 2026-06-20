@@ -1,4 +1,4 @@
-public enum AuthState: Sendable {
+public enum AuthState: Sendable, Equatable {
     case checking
     case authenticated
     case unauthenticated

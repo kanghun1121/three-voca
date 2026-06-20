@@ -8,6 +8,8 @@ let project = Project.makeModule(
             dependencies: [
                 .dependencies,
                 .designSystem,
+                .domainInterface,
+                .swiftUINavigation,
             ]
         )),
         .feature(tests: .myPage, factory: .init(
