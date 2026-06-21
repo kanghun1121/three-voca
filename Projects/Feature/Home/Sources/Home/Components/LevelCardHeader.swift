@@ -45,13 +45,13 @@ struct LevelCardHeader: View {
 private extension LevelCardHeader {
     var levelIcon: SwiftUI.Image {
         switch level {
-        case 1: DesignSystemAsset.levelIcon1.swiftUIImage
-        case 2: DesignSystemAsset.levelIcon2.swiftUIImage
-        case 3: DesignSystemAsset.levelIcon3.swiftUIImage
-        case 4: DesignSystemAsset.levelIcon4.swiftUIImage
-        case 5: DesignSystemAsset.levelIcon5.swiftUIImage
-        case 6: DesignSystemAsset.levelIcon6.swiftUIImage
-        default: DesignSystemAsset.levelIcon1.swiftUIImage
+        case 1: DesignSystemAsset.씨앗.swiftUIImage
+        case 2: DesignSystemAsset.새싹.swiftUIImage
+        case 3: DesignSystemAsset.성장.swiftUIImage
+        case 4: DesignSystemAsset.도약.swiftUIImage
+        case 5: DesignSystemAsset.정상.swiftUIImage
+        case 6: DesignSystemAsset.완성.swiftUIImage
+        default: DesignSystemAsset.씨앗.swiftUIImage
         }
     }
 }
