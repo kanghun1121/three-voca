@@ -23,17 +23,16 @@ public struct HomeView: View {
                         onSessionTapped: { viewModel.sessionTapped(id: $0) }
                     )
                 } else if viewModel.isLoading {
-                    ProgressView()
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    HomeLoadingView()
                 } else if let message = viewModel.errorMessage {
                     Text(message)
                         .foregroundStyle(.secondary)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else {
-                    ProgressView()
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    HomeLoadingView()
                 }
             }
+            .animation(.easeInOut(duration: 0.15), value: viewModel.state == nil)
             .task { await viewModel.load() }
             .navigationDestination(item: $viewModel.destination.session) { detailVM in
                 SessionDetailView(viewModel: detailVM)
@@ -43,6 +42,10 @@ public struct HomeView: View {
     }
 }
 
-#Preview {
+#Preview("홈") {
     HomeView(viewModel: HomeViewModel())
+}
+
+#Preview("로딩") {
+    HomeLoadingView()
 }
