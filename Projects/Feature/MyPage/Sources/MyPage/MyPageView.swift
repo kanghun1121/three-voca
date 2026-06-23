@@ -12,6 +12,13 @@ public struct MyPageView: View {
         _viewModel = State(initialValue: viewModel)
     }
 
+    private var privacySheetBinding: Binding<Bool> {
+        Binding(
+            get: { viewModel.isShowingPrivacyWebView },
+            set: { if !$0 { viewModel.destination = nil } }
+        )
+    }
+
     public var body: some View {
         ZStack {
             MyPageScrollContent(viewModel: viewModel)
@@ -38,6 +45,12 @@ public struct MyPageView: View {
             }
         }
         .animation(.spring(response: 0.4, dampingFraction: 0.85), value: viewModel.isShowingDeleteSheet)
+        .sheet(isPresented: privacySheetBinding) {
+            if let url = viewModel.privacyPolicyURL {
+                PrivacyWebView(url: url)
+                    .ignoresSafeArea()
+            }
+        }
         .alert($viewModel.destination.alert) { action in
             viewModel.alertButtonTapped(action)
         }

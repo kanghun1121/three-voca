@@ -8,8 +8,6 @@ import SwiftUINavigation
 @Observable
 @MainActor
 public final class MyPageViewModel {
-    public var email = "minji@example.com"
-
     enum AlertAction {
         case confirmLogout
     }
@@ -18,23 +16,35 @@ public final class MyPageViewModel {
     enum Destination {
         case alert(AlertState<AlertAction>)
         case deleteAccountSheet
+        case privacyWebView
     }
 
     var destination: Destination?
     var deleteConfirmText = ""
+    @ObservationIgnored @Dependency(\.authSessionClient) private var authSessionClient
 
     var isDeleteConfirmed: Bool { deleteConfirmText == "회원탈퇴" }
     var isShowingDeleteSheet: Bool {
         if case .deleteAccountSheet = destination { true } else { false }
     }
 
-    @ObservationIgnored @Dependency(\.authSessionClient) private var authSessionClient
+    var isShowingPrivacyWebView: Bool {
+        if case .privacyWebView = destination { true } else { false }
+    }
+
+    var privacyPolicyURL: URL? {
+        guard
+            let raw = Bundle.main.object(forInfoDictionaryKey: "PRIVACY_POLICY_URL") as? String,
+            let url = URL(string: raw)
+        else { return nil }
+        return url
+    }
 
     public init() {}
 
-    func inquiryTapped() {}
-    func termsTapped() {}
-    func privacyTapped() {}
+    func privacyTapped() {
+        destination = .privacyWebView
+    }
 
     func logoutTapped() {
         destination = .alert(
@@ -51,7 +61,17 @@ public final class MyPageViewModel {
     func alertButtonTapped(_ action: AlertAction?) {
         switch action {
         case .confirmLogout:
-            Task { [weak self] in try? await self?.authSessionClient.clearSession() }
+            Task { [weak self] in
+                guard let self else { return }
+                do {
+                    try await authSessionClient.clearSession()
+                } catch {
+                    destination = .alert(AlertState(
+                        title: TextState("로그아웃에 실패했습니다. 다시 시도해 주세요."),
+                        buttons: [.cancel(TextState("확인"))]
+                    ))
+                }
+            }
         case .none:
             break
         }

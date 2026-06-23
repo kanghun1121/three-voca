@@ -3,38 +3,15 @@ import SwiftUI
 import DesignSystem
 
 struct MyPageMenuView: View {
-    let onInquiryTapped: () -> Void
-    let onTermsTapped: () -> Void
     let onPrivacyTapped: () -> Void
-
-    private let items: [(String, () -> Void)]
-
-    init(
-        onInquiryTapped: @escaping () -> Void,
-        onTermsTapped: @escaping () -> Void,
-        onPrivacyTapped: @escaping () -> Void
-    ) {
-        self.onInquiryTapped = onInquiryTapped
-        self.onTermsTapped = onTermsTapped
-        self.onPrivacyTapped = onPrivacyTapped
-        items = [
-            ("문의사항", onInquiryTapped),
-            ("이용약관", onTermsTapped),
-            ("개인정보 처리방침", onPrivacyTapped),
-        ]
-    }
 
     var body: some View {
         VStack(spacing: 0) {
-            ForEach(Array(items.enumerated()), id: \.offset) { index, item in
-                MenuRow(title: item.0, action: item.1)
-
-                if index < items.count - 1 {
-                    Rectangle()
-                        .fill(DesignSystemAsset.border.swiftUIColor)
-                        .frame(height: 1)
-                }
-            }
+            MenuRow(title: "문의사항")
+            Rectangle()
+                .fill(DesignSystemAsset.border.swiftUIColor)
+                .frame(height: 1)
+            MenuRow(title: "개인정보 처리방침", action: onPrivacyTapped)
         }
         .padding(.horizontal, 26)
     }
@@ -42,10 +19,10 @@ struct MyPageMenuView: View {
 
 private struct MenuRow: View {
     let title: String
-    let action: () -> Void
+    var action: (() -> Void)? = nil
 
     var body: some View {
-        Button(action: action) {
+        Button(action: action ?? {}) {
             HStack {
                 Text(title)
                     .font(DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 16))
@@ -55,10 +32,12 @@ private struct MenuRow: View {
                 Spacer()
 
                 ChevronIcon()
+                    .accessibilityHidden(true)
             }
             .padding(.vertical, 18)
         }
         .buttonStyle(.plain)
+        .disabled(action == nil)
     }
 }
 
@@ -68,7 +47,7 @@ private struct ChevronIcon: View {
             .resizable()
             .scaledToFit()
             .frame(width: 9, height: 12)
-            .foregroundStyle(DesignSystemAsset.primary.swiftUIColor.opacity(0.55))
+            .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
             .fontWeight(.medium)
     }
 }

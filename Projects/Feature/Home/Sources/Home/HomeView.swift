@@ -39,6 +39,7 @@ public struct HomeView: View {
                 SessionDetailView(viewModel: detailVM)
             }
         }
+        .toolbar(viewModel.destination != nil ? .hidden : .visible, for: .tabBar)
     }
 }
 

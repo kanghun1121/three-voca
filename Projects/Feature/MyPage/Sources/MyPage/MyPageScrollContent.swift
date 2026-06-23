@@ -10,11 +10,7 @@ struct MyPageScrollContent: View {
             VStack(spacing: 0) {
                 MyPageHeaderView()
 
-                MyPageAccountView(email: viewModel.email)
-
                 MyPageMenuView(
-                    onInquiryTapped: viewModel.inquiryTapped,
-                    onTermsTapped: viewModel.termsTapped,
                     onPrivacyTapped: viewModel.privacyTapped
                 )
 
