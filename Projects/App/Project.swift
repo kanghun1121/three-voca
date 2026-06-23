@@ -33,9 +33,7 @@ let project = Project.makeModule(
             ]),
             sources: ["Sources/**"],
             resources: ["Resources/**"],
-            entitlements: .dictionary([
-                "com.apple.developer.applesignin": ["Default"],
-            ]),
+            entitlements: .file(path: "FiveVoca.entitlements"),
             dependencies: [.feature, .domain, .designSystem],
             settings: .settings(
                 configurations: [
