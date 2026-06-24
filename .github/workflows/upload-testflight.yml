@@ -1,0 +1,127 @@
+name: Upload to TestFlight
+
+on:
+  workflow_dispatch:
+    inputs:
+      marketing_version:
+        description: '마케팅 버전 (예: 1.0.0)'
+        required: true
+        default: '1.0.0'
+
+jobs:
+  upload:
+    runs-on: macos-15
+    timeout-minutes: 60
+
+    steps:
+      - name: 체크아웃
+        uses: actions/checkout@v4
+
+      - name: mise 설치
+        uses: jdx/mise-action@v2
+
+      - name: Secrets.xcconfig 생성
+        run: |
+          cat > Projects/App/Secrets.xcconfig << EOF
+          SUPABASE_ANON_KEY = ${{ secrets.SUPABASE_ANON_KEY }}
+          MW_DICTIONARY_API_KEY = ${{ secrets.MW_DICTIONARY_API_KEY }}
+          EOF
+
+      - name: tuist install & generate
+        run: |
+          tuist install
+          tuist generate --no-open
+
+      - name: 인증서 및 프로비저닝 프로파일 설치
+        env:
+          CERTIFICATE_BASE64: ${{ secrets.DISTRIBUTION_CERTIFICATE_BASE64 }}
+          CERTIFICATE_PASSWORD: ${{ secrets.DISTRIBUTION_CERTIFICATE_PASSWORD }}
+          PROVISIONING_PROFILE_BASE64: ${{ secrets.PROVISIONING_PROFILE_BASE64 }}
+        run: |
+          # 임시 키체인 생성
+          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+          KEYCHAIN_PASSWORD=temp-keychain-password
+
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+
+          # 인증서 설치
+          CERT_PATH=$RUNNER_TEMP/distribution.p12
+          echo "$CERTIFICATE_BASE64" | base64 --decode -o "$CERT_PATH"
+          security import "$CERT_PATH" -P "$CERTIFICATE_PASSWORD" -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
+          security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security list-keychain -d user -s "$KEYCHAIN_PATH"
+
+          # 프로비저닝 프로파일 설치
+          PP_PATH=$RUNNER_TEMP/profile.mobileprovision
+          echo "$PROVISIONING_PROFILE_BASE64" | base64 --decode -o "$PP_PATH"
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp "$PP_PATH" ~/Library/MobileDevice/Provisioning\ Profiles/
+
+      - name: 버전 설정
+        run: |
+          echo "MARKETING_VERSION=${{ github.event.inputs.marketing_version }}" >> $GITHUB_ENV
+          echo "BUILD_NUMBER=${{ github.run_number }}" >> $GITHUB_ENV
+
+      - name: xcodebuild archive
+        run: |
+          xcodebuild archive \
+            -workspace FiveVoca.xcworkspace \
+            -scheme FiveVoca-Release \
+            -configuration Release \
+            -destination generic/platform=iOS \
+            -archivePath $RUNNER_TEMP/FiveVoca.xcarchive \
+            CODE_SIGN_STYLE=Manual \
+            CODE_SIGN_IDENTITY="Apple Distribution" \
+            PROVISIONING_PROFILE_SPECIFIER="FiveVoca AppStore" \
+            MARKETING_VERSION=${{ env.MARKETING_VERSION }} \
+            CURRENT_PROJECT_VERSION=${{ env.BUILD_NUMBER }} \
+            | xcpretty
+
+      - name: ExportOptions.plist 생성
+        env:
+          PROVISIONING_PROFILE_BASE64: ${{ secrets.PROVISIONING_PROFILE_BASE64 }}
+        run: |
+          PP_PATH=$RUNNER_TEMP/profile.mobileprovision
+          PP_UUID=$(/usr/libexec/PlistBuddy -c "Print :UUID" /dev/stdin <<< $(security cms -D -i "$PP_PATH"))
+
+          cat > $RUNNER_TEMP/ExportOptions.plist << EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key>
+            <string>app-store-connect</string>
+            <key>provisioningProfiles</key>
+            <dict>
+              <key>com.kangdev.FiveVoca</key>
+              <string>${PP_UUID}</string>
+            </dict>
+          </dict>
+          </plist>
+          EOF
+
+      - name: xcodebuild export
+        run: |
+          xcodebuild -exportArchive \
+            -archivePath $RUNNER_TEMP/FiveVoca.xcarchive \
+            -exportPath $RUNNER_TEMP/export \
+            -exportOptionsPlist $RUNNER_TEMP/ExportOptions.plist \
+            | xcpretty
+
+      - name: TestFlight 업로드
+        env:
+          API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+          API_KEY_CONTENT: ${{ secrets.APP_STORE_CONNECT_API_KEY_CONTENT }}
+        run: |
+          # API Key 파일 저장
+          mkdir -p ~/.appstoreconnect/private_keys
+          echo "$API_KEY_CONTENT" > ~/.appstoreconnect/private_keys/AuthKey_${API_KEY_ID}.p8
+
+          xcrun altool --upload-app \
+            --type ios \
+            --file "$RUNNER_TEMP/export/FiveVoca.ipa" \
+            --apiKey "$API_KEY_ID" \
+            --apiIssuer "$API_ISSUER_ID"
