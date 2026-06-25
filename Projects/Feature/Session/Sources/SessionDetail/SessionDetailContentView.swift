@@ -1,5 +1,7 @@
 import SwiftUI
 
+import DesignSystem
+
 struct SessionDetailContentView: View {
     let state: SessionDetailPresentationModel
     let onGameTapped: () -> Void
@@ -22,5 +24,6 @@ struct SessionDetailContentView: View {
             .padding(.vertical)
         }
         .scrollIndicators(.hidden)
+        .background(DesignSystemAsset.bg.swiftUIColor)
     }
 }
