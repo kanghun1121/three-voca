@@ -1,5 +1,6 @@
 import SwiftUI
 
+import DesignSystem
 import FeatureSession
 
 import SwiftUINavigation
@@ -38,6 +39,7 @@ public struct HomeView: View {
                 SessionDetailView(viewModel: detailVM)
             }
         }
+        .tint(DesignSystemAsset.fgStrong.swiftUIColor)
         .toolbar(viewModel.destination != nil ? .hidden : .visible, for: .tabBar)
     }
 }
