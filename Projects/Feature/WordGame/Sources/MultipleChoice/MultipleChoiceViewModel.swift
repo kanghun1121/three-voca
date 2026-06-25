@@ -35,6 +35,7 @@ public final class MultipleChoiceViewModel {
     private var reviewWords: [GameWord] = []
     private var incorrectWordIDs: Set<String> = []
     private var advanceTask: Task<Void, Never>?
+    private let soundPlayer = GameSoundPlayer()
 
     init(
         words: [GameWord],
@@ -79,9 +80,14 @@ public final class MultipleChoiceViewModel {
         guard let word = currentWord else { return }
 
         let isCorrect = choice == word.primaryMeaning
-        if !isCorrect, shouldAddToReview(word) {
-            incorrectWordIDs.insert(word.id)
-            reviewWords.append(word)
+        if isCorrect {
+            soundPlayer.playCorrect()
+        } else {
+            soundPlayer.playWrong()
+            if shouldAddToReview(word) {
+                incorrectWordIDs.insert(word.id)
+                reviewWords.append(word)
+            }
         }
 
         viewState = .revealed(selected: choice)
