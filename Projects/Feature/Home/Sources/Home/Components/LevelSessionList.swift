@@ -25,8 +25,10 @@ struct LevelSessionList: View {
                     onSessionTapped(session.id)
                 } label: {
                     SessionRow(presentationModel: session)
+                        .frame(maxWidth: .infinity)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 9)
+                        .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
                 .padding(.horizontal, 8)
