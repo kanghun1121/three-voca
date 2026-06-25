@@ -33,6 +33,7 @@ struct VocabularyListContentView: View {
             .padding(.bottom, 24)
         }
         .scrollIndicators(.hidden)
+        .background(DesignSystemAsset.bg.swiftUIColor)
         .onChange(of: blurMode) { revealedIDs = [] }
     }
 }

@@ -22,6 +22,7 @@ struct VocabularyListSkeletonView: View {
             .redacted(reason: .placeholder)
         }
         .scrollIndicators(.hidden)
+        .background(DesignSystemAsset.bg.swiftUIColor)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("단어 목록 불러오는 중")
     }

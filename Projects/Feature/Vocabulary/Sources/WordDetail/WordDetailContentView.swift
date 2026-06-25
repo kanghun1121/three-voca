@@ -29,6 +29,6 @@ struct WordDetailContentView: View {
             .padding(.bottom, 32)
         }
         .scrollIndicators(.hidden)
-        .background(DesignSystemAsset.background.swiftUIColor)
+        .background(DesignSystemAsset.bg.swiftUIColor)
     }
 }
