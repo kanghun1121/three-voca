@@ -9,8 +9,6 @@ struct WordDetailHeaderView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            WordModeBadge()
-                .padding(.bottom, 14)
             Text(term)
                 .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 40))
                 .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
@@ -57,20 +55,4 @@ private struct AudioButton: View {
     }
 }
 
-private struct WordModeBadge: View {
-    @ScaledMetric private var fontSize: CGFloat = 11
 
-    var body: some View {
-        HStack(spacing: 6) {
-            Image(systemName: "book")
-                .font(.system(size: fontSize))
-            Text("단어 보기")
-                .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: fontSize))
-        }
-        .foregroundStyle(DesignSystemAsset.study300.swiftUIColor)
-        .padding(.horizontal, 10)
-        .padding(.vertical, 4)
-        .background(DesignSystemAsset.study100.swiftUIColor)
-        .clipShape(Capsule())
-    }
-}

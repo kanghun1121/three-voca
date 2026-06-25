@@ -9,8 +9,6 @@ struct VocabularyListHeaderView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            ModeLabelBadge()
-                .padding(.bottom, 10)
             Text("\(wordCount)개 단어")
                 .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 28))
                 .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
@@ -23,18 +21,3 @@ struct VocabularyListHeaderView: View {
     }
 }
 
-private struct ModeLabelBadge: View {
-    var body: some View {
-        HStack(spacing: 6) {
-            Image(systemName: "book")
-                .font(.system(size: 12))
-            Text("단어 보기 모드")
-                .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 12))
-        }
-        .foregroundStyle(DesignSystemAsset.study300.swiftUIColor)
-        .padding(.horizontal, 10)
-        .padding(.vertical, 4)
-        .background(DesignSystemAsset.study100.swiftUIColor)
-        .clipShape(Capsule())
-    }
-}
