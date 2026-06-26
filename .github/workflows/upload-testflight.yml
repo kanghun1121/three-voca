@@ -60,7 +60,8 @@ jobs:
           cp "$PP_PATH" ~/Library/MobileDevice/Provisioning\ Profiles/
 
           # 팀 ID를 프로파일에서 추출해 이후 단계에서 공유
-          DEVELOPMENT_TEAM=$(security cms -D -i "$PP_PATH" | /usr/libexec/PlistBuddy -c "Print :TeamIdentifier:0" /dev/stdin)
+          security cms -D -i "$PP_PATH" -o "$RUNNER_TEMP/profile.plist"
+          DEVELOPMENT_TEAM=$(/usr/libexec/PlistBuddy -c "Print :TeamIdentifier:0" "$RUNNER_TEMP/profile.plist")
           echo "DEVELOPMENT_TEAM=$DEVELOPMENT_TEAM" >> $GITHUB_ENV
 
       - name: 버전 설정
@@ -93,11 +94,8 @@ jobs:
           path: ${{ runner.temp }}/xcodebuild-archive.log
 
       - name: ExportOptions.plist 생성
-        env:
-          PROVISIONING_PROFILE_BASE64: ${{ secrets.PROVISIONING_PROFILE_BASE64 }}
         run: |
-          PP_PATH=$RUNNER_TEMP/profile.mobileprovision
-          PP_UUID=$(security cms -D -i "$PP_PATH" | /usr/libexec/PlistBuddy -c "Print :UUID" /dev/stdin)
+          PP_UUID=$(/usr/libexec/PlistBuddy -c "Print :UUID" "$RUNNER_TEMP/profile.plist")
 
           cat > $RUNNER_TEMP/ExportOptions.plist << EOF
           <?xml version="1.0" encoding="UTF-8"?>
