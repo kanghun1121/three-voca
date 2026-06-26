@@ -65,10 +65,12 @@ jobs:
           # 프로파일 디코딩 (UUID, TeamID 추출에 재사용)
           security cms -D -i "$PP_PATH" -o "$RUNNER_TEMP/profile.plist"
 
-          # DEVELOPMENT_TEAM을 프로파일에서 추출
+          # DEVELOPMENT_TEAM, 프로파일 이름 추출 및 확인
           DEVELOPMENT_TEAM=$(/usr/libexec/PlistBuddy -c "Print :TeamIdentifier:0" "$RUNNER_TEMP/profile.plist")
+          PROFILE_NAME=$(/usr/libexec/PlistBuddy -c "Print :Name" "$RUNNER_TEMP/profile.plist")
           echo "DEVELOPMENT_TEAM=$DEVELOPMENT_TEAM" >> $GITHUB_ENV
           echo "::notice::DEVELOPMENT_TEAM=$DEVELOPMENT_TEAM"
+          echo "::notice::PROFILE_NAME=$PROFILE_NAME"
 
       - name: 버전 설정
         run: |
@@ -85,9 +87,6 @@ jobs:
             -destination generic/platform=iOS \
             -archivePath $RUNNER_TEMP/FiveVoca.xcarchive \
             -skipMacroValidation \
-            CODE_SIGN_STYLE=Manual \
-            CODE_SIGN_IDENTITY="Apple Distribution" \
-            PROVISIONING_PROFILE_SPECIFIER="FiveVoca AppStore" \
             DEVELOPMENT_TEAM="${{ env.DEVELOPMENT_TEAM }}" \
             MARKETING_VERSION=${{ env.MARKETING_VERSION }} \
             CURRENT_PROJECT_VERSION=${{ env.BUILD_NUMBER }} \

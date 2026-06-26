@@ -38,7 +38,11 @@ let project = Project.makeModule(
             settings: .settings(
                 configurations: [
                     .debug(name: "Debug", xcconfig: "Secrets.xcconfig"),
-                    .release(name: "Release", xcconfig: "Secrets.xcconfig")
+                    .release(name: "Release", settings: [
+                        "CODE_SIGN_STYLE": "Manual",
+                        "CODE_SIGN_IDENTITY": "Apple Distribution",
+                        "PROVISIONING_PROFILE_SPECIFIER": "FiveVoca AppStore",
+                    ], xcconfig: "Secrets.xcconfig")
                 ]
             )
         ))
