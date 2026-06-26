@@ -20,6 +20,9 @@ jobs:
       - name: mise 설치
         uses: jdx/mise-action@v2
 
+      - name: xcpretty 설치
+        run: gem install xcpretty --no-document
+
       - name: Secrets.xcconfig 생성
         run: |
           cat > Projects/App/Secrets.xcconfig << EOF
@@ -59,6 +62,14 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp "$PP_PATH" ~/Library/MobileDevice/Provisioning\ Profiles/
 
+          # 프로파일 디코딩 (UUID, TeamID 추출에 재사용)
+          security cms -D -i "$PP_PATH" -o "$RUNNER_TEMP/profile.plist"
+
+          # DEVELOPMENT_TEAM을 프로파일에서 추출
+          DEVELOPMENT_TEAM=$(/usr/libexec/PlistBuddy -c "Print :TeamIdentifier:0" "$RUNNER_TEMP/profile.plist")
+          echo "DEVELOPMENT_TEAM=$DEVELOPMENT_TEAM" >> $GITHUB_ENV
+          echo "::notice::DEVELOPMENT_TEAM=$DEVELOPMENT_TEAM"
+
       - name: 버전 설정
         run: |
           echo "MARKETING_VERSION=${{ github.event.inputs.marketing_version }}" >> $GITHUB_ENV
@@ -66,25 +77,34 @@ jobs:
 
       - name: xcodebuild archive
         run: |
+          set -o pipefail
           xcodebuild archive \
             -workspace FiveVoca.xcworkspace \
             -scheme FiveVoca-Release \
             -configuration Release \
             -destination generic/platform=iOS \
             -archivePath $RUNNER_TEMP/FiveVoca.xcarchive \
+            -skipMacroValidation \
             CODE_SIGN_STYLE=Manual \
             CODE_SIGN_IDENTITY="Apple Distribution" \
             PROVISIONING_PROFILE_SPECIFIER="FiveVoca AppStore" \
+            DEVELOPMENT_TEAM="${{ env.DEVELOPMENT_TEAM }}" \
             MARKETING_VERSION=${{ env.MARKETING_VERSION }} \
             CURRENT_PROJECT_VERSION=${{ env.BUILD_NUMBER }} \
-            | xcpretty
+            2>&1 | tee $RUNNER_TEMP/xcodebuild-archive.log | xcpretty
+
+      - name: archive 로그 업로드 (실패 시)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xcodebuild-archive-log
+          path: ${{ runner.temp }}/xcodebuild-archive.log
+          if-no-files-found: ignore
 
       - name: ExportOptions.plist 생성
-        env:
-          PROVISIONING_PROFILE_BASE64: ${{ secrets.PROVISIONING_PROFILE_BASE64 }}
         run: |
-          PP_PATH=$RUNNER_TEMP/profile.mobileprovision
-          PP_UUID=$(/usr/libexec/PlistBuddy -c "Print :UUID" /dev/stdin <<< $(security cms -D -i "$PP_PATH"))
+          PP_UUID=$(/usr/libexec/PlistBuddy -c "Print :UUID" "$RUNNER_TEMP/profile.plist")
+          echo "::notice::PP_UUID=$PP_UUID"
 
           cat > $RUNNER_TEMP/ExportOptions.plist << EOF
           <?xml version="1.0" encoding="UTF-8"?>
@@ -93,6 +113,10 @@ jobs:
           <dict>
             <key>method</key>
             <string>app-store-connect</string>
+            <key>signingStyle</key>
+            <string>manual</string>
+            <key>teamID</key>
+            <string>${DEVELOPMENT_TEAM}</string>
             <key>provisioningProfiles</key>
             <dict>
               <key>com.kangdev.FiveVoca</key>
@@ -101,14 +125,26 @@ jobs:
           </dict>
           </plist>
           EOF
+          echo "--- ExportOptions.plist ---"
+          cat $RUNNER_TEMP/ExportOptions.plist
 
       - name: xcodebuild export
         run: |
+          set -o pipefail
           xcodebuild -exportArchive \
             -archivePath $RUNNER_TEMP/FiveVoca.xcarchive \
             -exportPath $RUNNER_TEMP/export \
             -exportOptionsPlist $RUNNER_TEMP/ExportOptions.plist \
-            | xcpretty
+            2>&1 | tee $RUNNER_TEMP/xcodebuild-export.log | xcpretty
+          ls -la $RUNNER_TEMP/export/
+
+      - name: export 로그 업로드 (실패 시)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xcodebuild-export-log
+          path: ${{ runner.temp }}/xcodebuild-export.log
+          if-no-files-found: ignore
 
       - name: TestFlight 업로드
         env:
