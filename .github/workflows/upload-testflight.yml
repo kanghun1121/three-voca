@@ -69,6 +69,7 @@ jobs:
           DEVELOPMENT_TEAM=$(/usr/libexec/PlistBuddy -c "Print :TeamIdentifier:0" "$RUNNER_TEMP/profile.plist")
           PROFILE_NAME=$(/usr/libexec/PlistBuddy -c "Print :Name" "$RUNNER_TEMP/profile.plist")
           echo "DEVELOPMENT_TEAM=$DEVELOPMENT_TEAM" >> $GITHUB_ENV
+          echo "PROFILE_NAME=$PROFILE_NAME" >> $GITHUB_ENV
           echo "::notice::DEVELOPMENT_TEAM=$DEVELOPMENT_TEAM"
           echo "::notice::PROFILE_NAME=$PROFILE_NAME"
 
@@ -88,6 +89,7 @@ jobs:
             -archivePath $RUNNER_TEMP/FiveVoca.xcarchive \
             -skipMacroValidation \
             DEVELOPMENT_TEAM="${{ env.DEVELOPMENT_TEAM }}" \
+            PROVISIONING_PROFILE_SPECIFIER="${{ env.PROFILE_NAME }}" \
             MARKETING_VERSION=${{ env.MARKETING_VERSION }} \
             CURRENT_PROJECT_VERSION=${{ env.BUILD_NUMBER }} \
             2>&1 | tee $RUNNER_TEMP/xcodebuild-archive.log | xcpretty
