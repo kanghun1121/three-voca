@@ -12,6 +12,7 @@ struct HeatmapWeekColumn: View {
     private static let dateFormatter: DateFormatter = {
         let f = DateFormatter()
         f.dateFormat = "yyyy-MM-dd"
+        f.timeZone = TimeZone(identifier: "Asia/Seoul")
         return f
     }()
 
