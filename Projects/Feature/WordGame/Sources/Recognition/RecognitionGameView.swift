@@ -98,13 +98,6 @@ private struct RecognitionCloseRow: View {
 
             Spacer()
 
-            Text("인식")
-                .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 12))
-                .tracking(0.12 * 12)
-                .foregroundStyle(DesignSystemAsset.white.swiftUIColor.opacity(0.70))
-
-            Spacer()
-
             Spacer().frame(width: 40)
         }
         .padding(.horizontal, 8)

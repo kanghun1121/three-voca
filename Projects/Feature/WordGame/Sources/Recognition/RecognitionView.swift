@@ -105,7 +105,7 @@ private struct RecognitionFooter: View {
 
     var body: some View {
         VStack(spacing: 16) {
-            Text("5초 안에 뜻이 떠올랐나요?")
+            Text("3초 안에 뜻이 떠올랐나요?")
                 .font(DesignSystemFontFamily.Pretendard.regular.swiftUIFont(size: 14))
                 .foregroundStyle(DesignSystemAsset.white.swiftUIColor.opacity(0.70))
 
