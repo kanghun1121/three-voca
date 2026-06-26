@@ -1,5 +1,6 @@
 import Foundation
 
+import Dependencies
 import SwiftUINavigation
 
 @Observable
@@ -43,7 +44,7 @@ public final class SpellingViewModel {
     private var reviewWords: [GameWord] = []
     private var incorrectWordIDs: Set<String> = []
     private var advanceTask: Task<Void, Never>?
-    private let soundPlayer = GameSoundPlayer()
+    @ObservationIgnored @Dependency(\.soundClient) private var soundClient
 
     var slots: [SlotState] {
         guard let word = currentWord else { return [] }
@@ -84,7 +85,7 @@ public final class SpellingViewModel {
 
     func skipButtonTapped() {
         guard viewState == .active, let word = currentWord else { return }
-        soundPlayer.playWrong()
+        soundClient.playWrong()
         viewState = .revealing
         if shouldAddToReview(word) {
             incorrectWordIDs.insert(word.id)
@@ -133,7 +134,7 @@ public final class SpellingViewModel {
         guard viewState == .active, let word = currentWord else { return }
 
         if isCorrectAnswer(for: word) {
-            soundPlayer.playCorrect()
+            soundClient.playCorrect()
             viewState = .correct
 
             advanceTask = Task {
@@ -141,7 +142,7 @@ public final class SpellingViewModel {
                 showWord(at: wordIndex + 1)
             }
         } else {
-            soundPlayer.playWrong()
+            soundClient.playWrong()
             viewState = .revealing
 
             if shouldAddToReview(word) {
