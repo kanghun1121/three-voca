@@ -25,7 +25,7 @@ public final class RecognitionViewModel {
 
     private(set) var viewState: ViewState = .loading
     private(set) var currentWord: GameWord?
-    private(set) var countdown: Int = 5
+    private(set) var countdown: Int = 3
     private(set) var ringProgress: Double = 1.0
     private(set) var wordIndex: Int = 0
     private(set) var totalWords: Int = 0
@@ -41,8 +41,8 @@ public final class RecognitionViewModel {
     private var countdownTask: Task<Void, Never>?
     private var revealTask: Task<Void, Never>?
     private var audioTask: Task<Void, Never>?
-    private let totalCountdown: Double = 5.0
-    private var remainingSeconds: Double = 5.0
+    private let totalCountdown: Double = 3.0
+    private var remainingSeconds: Double = 3.0
 
     init(words: [GameWord], onCompleted: @escaping () -> Void, onClose: @escaping () -> Void) {
         self.words = words
@@ -123,7 +123,7 @@ public final class RecognitionViewModel {
         return word
     }
 
-    private func startCountdown(remaining: Double = 5.0) {
+    private func startCountdown(remaining: Double = 3.0) {
         countdownTask?.cancel()
         ringProgress = remaining / totalCountdown
         countdown = Int(ceil(remaining))
