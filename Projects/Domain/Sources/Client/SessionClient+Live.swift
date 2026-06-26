@@ -15,6 +15,10 @@ private actor SessionCache {
     func set(_ id: String, _ session: Session) {
         store[id] = session
     }
+
+    func invalidate(_ id: String) {
+        store.removeValue(forKey: id)
+    }
 }
 
 extension SessionClient: DependencyKey {
@@ -34,6 +38,7 @@ extension SessionClient: DependencyKey {
             completeSession: { sessionID in
                 let request = CompleteSessionRequest(sessionID: sessionID)
                 let _: CompleteSessionResponseDTO = try await http.request(request)
+                await cache.invalidate(String(sessionID))
             }
         )
     }()
