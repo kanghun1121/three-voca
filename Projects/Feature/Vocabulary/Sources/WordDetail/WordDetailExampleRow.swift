@@ -25,11 +25,6 @@ struct WordDetailExampleRow: View {
                 .font(DesignSystemFontFamily.Pretendard.regular.swiftUIFont(size: 13))
                 .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
 
-            Button(action: {}) {
-                GrammarAnalysisLabel()
-            }
-            .buttonStyle(.plain)
-            .padding(.top, 4)
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
