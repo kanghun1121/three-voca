@@ -1,5 +1,6 @@
 import Foundation
 
+import Dependencies
 import SwiftUINavigation
 
 @Observable
@@ -35,7 +36,7 @@ public final class MultipleChoiceViewModel {
     private var reviewWords: [GameWord] = []
     private var incorrectWordIDs: Set<String> = []
     private var advanceTask: Task<Void, Never>?
-    private let soundPlayer = GameSoundPlayer()
+    @ObservationIgnored @Dependency(\.soundClient) private var soundClient
 
     init(
         words: [GameWord],
@@ -81,9 +82,9 @@ public final class MultipleChoiceViewModel {
 
         let isCorrect = choice == word.primaryMeaning
         if isCorrect {
-            soundPlayer.playCorrect()
+            soundClient.playCorrect()
         } else {
-            soundPlayer.playWrong()
+            soundClient.playWrong()
             if shouldAddToReview(word) {
                 incorrectWordIDs.insert(word.id)
                 reviewWords.append(word)
