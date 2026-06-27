@@ -6,8 +6,8 @@ let project = Project.makeModule(
     targets: [
         .app(factory: .init(
             infoPlist: .extendingDefault(with: [
-                "CFBundleShortVersionString": "1.0",
-                "CFBundleVersion": "1",
+                "CFBundleShortVersionString": "$(MARKETING_VERSION)",
+                "CFBundleVersion": "$(CURRENT_PROJECT_VERSION)",
                 "UILaunchScreen": [
                     "UIColorName": "",
                     "UIImageName": ""
