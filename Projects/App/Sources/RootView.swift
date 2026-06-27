@@ -13,7 +13,7 @@ struct RootView: View {
         Group {
             switch viewModel.authState {
             case .checking:
-                ProgressView()
+                LaunchScreen()
                     .transition(.opacity)
             case .unauthenticated:
                 LoginView(viewModel: withDependencies {
