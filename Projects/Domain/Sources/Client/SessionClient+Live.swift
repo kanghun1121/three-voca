@@ -36,7 +36,11 @@ extension SessionClient: DependencyKey {
                 return session
             },
             completeSession: { sessionID in
-                let request = CompleteSessionRequest(sessionID: sessionID)
+                let formatter = DateFormatter()
+                formatter.dateFormat = "yyyy-MM-dd"
+                formatter.timeZone = TimeZone(identifier: "Asia/Seoul")
+                let localDate = formatter.string(from: Date())
+                let request = CompleteSessionRequest(sessionID: sessionID, localDate: localDate)
                 let _: CompleteSessionResponseDTO = try await http.request(request)
                 await cache.invalidate(String(sessionID))
             }
