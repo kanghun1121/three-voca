@@ -19,6 +19,13 @@ enum HomeColors {
     static let streakOrange = Color(red: 232/255, green: 89/255, blue: 12/255)   // #E8590C
     static let streakBg     = Color(red: 255/255, green: 241/255, blue: 232/255) // #FFF1E8
 
+    // MARK: - 캘린더 요일 헤더
+    static let sundayRed    = Color(red: 229/255, green: 72/255, blue: 77/255)   // #E5484D
+    static let saturdayBlue = Color(red: 58/255, green: 111/255, blue: 247/255)  // #3A6FF7
+
+    // MARK: - 활성 카드 그라디언트
+    static let activeCardGradientStart = Color(red: 245/255, green: 249/255, blue: 255/255) // #F5F9FF
+
     static func levelColor(_ level: Int) -> Color {
         switch level {
         case 1: level1
