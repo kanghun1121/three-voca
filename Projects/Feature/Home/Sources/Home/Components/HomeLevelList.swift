@@ -4,7 +4,7 @@ import DesignSystem
 
 struct HomeLevelList: View {
     let levels: [LevelCardPresentationModel]
-    let expandedLevelID: String?
+    let expandedLevelIDs: Set<String>
     let onLevelTapped: (String) -> Void
     let onSessionTapped: (Int) -> Void
 
@@ -18,7 +18,7 @@ struct HomeLevelList: View {
                 ForEach(levels) { level in
                     LevelCard(
                         presentationModel: level,
-                        isExpanded: expandedLevelID == level.id
+                        isExpanded: expandedLevelIDs.contains(level.id)
                     ) {
                         onLevelTapped(level.id)
                     } onSessionTapped: { id in

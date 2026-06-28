@@ -19,7 +19,7 @@ public struct HomeView: View {
                     HomeContentView(
                         state: state,
                         activities: viewModel.activities,
-                        expandedLevelID: viewModel.expandedLevelID,
+                        expandedLevelIDs: viewModel.expandedLevelIDs,
                         onLevelTapped: { viewModel.levelTapped(id: $0) },
                         onSessionTapped: { viewModel.sessionTapped(id: $0) }
                     )
