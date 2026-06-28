@@ -2,6 +2,7 @@ import Foundation
 
 struct HomePresentationModel: Equatable {
     let levels: [LevelCardPresentationModel]
+    let streakDays: Int
 }
 
 struct LevelCardPresentationModel: Equatable, Identifiable {
@@ -40,5 +41,6 @@ enum LevelBadgeColor: Equatable {
     case level2
     case level3
     case level4
+    case level5
     case unknown
 }
