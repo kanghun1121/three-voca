@@ -1,5 +1,6 @@
 import Foundation
 
+import DomainInterface
 import Dependencies
 import SwiftUINavigation
 
@@ -44,7 +45,10 @@ public final class SpellingViewModel {
     private var reviewWords: [GameWord] = []
     private var incorrectWordIDs: Set<String> = []
     private var advanceTask: Task<Void, Never>?
+    private var audioTask: Task<Void, Never>?
     @ObservationIgnored @Dependency(\.soundClient) private var soundClient
+    @ObservationIgnored @Dependency(\.audioClient) private var audioClient
+    @ObservationIgnored @Dependency(\.audioPlayerClient) private var audioPlayerClient
 
     var slots: [SlotState] {
         guard let word = currentWord else { return [] }
@@ -101,6 +105,7 @@ public final class SpellingViewModel {
         switch action {
         case .confirmDiscard:
             advanceTask?.cancel()
+            audioTask?.cancel()
             onClose()
         case .none:
             break
@@ -167,10 +172,18 @@ public final class SpellingViewModel {
 
         let word = currentWords[index]
         resetInput(for: word)
-        
+
         wordIndex = index
         currentWord = word
         viewState = .active
+
+        audioTask?.cancel()
+        audioTask = Task { [weak self] in
+            guard let self else { return }
+            guard let url = await audioClient.audioURL(word.term) else { return }
+            guard !Task.isCancelled else { return }
+            await audioPlayerClient.play(url)
+        }
     }
     
     private func isCorrectAnswer(for word: GameWord) -> Bool {
