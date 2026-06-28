@@ -18,8 +18,8 @@ public struct HomeView: View {
                 if let state = viewModel.state {
                     HomeContentView(
                         state: state,
-                        heatmapData: viewModel.heatmapData,
-                        expandedLevelIDs: viewModel.expandedLevelIDs,
+                        activities: viewModel.activities,
+                        expandedLevelID: viewModel.expandedLevelID,
                         onLevelTapped: { viewModel.levelTapped(id: $0) },
                         onSessionTapped: { viewModel.sessionTapped(id: $0) }
                     )

@@ -3,8 +3,11 @@ import Foundation
 import DomainInterface
 
 extension VocabularyLibrary {
-    func toHomePresentationModel() -> HomePresentationModel {
-        HomePresentationModel(levels: levels.map { $0.toLevelCardPresentationModel() })
+    func toHomePresentationModel(activities: [DailyActivity]) -> HomePresentationModel {
+        HomePresentationModel(
+            levels: levels.map { $0.toLevelCardPresentationModel() },
+            streakDays: activities.streakDays()
+        )
     }
 }
 
@@ -39,4 +42,33 @@ private extension SessionProgress {
             icon: status == .completed ? .completedHigh : .notStarted
         )
     }
+}
+
+private extension [DailyActivity] {
+    func streakDays() -> Int {
+        let cal = Calendar.current
+        let today = cal.startOfDay(for: Date.now)
+        let studiedDates = Set(self.compactMap { activity -> Date? in
+            guard let date = ISO8601DateFormatter.yyyyMMdd.date(from: activity.date) else { return nil }
+            return cal.startOfDay(for: date)
+        })
+        var streak = 0
+        var cursor = today
+        while studiedDates.contains(cursor) {
+            streak += 1
+            guard let prev = cal.date(byAdding: .day, value: -1, to: cursor) else { break }
+            cursor = prev
+        }
+        return streak
+    }
+}
+
+private extension ISO8601DateFormatter {
+    static let yyyyMMdd: DateFormatter = {
+        let f = DateFormatter()
+        f.dateFormat = "yyyy-MM-dd"
+        f.calendar = Calendar(identifier: .iso8601)
+        f.timeZone = TimeZone(secondsFromGMT: 0)
+        return f
+    }()
 }
