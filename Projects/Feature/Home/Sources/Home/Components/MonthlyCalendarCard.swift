@@ -91,10 +91,23 @@ struct MonthlyCalendarCard: View {
                 .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 15.5))
                 .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
             Spacer()
-            Text("이번 달 \(studiedThisMonth)일 학습")
-                .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 12))
-                .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
+            studiedCountLabel
         }
+    }
+
+    private var studiedCountLabel: some View {
+        let font = DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 12)
+        return (
+            Text("이번 달 ")
+                .font(font)
+                .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
+            + Text("\(studiedThisMonth)")
+                .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 12))
+                .foregroundStyle(DesignSystemAsset.primary.swiftUIColor)
+            + Text("일 학습")
+                .font(font)
+                .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
+        )
     }
 
     private var gridSection: some View {
