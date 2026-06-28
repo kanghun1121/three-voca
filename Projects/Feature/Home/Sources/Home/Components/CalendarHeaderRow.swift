@@ -8,6 +8,7 @@ struct CalendarHeaderRow: View {
     let isAtCurrentMonth: Bool
     let onPrevious: () -> Void
     let onNext: () -> Void
+    let onToday: () -> Void
 
     var body: some View {
         HStack(spacing: 8) {
@@ -18,7 +19,8 @@ struct CalendarHeaderRow: View {
             CalendarNavButtons(
                 isAtCurrentMonth: isAtCurrentMonth,
                 onPrevious: onPrevious,
-                onNext: onNext
+                onNext: onNext,
+                onToday: onToday
             )
         }
     }

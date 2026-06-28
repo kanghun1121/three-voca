@@ -64,7 +64,8 @@ struct MonthlyCalendarCard: View {
                 month: month,
                 isAtCurrentMonth: isAtCurrentMonth,
                 onPrevious: { monthOffset -= 1 },
-                onNext: { monthOffset += 1 }
+                onNext: { monthOffset += 1 },
+                onToday: { monthOffset = 0 }
             )
             .padding(.bottom, 19)
             CalendarWeekdayHeader()
@@ -75,11 +76,7 @@ struct MonthlyCalendarCard: View {
                 today: today,
                 displayedDate: displayedDate
             )
-            CalendarFooterRow(
-                streakDays: streakDays,
-                isAtCurrentMonth: isAtCurrentMonth,
-                onToday: { monthOffset = 0 }
-            )
+            CalendarFooterRow(streakDays: streakDays, isAtCurrentMonth: isAtCurrentMonth)
             .padding(.top, 17)
         }
         .padding(.horizontal, 16)
