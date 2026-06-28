@@ -14,10 +14,7 @@ struct HomeContentView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
                 HomeGreetingHeader()
-                MonthlyCalendarCard(
-                    activities: activities,
-                    streakDays: state.streakDays
-                )
+                MonthlyCalendarCard(activities: activities, streakDays: state.streakDays)
                 .padding(.horizontal, 18)
                 .padding(.bottom, 22)
                 HomeLevelList(

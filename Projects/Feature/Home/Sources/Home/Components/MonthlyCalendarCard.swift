@@ -7,7 +7,7 @@ struct MonthlyCalendarCard: View {
     let activities: [DailyActivity]
     let streakDays: Int
 
-    @State private var monthOffset: Int = 0
+    @State private var monthOffset = 0
 
     private let cal = Calendar.current
 
