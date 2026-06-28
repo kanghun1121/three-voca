@@ -1,16 +1,13 @@
 import SwiftUI
 
 import DesignSystem
-import DomainInterface
 
 struct MonthlyCalendarCard: View {
-    let activities: [DailyActivity]
+    let viewModel: HomeViewModel
     let streakDays: Int
 
-    @State private var viewModel = CalendarViewModel()
-
     private var activityMap: [String: CalendarDayIntensity] {
-        Dictionary(uniqueKeysWithValues: activities.compactMap { activity -> (String, CalendarDayIntensity)? in
+        Dictionary(uniqueKeysWithValues: viewModel.activities.compactMap { activity -> (String, CalendarDayIntensity)? in
             let intensity: CalendarDayIntensity
             switch activity.sessionsCount {
             case 1:    intensity = .light
@@ -24,23 +21,23 @@ struct MonthlyCalendarCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             CalendarHeaderRow(
-                year: viewModel.year,
-                month: viewModel.month,
-                isAtCurrentMonth: viewModel.isAtCurrentMonth,
-                onPrevious: viewModel.previousMonth,
-                onNext: viewModel.nextMonth,
-                onToday: viewModel.goToToday
+                year: viewModel.calendarYear,
+                month: viewModel.calendarMonth,
+                isAtCurrentMonth: viewModel.isCalendarAtCurrentMonth,
+                onPrevious: viewModel.calendarPreviousMonth,
+                onNext: viewModel.calendarNextMonth,
+                onToday: viewModel.calendarGoToToday
             )
             .padding(.bottom, 19)
             CalendarWeekdayHeader()
                 .padding(.bottom, 6)
             CalendarGridSection(
-                rows: viewModel.rows,
+                rows: viewModel.calendarRows,
                 activityMap: activityMap,
-                today: viewModel.today,
-                displayedDate: viewModel.displayedDate
+                today: viewModel.calendarToday,
+                displayedDate: viewModel.calendarDisplayedDate
             )
-            CalendarFooterRow(streakDays: streakDays, isAtCurrentMonth: viewModel.isAtCurrentMonth)
+            CalendarFooterRow(streakDays: streakDays, isAtCurrentMonth: viewModel.isCalendarAtCurrentMonth)
             .padding(.top, 17)
         }
         .padding(.horizontal, 16)
@@ -55,12 +52,4 @@ struct MonthlyCalendarCard: View {
             y: 6
         )
     }
-}
-
-#Preview {
-    MonthlyCalendarCard(
-        activities: DailyActivity.previewFixture,
-        streakDays: 5
-    )
-    .padding()
 }
