@@ -8,12 +8,11 @@ import Dependencies
 
 struct RootView: View {
     @State private var viewModel = AppViewModel()
-    @State private var showLaunch = true
 
     var body: some View {
         Group {
-            if showLaunch {
-                LaunchScreen()
+            if viewModel.isCheckingSession {
+                SplashView()
                     .transition(.opacity)
             } else {
                 switch viewModel.authState {
@@ -30,12 +29,6 @@ struct RootView: View {
                 }
             }
         }
-        .task {
-            viewModel.onAppear()
-            try? await Task.sleep(for: .seconds(1))
-            withAnimation(.easeInOut(duration: 0.4)) {
-                showLaunch = false
-            }
-        }
+        .task { viewModel.onAppear() }
     }
 }

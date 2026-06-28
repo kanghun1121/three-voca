@@ -2,7 +2,7 @@ import SwiftUI
 
 import DesignSystem
 
-struct LaunchScreenContentView: View {
+struct SplashContentView: View {
     let isVisible: Bool
 
     var body: some View {

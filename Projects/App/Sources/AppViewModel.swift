@@ -8,6 +8,7 @@ import Dependencies
 @MainActor
 final class AppViewModel {
     var authState: AuthState = .unauthenticated
+    var isCheckingSession = true
 
     @ObservationIgnored @Dependency(\.authSessionClient) private var authSessionClient
     @ObservationIgnored @Dependency(\.authClient) private var authClient
@@ -28,9 +29,13 @@ final class AppViewModel {
                 }
             }
         }
-        
-        Task {
+
+        Task { [weak self] in
+            guard let self else { return }
             await authClient.checkSession()
+            withAnimation(.easeInOut(duration: 0.4)) {
+                isCheckingSession = false
+            }
         }
     }
 }
