@@ -9,7 +9,7 @@ struct CalendarNavButtons: View {
     let onToday: () -> Void
 
     var body: some View {
-        HStack(spacing: 4) {
+        HStack(spacing: 0) {
             if !isAtCurrentMonth {
                 Button("오늘로", action: onToday)
                     .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 12))
