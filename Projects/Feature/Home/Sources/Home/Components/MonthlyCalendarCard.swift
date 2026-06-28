@@ -11,7 +11,6 @@ struct MonthlyCalendarCard: View {
     private let dateFormatter: DateFormatter = {
         let f = DateFormatter()
         f.dateFormat = "yyyy-MM-dd"
-        f.timeZone = TimeZone(secondsFromGMT: 0)
         return f
     }()
 
