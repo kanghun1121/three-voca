@@ -87,7 +87,7 @@ struct MonthlyCalendarCard: View {
 
     private var headerRow: some View {
         HStack {
-            Text("\(year)년 \(month)월")
+            Text("\(String(year))년 \(String(month))월")
                 .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 15.5))
                 .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
             Spacer()
@@ -139,8 +139,10 @@ struct MonthlyCalendarCard: View {
         HStack(spacing: 0) {
             if streakDays > 0 {
                 HStack(spacing: 5) {
-                    Text("🔥")
-                        .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 12))
+                    DesignSystemAsset.flame.swiftUIImage
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 14, height: 14)
                     Text("\(streakDays)일 연속")
                         .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 12))
                         .foregroundStyle(HomeColors.streakOrange)
