@@ -67,8 +67,6 @@ private extension ISO8601DateFormatter {
     static let yyyyMMdd: DateFormatter = {
         let f = DateFormatter()
         f.dateFormat = "yyyy-MM-dd"
-        f.calendar = Calendar(identifier: .iso8601)
-        f.timeZone = TimeZone(secondsFromGMT: 0)
         return f
     }()
 }
