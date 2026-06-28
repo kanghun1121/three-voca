@@ -5,15 +5,15 @@ import XCTest
 @MainActor
 final class CalendarNavigationTests: XCTestCase {
 
-    // 이번 달이 아닐 때 isCalendarAtCurrentMonth == false → 연속 라벨 숨김 조건 충족
-    func testStreakHiddenWhenNotAtCurrentMonth() {
+    func test_이전달_이동시_현재달이_아닌_상태가_된다() {
         let vm = HomeViewModel()
+
         vm.calendarPreviousMonth()
-        XCTAssertFalse(vm.isCalendarAtCurrentMonth)
+
+        XCTAssertFalse(vm.isCalendarAtCurrentMonth, "연속 학습 라벨은 현재 달에서만 표시되어야 합니다.")
     }
 
-    // 이전 달 셰브론 클릭 시 해당 달로 이동
-    func testPreviousMonthChevronNavigatesMonth() {
+    func test_이전달_셰브론_클릭시_이전달로_이동된다() {
         let june = Calendar.current.date(from: DateComponents(year: 2026, month: 6, day: 1))!
         let vm = HomeViewModel(calendarToday: june)
 
@@ -23,13 +23,12 @@ final class CalendarNavigationTests: XCTestCase {
         XCTAssertEqual(vm.calendarMonth, 5)
     }
 
-    // 현재 달에서 다음 달 셰브론 클릭 시 미래로 이동 불가
-    func testNextMonthChevronBlockedAtCurrentMonth() {
+    func test_현재달에서_다음달_셰브론_클릭시_이동이_차단된다() {
         let vm = HomeViewModel()
         XCTAssertTrue(vm.isCalendarAtCurrentMonth)
 
         vm.calendarNextMonth()
 
-        XCTAssertTrue(vm.isCalendarAtCurrentMonth)
+        XCTAssertTrue(vm.isCalendarAtCurrentMonth, "현재 달에서 미래 달로의 이동이 차단되어야 합니다.")
     }
 }

@@ -31,12 +31,7 @@ struct MonthlyCalendarCard: View {
             .padding(.bottom, 19)
             CalendarWeekdayHeader()
                 .padding(.bottom, 6)
-            CalendarGridSection(
-                rows: viewModel.calendarRows,
-                activityMap: activityMap,
-                today: viewModel.calendarToday,
-                displayedDate: viewModel.calendarDisplayedDate
-            )
+            CalendarGridSection(rows: viewModel.calendarRows, activityMap: activityMap)
             CalendarFooterRow(streakDays: streakDays, isAtCurrentMonth: viewModel.isCalendarAtCurrentMonth)
             .padding(.top, 17)
         }

@@ -48,17 +48,32 @@ public final class HomeViewModel {
     var calendarMonth: Int { cal.component(.month, from: calendarDisplayedDate) }
     var isCalendarAtCurrentMonth: Bool { calendarMonthOffset == 0 }
 
-    var calendarRows: [[Int?]] {
-        let count = cal.range(of: .day, in: .month, for: calendarDisplayedDate)?.count ?? 30
-        var comps = cal.dateComponents([.year, .month], from: calendarDisplayedDate)
-        comps.day = 1
-        let firstDow = cal.date(from: comps).map { cal.component(.weekday, from: $0) - 1 } ?? 0
-        let cells: [Int?] = Array(repeating: nil, count: firstDow) + (1...count).map { Optional($0) }
-        return stride(from: 0, to: cells.count, by: 7).map { start in
-            let end = min(start + 7, cells.count)
-            let row = Array(cells[start..<end])
-            return row + Array(repeating: nil, count: 7 - row.count)
+    var calendarRows: [[CalendarDay]] {
+        let period = cal.monthlyCalendarPeriod(for: calendarDisplayedDate)
+        let days = calendarDays(for: period)
+        return stride(from: 0, to: days.count, by: 7).map { start in
+            Array(days[start..<min(start + 7, days.count)])
         }
+    }
+
+    private func calendarDays(for period: DateInterval) -> [CalendarDay] {
+        let displayedComps = cal.dateComponents([.year, .month], from: calendarDisplayedDate)
+        var days: [CalendarDay] = []
+        var current = period.start
+        while current < period.end {
+            let comps = cal.dateComponents([.year, .month], from: current)
+            let isCurrentMonth = comps.year == displayedComps.year && comps.month == displayedComps.month
+            days.append(CalendarDay(
+                date: current,
+                dayNumber: cal.component(.day, from: current),
+                isCurrentMonth: isCurrentMonth,
+                isToday: cal.isDate(current, inSameDayAs: calendarToday),
+                isFuture: cal.startOfDay(for: current) > calendarToday
+            ))
+            guard let next = cal.date(byAdding: .day, value: 1, to: current) else { break }
+            current = next
+        }
+        return days
     }
 
     // MARK: - Calendar actions
