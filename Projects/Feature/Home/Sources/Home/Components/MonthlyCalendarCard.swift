@@ -65,12 +65,12 @@ struct MonthlyCalendarCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             headerRow
-                .padding(.bottom, 14)
+                .padding(.bottom, 19)
             CalendarWeekdayHeader()
                 .padding(.bottom, 6)
             gridSection
             footerRow
-                .padding(.top, 12)
+                .padding(.top, 17)
         }
         .padding(.horizontal, 16)
         .padding(.top, 17)
@@ -162,11 +162,6 @@ struct MonthlyCalendarCard: View {
                 }
             }
             Spacer()
-            if studiedThisMonth > 0 {
-                Text("오늘도 학습을 마쳤어요")
-                    .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 12))
-                    .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
-            }
         }
     }
 }
