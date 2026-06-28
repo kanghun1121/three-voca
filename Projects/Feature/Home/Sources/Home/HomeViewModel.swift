@@ -16,28 +16,8 @@ public final class HomeViewModel {
     private(set) var expandedLevelIDs: Set<String> = []
     var destination: Destination?
 
-    // MARK: - Calendar
-
     let calendarToday: Date
     private(set) var calendarMonthOffset: Int = 0
-
-    @ObservationIgnored @Dependency(\.homeClient) private var homeClient
-
-    @CasePathable
-    public enum Destination {
-        case session(SessionDetailViewModel)
-    }
-
-    public init(
-        destination: Destination? = nil,
-        calendarToday: Date = Calendar.current.startOfDay(for: .now)
-    ) {
-        self.destination = destination
-        self.calendarToday = calendarToday
-    }
-
-    // MARK: - Calendar computed
-
     private var cal: Calendar { .current }
 
     var calendarDisplayedDate: Date {
@@ -54,6 +34,21 @@ public final class HomeViewModel {
         return stride(from: 0, to: days.count, by: 7).map { start in
             Array(days[start..<min(start + 7, days.count)])
         }
+    }
+
+    @ObservationIgnored @Dependency(\.homeClient) private var homeClient
+
+    @CasePathable
+    public enum Destination {
+        case session(SessionDetailViewModel)
+    }
+
+    public init(
+        destination: Destination? = nil,
+        calendarToday: Date = Calendar.current.startOfDay(for: .now)
+    ) {
+        self.destination = destination
+        self.calendarToday = calendarToday
     }
 
     private func calendarDays(for period: DateInterval) -> [CalendarDay] {
@@ -76,9 +71,9 @@ public final class HomeViewModel {
         return days
     }
 
-    // MARK: - Calendar actions
-
-    func calendarPreviousMonth() { calendarMonthOffset -= 1 }
+    func calendarPreviousMonth() {
+        calendarMonthOffset -= 1
+    }
 
     func calendarNextMonth() {
         guard !isCalendarAtCurrentMonth else { return }
