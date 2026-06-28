@@ -12,7 +12,7 @@ struct LevelCardHeader: View {
 
     var body: some View {
         HStack(spacing: 13) {
-            iconChip
+            LevelIconChip(level: level)
             Text(name)
                 .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 15.5))
                 .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
@@ -36,35 +36,6 @@ struct LevelCardHeader: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 15)
-    }
-
-    // 40×40 컬러 배경 + 책 아이콘 칩
-    private var iconChip: some View {
-        let color = HomeColors.levelColor(level)
-        return ZStack {
-            RoundedRectangle(cornerRadius: 13)
-                .fill(color.opacity(0.12))
-                .frame(width: 40, height: 40)
-            levelIcon
-                .resizable()
-                .scaledToFit()
-                .frame(width: 22, height: 22)
-                .colorMultiply(color)
-        }
-    }
-}
-
-private extension LevelCardHeader {
-    var levelIcon: SwiftUI.Image {
-        switch level {
-        case 1: DesignSystemAsset.levelIcon1.swiftUIImage
-        case 2: DesignSystemAsset.levelIcon2.swiftUIImage
-        case 3: DesignSystemAsset.levelIcon3.swiftUIImage
-        case 4: DesignSystemAsset.levelIcon4.swiftUIImage
-        case 5: DesignSystemAsset.levelIcon5.swiftUIImage
-        case 6: DesignSystemAsset.levelIcon6.swiftUIImage
-        default: DesignSystemAsset.levelIcon1.swiftUIImage
-        }
     }
 }
 

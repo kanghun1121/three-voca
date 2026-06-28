@@ -49,7 +49,7 @@ private extension [DailyActivity] {
         let cal = Calendar.current
         let today = cal.startOfDay(for: Date.now)
         let studiedDates = Set(self.compactMap { activity -> Date? in
-            guard let date = ISO8601DateFormatter.yyyyMMdd.date(from: activity.date) else { return nil }
+            guard let date = DateFormatter.yyyyMMdd.date(from: activity.date) else { return nil }
             return cal.startOfDay(for: date)
         })
         var streak = 0
@@ -63,7 +63,7 @@ private extension [DailyActivity] {
     }
 }
 
-private extension ISO8601DateFormatter {
+private extension DateFormatter {
     static let yyyyMMdd: DateFormatter = {
         let f = DateFormatter()
         f.dateFormat = "yyyy-MM-dd"

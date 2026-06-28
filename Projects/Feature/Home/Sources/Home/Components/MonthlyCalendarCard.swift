@@ -10,11 +10,6 @@ struct MonthlyCalendarCard: View {
     @State private var monthOffset: Int = 0
 
     private let cal = Calendar.current
-    private let dateFormatter: DateFormatter = {
-        let f = DateFormatter()
-        f.dateFormat = "yyyy-MM-dd"
-        return f
-    }()
 
     private var today: Date { cal.startOfDay(for: Date.now) }
 
@@ -60,15 +55,32 @@ struct MonthlyCalendarCard: View {
         }
     }
 
+    private var isAtCurrentMonth: Bool { monthOffset == 0 }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            headerRow
-                .padding(.bottom, 19)
+            CalendarHeaderRow(
+                year: year,
+                month: month,
+                isAtCurrentMonth: isAtCurrentMonth,
+                onPrevious: { monthOffset -= 1 },
+                onNext: { monthOffset += 1 }
+            )
+            .padding(.bottom, 19)
             CalendarWeekdayHeader()
                 .padding(.bottom, 6)
-            gridSection
-            footerRow
-                .padding(.top, 17)
+            CalendarGridSection(
+                rows: rows,
+                activityMap: activityMap,
+                today: today,
+                displayedDate: displayedDate
+            )
+            CalendarFooterRow(
+                streakDays: streakDays,
+                isAtCurrentMonth: isAtCurrentMonth,
+                onToday: { monthOffset = 0 }
+            )
+            .padding(.top, 17)
         }
         .padding(.horizontal, 16)
         .padding(.top, 17)
@@ -81,108 +93,6 @@ struct MonthlyCalendarCard: View {
             x: 0,
             y: 6
         )
-    }
-
-    private var isAtCurrentMonth: Bool { monthOffset == 0 }
-
-    private var headerRow: some View {
-        HStack(spacing: 8) {
-            Text("\(String(year))년 \(String(month))월")
-                .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 15.5))
-                .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
-            Spacer()
-            HStack(spacing: 2) {
-                Button {
-                    monthOffset -= 1
-                } label: {
-                    Image(systemName: "chevron.left")
-                        .font(.system(size: 13, weight: .semibold))
-                        .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
-                        .frame(width: 28, height: 28)
-                }
-                Button {
-                    guard !isAtCurrentMonth else { return }
-                    monthOffset += 1
-                } label: {
-                    Image(systemName: "chevron.right")
-                        .font(.system(size: 13, weight: .semibold))
-                        .foregroundStyle(
-                            isAtCurrentMonth
-                                ? DesignSystemAsset.fgMuted.swiftUIColor
-                                : DesignSystemAsset.fgStrong.swiftUIColor
-                        )
-                        .frame(width: 28, height: 28)
-                }
-            }
-        }
-    }
-
-    private var gridSection: some View {
-        VStack(spacing: 4) {
-            ForEach(Array(rows.enumerated()), id: \.offset) { _, row in
-                HStack(spacing: 0) {
-                    ForEach(Array(row.enumerated()), id: \.offset) { _, day in
-                        cellView(day: day)
-                    }
-                }
-            }
-        }
-    }
-
-    private func cellView(day: Int?) -> some View {
-        guard let day else {
-            return CalendarDayCell(kind: .empty)
-        }
-        var comps = cal.dateComponents([.year, .month], from: displayedDate)
-        comps.day = day
-        guard let date = cal.date(from: comps) else {
-            return CalendarDayCell(kind: .notStudied(day))
-        }
-        let dayStart = cal.startOfDay(for: date)
-        let isToday = dayStart == today
-        let isFuture = dayStart > today
-        let dateKey = dateFormatter.string(from: date)
-        let intensity = activityMap[dateKey]
-
-        if isToday {
-            return CalendarDayCell(kind: .today(day, intensity))
-        } else if isFuture {
-            return CalendarDayCell(kind: .future(day))
-        } else if let intensity {
-            return CalendarDayCell(kind: .studied(day, intensity))
-        } else {
-            return CalendarDayCell(kind: .notStudied(day))
-        }
-    }
-
-    private var footerRow: some View {
-        HStack(spacing: 0) {
-            if streakDays > 0 && monthOffset == 0 {
-                HStack(spacing: 5) {
-                    DesignSystemAsset.flame.swiftUIImage
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 14, height: 14)
-                    Text("\(streakDays)일 연속")
-                        .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 12))
-                        .foregroundStyle(HomeColors.streakOrange)
-                }
-            }
-            Spacer()
-            if monthOffset != 0 {
-                Button {
-                    monthOffset = 0
-                } label: {
-                    Text("오늘로")
-                        .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 12))
-                        .foregroundStyle(DesignSystemAsset.primary.swiftUIColor)
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 6)
-                        .background(DesignSystemAsset.primary.swiftUIColor.opacity(0.1))
-                        .clipShape(.rect(cornerRadius: 8))
-                }
-            }
-        }
     }
 }
 

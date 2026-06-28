@@ -38,7 +38,7 @@ struct LevelCard: View {
                 )
             }
         }
-        .background(cardBackground)
+        .background(LevelCardBackground(isActive: isActive))
         .clipShape(.rect(cornerRadius: 16))
         .overlay {
             RoundedRectangle(cornerRadius: 16)
@@ -56,21 +56,5 @@ struct LevelCard: View {
             y: 4
         )
         .animation(.easeOut(duration: 0.2), value: isExpanded)
-    }
-
-    @ViewBuilder
-    private var cardBackground: some View {
-        if isActive {
-            LinearGradient(
-                colors: [
-                    Color(red: 245/255, green: 249/255, blue: 255/255),
-                    Color.white
-                ],
-                startPoint: UnitPoint(x: 0.2, y: 0.0),
-                endPoint: UnitPoint(x: 1.0, y: 1.0)
-            )
-        } else {
-            DesignSystemAsset.white.swiftUIColor
-        }
     }
 }

@@ -26,9 +26,7 @@ public struct HomeView: View {
                 } else if viewModel.isLoading {
                     HomeLoadingView()
                 } else if let message = viewModel.errorMessage {
-                    Text(message)
-                        .foregroundStyle(.secondary)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    ContentUnavailableView(message, systemImage: "exclamationmark.triangle")
                 } else {
                     HomeLoadingView()
                 }
