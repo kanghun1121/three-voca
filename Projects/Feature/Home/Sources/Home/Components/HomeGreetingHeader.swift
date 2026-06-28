@@ -27,8 +27,10 @@ struct HomeGreetingHeader: View {
 
     private var streakChip: some View {
         HStack(spacing: 4) {
-            Text("🔥")
-                .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 12))
+            DesignSystemAsset.flame.swiftUIImage
+                .resizable()
+                .scaledToFit()
+                .frame(width: 14, height: 14)
             Text("\(streakDays)일 연속 학습 중")
                 .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 12))
                 .foregroundStyle(HomeColors.streakOrange)
