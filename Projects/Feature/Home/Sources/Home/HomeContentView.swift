@@ -6,7 +6,7 @@ import DomainInterface
 struct HomeContentView: View {
     let state: HomePresentationModel
     let activities: [DailyActivity]
-    let expandedLevelID: String?
+    let expandedLevelIDs: Set<String>
     let onLevelTapped: (String) -> Void
     let onSessionTapped: (Int) -> Void
 
@@ -22,7 +22,7 @@ struct HomeContentView: View {
                 .padding(.bottom, 22)
                 HomeLevelList(
                     levels: state.levels,
-                    expandedLevelID: expandedLevelID,
+                    expandedLevelIDs: expandedLevelIDs,
                     onLevelTapped: onLevelTapped,
                     onSessionTapped: onSessionTapped
                 )
@@ -37,7 +37,7 @@ struct HomeContentView: View {
     HomeContentView(
         state: VocabularyLibrary.previewFixture.toHomePresentationModel(activities: DailyActivity.previewFixture),
         activities: DailyActivity.previewFixture,
-        expandedLevelID: nil,
+        expandedLevelIDs: [],
         onLevelTapped: { _ in },
         onSessionTapped: { _ in }
     )
