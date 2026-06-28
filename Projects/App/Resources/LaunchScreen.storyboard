@@ -18,8 +18,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="LaunchImage" translatesAutoresizingMaskIntoConstraints="NO" id="YOu-tb-fAR">
-                                <rect key="frame" x="0.0" y="0.0" width="393" height="210"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" image="LaunchImage" translatesAutoresizingMaskIntoConstraints="NO" id="YOu-tb-fAR">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Bcu-3y-fUS"/>
@@ -27,8 +27,8 @@
                         <constraints>
                             <constraint firstItem="YOu-tb-fAR" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="c1-lead"/>
                             <constraint firstItem="YOu-tb-fAR" firstAttribute="trailing" secondItem="Ze5-6b-2t3" secondAttribute="trailing" id="c2-trail"/>
-                            <constraint firstItem="YOu-tb-fAR" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="c3-cy"/>
-                            <constraint firstItem="YOu-tb-fAR" firstAttribute="height" secondItem="YOu-tb-fAR" secondAttribute="width" multiplier="174:325" id="c4-ratio"/>
+                            <constraint firstItem="YOu-tb-fAR" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="c3-top"/>
+                            <constraint firstItem="YOu-tb-fAR" firstAttribute="bottom" secondItem="Ze5-6b-2t3" secondAttribute="bottom" id="c4-bottom"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -38,6 +38,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="LaunchImage" width="325" height="174"/>
+        <image name="LaunchImage" width="390" height="844"/>
     </resources>
 </document>
