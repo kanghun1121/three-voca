@@ -35,12 +35,3 @@ enum SessionIconKind: Equatable {
 
     var isCompleted: Bool { self != .notStarted }
 }
-
-enum LevelBadgeColor: Equatable {
-    case level1
-    case level2
-    case level3
-    case level4
-    case level5
-    case unknown
-}
