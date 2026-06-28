@@ -16,13 +16,7 @@ public struct HomeView: View {
         NavigationStack {
             Group {
                 if let state = viewModel.state {
-                    HomeContentView(
-                        state: state,
-                        activities: viewModel.activities,
-                        expandedLevelIDs: viewModel.expandedLevelIDs,
-                        onLevelTapped: { viewModel.levelTapped(id: $0) },
-                        onSessionTapped: { viewModel.sessionTapped(id: $0) }
-                    )
+                    HomeContentView(state: state, viewModel: viewModel)
                 } else if viewModel.isLoading {
                     HomeLoadingView()
                 } else if let message = viewModel.errorMessage {

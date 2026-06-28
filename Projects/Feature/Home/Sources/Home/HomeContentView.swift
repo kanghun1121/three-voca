@@ -5,23 +5,20 @@ import DomainInterface
 
 struct HomeContentView: View {
     let state: HomePresentationModel
-    let activities: [DailyActivity]
-    let expandedLevelIDs: Set<String>
-    let onLevelTapped: (String) -> Void
-    let onSessionTapped: (Int) -> Void
+    let viewModel: HomeViewModel
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
                 HomeGreetingHeader()
-                MonthlyCalendarCard(activities: activities, streakDays: state.streakDays)
+                MonthlyCalendarCard(viewModel: viewModel, streakDays: state.streakDays)
                 .padding(.horizontal, 18)
                 .padding(.bottom, 22)
                 HomeLevelList(
                     levels: state.levels,
-                    expandedLevelIDs: expandedLevelIDs,
-                    onLevelTapped: onLevelTapped,
-                    onSessionTapped: onSessionTapped
+                    expandedLevelIDs: viewModel.expandedLevelIDs,
+                    onLevelTapped: { viewModel.levelTapped(id: $0) },
+                    onSessionTapped: { viewModel.sessionTapped(id: $0) }
                 )
             }
         }
@@ -33,9 +30,6 @@ struct HomeContentView: View {
 #Preview {
     HomeContentView(
         state: VocabularyLibrary.previewFixture.toHomePresentationModel(activities: DailyActivity.previewFixture),
-        activities: DailyActivity.previewFixture,
-        expandedLevelIDs: [],
-        onLevelTapped: { _ in },
-        onSessionTapped: { _ in }
+        viewModel: HomeViewModel()
     )
 }
