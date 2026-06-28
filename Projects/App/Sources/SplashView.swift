@@ -2,7 +2,7 @@ import SwiftUI
 
 import DesignSystem
 
-struct LaunchScreen: View {
+struct SplashView: View {
     @State private var isVisible = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -11,7 +11,7 @@ struct LaunchScreen: View {
             DesignSystemAsset.background.swiftUIColor
                 .ignoresSafeArea()
 
-            LaunchScreenContentView(isVisible: isVisible)
+            SplashContentView(isVisible: isVisible)
         }
         .onAppear {
             if reduceMotion {
