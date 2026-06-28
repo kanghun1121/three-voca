@@ -61,12 +61,7 @@ struct CalendarDayCell: View {
                     if let intensity {
                         Circle()
                             .fill(intensity.color)
-                    } else {
-                        Circle()
-                            .fill(Color.clear)
                     }
-                    Circle()
-                        .strokeBorder(DesignSystemAsset.primary.swiftUIColor, lineWidth: 2)
                     Text("\(day)")
                         .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 12))
                         .foregroundStyle(intensity != nil ? .white : DesignSystemAsset.fgStrong.swiftUIColor)
