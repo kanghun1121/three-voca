@@ -83,11 +83,13 @@ struct MonthlyCalendarCard: View {
         )
     }
 
+    private var isAtCurrentMonth: Bool { monthOffset == 0 }
+
     private var headerRow: some View {
         HStack(spacing: 8) {
             Text("\(String(year))년 \(String(month))월")
                 .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 15.5))
-                .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
+                .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
             Spacer()
             HStack(spacing: 2) {
                 Button {
@@ -95,15 +97,20 @@ struct MonthlyCalendarCard: View {
                 } label: {
                     Image(systemName: "chevron.left")
                         .font(.system(size: 13, weight: .semibold))
-                        .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
+                        .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
                         .frame(width: 28, height: 28)
                 }
                 Button {
+                    guard !isAtCurrentMonth else { return }
                     monthOffset += 1
                 } label: {
                     Image(systemName: "chevron.right")
                         .font(.system(size: 13, weight: .semibold))
-                        .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
+                        .foregroundStyle(
+                            isAtCurrentMonth
+                                ? DesignSystemAsset.fgMuted.swiftUIColor
+                                : DesignSystemAsset.fgStrong.swiftUIColor
+                        )
                         .frame(width: 28, height: 28)
                 }
             }
