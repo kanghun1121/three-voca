@@ -48,11 +48,6 @@ struct MonthlyCalendarCard: View {
         })
     }
 
-    private var studiedThisMonth: Int {
-        let prefix = String(format: "%04d-%02d", year, month)
-        return activityMap.keys.filter { $0.hasPrefix(prefix) }.count
-    }
-
     private var cells: [Int?] {
         Array(repeating: nil, count: firstDow) + (1...daysInMonth).map { Optional($0) }
     }
@@ -94,7 +89,6 @@ struct MonthlyCalendarCard: View {
                 .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 15.5))
                 .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
             Spacer()
-            studiedCountLabel
             HStack(spacing: 2) {
                 Button {
                     monthOffset -= 1
@@ -114,21 +108,6 @@ struct MonthlyCalendarCard: View {
                 }
             }
         }
-    }
-
-    private var studiedCountLabel: some View {
-        let font = DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 12)
-        return (
-            Text("이번 달 ")
-                .font(font)
-                .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
-            + Text("\(studiedThisMonth)")
-                .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 12))
-                .foregroundStyle(DesignSystemAsset.primary.swiftUIColor)
-            + Text("일 학습")
-                .font(font)
-                .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
-        )
     }
 
     private var gridSection: some View {
