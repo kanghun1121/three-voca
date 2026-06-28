@@ -7,13 +7,12 @@ struct WordGameLaunchView: View {
 
     @State private var brandOffset: Double = 10
     @State private var brandOpacity: Double = 0
-    @State private var pillBobbed = false
 
     var body: some View {
         ZStack {
             GameBackground()
             LaunchBrandView(offset: brandOffset, opacity: brandOpacity)
-            LaunchTapHintView(bobbed: pillBobbed)
+            LaunchTapHintView()
         }
         .contentShape(Rectangle())
         .onTapGesture { onStart() }
@@ -25,7 +24,6 @@ struct WordGameLaunchView: View {
                 brandOffset = 0
                 brandOpacity = 1
             }
-            pillBobbed = true
         }
     }
 }
@@ -57,44 +55,13 @@ private struct LaunchBrandView: View {
 // MARK: - 하단 탭 힌트
 
 private struct LaunchTapHintView: View {
-    let bobbed: Bool
-
     var body: some View {
         VStack {
             Spacer()
-            LaunchPillView(bobbed: bobbed)
-                .padding(.bottom, 56)
-        }
-    }
-}
-
-private struct LaunchPillView: View {
-    let bobbed: Bool
-
-    var body: some View {
-        HStack(spacing: 8) {
             Text("탭하여 시작")
-                .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 14))
-                .foregroundStyle(Color.white)
-
-            Image(systemName: "arrow.right")
-                .font(.system(size: 13, weight: .semibold))
-                .foregroundStyle(Color.white)
+                .font(DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 15))
+                .foregroundStyle(Color.white.opacity(0.38))
+                .padding(.bottom, 30)
         }
-        .padding(.horizontal, 20)
-        .padding(.vertical, 10)
-        .background(Color.white.opacity(0.10))
-        .overlay {
-            Capsule()
-                .stroke(Color.white.opacity(0.20), lineWidth: 1)
-        }
-        .clipShape(Capsule())
-        .offset(y: bobbed ? -4 : 0)
-        .animation(
-            .easeInOut(duration: 1.3)
-                .repeatForever(autoreverses: true)
-                .delay(0.6),
-            value: bobbed
-        )
     }
 }
