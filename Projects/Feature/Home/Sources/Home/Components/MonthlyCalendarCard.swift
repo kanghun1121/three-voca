@@ -7,6 +7,8 @@ struct MonthlyCalendarCard: View {
     let activities: [DailyActivity]
     let streakDays: Int
 
+    @State private var monthOffset: Int = 0
+
     private let cal = Calendar.current
     private let dateFormatter: DateFormatter = {
         let f = DateFormatter()
@@ -16,16 +18,19 @@ struct MonthlyCalendarCard: View {
 
     private var today: Date { cal.startOfDay(for: Date.now) }
 
-    private var year: Int { cal.component(.year, from: today) }
-    private var month: Int { cal.component(.month, from: today) }
-
-    private var daysInMonth: Int {
-        cal.range(of: .day, in: .month, for: today)?.count ?? 30
+    private var displayedDate: Date {
+        cal.date(byAdding: .month, value: monthOffset, to: today) ?? today
     }
 
-    // 해당 월 1일의 요일 오프셋 (0=일, 6=토)
+    private var year: Int { cal.component(.year, from: displayedDate) }
+    private var month: Int { cal.component(.month, from: displayedDate) }
+
+    private var daysInMonth: Int {
+        cal.range(of: .day, in: .month, for: displayedDate)?.count ?? 30
+    }
+
     private var firstDow: Int {
-        var comps = cal.dateComponents([.year, .month], from: today)
+        var comps = cal.dateComponents([.year, .month], from: displayedDate)
         comps.day = 1
         guard let firstDay = cal.date(from: comps) else { return 0 }
         return cal.component(.weekday, from: firstDay) - 1
@@ -48,7 +53,6 @@ struct MonthlyCalendarCard: View {
         return activityMap.keys.filter { $0.hasPrefix(prefix) }.count
     }
 
-    // 셀 배열: nil=빈칸, Int=날짜
     private var cells: [Int?] {
         Array(repeating: nil, count: firstDow) + (1...daysInMonth).map { Optional($0) }
     }
@@ -85,12 +89,30 @@ struct MonthlyCalendarCard: View {
     }
 
     private var headerRow: some View {
-        HStack {
+        HStack(spacing: 8) {
             Text("\(String(year))년 \(String(month))월")
                 .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 15.5))
                 .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
             Spacer()
             studiedCountLabel
+            HStack(spacing: 2) {
+                Button {
+                    monthOffset -= 1
+                } label: {
+                    Image(systemName: "chevron.left")
+                        .font(.system(size: 13, weight: .semibold))
+                        .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
+                        .frame(width: 28, height: 28)
+                }
+                Button {
+                    monthOffset += 1
+                } label: {
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 13, weight: .semibold))
+                        .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
+                        .frame(width: 28, height: 28)
+                }
+            }
         }
     }
 
@@ -125,7 +147,7 @@ struct MonthlyCalendarCard: View {
         guard let day else {
             return CalendarDayCell(kind: .empty)
         }
-        var comps = cal.dateComponents([.year, .month], from: today)
+        var comps = cal.dateComponents([.year, .month], from: displayedDate)
         comps.day = day
         guard let date = cal.date(from: comps) else {
             return CalendarDayCell(kind: .notStudied(day))
@@ -149,7 +171,7 @@ struct MonthlyCalendarCard: View {
 
     private var footerRow: some View {
         HStack(spacing: 0) {
-            if streakDays > 0 {
+            if streakDays > 0 && monthOffset == 0 {
                 HStack(spacing: 5) {
                     DesignSystemAsset.flame.swiftUIImage
                         .resizable()
@@ -161,6 +183,19 @@ struct MonthlyCalendarCard: View {
                 }
             }
             Spacer()
+            if monthOffset != 0 {
+                Button {
+                    monthOffset = 0
+                } label: {
+                    Text("오늘로")
+                        .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 12))
+                        .foregroundStyle(DesignSystemAsset.primary.swiftUIColor)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
+                        .background(DesignSystemAsset.primary.swiftUIColor.opacity(0.1))
+                        .clipShape(.rect(cornerRadius: 8))
+                }
+            }
         }
     }
 }
