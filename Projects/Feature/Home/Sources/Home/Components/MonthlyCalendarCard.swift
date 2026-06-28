@@ -88,8 +88,8 @@ struct MonthlyCalendarCard: View {
     private var headerRow: some View {
         HStack {
             Text("\(String(year))년 \(String(month))월")
-                .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 15.5))
-                .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
+                .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 15.5))
+                .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
             Spacer()
             studiedCountLabel
         }
