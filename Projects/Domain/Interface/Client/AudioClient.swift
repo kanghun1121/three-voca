@@ -3,11 +3,11 @@ import Foundation
 import Dependencies
 
 public struct AudioClient: Sendable {
-    public var prefetchAudio: @Sendable (_ terms: [String]) async -> Void
+    public var prefetchAudio: @Sendable (_ words: [(term: String, audioUrl: String)]) async -> Void
     public var audioURL: @Sendable (_ term: String) async -> URL?
 
     public init(
-        prefetchAudio: @escaping @Sendable (_ terms: [String]) async -> Void,
+        prefetchAudio: @escaping @Sendable (_ words: [(term: String, audioUrl: String)]) async -> Void,
         audioURL: @escaping @Sendable (_ term: String) async -> URL?
     ) {
         self.prefetchAudio = prefetchAudio

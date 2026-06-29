@@ -28,6 +28,7 @@ struct SessionDetailResponseDTO: Decodable {
         let pronunciation: String
         let definitions: [Definition]
         let distractors: [String]
+        let audioUrl: String?
     }
 
     let session: Metadata

@@ -33,19 +33,22 @@ public struct Session: Equatable {
         public let pronunciation: String
         public let definitions: [Definition]
         public let distractors: [String]
+        public let audioUrl: String?
 
         public init(
             id: String,
             term: String,
             pronunciation: String,
             definitions: [Definition],
-            distractors: [String]
+            distractors: [String],
+            audioUrl: String? = nil
         ) {
             self.id = id
             self.term = term
             self.pronunciation = pronunciation
             self.definitions = definitions
             self.distractors = distractors
+            self.audioUrl = audioUrl
         }
     }
 
