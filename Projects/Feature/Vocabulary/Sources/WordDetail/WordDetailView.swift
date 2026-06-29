@@ -34,29 +34,3 @@ public struct WordDetailView: View {
         }
     }
 }
-
-private struct WordDetailPageView: View {
-    let viewState: WordDetailViewModel.ViewState?
-    let onPronunciationTapped: (String) -> Void
-
-    var body: some View {
-        ScrollView {
-            switch viewState {
-            case .loaded(let state):
-                WordDetailContentView(state: state, onPronunciationTapped: onPronunciationTapped)
-            case .error(let message):
-                Text(message)
-                    .foregroundStyle(.secondary)
-                    .frame(maxWidth: .infinity, minHeight: 300)
-                    .padding(.top, 100)
-            case .loading, nil:
-                ProgressView()
-                    .frame(maxWidth: .infinity, minHeight: 300)
-                    .padding(.top, 100)
-                    .accessibilityLabel("단어 정보 불러오는 중")
-            }
-        }
-        .scrollIndicators(.hidden)
-        .background(DesignSystemAsset.bg.swiftUIColor)
-    }
-}
