@@ -17,8 +17,8 @@ struct CalendarWeekdayHeader: View {
     }
 
     private func foregroundColor(index: Int) -> Color {
-        if index == 0 { return HomeColors.sundayRed }
-        if index == 6 { return HomeColors.saturdayBlue }
+        if index == 0 { return DesignSystemAsset.sundayRed.swiftUIColor }
+        if index == 6 { return DesignSystemAsset.saturdayBlue.swiftUIColor }
         return DesignSystemAsset.fgMuted.swiftUIColor
     }
 }

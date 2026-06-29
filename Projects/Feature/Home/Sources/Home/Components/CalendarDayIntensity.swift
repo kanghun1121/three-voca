@@ -7,8 +7,8 @@ enum CalendarDayIntensity {
 
     var color: Color {
         switch self {
-        case .light: HomeColors.calendarLight
-        case .mid:   HomeColors.calendarMid
+        case .light: DesignSystemAsset.calendarLight.swiftUIColor
+        case .mid:   DesignSystemAsset.calendarMid.swiftUIColor
         case .full:  DesignSystemAsset.primary.swiftUIColor
         }
     }

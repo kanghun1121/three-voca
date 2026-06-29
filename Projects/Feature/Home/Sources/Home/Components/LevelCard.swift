@@ -8,7 +8,15 @@ struct LevelCard: View {
     let action: () -> Void
     let onSessionTapped: (Int) -> Void
 
-    private var levelColor: Color { HomeColors.levelColor(presentationModel.level) }
+    private var levelColor: Color {
+        switch presentationModel.level {
+        case 2: DesignSystemAsset.level2.swiftUIColor
+        case 3: DesignSystemAsset.level3.swiftUIColor
+        case 4: DesignSystemAsset.level4.swiftUIColor
+        case 5: DesignSystemAsset.level5.swiftUIColor
+        default: DesignSystemAsset.primary.swiftUIColor
+        }
+    }
     private var isActive: Bool { presentationModel.status == .active }
 
     var body: some View {
@@ -43,7 +51,7 @@ struct LevelCard: View {
         .overlay {
             RoundedRectangle(cornerRadius: 16)
                 .stroke(
-                    isActive ? HomeColors.activeBorder : DesignSystemAsset.borderSubtle.swiftUIColor,
+                    isActive ? DesignSystemAsset.activeBorder.swiftUIColor : DesignSystemAsset.borderSubtle.swiftUIColor,
                     lineWidth: 1
                 )
         }
