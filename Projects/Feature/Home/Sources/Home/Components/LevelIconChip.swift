@@ -6,7 +6,15 @@ struct LevelIconChip: View {
     let level: Int
 
     var body: some View {
-        let color = HomeColors.levelColor(level)
+        let color: Color = {
+            switch level {
+            case 2: DesignSystemAsset.level2.swiftUIColor
+            case 3: DesignSystemAsset.level3.swiftUIColor
+            case 4: DesignSystemAsset.level4.swiftUIColor
+            case 5: DesignSystemAsset.level5.swiftUIColor
+            default: DesignSystemAsset.primary.swiftUIColor
+            }
+        }()
         ZStack {
             RoundedRectangle(cornerRadius: 13)
                 .fill(color.opacity(0.12))

@@ -13,7 +13,7 @@ struct CalendarStreakLabel: View {
                 .frame(width: 14, height: 14)
             Text("\(streakDays)일 연속")
                 .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 12))
-                .foregroundStyle(HomeColors.streakOrange)
+                .foregroundStyle(DesignSystemAsset.streakOrange.swiftUIColor)
         }
     }
 }
