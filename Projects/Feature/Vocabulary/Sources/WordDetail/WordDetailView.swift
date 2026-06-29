@@ -40,17 +40,23 @@ private struct WordDetailPageView: View {
     let onPronunciationTapped: (String) -> Void
 
     var body: some View {
-        switch viewState {
-        case .loaded(let state):
-            WordDetailContentView(state: state, onPronunciationTapped: onPronunciationTapped)
-        case .error(let message):
-            Text(message)
-                .foregroundStyle(.secondary)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-        case .loading, nil:
-            ProgressView()
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .accessibilityLabel("단어 정보 불러오는 중")
+        ScrollView {
+            switch viewState {
+            case .loaded(let state):
+                WordDetailContentView(state: state, onPronunciationTapped: onPronunciationTapped)
+            case .error(let message):
+                Text(message)
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity, minHeight: 300)
+                    .padding(.top, 100)
+            case .loading, nil:
+                ProgressView()
+                    .frame(maxWidth: .infinity, minHeight: 300)
+                    .padding(.top, 100)
+                    .accessibilityLabel("단어 정보 불러오는 중")
+            }
         }
+        .scrollIndicators(.hidden)
+        .background(DesignSystemAsset.bg.swiftUIColor)
     }
 }
