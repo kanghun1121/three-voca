@@ -8,6 +8,7 @@ struct GameWord: Equatable, Identifiable {
     let pronunciation: String
     let primaryMeaning: String
     let distractors: [String]
+    let audioUrl: String
 
     init(from word: Session.Word) {
         self.id = word.id
@@ -15,5 +16,6 @@ struct GameWord: Equatable, Identifiable {
         self.pronunciation = word.pronunciation
         self.primaryMeaning = word.definitions.first?.meaning ?? ""
         self.distractors = word.distractors
+        self.audioUrl = word.audioUrl
     }
 }

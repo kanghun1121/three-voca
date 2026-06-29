@@ -123,6 +123,9 @@ public final class MultipleChoiceViewModel {
         audioTask?.cancel()
         audioTask = Task { [weak self] in
             guard let self else { return }
+            if await audioClient.audioURL(word.term) == nil {
+                await audioClient.prefetchAudio([(term: word.term, audioUrl: word.audioUrl)])
+            }
             guard let url = await audioClient.audioURL(word.term) else { return }
             guard !Task.isCancelled else { return }
             await audioPlayerClient.play(url)

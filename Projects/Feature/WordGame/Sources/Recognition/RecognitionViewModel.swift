@@ -108,6 +108,9 @@ public final class RecognitionViewModel {
 
         audioTask?.cancel()
         audioTask = Task {
+            if await audioClient.audioURL(word.term) == nil {
+                await audioClient.prefetchAudio([(term: word.term, audioUrl: word.audioUrl)])
+            }
             guard let url = await audioClient.audioURL(word.term) else { return }
             guard !Task.isCancelled else { return }
             await audioPlayerClient.play(url)
