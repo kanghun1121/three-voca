@@ -8,10 +8,7 @@ let project = Project.makeModule(
             infoPlist: .extendingDefault(with: [
                 "CFBundleShortVersionString": "$(MARKETING_VERSION)",
                 "CFBundleVersion": "$(CURRENT_PROJECT_VERSION)",
-                "UILaunchScreen": [
-                    "UIColorName": "",
-                    "UIImageName": ""
-                ],
+                "UILaunchStoryboardName": "LaunchScreen",
                 "UIApplicationSceneManifest": [
                     "UIApplicationSupportsMultipleScenes": false,
                     "UISceneConfigurations": [:]

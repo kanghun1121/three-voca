@@ -11,17 +11,19 @@ struct RootView: View {
 
     var body: some View {
         Group {
-            switch viewModel.authState {
-            case .unauthenticated:
-                LoginView(viewModel: withDependencies {
-                    $0.authClient = .liveValue
-                } operation: {
-                    LoginViewModel()
-                })
-                .transition(.opacity)
-            case .authenticated:
-                MainTabView()
-                    .transition(.opacity)
+            if viewModel.isCheckingSession {
+                SplashView()
+            } else {
+                switch viewModel.authState {
+                case .unauthenticated:
+                    LoginView(viewModel: withDependencies {
+                        $0.authClient = .liveValue
+                    } operation: {
+                        LoginViewModel()
+                    })
+                case .authenticated:
+                    MainTabView()
+                }
             }
         }
         .task { viewModel.onAppear() }
