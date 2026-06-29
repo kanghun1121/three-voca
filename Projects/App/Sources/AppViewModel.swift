@@ -24,18 +24,14 @@ final class AppViewModel {
         streamTask = Task { [weak self] in
             guard let self else { return }
             for await state in authSessionClient.authStateStream() {
-                withAnimation(.easeInOut(duration: 0.4)) {
-                    authState = state
-                }
+                authState = state
             }
         }
 
         Task { [weak self] in
             guard let self else { return }
             await authClient.checkSession()
-            withAnimation(.easeInOut(duration: 0.4)) {
-                isCheckingSession = false
-            }
+            isCheckingSession = false
         }
     }
 }

@@ -13,7 +13,6 @@ struct RootView: View {
         Group {
             if viewModel.isCheckingSession {
                 SplashView()
-                    .transition(.opacity)
             } else {
                 switch viewModel.authState {
                 case .unauthenticated:
@@ -22,10 +21,8 @@ struct RootView: View {
                     } operation: {
                         LoginViewModel()
                     })
-                    .transition(.opacity)
                 case .authenticated:
                     MainTabView()
-                        .transition(.opacity)
                 }
             }
         }
