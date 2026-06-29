@@ -37,10 +37,7 @@ public final class VocabularyListViewModel {
             let session = try await sessionClient.fetchSessionDetail(sessionID)
             viewState = .loaded(session.toVocabularyListPresentationModel())
             let wordIDs = session.words.map(\.id)
-            let audioItems = session.words.compactMap { w -> (String, String)? in
-                guard let url = w.audioUrl else { return nil }
-                return (w.term, url)
-            }
+            let audioItems = session.words.map { ($0.term, $0.audioUrl) }
             Task { await wordClient.prefetchWordDetails(wordIDs) }
             Task { await audioClient.prefetchAudio(audioItems) }
         } catch {
