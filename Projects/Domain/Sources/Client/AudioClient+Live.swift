@@ -1,21 +1,19 @@
 import Foundation
 
-import Core
 import DomainInterface
 
 import Dependencies
 
 extension AudioClient: DependencyKey {
     public static let liveValue: AudioClient = {
-        let http = HTTPClient()
         let cache = AudioCache()
         return AudioClient(
-            prefetchAudio: { terms in
+            prefetchAudio: { words in
                 await withTaskGroup(of: Void.self) { group in
-                    for term in terms {
+                    for (term, audioUrlString) in words {
                         group.addTask {
                             guard await cache.fetch(term) == nil else { return }
-                            guard let remoteURL = await requestMP3URL(term: term, http: http) else { return }
+                            guard let remoteURL = URL(string: audioUrlString) else { return }
                             // MP3를 임시 디렉토리에 미리 다운로드해두어
                             // 재생 버튼 탭 시 AVPlayer가 네트워크 요청 없이 즉시 재생할 수 있게 한다.
                             guard let localURL = await downloadMP3(from: remoteURL, term: term) else { return }
@@ -25,27 +23,13 @@ extension AudioClient: DependencyKey {
                 }
             },
             audioURL: { term in
-                if let cached = await cache.fetch(term) { return cached }
-                // prefetch가 완료되지 않은 상태에서 탭한 경우 — 직접 다운로드 후 캐싱
-                guard let remoteURL = await requestMP3URL(term: term, http: http) else { return nil }
-                guard let localURL = await downloadMP3(from: remoteURL, term: term) else { return nil }
-                await cache.set(term, localURL)
-                return localURL
+                await cache.fetch(term)
             }
         )
     }()
 }
 
 private extension AudioClient {
-    static func requestMP3URL(term: String, http: any HTTPClienting) async -> URL? {
-        guard let entries: [MWEntryResponseDTO] = try? await http.request(GetMWAudioRequest(term: term)),
-              let audio = entries.first?.hwi?.prs?.first?.sound?.audio,
-              !audio.isEmpty else { return nil }
-
-        guard let subdir = audio.first.map(String.init) else { return nil }
-        return URL(string: "https://media.merriam-webster.com/audio/prons/en/us/mp3/\(subdir)/\(audio).mp3")
-    }
-
     // 앱 재시작 전까지 유효한 임시 디렉토리에 저장한다.
     // AVPlayer는 URLCache를 사용하지 않으므로 file:// URL을 직접 전달해야 즉시 재생된다.
     static func downloadMP3(from url: URL, term: String) async -> URL? {
