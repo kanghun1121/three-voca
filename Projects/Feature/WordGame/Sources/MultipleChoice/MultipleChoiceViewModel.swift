@@ -76,6 +76,7 @@ public final class MultipleChoiceViewModel {
         case .confirmDiscard:
             advanceTask?.cancel()
             audioTask?.cancel()
+            audioPlayerClient.stop()
             onClose()
         case .none:
             break

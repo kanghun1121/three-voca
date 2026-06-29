@@ -81,6 +81,7 @@ public final class RecognitionViewModel {
         case .confirmDiscard:
             revealTask?.cancel()
             audioTask?.cancel()
+            audioPlayerClient.stop()
             onClose()
         case .none:
             startCountdown(remaining: remainingSeconds)

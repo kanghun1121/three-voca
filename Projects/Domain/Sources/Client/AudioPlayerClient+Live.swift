@@ -16,6 +16,9 @@ extension AudioPlayerClient: DependencyKey {
                 let item = AVPlayerItem(url: url)
                 player.replaceCurrentItem(with: item)
                 player.play()
+            },
+            stop: {
+                player.replaceCurrentItem(with: nil)
             }
         )
     }()
