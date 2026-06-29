@@ -91,8 +91,10 @@ public final class SpellingViewModel {
             incorrectWordIDs.insert(word.id)
             reviewWords.append(word)
         }
-        advanceTask = Task {
+        advanceTask = Task { [weak self] in
             try? await Task.sleep(for: .seconds(1))
+            guard !Task.isCancelled else { return }
+            guard let self else { return }
             showWord(at: wordIndex + 1)
         }
     }
@@ -137,8 +139,10 @@ public final class SpellingViewModel {
             soundClient.playCorrect()
             viewState = .correct
 
-            advanceTask = Task {
+            advanceTask = Task { [weak self] in
                 try? await Task.sleep(for: .seconds(0.5))
+                guard !Task.isCancelled else { return }
+                guard let self else { return }
                 showWord(at: wordIndex + 1)
             }
         } else {
@@ -150,8 +154,10 @@ public final class SpellingViewModel {
                 reviewWords.append(word)
             }
             
-            advanceTask = Task {
+            advanceTask = Task { [weak self] in
                 try? await Task.sleep(for: .seconds(1))
+                guard !Task.isCancelled else { return }
+                guard let self else { return }
                 showWord(at: wordIndex + 1)
             }
         }

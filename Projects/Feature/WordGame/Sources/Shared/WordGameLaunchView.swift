@@ -20,7 +20,10 @@ struct WordGameLaunchView: View {
         .accessibilityLabel("게임 시작")
         .toolbar(.hidden, for: .navigationBar)
         .onAppear {
-            withAnimation(.timingCurve(0.3, 0, 0, 1, duration: 0.62)) {
+            withAnimation(.timingCurve(
+                0.3, 0, 0, 1,
+                duration: 0.62
+            )) {
                 brandOffset = 0
                 brandOpacity = 1
             }
@@ -38,13 +41,18 @@ private struct LaunchBrandView: View {
         VStack(spacing: 14) {
             Text("3초 단어")
                 .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 46))
-                .foregroundStyle(Color.white)
+                .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
                 .kerning(-0.035 * 46)
-                .shadow(color: Color(red: 0.18, green: 0.15, blue: 0.41).opacity(0.6), radius: 20, x: 0, y: 4)
+                .shadow(
+                    color: DesignSystemAsset.gameDeep.swiftUIColor.opacity(0.6),
+                    radius: 20,
+                    x: 0,
+                    y: 4
+                )
 
             Text("단어 속으로 들어갈 시간")
                 .font(DesignSystemFontFamily.Pretendard.regular.swiftUIFont(size: 15))
-                .foregroundStyle(Color.white.opacity(0.62))
+                .foregroundStyle(DesignSystemAsset.white.swiftUIColor.opacity(0.62))
                 .kerning(0.01 * 15)
         }
         .offset(y: offset)
@@ -60,7 +68,7 @@ private struct LaunchTapHintView: View {
             Spacer()
             Text("탭하여 시작")
                 .font(DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 15))
-                .foregroundStyle(Color.white.opacity(0.38))
+                .foregroundStyle(DesignSystemAsset.white.swiftUIColor.opacity(0.38))
                 .padding(.bottom, 30)
         }
     }
