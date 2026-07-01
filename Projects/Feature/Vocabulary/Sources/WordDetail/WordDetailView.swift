@@ -1,6 +1,9 @@
 import SwiftUI
 
 import DesignSystem
+import FeatureAnalysis
+
+import SwiftUINavigation
 
 public struct WordDetailView: View {
     @Bindable private var viewModel: WordDetailViewModel
@@ -13,9 +16,13 @@ public struct WordDetailView: View {
     public var body: some View {
         TabView(selection: $viewModel.currentIndex) {
             ForEach(viewModel.wordIDs.indices, id: \.self) { index in
-                WordDetailPageView(viewState: viewModel.viewStates[index]) { term in
-                    Task { await viewModel.didTapPronunciationButton(term: term) }
-                }
+                WordDetailPageView(
+                    viewState: viewModel.viewStates[index],
+                    onPronunciationTapped: { term in
+                        Task { await viewModel.didTapPronunciationButton(term: term) }
+                    },
+                    onChunkReaderTapped: viewModel.didTapChunkReader
+                )
                 .tag(index)
                 .task { await viewModel.requestIfNeeded(at: index) }
             }
@@ -31,6 +38,9 @@ public struct WordDetailView: View {
                     .fontWeight(.semibold)
                     .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
             }
+        }
+        .navigationDestination(item: $viewModel.destination.chunkReader) { chunkReaderVM in
+            ChunkReaderView(viewModel: chunkReaderVM)
         }
     }
 }

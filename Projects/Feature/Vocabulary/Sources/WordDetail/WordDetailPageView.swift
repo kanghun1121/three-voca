@@ -5,12 +5,17 @@ import DesignSystem
 struct WordDetailPageView: View {
     let viewState: WordDetailViewModel.ViewState?
     let onPronunciationTapped: (String) -> Void
+    let onChunkReaderTapped: (WordDetailPresentationModel.ExampleRow) -> Void
 
     var body: some View {
         ScrollView {
             switch viewState {
             case .loaded(let state):
-                WordDetailContentView(state: state, onPronunciationTapped: onPronunciationTapped)
+                WordDetailContentView(
+                    state: state,
+                    onPronunciationTapped: onPronunciationTapped,
+                    onChunkReaderTapped: onChunkReaderTapped
+                )
             case .error(let message):
                 Text(message)
                     .foregroundStyle(.secondary)

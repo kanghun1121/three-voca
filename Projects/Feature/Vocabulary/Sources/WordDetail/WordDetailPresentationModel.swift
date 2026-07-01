@@ -1,5 +1,7 @@
 import Foundation
 
+import DomainInterface
+
 struct WordDetailPresentationModel: Equatable {
     struct DefinitionGroup: Equatable {
         let partOfSpeech: String
@@ -10,6 +12,8 @@ struct WordDetailPresentationModel: Equatable {
         let id: Int
         let en: String
         let ko: String
+        let chunks: [WordDetail.Example.Chunk]?
+        let words: [WordDetail.Example.Word]?
     }
 
     let term: String
