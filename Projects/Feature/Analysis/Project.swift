@@ -2,24 +2,23 @@ import ProjectDescription
 import DependencyPlugin
 
 let project = Project.makeModule(
-    name: ModulePath.Feature.name + ModulePath.Feature.vocabulary.rawValue,
+    name: ModulePath.Feature.name + ModulePath.Feature.analysis.rawValue,
     targets: [
-        .feature(implements: .vocabulary, factory: .init(
+        .feature(implements: .analysis, factory: .init(
             dependencies: [
-                .feature(implements: .analysis),
                 .dependencies,
                 .designSystem,
                 .swiftUINavigation,
             ]
         )),
-        .feature(tests: .vocabulary, factory: .init(
+        .feature(tests: .analysis, factory: .init(
             dependencies: [
-                .feature(implements: .vocabulary),
+                .feature(implements: .analysis),
                 .domainInterface,
                 .dependencies,
             ]
         )),
-        .feature(example: .vocabulary, factory: .init(
+        .feature(example: .analysis, factory: .init(
             infoPlist: .extendingDefault(with: [
                 "CFBundleShortVersionString": "1.0",
                 "CFBundleVersion": "1",
@@ -31,7 +30,7 @@ let project = Project.makeModule(
             ]),
             resources: ["Example/Resources/**"],
             dependencies: [
-                .feature(implements: .vocabulary),
+                .feature(implements: .analysis),
                 .dependencies,
                 .designSystem,
             ]
@@ -39,9 +38,9 @@ let project = Project.makeModule(
     ],
     schemes: [
         .scheme(
-            name: "FeatureVocabularyExample",
-            buildAction: .buildAction(targets: [.target("FeatureVocabularyExample")]),
-            runAction: .runAction(executable: .target("FeatureVocabularyExample"))
+            name: "FeatureAnalysisExample",
+            buildAction: .buildAction(targets: [.target("FeatureAnalysisExample")]),
+            runAction: .runAction(executable: .target("FeatureAnalysisExample"))
         )
     ]
 )
