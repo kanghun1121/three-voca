@@ -37,6 +37,11 @@ DesignSystemAsset.Color.white.swiftUIColor
 DesignSystemAsset.Color.game.swiftUIColor
 DesignSystemAsset.Color.game100.swiftUIColor  // ~ game400
 DesignSystemAsset.Color.study100.swiftUIColor // ~ study300
+
+// Chunk Reader (끊어읽기 화면 전용)
+DesignSystemAsset.Color.chunkBg.swiftUIColor        // #FBF3E7 청크 기본 배경
+DesignSystemAsset.Color.chunkSelected.swiftUIColor  // #F3E3C6 청크 선택 배경
+DesignSystemAsset.Color.chunkRing.swiftUIColor      // #B98A3C 청크 선택 링
 ```
 
 필요한 토큰이 없으면 임의로 색상을 추가하지 말고 먼저 물어본다.

@@ -6,6 +6,7 @@ let project = Project.makeModule(
     targets: [
         .feature(implements: .analysis, factory: .init(
             dependencies: [
+                .domainInterface,
                 .dependencies,
                 .designSystem,
                 .swiftUINavigation,
@@ -31,6 +32,7 @@ let project = Project.makeModule(
             resources: ["Example/Resources/**"],
             dependencies: [
                 .feature(implements: .analysis),
+                .domainInterface,
                 .dependencies,
                 .designSystem,
             ]

@@ -5,6 +5,7 @@ import DesignSystem
 struct WordDetailContentView: View {
     let state: WordDetailPresentationModel
     let onPronunciationTapped: (String) -> Void
+    let onChunkReaderTapped: (WordDetailPresentationModel.ExampleRow) -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -20,7 +21,11 @@ struct WordDetailContentView: View {
                 .padding(.bottom, 28)
 
             if !state.examples.isEmpty {
-                WordDetailExamplesView(term: state.term, examples: state.examples)
+                WordDetailExamplesView(
+                    term: state.term,
+                    examples: state.examples,
+                    onChunkReaderTapped: onChunkReaderTapped
+                )
             }
         }
         .padding(.horizontal, 20)

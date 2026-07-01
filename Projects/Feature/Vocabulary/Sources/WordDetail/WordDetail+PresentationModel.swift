@@ -8,7 +8,15 @@ extension WordDetail {
             definitionGroups: groupedDefinitions(),
             examples: examples
                 .sorted { $0.order < $1.order }
-                .map { WordDetailPresentationModel.ExampleRow(id: $0.order, en: $0.en, ko: $0.ko) }
+                .map {
+                    WordDetailPresentationModel.ExampleRow(
+                        id: $0.order,
+                        en: $0.en,
+                        ko: $0.ko,
+                        chunks: $0.chunks,
+                        words: $0.words
+                    )
+                }
         )
     }
 }

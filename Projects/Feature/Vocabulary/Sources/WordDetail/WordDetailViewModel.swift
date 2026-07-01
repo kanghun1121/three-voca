@@ -1,8 +1,10 @@
 import Foundation
 
 import DomainInterface
+import FeatureAnalysis
 
 import Dependencies
+import SwiftUINavigation
 
 @Observable
 @MainActor
@@ -13,8 +15,14 @@ public final class WordDetailViewModel {
         case error(String)
     }
 
+    @CasePathable
+    enum Destination {
+        case chunkReader(ChunkReaderViewModel)
+    }
+
     private(set) var viewStates: [Int: ViewState] = [:]
     var currentIndex: Int
+    var destination: Destination?
     let wordIDs: [String]
 
     @ObservationIgnored @Dependency(\.wordClient) private var wordClient
@@ -29,6 +37,11 @@ public final class WordDetailViewModel {
     func didTapPronunciationButton(term: String) async {
         guard let url = await audioClient.audioURL(term) else { return }
         await audioPlayerClient.play(url)
+    }
+
+    func didTapChunkReader(example: WordDetailPresentationModel.ExampleRow) {
+        guard let chunks = example.chunks, !chunks.isEmpty else { return }
+        destination = .chunkReader(ChunkReaderViewModel(chunks: chunks, words: example.words ?? []))
     }
 
     func requestIfNeeded(at index: Int) async {

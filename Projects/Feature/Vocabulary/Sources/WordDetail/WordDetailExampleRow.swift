@@ -6,12 +6,18 @@ import DesignSystem
 struct WordDetailExampleRow: View {
     let term: String
     let example: WordDetailPresentationModel.ExampleRow
+    let onChunkReaderTapped: (WordDetailPresentationModel.ExampleRow) -> Void
     // body 평가와 독립적으로 init 시점에 한 번만 NLTagger를 실행
     private let highlightedEnText: Text
 
-    init(term: String, example: WordDetailPresentationModel.ExampleRow) {
+    init(
+        term: String,
+        example: WordDetailPresentationModel.ExampleRow,
+        onChunkReaderTapped: @escaping (WordDetailPresentationModel.ExampleRow) -> Void
+    ) {
         self.term = term
         self.example = example
+        self.onChunkReaderTapped = onChunkReaderTapped
         self.highlightedEnText = Self.buildHighlightedText(sentence: example.en, keyword: term)
     }
 
@@ -25,6 +31,20 @@ struct WordDetailExampleRow: View {
                 .font(DesignSystemFontFamily.Pretendard.regular.swiftUIFont(size: 13))
                 .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
 
+            if let chunks = example.chunks, !chunks.isEmpty {
+                Button {
+                    onChunkReaderTapped(example)
+                } label: {
+                    HStack(spacing: 4) {
+                        Image(systemName: "text.word.spacing")
+                            .font(.system(size: 13))
+                        Text("끊어읽기")
+                            .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 12))
+                    }
+                    .foregroundStyle(DesignSystemAsset.study300.swiftUIColor)
+                }
+                .buttonStyle(.plain)
+            }
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
