@@ -24,14 +24,40 @@ public struct WordDetail: Equatable {
     }
 
     public struct Example: Equatable {
+        public struct Word: Equatable {
+            public let word: String
+            public let meaning: String
+            public let pos: String
+
+            public init(word: String, meaning: String, pos: String) {
+                self.word = word
+                self.meaning = meaning
+                self.pos = pos
+            }
+        }
+
+        public struct Chunk: Equatable {
+            public let text: String
+            public let meaning: String
+
+            public init(text: String, meaning: String) {
+                self.text = text
+                self.meaning = meaning
+            }
+        }
+
         public let en: String
         public let ko: String
         public let order: Int
+        public let words: [Word]?
+        public let chunks: [Chunk]?
 
-        public init(en: String, ko: String, order: Int) {
+        public init(en: String, ko: String, order: Int, words: [Word]? = nil, chunks: [Chunk]? = nil) {
             self.en = en
             self.ko = ko
             self.order = order
+            self.words = words
+            self.chunks = chunks
         }
     }
 
