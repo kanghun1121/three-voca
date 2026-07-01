@@ -5,15 +5,15 @@ import DesignSystem
 struct ChunkReaderHintBadge: View {
     var body: some View {
         Label {
-            Text("의미 단위로 해석해보자")
-                .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 13))
+            Text("의미 단위 해석")
+                .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 11))
         } icon: {
             Image(systemName: "bolt.fill")
-                .font(.system(size: 12))
+                .font(.system(size: 10))
         }
         .foregroundStyle(DesignSystemAsset.study300.swiftUIColor)
-        .padding(.horizontal, 10)
-        .padding(.vertical, 6)
+        .padding(.horizontal, 8)
+        .padding(.vertical, 4)
         .background(DesignSystemAsset.study100.swiftUIColor.opacity(0.5))
         .clipShape(.capsule)
         .overlay {
