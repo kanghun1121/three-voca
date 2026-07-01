@@ -9,10 +9,7 @@ struct WordDetailContentView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            WordDetailHeaderView(
-                term: state.term,
-                pronunciation: state.pronunciation
-            ) {
+            WordDetailHeaderView(term: state.term, pronunciation: state.pronunciation) {
                 onPronunciationTapped(state.term)
             }
             .padding(.bottom, 22)
