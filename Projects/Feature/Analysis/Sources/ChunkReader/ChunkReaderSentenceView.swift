@@ -13,6 +13,9 @@ struct ChunkReaderSentenceView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
+            ChunkReaderHintBadge()
+                .padding(.bottom, 12)
+
             FlowLayout(horizontalSpacing: 4, verticalSpacing: 5) {
                 ForEach(chunks) { chunk in
                     ChunkView(
