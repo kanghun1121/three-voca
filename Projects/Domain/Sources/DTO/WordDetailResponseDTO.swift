@@ -7,9 +7,22 @@ struct WordDetailResponseDTO: Decodable {
     }
 
     struct ExampleDTO: Decodable {
+        struct WordDTO: Decodable {
+            let word: String
+            let meaning: String
+            let pos: String
+        }
+
+        struct ChunkDTO: Decodable {
+            let text: String
+            let meaning: String
+        }
+
         let en: String
         let ko: String
         let order: Int
+        let words: String?
+        let chunks: String?
     }
 
     let id: String
