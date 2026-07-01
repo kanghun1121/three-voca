@@ -11,10 +11,8 @@ struct ChunkReaderWordListView: View {
                 .background(DesignSystemAsset.borderSubtle.swiftUIColor)
                 .padding(.bottom, 10)
 
-            Text("단어 뜻")
-                .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 14))
-                .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
-                .padding(.bottom, 4)
+            ChunkReaderBadge(icon: "text.book.closed.fill", label: "단어 뜻")
+                .padding(.bottom, 8)
 
             ChunkReaderWordRows(words: words)
         }

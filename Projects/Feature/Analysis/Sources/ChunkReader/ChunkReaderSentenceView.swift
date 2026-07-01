@@ -13,7 +13,7 @@ struct ChunkReaderSentenceView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            ChunkReaderHintBadge()
+            ChunkReaderBadge(icon: "bolt.fill", label: "의미 단위 해석")
                 .padding(.bottom, 12)
 
             FlowLayout(horizontalSpacing: 4, verticalSpacing: 5) {
