@@ -10,6 +10,7 @@ set -e
 TASK_ID="$1"
 DESCRIPTION="$2"
 PROJECT_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+source "$PROJECT_ROOT/scripts/harness-config.sh"
 BASE_BRANCH="dev"
 
 # ── 인수 검증 ──────────────────────────────────────────────────
@@ -20,18 +21,20 @@ if [ -z "$TASK_ID" ] || [ -z "$DESCRIPTION" ]; then
 fi
 
 # ── 1. Worktree 생성 ───────────────────────────────────────────
-WORKTREE_PATH="$PROJECT_ROOT/.claude/worktrees/$TASK_ID"
+WORKTREE_PATH="$HARNESS_WORKTREES_DIR/$TASK_ID"
 
 if [ -d "$WORKTREE_PATH" ]; then
   echo "⚠️  Worktree 이미 존재: $WORKTREE_PATH"
 else
   echo "▶ Worktree 생성 중 ($TASK_ID ← $BASE_BRANCH)..."
+  mkdir -p "$(dirname "$WORKTREE_PATH")"
   git -C "$PROJECT_ROOT" worktree add "$WORKTREE_PATH" -b "$TASK_ID" "$BASE_BRANCH"
 fi
-  echo "$TASK_ID" > "$PROJECT_ROOT/.claude/active-task"
+mkdir -p "$HARNESS_ROOT"
+echo "$TASK_ID" > "$HARNESS_ACTIVE_TASK_FILE"
 
 # ── 2. EXEC_PLAN 생성 ──────────────────────────────────────────
-PLAN_DIR="$PROJECT_ROOT/.claude/exec-plans/active/$TASK_ID"
+PLAN_DIR="$HARNESS_EXEC_PLANS_DIR/active/$TASK_ID"
 mkdir -p "$PLAN_DIR"
 
 if [ ! -f "$PLAN_DIR/PLAN.md" ]; then
@@ -41,7 +44,7 @@ if [ ! -f "$PLAN_DIR/PLAN.md" ]; then
 - 작업 ID: \`$TASK_ID\`
 - 생성일: $(date '+%Y-%m-%d')
 - 기반 브랜치: $BASE_BRANCH
-- Worktree: \`.claude/worktrees/$TASK_ID\`
+- Worktree: \`.harness/worktrees/$TASK_ID\`
 
 ---
 
@@ -89,7 +92,7 @@ else
 fi
 
 # ── 3. 로그 디렉토리 생성 ──────────────────────────────────────
-LOG_DIR="$PROJECT_ROOT/.claude/logs/$TASK_ID"
+LOG_DIR="$HARNESS_LOGS_DIR/$TASK_ID"
 mkdir -p "$LOG_DIR"
 
 # ── 완료 안내 ──────────────────────────────────────────────────
@@ -98,12 +101,12 @@ echo "✅ 작업 환경 생성 완료"
 echo ""
 echo "  브랜치   : $TASK_ID  (← $BASE_BRANCH)"
 echo "  worktree : $WORKTREE_PATH"
-echo "  exec-plan: .claude/exec-plans/active/$TASK_ID/PLAN.md"
-echo "  logs     : .claude/logs/$TASK_ID/"
+echo "  exec-plan: .harness/exec-plans/active/$TASK_ID/PLAN.md"
+echo "  logs     : .harness/logs/$TASK_ID/"
 echo ""
 echo "▶ 다음 단계:"
-echo "  1. .claude/exec-plans/active/$TASK_ID/PLAN.md 에 단계별 계획을 작성한다"
-echo "  2. AGENTS.md 를 확인하고 필요한 문서를 읽는다"
+echo "  1. .harness/exec-plans/active/$TASK_ID/PLAN.md 에 단계별 계획을 작성한다"
+echo "  2. docs/HARNESS.md 와 docs/AGENTS_DOC_INDEX.md 를 확인하고 필요한 문서를 읽는다"
 echo "  3. Worktree에서 구현한다:"
 echo "       cd $WORKTREE_PATH"
 echo "  4. 검증:"
