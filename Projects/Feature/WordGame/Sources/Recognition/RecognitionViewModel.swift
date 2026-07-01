@@ -109,7 +109,8 @@ public final class RecognitionViewModel {
         let word = setCurrentWord(at: index)
 
         audioTask?.cancel()
-        audioTask = Task {
+        audioTask = Task { [weak self] in
+            guard let self else { return }
             if await audioClient.audioURL(word.term) == nil {
                 await audioClient.prefetchAudio([(term: word.term, audioUrl: word.audioUrl)])
             }
@@ -134,7 +135,8 @@ public final class RecognitionViewModel {
         countdown = Int(ceil(remaining))
         viewState = .active
 
-        countdownTask = Task {
+        countdownTask = Task { [weak self] in
+            guard let self else { return }
             let startDate = Date.now
 
             while !Task.isCancelled {
@@ -159,9 +161,10 @@ public final class RecognitionViewModel {
         countdownTask?.cancel()
         viewState = .revealing
         revealTask?.cancel()
-        revealTask = Task {
+        revealTask = Task { [weak self] in
             try? await Task.sleep(for: .seconds(1))
             guard !Task.isCancelled else { return }
+            guard let self else { return }
             showWord(at: wordIndex + 1)
         }
     }
