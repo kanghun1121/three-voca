@@ -12,7 +12,11 @@ struct WordDetailExamplesView: View {
             Divider()
                 .background(DesignSystemAsset.borderSubtle.swiftUIColor)
                 .padding(.bottom, 22)
-            ExamplesSection(term: term, examples: examples, onChunkReaderTapped: onChunkReaderTapped)
+            ExamplesSection(
+                term: term,
+                examples: examples,
+                onChunkReaderTapped: onChunkReaderTapped
+            )
         }
         .padding(.bottom, 24)
     }
@@ -28,7 +32,11 @@ private struct ExamplesSection: View {
             Text("예문")
                 .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 13))
                 .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
-            ExampleList(term: term, examples: examples, onChunkReaderTapped: onChunkReaderTapped)
+            ExampleList(
+                term: term,
+                examples: examples,
+                onChunkReaderTapped: onChunkReaderTapped
+            )
         }
     }
 }
@@ -41,7 +49,11 @@ private struct ExampleList: View {
     var body: some View {
         LazyVStack(spacing: 10) {
             ForEach(examples) { example in
-                WordDetailExampleRow(term: term, example: example, onChunkReaderTapped: onChunkReaderTapped)
+                WordDetailExampleRow(
+                    term: term,
+                    example: example,
+                    onChunkReaderTapped: onChunkReaderTapped
+                )
             }
         }
     }

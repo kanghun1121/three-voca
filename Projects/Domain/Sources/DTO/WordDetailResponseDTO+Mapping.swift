@@ -30,7 +30,13 @@ private extension WordDetailResponseDTO.ExampleDTO {
             en: en,
             ko: ko,
             order: order,
-            words: words?.map { WordDetail.Example.Word(word: $0.word, meaning: $0.meaning, pos: $0.pos) },
+            words: words?.map {
+                WordDetail.Example.Word(
+                    word: $0.word,
+                    meaning: $0.meaning,
+                    pos: $0.pos
+                )
+            },
             chunks: chunks?.map { WordDetail.Example.Chunk(text: $0.text, meaning: $0.meaning) }
         )
     }

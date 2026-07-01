@@ -35,11 +35,12 @@ struct WordDetailExampleRow: View {
                 Button {
                     onChunkReaderTapped(example)
                 } label: {
-                    HStack(spacing: 4) {
-                        Image(systemName: "text.word.spacing")
-                            .font(.system(size: 13))
+                    Label {
                         Text("끊어읽기")
                             .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 12))
+                    } icon: {
+                        Image(systemName: "text.word.spacing")
+                            .font(.system(size: 13))
                     }
                     .foregroundStyle(DesignSystemAsset.study300.swiftUIColor)
                 }

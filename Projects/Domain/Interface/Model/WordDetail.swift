@@ -29,7 +29,11 @@ public struct WordDetail: Equatable {
             public let meaning: String
             public let pos: String
 
-            public init(word: String, meaning: String, pos: String) {
+            public init(
+                word: String,
+                meaning: String,
+                pos: String
+            ) {
                 self.word = word
                 self.meaning = meaning
                 self.pos = pos
@@ -52,7 +56,13 @@ public struct WordDetail: Equatable {
         public let words: [Word]?
         public let chunks: [Chunk]?
 
-        public init(en: String, ko: String, order: Int, words: [Word]? = nil, chunks: [Chunk]? = nil) {
+        public init(
+            en: String,
+            ko: String,
+            order: Int,
+            words: [Word]? = nil,
+            chunks: [Chunk]? = nil
+        ) {
             self.en = en
             self.ko = ko
             self.order = order

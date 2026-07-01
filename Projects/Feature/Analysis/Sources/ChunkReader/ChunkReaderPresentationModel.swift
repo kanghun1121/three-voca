@@ -21,7 +21,11 @@ struct ChunkReaderPresentationModel: Equatable {
 
     init(chunks: [WordDetail.Example.Chunk], words: [WordDetail.Example.Word]) {
         self.chunks = chunks.enumerated().map { index, chunk in
-            Chunk(id: index, text: chunk.text, meaning: chunk.meaning)
+            Chunk(
+                id: index,
+                text: chunk.text,
+                meaning: chunk.meaning
+            )
         }
         self.words = words.enumerated().map { index, word in
             WordRow(

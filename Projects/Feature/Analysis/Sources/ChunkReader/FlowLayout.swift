@@ -5,7 +5,11 @@ struct FlowLayout: Layout {
     var horizontalSpacing: CGFloat = 4
     var verticalSpacing: CGFloat = 5
 
-    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+    func sizeThatFits(
+        proposal: ProposedViewSize,
+        subviews: Subviews,
+        cache: inout ()
+    ) -> CGSize {
         let maxWidth = proposal.width ?? .infinity
         let rows = arrangeRows(subviews: subviews, maxWidth: maxWidth)
         let height = rows.reduce(CGFloat.zero) { partial, row in
@@ -15,7 +19,12 @@ struct FlowLayout: Layout {
         return CGSize(width: width, height: height)
     }
 
-    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+    func placeSubviews(
+        in bounds: CGRect,
+        proposal: ProposedViewSize,
+        subviews: Subviews,
+        cache: inout ()
+    ) {
         let rows = arrangeRows(subviews: subviews, maxWidth: bounds.width)
         var y = bounds.minY
         for row in rows {
@@ -54,7 +63,13 @@ struct FlowLayout: Layout {
             let neededWidth = currentWidth + (currentItems.isEmpty ? 0 : horizontalSpacing) + size.width
 
             if !currentItems.isEmpty, neededWidth > maxWidth {
-                rows.append(Row(items: currentItems, width: currentWidth, height: currentHeight))
+                rows.append(
+                    Row(
+                        items: currentItems,
+                        width: currentWidth,
+                        height: currentHeight
+                    )
+                )
                 currentItems = []
                 currentWidth = 0
                 currentHeight = 0
@@ -66,7 +81,13 @@ struct FlowLayout: Layout {
         }
 
         if !currentItems.isEmpty {
-            rows.append(Row(items: currentItems, width: currentWidth, height: currentHeight))
+            rows.append(
+                Row(
+                    items: currentItems,
+                    width: currentWidth,
+                    height: currentHeight
+                )
+            )
         }
 
         return rows
