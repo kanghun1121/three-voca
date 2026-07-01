@@ -4,6 +4,7 @@ import DependencyPlugin
 let targets: [Target] = [
     .feature(factory: .init(
         dependencies: [
+            .feature(implements: .analysis),
             .feature(implements: .home),
             .feature(implements: .login),
             .feature(implements: .session),
