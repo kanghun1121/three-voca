@@ -10,10 +10,10 @@ struct ChunkView: View {
     var body: some View {
         Button(action: onTap) {
             Text(chunk.text)
-                .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 17))
+                .font(DesignSystemFontFamily.Pretendard.regular.swiftUIFont(size: 17))
                 .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
-                .padding(.horizontal, 7)
-                .padding(.vertical, 2)
+                .padding(.horizontal, 9)
+                .padding(.vertical, 4)
                 .background {
                     RoundedRectangle(cornerRadius: 8)
                         .fill(
