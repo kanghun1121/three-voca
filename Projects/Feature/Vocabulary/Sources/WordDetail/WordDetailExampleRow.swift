@@ -43,6 +43,8 @@ struct WordDetailExampleRow: View {
                     }
                     .foregroundStyle(DesignSystemAsset.study300.swiftUIColor)
                 }
+                .padding(.vertical, 8)
+                .contentShape(.rect)
                 .buttonStyle(.plain)
             }
         }
