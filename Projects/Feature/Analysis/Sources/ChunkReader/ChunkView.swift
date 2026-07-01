@@ -12,8 +12,8 @@ struct ChunkView: View {
             Text(chunk.text)
                 .font(DesignSystemFontFamily.Pretendard.regular.swiftUIFont(size: 17))
                 .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
-                .padding(.horizontal, 9)
-                .padding(.vertical, 4)
+                .padding(.horizontal, 14)
+                .padding(.vertical, 11)
                 .background {
                     RoundedRectangle(cornerRadius: 8)
                         .fill(
