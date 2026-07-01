@@ -15,7 +15,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/Users/kanghun/Desktop/FiveVoca/.claude/hooks/verify-build.sh",
+            "command": "/Users/kanghun/Desktop/FiveVoca/scripts/verify-build-hook.sh",
             "timeout": 120
           }
         ]
@@ -27,7 +27,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/Users/kanghun/Desktop/FiveVoca/.claude/hooks/phase-guard.sh"
+            "command": "/Users/kanghun/Desktop/FiveVoca/scripts/phase-guard-hook.sh"
           }
         ]
       }

@@ -21,11 +21,11 @@ bash scripts/start-task.sh <task-id> <description>
 
 | 산출물 | 경로 |
 |---|---|
-| 계획서 | `.claude/exec-plans/active/<task-id>/PLAN.md` |
-| 격리 브랜치 | `.claude/worktrees/<task-id>/` |
-| 로그 디렉토리 | `.claude/logs/<task-id>/` |
+| 계획서 | `.harness/exec-plans/active/<task-id>/PLAN.md` |
+| 격리 브랜치 | `.harness/worktrees/<task-id>/` |
+| 로그 디렉토리 | `.harness/logs/<task-id>/` |
 
-계획서를 작성하기 전에 **`AGENTS.md`를 확인**하고, 이번 작업에 필요한 문서를 읽는다.
+계획서를 작성하기 전에 **`docs/HARNESS.md`와 `docs/AGENTS_DOC_INDEX.md`를 확인**하고, 이번 작업에 필요한 문서를 읽는다.
 **계획서를 먼저 작성한다.** 계획 없이 코드를 먼저 작성하지 않는다.
 
 ---
@@ -35,7 +35,7 @@ bash scripts/start-task.sh <task-id> <description>
 생성된 Worktree 디렉토리로 이동하여 작업한다.
 
 ```bash
-cd .claude/worktrees/<task-id>
+cd .harness/worktrees/<task-id>
 ```
 
 이동 후 **`/setup-worktree` 스킬을 실행**한다. xcconfig 복사 + `tuist install`이 완료되면 이후 `tuist generate`만으로 Xcode를 열 수 있다.
@@ -75,4 +75,4 @@ bash scripts/verify-task.sh <task-id>
 
 **pre-commit 훅이 Swift 파일 변경 시 테스트를 자동 실행한다.** 실패 시 커밋이 차단된다.  
 
-완료 후 `.claude/exec-plans/active/<task-id>/PLAN.md` 를 `.claude/exec-plans/completed/` 로 이동한다.
+완료 후 `.harness/exec-plans/active/<task-id>/PLAN.md` 를 `.harness/exec-plans/completed/` 로 이동한다.

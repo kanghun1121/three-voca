@@ -7,14 +7,18 @@
 
 TASK_ID="${1:-unknown}"
 PROJECT_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-LOG_DIR="$PROJECT_ROOT/.claude/logs/$TASK_ID"
+source "$PROJECT_ROOT/scripts/harness-config.sh"
+LOG_DIR="$HARNESS_LOGS_DIR/$TASK_ID"
 SCHEME="FiveVoca"
 TEST_SCHEME="AllTest"
 DESTINATION="platform=iOS Simulator,OS=18.6,name=iPhone 16"
 FAILED=0
 
 # Worktree가 있으면 Worktree 기준으로 빌드, 없으면 메인 레포 기준
-WORKTREE_PATH="$PROJECT_ROOT/.claude/worktrees/$TASK_ID"
+WORKTREE_PATH="$HARNESS_WORKTREES_DIR/$TASK_ID"
+if [ ! -d "$WORKTREE_PATH" ]; then
+  WORKTREE_PATH="$LEGACY_WORKTREES_DIR/$TASK_ID"
+fi
 if [ -d "$WORKTREE_PATH" ]; then
   SOURCE_ROOT="$WORKTREE_PATH"
 else

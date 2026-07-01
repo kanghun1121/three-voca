@@ -21,7 +21,7 @@ git worktree list --porcelain
 출력의 첫 번째 `worktree` 줄이 메인 루트다. 현재 디렉토리(`pwd`)와 비교해 worktree 여부를 판단한다.
 
 - 현재 디렉토리 == 메인 루트: "메인 루트에서 실행 중입니다. worktree 디렉토리로 이동 후 실행해주세요." 라고 안내하고 중단.
-- 현재 디렉토리가 메인 루트 하위의 `.claude/worktrees/` 경로: 정상 진행.
+- 현재 디렉토리가 메인 루트 하위의 `.harness/worktrees/` 또는 기존 `.claude/worktrees/` 경로: 정상 진행.
 
 ### 2단계 — xcconfig 복사
 
