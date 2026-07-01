@@ -19,10 +19,6 @@ public struct ChunkReaderView: View {
                     onChunkTapped: viewModel.didTapChunk
                 )
 
-                Divider()
-                    .background(DesignSystemAsset.borderSubtle.swiftUIColor)
-                    .padding(.vertical, 4)
-
                 ChunkReaderWordListView(words: viewModel.presentationModel.words)
             }
             .padding(.horizontal, 20)
@@ -39,16 +35,6 @@ public struct ChunkReaderView: View {
                 Button("뒤로", systemImage: "chevron.left", action: dismiss.callAsFunction)
                     .fontWeight(.semibold)
                     .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
-            }
-            ToolbarItem(placement: .principal) {
-                Text("끊어읽기")
-                    .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 16))
-                    .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
-            }
-            ToolbarItem(placement: .topBarTrailing) {
-                Text("의미 단위")
-                    .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 12))
-                    .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
             }
         }
     }

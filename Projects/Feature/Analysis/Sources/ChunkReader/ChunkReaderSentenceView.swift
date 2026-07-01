@@ -13,11 +13,6 @@ struct ChunkReaderSentenceView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text("탭하면 의미가 나와요")
-                .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 12))
-                .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
-                .padding(.bottom, 12)
-
             FlowLayout(horizontalSpacing: 4, verticalSpacing: 5) {
                 ForEach(chunks) { chunk in
                     ChunkView(
