@@ -45,9 +45,6 @@ public final class WordGameViewModel {
     func load() async {
         do {
             let session = try await sessionClient.fetchSessionDetail(sessionID)
-            // 캐싱 완료 전 게임 화면이 먼저 뜨면 자동 진행 타이머가 다운로드 중인 Task를 취소해 무음 재생되므로,
-            // 게임 화면을 보여주기 전에 오디오 캐싱을 완료한다. SessionDetail에서 이미 prefetch를 시작했다면
-            // 그 Task를 그대로 기다리고, 없으면(SessionDetail을 거치지 않는 독립 진입) 직접 시작한다.
             if let audioPrefetchTask {
                 await audioPrefetchTask.value
             } else {
