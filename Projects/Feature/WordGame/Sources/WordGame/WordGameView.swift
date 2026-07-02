@@ -14,11 +14,7 @@ public struct WordGameView: View {
         Group {
             switch viewModel.activeStage {
             case .loading:
-                ZStack {
-                    GameBackground()
-                    ProgressView()
-                        .tint(DesignSystemAsset.white.swiftUIColor)
-                }
+                WordGameLoadingView()
 
             case .launch(let onStart):
                 WordGameLaunchView(onStart: onStart)
