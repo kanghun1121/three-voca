@@ -53,6 +53,7 @@ public final class SessionDetailViewModel {
     }
 
     public func didTapGame() {
+        guard let audioPrefetchTask else { return }
         destination = .wordGame(WordGameViewModel(sessionID: sessionID, audioPrefetchTask: audioPrefetchTask))
     }
 }

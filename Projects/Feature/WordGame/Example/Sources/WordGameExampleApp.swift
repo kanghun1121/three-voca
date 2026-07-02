@@ -35,21 +35,24 @@ private extension SessionClient {
                         term: "apple",
                         pronunciation: "/ˈæp.əl/",
                         definitions: [.init(id: "d1", partOfSpeech: .noun, meaning: "사과")],
-                        distractors: ["바나나", "포도", "딸기"]
+                        distractors: ["바나나", "포도", "딸기"],
+                        audioUrl: ""
                     ),
                     Session.Word(
                         id: "w2",
                         term: "brave",
                         pronunciation: "/breɪv/",
                         definitions: [.init(id: "d2", partOfSpeech: .adjective, meaning: "용감한")],
-                        distractors: ["겁쟁이", "느린", "조용한"]
+                        distractors: ["겁쟁이", "느린", "조용한"],
+                        audioUrl: ""
                     ),
                     Session.Word(
                         id: "w3",
                         term: "create",
                         pronunciation: "/kriˈeɪt/",
                         definitions: [.init(id: "d3", partOfSpeech: .verb, meaning: "만들다, 창조하다")],
-                        distractors: ["파괴하다", "멈추다", "잊다"]
+                        distractors: ["파괴하다", "멈추다", "잊다"],
+                        audioUrl: ""
                     ),
                 ],
                 record: nil
@@ -66,13 +69,13 @@ struct ExampleRootView: View {
         NavigationStack {
             VStack(spacing: 20) {
                 Button("Recognition 부터") {
-                    destination = WordGameViewModel(sessionID: "demo", startingFrom: .recognition)
+                    destination = WordGameViewModel(sessionID: "demo", startingFrom: .recognition, audioPrefetchTask: Task {})
                 }
                 Button("MultipleChoice 부터") {
-                    destination = WordGameViewModel(sessionID: "demo", startingFrom: .multipleChoice)
+                    destination = WordGameViewModel(sessionID: "demo", startingFrom: .multipleChoice, audioPrefetchTask: Task {})
                 }
                 Button("Spelling 부터") {
-                    destination = WordGameViewModel(sessionID: "demo", startingFrom: .spelling)
+                    destination = WordGameViewModel(sessionID: "demo", startingFrom: .spelling, audioPrefetchTask: Task {})
                 }
             }
             .navigationDestination(item: $destination) { vm in

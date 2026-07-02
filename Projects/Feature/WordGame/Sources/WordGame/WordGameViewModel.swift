@@ -30,13 +30,12 @@ public final class WordGameViewModel {
     var dismiss = false
 
     @ObservationIgnored @Dependency(\.sessionClient) private var sessionClient
-    @ObservationIgnored @Dependency(\.audioClient) private var audioClient
 
     private let sessionID: String
     private let startingStage: StartingStage
-    private let audioPrefetchTask: Task<Void, Never>?
+    private let audioPrefetchTask: Task<Void, Never>
 
-    public init(sessionID: String, startingFrom: StartingStage = .recognition, audioPrefetchTask: Task<Void, Never>? = nil) {
+    public init(sessionID: String, startingFrom: StartingStage = .recognition, audioPrefetchTask: Task<Void, Never>) {
         self.sessionID = sessionID
         self.startingStage = startingFrom
         self.audioPrefetchTask = audioPrefetchTask
@@ -45,12 +44,7 @@ public final class WordGameViewModel {
     func load() async {
         do {
             let session = try await sessionClient.fetchSessionDetail(sessionID)
-            if let audioPrefetchTask {
-                await audioPrefetchTask.value
-            } else {
-                let audioItems = session.words.map { ($0.term, $0.audioUrl) }
-                await audioClient.prefetchAudio(audioItems)
-            }
+            await audioPrefetchTask.value
             let words = session.words.map { GameWord(from: $0) }
             switch startingStage {
             case .recognition:    showLaunch(words: words)
