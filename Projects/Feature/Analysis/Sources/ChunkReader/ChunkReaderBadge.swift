@@ -2,13 +2,16 @@ import SwiftUI
 
 import DesignSystem
 
-struct ChunkReaderHintBadge: View {
+struct ChunkReaderBadge: View {
+    let icon: String
+    let label: String
+
     var body: some View {
         Label {
-            Text("의미 단위 해석")
+            Text(label)
                 .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 11))
         } icon: {
-            Image(systemName: "bolt.fill")
+            Image(systemName: icon)
                 .font(.system(size: 10))
         }
         .foregroundStyle(DesignSystemAsset.study300.swiftUIColor)
