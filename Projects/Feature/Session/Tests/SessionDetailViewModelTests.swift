@@ -9,6 +9,7 @@ final class SessionDetailViewModelTests: XCTestCase {
     func test_load_성공시_viewState가_loaded로_전환된다() async {
         let vm = withDependencies {
             $0.sessionClient = .previewValue
+            $0.audioClient.prefetchAudio = { _ in }
         } operation: {
             SessionDetailViewModel(sessionID: "t")
         }
