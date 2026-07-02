@@ -34,19 +34,26 @@ public final class WordGameViewModel {
 
     private let sessionID: String
     private let startingStage: StartingStage
+    private let audioPrefetchTask: Task<Void, Never>?
 
-    public init(sessionID: String, startingFrom: StartingStage = .recognition) {
+    public init(sessionID: String, startingFrom: StartingStage = .recognition, audioPrefetchTask: Task<Void, Never>? = nil) {
         self.sessionID = sessionID
         self.startingStage = startingFrom
+        self.audioPrefetchTask = audioPrefetchTask
     }
 
     func load() async {
         do {
             let session = try await sessionClient.fetchSessionDetail(sessionID)
-            let audioItems = session.words.map { ($0.term, $0.audioUrl) }
             // 캐싱 완료 전 게임 화면이 먼저 뜨면 자동 진행 타이머가 다운로드 중인 Task를 취소해 무음 재생되므로,
-            // 게임 화면을 보여주기 전에 오디오 캐싱을 완료한다.
-            await audioClient.prefetchAudio(audioItems)
+            // 게임 화면을 보여주기 전에 오디오 캐싱을 완료한다. SessionDetail에서 이미 prefetch를 시작했다면
+            // 그 Task를 그대로 기다리고, 없으면(SessionDetail을 거치지 않는 독립 진입) 직접 시작한다.
+            if let audioPrefetchTask {
+                await audioPrefetchTask.value
+            } else {
+                let audioItems = session.words.map { ($0.term, $0.audioUrl) }
+                await audioClient.prefetchAudio(audioItems)
+            }
             let words = session.words.map { GameWord(from: $0) }
             switch startingStage {
             case .recognition:    showLaunch(words: words)
