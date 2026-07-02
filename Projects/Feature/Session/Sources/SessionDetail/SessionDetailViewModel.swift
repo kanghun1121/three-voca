@@ -36,6 +36,7 @@ public final class SessionDetailViewModel {
 
     public func load() async {
         viewState = .loading
+        
         do {
             let session = try await sessionClient.fetchSessionDetail(sessionID)
             viewState = .loaded(session.toSessionDetailPresentationModel())
