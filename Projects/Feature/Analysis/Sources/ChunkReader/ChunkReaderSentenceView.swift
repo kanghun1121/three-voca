@@ -16,15 +16,11 @@ struct ChunkReaderSentenceView: View {
             ChunkReaderBadge(icon: "bolt.fill", label: "의미 단위 해석")
                 .padding(.bottom, 12)
 
-            FlowLayout(horizontalSpacing: 4, verticalSpacing: 5) {
-                ForEach(chunks) { chunk in
-                    ChunkView(
-                        chunk: chunk,
-                        isSelected: chunk.id == selectedChunkID,
-                        onTap: { onChunkTapped(chunk.id) }
-                    )
-                }
-            }
+            ChunkChipsRow(
+                chunks: chunks,
+                selectedChunkID: selectedChunkID,
+                onChunkTapped: onChunkTapped
+            )
 
             ChunkReaderMeaningLabel(meaning: selectedChunk?.meaning)
                 .frame(minHeight: 26, alignment: .leading)
