@@ -14,43 +14,22 @@ import Foundation
 final class SpyHTTPInterceptor: HTTPInterceptor, @unchecked Sendable {
     var retryResult = false
 
-    private let lock = NSLock()
-    private var _adaptCallCount = 0
-    private var _retryCallCount = 0
-    private var _lastAdaptedRequest: URLRequest?
-
-    var adaptCallCount: Int {
-        lock.lock(); defer { lock.unlock() }
-        return _adaptCallCount
-    }
-
-    var retryCallCount: Int {
-        lock.lock(); defer { lock.unlock() }
-        return _retryCallCount
-    }
-
-    var lastAdaptedRequest: URLRequest? {
-        lock.lock(); defer { lock.unlock() }
-        return _lastAdaptedRequest
-    }
+    var adaptCallCount = 0
+    var retryCallCount = 0
+    var lastAdaptedRequest: URLRequest?
 
     func adapt(_ request: URLRequest) async throws -> URLRequest {
         var adapted = request
         adapted.setValue("Bearer stub-token", forHTTPHeaderField: "Authorization")
 
-        lock.lock()
-        _adaptCallCount += 1
-        _lastAdaptedRequest = adapted
-        lock.unlock()
+        adaptCallCount += 1
+        lastAdaptedRequest = adapted
 
         return adapted
     }
 
     func retry(dueTo error: any Error, response: HTTPURLResponse?) async -> Bool {
-        lock.lock()
-        _retryCallCount += 1
-        lock.unlock()
-
+        retryCallCount += 1
         return retryResult
     }
 }
