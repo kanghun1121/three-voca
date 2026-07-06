@@ -26,7 +26,7 @@ final class HTTPClientTests: XCTestCase {
             let data = Data(#"{"some_value":"hello"}"#.utf8)
             return (response, data)
         }
-        
+
         let sut = HTTPClient(session: MockURLProtocol.makeSession())
         let result: StubDecodable = try await sut.request(StubRequestable())
 
@@ -58,7 +58,7 @@ final class HTTPClientTests: XCTestCase {
 
     func test_request_401응답에서_retry가_true를_반환하면_재요청하여_성공응답을_반환한다() async throws {
         let interceptor = SpyHTTPInterceptor()
-        interceptor.retryResult = true
+        interceptor.shouldRetry = true
 
         MockURLProtocol.requestHandler = { request in
             if interceptor.retryCallCount == 0 {
@@ -90,7 +90,7 @@ final class HTTPClientTests: XCTestCase {
 
     func test_request_401응답에서_retry가_false를_반환하면_재요청없이_httpError를_던진다() async {
         let interceptor = SpyHTTPInterceptor()
-        interceptor.retryResult = false
+        interceptor.shouldRetry = false
 
         MockURLProtocol.requestHandler = { request in
             let response = HTTPURLResponse(

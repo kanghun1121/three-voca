@@ -12,7 +12,7 @@ import Foundation
 
 /// `adapt`/`retry` 호출 여부·횟수·결과를 기록하는 스파이 인터셉터.
 final class SpyHTTPInterceptor: HTTPInterceptor, @unchecked Sendable {
-    var retryResult = false
+    var shouldRetry = false
 
     var adaptCallCount = 0
     var retryCallCount = 0
@@ -30,6 +30,6 @@ final class SpyHTTPInterceptor: HTTPInterceptor, @unchecked Sendable {
 
     func retry(dueTo error: any Error, response: HTTPURLResponse?) async -> Bool {
         retryCallCount += 1
-        return retryResult
+        return shouldRetry
     }
 }
