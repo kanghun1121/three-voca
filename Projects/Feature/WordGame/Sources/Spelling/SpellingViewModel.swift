@@ -215,20 +215,19 @@ public final class SpellingViewModel {
     /// 인덱스와 현재 inputText를 기반으로 슬롯 상태를 결정한다.
     /// 복습 라운드의 첫 번째 슬롯은 항상 힌트로 반환한다.
     private func makeSlot(at index: Int, char: Character) -> SlotState {
-        // 복습 라운드 첫 번째 슬롯: 힌트 글자 고정
         guard !isReviewRound || index != 0 else {
             return .hint(char.lowercased().first ?? char)
         }
-        // 이미 입력된 슬롯
+        
         guard index >= inputText.count else {
             let inputChar = inputText[inputText.index(inputText.startIndex, offsetBy: index)]
             return .filled(inputChar)
         }
-        // 현재 커서 위치
+        
         guard index > inputText.count else {
             return .cursor
         }
-        // 아직 입력되지 않은 슬롯
+        
         return .empty
     }
 }
