@@ -28,16 +28,19 @@ public final class WordGameViewModel {
 
     private(set) var activeStage: ActiveStage = .loading
     var dismiss = false
+    private(set) var finishGameTask: Task<Void, Never>?
 
     @ObservationIgnored @Dependency(\.sessionClient) private var sessionClient
-
-    private(set) var finishGameTask: Task<Void, Never>?
 
     private let sessionID: String
     private let startingStage: StartingStage
     private let audioPrefetchTask: Task<Void, Never>
 
-    public init(sessionID: String, startingFrom: StartingStage = .recognition, audioPrefetchTask: Task<Void, Never>) {
+    public init(
+        sessionID: String,
+        startingFrom: StartingStage = .recognition,
+        audioPrefetchTask: Task<Void, Never>
+    ) {
         self.sessionID = sessionID
         self.startingStage = startingFrom
         self.audioPrefetchTask = audioPrefetchTask
