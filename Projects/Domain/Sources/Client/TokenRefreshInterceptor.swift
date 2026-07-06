@@ -6,9 +6,8 @@ import DomainInterface
 import Dependencies
 
 struct TokenRefreshInterceptor: HTTPInterceptor {
-    let authSessionClient: AuthSessionClient
-
     @Dependency(\.httpClient) private var httpClient
+    @Dependency(\.authSessionClient) private var authSessionClient
 
     func adapt(_ request: URLRequest) async throws -> URLRequest {
         guard let accessToken = await authSessionClient.getAccessToken() else {

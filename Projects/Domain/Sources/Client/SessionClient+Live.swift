@@ -23,8 +23,7 @@ private actor SessionCache {
 
 extension SessionClient: DependencyKey {
     public static let liveValue: SessionClient = {
-        let authSessionClient = AuthSessionClient.liveValue
-        let http = HTTPClient(interceptor: TokenRefreshInterceptor(authSessionClient: authSessionClient))
+        let http = HTTPClient(interceptor: TokenRefreshInterceptor())
         let cache = SessionCache()
         return SessionClient(
             fetchSessionDetail: { id in

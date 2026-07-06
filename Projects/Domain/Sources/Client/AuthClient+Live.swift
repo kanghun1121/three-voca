@@ -8,7 +8,7 @@ import Dependencies
 extension AuthClient: DependencyKey {
     public static let liveValue: AuthClient = {
         let authSessionClient = AuthSessionClient.liveValue
-        let client = HTTPClient(interceptor: TokenRefreshInterceptor(authSessionClient: authSessionClient))
+        let client = HTTPClient(interceptor: TokenRefreshInterceptor())
 
         return AuthClient(
             signInWithApple: { identityToken in
