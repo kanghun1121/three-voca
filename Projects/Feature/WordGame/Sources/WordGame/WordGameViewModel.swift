@@ -31,6 +31,8 @@ public final class WordGameViewModel {
 
     @ObservationIgnored @Dependency(\.sessionClient) private var sessionClient
 
+    private(set) var finishGameTask: Task<Void, Never>?
+
     private let sessionID: String
     private let startingStage: StartingStage
     private let audioPrefetchTask: Task<Void, Never>
@@ -108,7 +110,7 @@ public final class WordGameViewModel {
     }
 
     private func finishGame() {
-        Task { [weak self] in
+        finishGameTask = Task { [weak self] in
             guard let self else { return }
             if let id = Int(sessionID) {
                 try? await sessionClient.completeSession(id)

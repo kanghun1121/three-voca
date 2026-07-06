@@ -24,13 +24,14 @@ final class SpellingViewModelTests: XCTestCase {
             SpellingViewModel(
                 words: [word],
                 onCompleted: {},
-                onClose: {}
+                onClose: {},
+                clock: ImmediateClock()
             )
         }
 
         vm.load()
         vm.skipButtonTapped()
-        try? await Task.sleep(for: .milliseconds(1150))
+        _ = await vm.advanceTask?.value
 
         XCTAssertTrue(vm.isReviewRound)
         XCTAssertEqual(vm.inputText, "c")
@@ -56,33 +57,34 @@ final class SpellingViewModelTests: XCTestCase {
             SpellingViewModel(
                 words: words,
                 onCompleted: {},
-                onClose: {}
+                onClose: {},
+                clock: ImmediateClock()
             )
         }
 
         vm.load()
 
         vm.inputText = "zzz" // cat 오답
-        try? await Task.sleep(for: .milliseconds(1150))
+        _ = await vm.advanceTask?.value
         vm.inputText = "dog" // dog 정답
-        try? await Task.sleep(for: .milliseconds(650))
+        _ = await vm.advanceTask?.value
         vm.inputText = "zzz" // sun 오답
-        try? await Task.sleep(for: .milliseconds(1150))
+        _ = await vm.advanceTask?.value
         vm.inputText = "zzz" // cup 오답
-        try? await Task.sleep(for: .milliseconds(1150))
+        _ = await vm.advanceTask?.value
         vm.inputText = "run" // run 정답
-        try? await Task.sleep(for: .milliseconds(650))
+        _ = await vm.advanceTask?.value
 
         XCTAssertTrue(vm.isReviewRound)
         XCTAssertEqual(vm.totalWords, 3)
         XCTAssertEqual(vm.currentWord?.term, "cat")
 
         vm.inputText = "cat"
-        try? await Task.sleep(for: .milliseconds(650))
+        _ = await vm.advanceTask?.value
         XCTAssertEqual(vm.currentWord?.term, "sun")
 
         vm.inputText = "sun"
-        try? await Task.sleep(for: .milliseconds(650))
+        _ = await vm.advanceTask?.value
         XCTAssertEqual(vm.currentWord?.term, "cup")
     }
 
@@ -105,14 +107,15 @@ final class SpellingViewModelTests: XCTestCase {
             SpellingViewModel(
                 words: words,
                 onCompleted: {},
-                onClose: {}
+                onClose: {},
+                clock: ImmediateClock()
             )
         }
 
         vm.load()
         for _ in terms {
             vm.skipButtonTapped()
-            try? await Task.sleep(for: .milliseconds(1150))
+            _ = await vm.advanceTask?.value
         }
 
         XCTAssertTrue(vm.isReviewRound)
@@ -189,13 +192,14 @@ final class SpellingViewModelTests: XCTestCase {
             SpellingViewModel(
                 words: [word],
                 onCompleted: {},
-                onClose: {}
+                onClose: {},
+                clock: ImmediateClock()
             )
         }
 
         vm.load()
         vm.skipButtonTapped()
-        try? await Task.sleep(for: .milliseconds(1150))
+        _ = await vm.advanceTask?.value
 
         XCTAssertEqual(vm.slots, [.hint("c"), .cursor, .empty])
     }
@@ -241,13 +245,14 @@ final class SpellingViewModelTests: XCTestCase {
             SpellingViewModel(
                 words: [word],
                 onCompleted: {},
-                onClose: {}
+                onClose: {},
+                clock: ImmediateClock()
             )
         }
 
         vm.load()
         vm.skipButtonTapped()
-        try? await Task.sleep(for: .milliseconds(1150))
+        _ = await vm.advanceTask?.value
 
         vm.inputText = "appl"
 
@@ -274,13 +279,14 @@ final class SpellingViewModelTests: XCTestCase {
             SpellingViewModel(
                 words: [word],
                 onCompleted: { isCompleted = true },
-                onClose: {}
+                onClose: {},
+                clock: ImmediateClock()
             )
         }
 
         vm.load()
         vm.inputText = "cat"
-        try? await Task.sleep(for: .milliseconds(650))
+        _ = await vm.advanceTask?.value
 
         XCTAssertTrue(isCompleted)
     }
