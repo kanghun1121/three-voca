@@ -3,13 +3,11 @@
 //  CoreTests
 //
 //  Created by 강대훈 on 7/6/26.
-//  Copyright © 2026 FiveVoca. All rights reserved.
 //
 
 import Foundation
 
 /// `URLSession` 요청을 가로채 스텁 응답을 반환하는 테스트 더블.
-/// 참고: https://linux-studying.tistory.com/31
 final class MockURLProtocol: URLProtocol, @unchecked Sendable {
     static var requestHandler: (@Sendable (URLRequest) throws -> (HTTPURLResponse, Data))?
 

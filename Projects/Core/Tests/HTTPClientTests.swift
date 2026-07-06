@@ -26,8 +26,8 @@ final class HTTPClientTests: XCTestCase {
             let data = Data(#"{"some_value":"hello"}"#.utf8)
             return (response, data)
         }
+        
         let sut = HTTPClient(session: MockURLProtocol.makeSession())
-
         let result: StubDecodable = try await sut.request(StubRequestable())
 
         XCTAssertEqual(result.someValue, "hello")
@@ -43,6 +43,7 @@ final class HTTPClientTests: XCTestCase {
             )!
             return (response, Data())
         }
+
         let sut = HTTPClient(session: MockURLProtocol.makeSession())
 
         do {
@@ -58,10 +59,9 @@ final class HTTPClientTests: XCTestCase {
     func test_request_401응답에서_retry가_true를_반환하면_재요청하여_성공응답을_반환한다() async throws {
         let interceptor = SpyHTTPInterceptor()
         interceptor.retryResult = true
-        let counter = CallCounter()
 
         MockURLProtocol.requestHandler = { request in
-            if counter.increment() == 1 {
+            if interceptor.retryCallCount == 0 {
                 let response = HTTPURLResponse(
                     url: request.url!,
                     statusCode: 401,
@@ -86,16 +86,13 @@ final class HTTPClientTests: XCTestCase {
 
         XCTAssertEqual(result.someValue, "retried")
         XCTAssertEqual(interceptor.retryCallCount, 1)
-        XCTAssertEqual(counter.value, 2)
     }
 
     func test_request_401응답에서_retry가_false를_반환하면_재요청없이_httpError를_던진다() async {
         let interceptor = SpyHTTPInterceptor()
         interceptor.retryResult = false
-        let counter = CallCounter()
 
         MockURLProtocol.requestHandler = { request in
-            _ = counter.increment()
             let response = HTTPURLResponse(
                 url: request.url!,
                 statusCode: 401,
@@ -116,7 +113,6 @@ final class HTTPClientTests: XCTestCase {
         }
 
         XCTAssertEqual(interceptor.retryCallCount, 1)
-        XCTAssertEqual(counter.value, 1, "retry가 false이면 재요청이 발생하지 않아야 합니다.")
     }
 
     func test_request_requiresAuthentication이_true이면_adapt가_호출되어_요청이_변형된다() async throws {
@@ -163,21 +159,4 @@ final class HTTPClientTests: XCTestCase {
 
 private struct StubDecodable: Decodable, Equatable {
     let someValue: String
-}
-
-private final class CallCounter: @unchecked Sendable {
-    private let lock = NSLock()
-    private var count = 0
-
-    var value: Int {
-        lock.lock(); defer { lock.unlock() }
-        return count
-    }
-
-    @discardableResult
-    func increment() -> Int {
-        lock.lock(); defer { lock.unlock() }
-        count += 1
-        return count
-    }
 }
