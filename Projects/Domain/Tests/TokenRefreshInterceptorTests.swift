@@ -40,8 +40,6 @@ final class TokenRefreshInterceptorTests: XCTestCase {
     }
 
     func test_retry_401이_아니면_false를_반환하고_refreshAccessToken을_호출하지_않는다() async {
-        // authSessionClient.refreshAccessToken을 오버라이드하지 않아 testValue(unimplemented)가 그대로 유지된다.
-        // guard에서 반환되지 않고 refreshAccessToken이 호출되면 unimplemented가 테스트를 실패시킨다.
         let sut = TokenRefreshInterceptor()
 
         let response = HTTPURLResponse(
