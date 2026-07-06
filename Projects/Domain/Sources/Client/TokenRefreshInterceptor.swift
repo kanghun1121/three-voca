@@ -3,8 +3,12 @@ import Foundation
 import Core
 import DomainInterface
 
+import Dependencies
+
 struct TokenRefreshInterceptor: HTTPInterceptor {
     let authSessionClient: AuthSessionClient
+
+    @Dependency(\.httpClient) private var httpClient
 
     func adapt(_ request: URLRequest) async throws -> URLRequest {
         guard let accessToken = await authSessionClient.getAccessToken() else {
@@ -20,9 +24,8 @@ struct TokenRefreshInterceptor: HTTPInterceptor {
 
         do {
             let refreshToken = try authSessionClient.getRefreshToken()
-            let client = HTTPClient()
             let request = RefreshTokenRequest(refreshToken: refreshToken)
-            let dto: AuthTokenResponseDTO = try await client.request(request)
+            let dto: AuthTokenResponseDTO = try await httpClient.request(request)
             let token = dto.toDomain()
             await authSessionClient.setAccessToken(token.accessToken)
             try authSessionClient.setRefreshToken(token.refreshToken)
