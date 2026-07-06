@@ -44,7 +44,7 @@ public final class SpellingViewModel {
 
     private var reviewWords: [GameWord] = []
     private var incorrectWordIDs: Set<String> = []
-    private var advanceTask: Task<Void, Never>?
+    private(set) var advanceTask: Task<Void, Never>?
 
     @ObservationIgnored @Dependency(\.soundClient) private var soundClient
 

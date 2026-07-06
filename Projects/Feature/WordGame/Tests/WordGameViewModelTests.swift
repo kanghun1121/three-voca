@@ -69,7 +69,7 @@ final class WordGameViewModelTests: XCTestCase {
 
             spellingVM.load()
             spellingVM.inputText = "cat"
-            try? await Task.sleep(for: .milliseconds(600))
+            _ = await spellingVM.advanceTask?.value
 
             guard case .gameComplete(_, let onDismiss) = vm.activeStage else {
                 XCTFail("activeStage가 .gameComplete여야 합니다. 실제: \(vm.activeStage)")
@@ -77,7 +77,7 @@ final class WordGameViewModelTests: XCTestCase {
             }
 
             onDismiss()
-            try? await Task.sleep(for: .milliseconds(300))
+            _ = await vm.finishGameTask?.value
 
             XCTAssertTrue(vm.dismiss)
             let completedID = await recorder.completedID
