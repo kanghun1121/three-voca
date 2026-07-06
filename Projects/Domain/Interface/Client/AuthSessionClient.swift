@@ -9,6 +9,7 @@ public struct AuthSessionClient: Sendable {
     public var setRefreshToken: @Sendable (String) throws -> Void
     public var clearSession: @Sendable () async throws -> Void
     public var deleteAccount: @Sendable () async throws -> Void
+    public var refreshAccessToken: @Sendable () async -> Bool
     public var authStateStream: @Sendable () -> AsyncStream<AuthState>
 
     public init(
@@ -18,6 +19,7 @@ public struct AuthSessionClient: Sendable {
         setRefreshToken: @escaping @Sendable (String) throws -> Void,
         clearSession: @escaping @Sendable () async throws -> Void,
         deleteAccount: @escaping @Sendable () async throws -> Void,
+        refreshAccessToken: @escaping @Sendable () async -> Bool,
         authStateStream: @escaping @Sendable () -> AsyncStream<AuthState>
     ) {
         self.getAccessToken = getAccessToken
@@ -26,6 +28,7 @@ public struct AuthSessionClient: Sendable {
         self.setRefreshToken = setRefreshToken
         self.clearSession = clearSession
         self.deleteAccount = deleteAccount
+        self.refreshAccessToken = refreshAccessToken
         self.authStateStream = authStateStream
     }
 }
@@ -38,6 +41,7 @@ extension AuthSessionClient: TestDependencyKey {
         setRefreshToken: unimplemented("\(Self.self).setRefreshToken"),
         clearSession: unimplemented("\(Self.self).clearSession"),
         deleteAccount: unimplemented("\(Self.self).deleteAccount"),
+        refreshAccessToken: unimplemented("\(Self.self).refreshAccessToken"),
         authStateStream: unimplemented("\(Self.self).authStateStream")
     )
 
@@ -48,6 +52,7 @@ extension AuthSessionClient: TestDependencyKey {
         setRefreshToken: { _ in },
         clearSession: {},
         deleteAccount: {},
+        refreshAccessToken: { true },
         authStateStream: { AsyncStream { _ in } }
     )
 }
