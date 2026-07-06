@@ -218,16 +218,16 @@ public final class SpellingViewModel {
         guard !isReviewRound || index != 0 else {
             return .hint(char.lowercased().first ?? char)
         }
-        
+
         guard index >= inputText.count else {
             let inputChar = inputText[inputText.index(inputText.startIndex, offsetBy: index)]
             return .filled(inputChar)
         }
-        
+
         guard index > inputText.count else {
             return .cursor
         }
-        
+
         return .empty
     }
 }
