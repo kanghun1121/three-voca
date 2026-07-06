@@ -40,10 +40,12 @@ public final class SpellingViewModel {
     private let words: [GameWord]
     private let onCompleted: () -> Void
     private let onClose: () -> Void
+    private let clock: any Clock<Duration>
 
     private var reviewWords: [GameWord] = []
     private var incorrectWordIDs: Set<String> = []
     private var advanceTask: Task<Void, Never>?
+
     @ObservationIgnored @Dependency(\.soundClient) private var soundClient
 
     var slots: [SlotState] {
@@ -58,12 +60,14 @@ public final class SpellingViewModel {
     init(
         words: [GameWord],
         onCompleted: @escaping () -> Void,
-        onClose: @escaping () -> Void
+        onClose: @escaping () -> Void,
+        clock: any Clock<Duration> = ContinuousClock()
     ) {
         self.words = words
         self.totalWords = words.count
         self.onCompleted = onCompleted
         self.onClose = onClose
+        self.clock = clock
     }
 
     func load() {
@@ -92,9 +96,9 @@ public final class SpellingViewModel {
             reviewWords.append(word)
         }
         advanceTask = Task { [weak self] in
-            try? await Task.sleep(for: .seconds(1))
-            guard !Task.isCancelled else { return }
             guard let self else { return }
+            try? await self.clock.sleep(for: .seconds(1))
+            guard !Task.isCancelled else { return }
             showWord(at: wordIndex + 1)
         }
     }
@@ -140,9 +144,9 @@ public final class SpellingViewModel {
             viewState = .correct
 
             advanceTask = Task { [weak self] in
-                try? await Task.sleep(for: .seconds(0.5))
-                guard !Task.isCancelled else { return }
                 guard let self else { return }
+                try? await self.clock.sleep(for: .seconds(0.5))
+                guard !Task.isCancelled else { return }
                 showWord(at: wordIndex + 1)
             }
         } else {
@@ -155,9 +159,9 @@ public final class SpellingViewModel {
             }
             
             advanceTask = Task { [weak self] in
-                try? await Task.sleep(for: .seconds(1))
-                guard !Task.isCancelled else { return }
                 guard let self else { return }
+                try? await self.clock.sleep(for: .seconds(1))
+                guard !Task.isCancelled else { return }
                 showWord(at: wordIndex + 1)
             }
         }
