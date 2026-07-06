@@ -34,10 +34,11 @@ public final class MultipleChoiceViewModel {
     private let words: [GameWord]
     private let onCompleted: () -> Void
     private let onClose: () -> Void
+    private let clock: any Clock<Duration>
 
     private var reviewWords: [GameWord] = []
     private var incorrectWordIDs: Set<String> = []
-    private var advanceTask: Task<Void, Never>?
+    private(set) var advanceTask: Task<Void, Never>?
     private var audioTask: Task<Void, Never>?
     @ObservationIgnored @Dependency(\.soundClient) private var soundClient
     @ObservationIgnored @Dependency(\.audioClient) private var audioClient
@@ -46,12 +47,14 @@ public final class MultipleChoiceViewModel {
     init(
         words: [GameWord],
         onCompleted: @escaping () -> Void,
-        onClose: @escaping () -> Void
+        onClose: @escaping () -> Void,
+        clock: any Clock<Duration> = ContinuousClock()
     ) {
         self.words = words
         self.totalWords = words.count
         self.onCompleted = onCompleted
         self.onClose = onClose
+        self.clock = clock
     }
 
     func load() {
@@ -101,9 +104,9 @@ public final class MultipleChoiceViewModel {
         viewState = .revealed(selected: choice)
 
         advanceTask = Task { [weak self] in
-            try? await Task.sleep(for: .milliseconds(1000))
-            guard !Task.isCancelled else { return }
             guard let self else { return }
+            try? await self.clock.sleep(for: .milliseconds(1000))
+            guard !Task.isCancelled else { return }
             showWord(at: wordIndex + 1)
         }
     }
