@@ -12,6 +12,7 @@ let workspace = Workspace(
                 .project(path: "Projects/Feature/Home", target: "FeatureHomeTests"),
                 .project(path: "Projects/Feature/Session", target: "FeatureSessionTests"),
                 .project(path: "Projects/Feature/Vocabulary", target: "FeatureVocabularyTests"),
+                .project(path: "Projects/Feature/WordGame", target: "FeatureWordGameTests"),
             ]),
             testAction: .targets([
                 .testableTarget(
@@ -28,6 +29,9 @@ let workspace = Workspace(
                 ),
                 .testableTarget(
                     target: .project(path: "Projects/Feature/Vocabulary", target: "FeatureVocabularyTests")
+                ),
+                .testableTarget(
+                    target: .project(path: "Projects/Feature/WordGame", target: "FeatureWordGameTests")
                 ),
             ])
         )
