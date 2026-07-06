@@ -7,8 +7,7 @@ import Dependencies
 
 extension HomeClient: DependencyKey {
     public static let liveValue: HomeClient = {
-        let authSessionClient = AuthSessionClient.liveValue
-        let client = HTTPClient(interceptor: TokenRefreshInterceptor(authSessionClient: authSessionClient))
+        let client = HTTPClient(interceptor: TokenRefreshInterceptor())
         return HomeClient(
             fetchHomeOverview: {
                 let request = GetAllLevelsWithSessionsRequest()
