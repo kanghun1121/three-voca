@@ -51,11 +51,11 @@ struct WordDetailExampleRow: View {
         }
     }
 
-    // TODO: - NLTagger 파이프라인(lemma/tokenRanges/phraseRanges)이 View에 혼재함. 별도 타입으로 분리 필요
+    // TODO: - NLTagger 파이프라인(computeLemma/findTokenRanges/findPhraseRanges)이 View에 혼재함. 별도 타입으로 분리 필요
     private static func buildHighlightedText(sentence: String, keyword: String) -> Text {
         let matchRanges = keyword.contains(" ")
-            ? phraseRanges(in: sentence, phrase: keyword)
-            : tokenRanges(in: sentence, keyword: keyword)
+            ? findPhraseRanges(in: sentence, phrase: keyword)
+            : findTokenRanges(in: sentence, keyword: keyword)
 
         guard !matchRanges.isEmpty else {
             return Text(sentence)
@@ -77,7 +77,7 @@ struct WordDetailExampleRow: View {
         return Text(attributed)
     }
 
-    private static func lemma(of word: String) -> String {
+    private static func computeLemma(of word: String) -> String {
         let tagger = NLTagger(tagSchemes: [.lemma])
         tagger.string = word
         var result = word.lowercased()
@@ -94,12 +94,12 @@ struct WordDetailExampleRow: View {
         return result
     }
 
-    // 키워드를 문맥 없이 고립시켜 렘마화하면(lemma(of:)) 문장 속 문맥 기반 렘마와 품사 추정이 어긋나
+    // 키워드를 문맥 없이 고립시켜 렘마화하면(computeLemma(of:)) 문장 속 문맥 기반 렘마와 품사 추정이 어긋나
     // 같은 단어인데도 다른 렘마가 나올 수 있다 (예: 고립된 "shopping" → "shop", 문장 속 "shopping" → "shopping").
     // 표층형이 그대로 일치하는 절대다수의 경우를 렘마 비교보다 먼저 확인해 이 불일치를 우회한다.
-    private static func tokenRanges(in sentence: String, keyword: String) -> [Range<String.Index>] {
+    private static func findTokenRanges(in sentence: String, keyword: String) -> [Range<String.Index>] {
         let keywordLower = keyword.lowercased()
-        let keywordLemma = lemma(of: keyword)
+        let keywordLemma = computeLemma(of: keyword)
         let tagger = NLTagger(tagSchemes: [.lemma])
         tagger.string = sentence
         var ranges: [Range<String.Index>] = []
@@ -120,11 +120,11 @@ struct WordDetailExampleRow: View {
     }
 
     // "have to", "used to" 같은 구(phrase) 키워드를 연속 토큰 시퀀스로 매칭
-    private static func phraseRanges(in sentence: String, phrase: String) -> [Range<String.Index>] {
-        let literalMatches = literalPhraseRanges(in: sentence, phrase: phrase)
+    private static func findPhraseRanges(in sentence: String, phrase: String) -> [Range<String.Index>] {
+        let literalMatches = findLiteralPhraseRanges(in: sentence, phrase: phrase)
         guard literalMatches.isEmpty else { return literalMatches }
 
-        let phraseLemmas = lemmas(of: phrase)
+        let phraseLemmas = computeLemmas(of: phrase)
         guard !phraseLemmas.isEmpty else { return [] }
 
         let tagger = NLTagger(tagSchemes: [.lemma])
@@ -158,10 +158,14 @@ struct WordDetailExampleRow: View {
     // phrase 표층형이 대소문자만 다르게 문장에 그대로 등장하는 모든 위치를 찾는다.
     // 단어 경계를 넘나드는 오탐(예: "to go"가 "photo goes"의 "oto go" 부분과 매칭)을 막기 위해
     // 매칭 앞뒤가 단어 문자(alphanumeric)가 아닌 경우에만 채택한다.
-    private static func literalPhraseRanges(in sentence: String, phrase: String) -> [Range<String.Index>] {
+    private static func findLiteralPhraseRanges(in sentence: String, phrase: String) -> [Range<String.Index>] {
         var ranges: [Range<String.Index>] = []
         var searchStart = sentence.startIndex
-        while let found = sentence.range(of: phrase, options: .caseInsensitive, range: searchStart..<sentence.endIndex) {
+        while let found = sentence.range(
+            of: phrase,
+            options: .caseInsensitive,
+            range: searchStart..<sentence.endIndex
+        ) {
             searchStart = found.upperBound
             let hasLeadingBoundary = found.lowerBound == sentence.startIndex
                 || !sentence[sentence.index(before: found.lowerBound)].isLetter
@@ -174,7 +178,7 @@ struct WordDetailExampleRow: View {
         return ranges
     }
 
-    private static func lemmas(of phrase: String) -> [String] {
+    private static func computeLemmas(of phrase: String) -> [String] {
         let tagger = NLTagger(tagSchemes: [.lemma])
         tagger.string = phrase
         var result: [String] = []
