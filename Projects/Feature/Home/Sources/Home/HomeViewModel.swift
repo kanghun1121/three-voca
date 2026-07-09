@@ -92,7 +92,7 @@ public final class HomeViewModel {
             async let heatmap = homeClient.fetchHeatmapData()
             let (library, fetched) = try await (overview, heatmap)
             activities = fetched
-            state = library.toHomePresentationModel(activities: fetched)
+            state = library.toHomePresentationModel()
             if expandedLevelIDs.isEmpty, let activeID = state?.levels.first(where: { $0.status == .active })?.id {
                 expandedLevelIDs.insert(activeID)
             }

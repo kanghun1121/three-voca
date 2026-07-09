@@ -2,7 +2,6 @@ import Foundation
 
 struct HomePresentationModel: Equatable {
     let levels: [LevelCardPresentationModel]
-    let streakDays: Int
 }
 
 struct LevelCardPresentationModel: Equatable, Identifiable {
