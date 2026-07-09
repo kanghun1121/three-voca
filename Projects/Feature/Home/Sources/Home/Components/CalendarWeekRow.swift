@@ -11,7 +11,7 @@ struct CalendarWeekRow: View {
     }()
 
     var body: some View {
-        HStack(spacing: 0) {
+        HStack(spacing: 4) {
             ForEach(days, id: \.date) { day in
                 CalendarDayCell(kind: cellKind(for: day))
             }

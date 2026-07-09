@@ -1,7 +1,7 @@
 import Foundation
 
 extension Calendar {
-    /// 월간 캘린더 표시 기간 계산 (이전/다음 달 일수 포함, 일요일 시작 기준)
+    /// 월간 캘린더 표시 기간 계산 (이전/다음 달 일수 포함, 월요일 시작 기준)
     func monthlyCalendarPeriod(for date: Date) -> DateInterval {
         guard let monthInterval = dateInterval(of: .month, for: date),
               let firstWeekday = dateComponents([.weekday], from: monthInterval.start).weekday
@@ -9,7 +9,7 @@ extension Calendar {
             return DateInterval(start: date, end: date)
         }
 
-        let leadingCount = (firstWeekday - 1 + 7) % 7
+        let leadingCount = (firstWeekday - 2 + 7) % 7
         let startDate = self.date(byAdding: .day, value: -leadingCount, to: monthInterval.start)
             ?? monthInterval.start
 

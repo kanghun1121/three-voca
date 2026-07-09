@@ -3,10 +3,10 @@ import SwiftUI
 import DesignSystem
 
 struct CalendarWeekdayHeader: View {
-    private let labels = ["일", "월", "화", "수", "목", "금", "토"]
+    private let labels = ["월", "화", "수", "목", "금", "토", "일"]
 
     var body: some View {
-        HStack(spacing: 0) {
+        HStack(spacing: 4) {
             ForEach(labels.indices, id: \.self) { index in
                 Text(labels[index])
                     .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 11))
@@ -17,8 +17,8 @@ struct CalendarWeekdayHeader: View {
     }
 
     private func foregroundColor(index: Int) -> Color {
-        if index == 0 { return DesignSystemAsset.sundayRed.swiftUIColor }
-        if index == 6 { return DesignSystemAsset.saturdayBlue.swiftUIColor }
-        return DesignSystemAsset.fgMuted.swiftUIColor
+        index == labels.count - 1
+            ? DesignSystemAsset.positive.swiftUIColor
+            : DesignSystemAsset.fgSubtle.swiftUIColor
     }
 }

@@ -9,31 +9,34 @@ struct CalendarNavButtons: View {
     let onToday: () -> Void
 
     var body: some View {
-        HStack(spacing: 0) {
+        HStack(spacing: 6) {
             if !isAtCurrentMonth {
                 Button("오늘로", action: onToday)
                     .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 12))
-                    .foregroundStyle(DesignSystemAsset.primary.swiftUIColor)
+                    .foregroundStyle(DesignSystemAsset.positive.swiftUIColor)
                     .padding(.horizontal, 10)
                     .padding(.vertical, 5)
-                    .background(DesignSystemAsset.primary.swiftUIColor.opacity(0.1))
+                    .background(DesignSystemAsset.positive.swiftUIColor.opacity(0.1))
                     .clipShape(.rect(cornerRadius: 8))
             }
-            Button("이전 달", systemImage: "chevron.left", action: onPrevious)
-                .labelStyle(.iconOnly)
-                .font(.system(size: 13, weight: .semibold))
-                .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
-                .frame(width: 44, height: 44)
-            Button("다음 달", systemImage: "chevron.right", action: onNext)
-                .labelStyle(.iconOnly)
-                .font(.system(size: 13, weight: .semibold))
-                .foregroundStyle(
-                    isAtCurrentMonth
-                        ? DesignSystemAsset.fgMuted.swiftUIColor
-                        : DesignSystemAsset.fgStrong.swiftUIColor
-                )
-                .frame(width: 44, height: 44)
-                .disabled(isAtCurrentMonth)
+            navButton(label: "이전 달", systemImage: "chevron.left", action: onPrevious, isEnabled: true)
+            navButton(label: "다음 달", systemImage: "chevron.right", action: onNext, isEnabled: !isAtCurrentMonth)
         }
+    }
+
+    private func navButton(label: String, systemImage: String, action: @escaping () -> Void, isEnabled: Bool) -> some View {
+        Button(label, systemImage: systemImage, action: action)
+            .labelStyle(.iconOnly)
+            .font(.system(size: 13, weight: .semibold))
+            .foregroundStyle(
+                isEnabled
+                    ? DesignSystemAsset.fgMuted.swiftUIColor
+                    : DesignSystemAsset.fgSubtle.swiftUIColor
+            )
+            .frame(width: 30, height: 30)
+            .background(DesignSystemAsset.bgSubtle.swiftUIColor)
+            .clipShape(.rect(cornerRadius: 9))
+            .contentShape(Rectangle())
+            .disabled(!isEnabled)
     }
 }

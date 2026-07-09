@@ -12,9 +12,14 @@ struct CalendarHeaderRow: View {
 
     var body: some View {
         HStack(spacing: 8) {
-            Text("\(String(year))년 \(String(month))월")
-                .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 15.5))
-                .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
+            HStack(alignment: .lastTextBaseline, spacing: 7) {
+                Text("\(String(month))월")
+                    .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 19))
+                    .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
+                Text(String(year))
+                    .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 13))
+                    .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
+            }
             Spacer()
             CalendarNavButtons(
                 isAtCurrentMonth: isAtCurrentMonth,
