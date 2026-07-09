@@ -7,23 +7,12 @@ struct WordDetailExampleRow: View {
     let term: String
     let example: WordDetailPresentationModel.ExampleRow
     let onChunkReaderTapped: (WordDetailPresentationModel.ExampleRow) -> Void
-    // body 평가와 독립적으로 init 시점에 한 번만 NLTagger를 실행
-    private let highlightedEnText: Text
-
-    init(
-        term: String,
-        example: WordDetailPresentationModel.ExampleRow,
-        onChunkReaderTapped: @escaping (WordDetailPresentationModel.ExampleRow) -> Void
-    ) {
-        self.term = term
-        self.example = example
-        self.onChunkReaderTapped = onChunkReaderTapped
-        self.highlightedEnText = Self.buildHighlightedText(sentence: example.en, keyword: term)
-    }
+    // NLTagger 파이프라인은 view 생성/body 평가를 막지 않도록 task()에서 채운다
+    @State private var highlightedEnText: Text? = nil
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            highlightedEnText
+            (highlightedEnText ?? Text(example.en))
                 .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 16))
                 .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
 
@@ -56,6 +45,9 @@ struct WordDetailExampleRow: View {
         .overlay {
             RoundedRectangle(cornerRadius: 14)
                 .stroke(DesignSystemAsset.study100.swiftUIColor, lineWidth: 1)
+        }
+        .task(id: "\(term)|\(example.en)") {
+            highlightedEnText = Self.buildHighlightedText(sentence: example.en, keyword: term)
         }
     }
 
@@ -152,11 +144,11 @@ struct WordDetailExampleRow: View {
 
         var ranges: [Range<String.Index>] = []
         let phraseCount = phraseLemmas.count
-        for i in 0...(tokens.count - phraseCount) where tokens.count >= phraseCount {
+        guard tokens.count >= phraseCount else { return [] }
+        for i in 0...(tokens.count - phraseCount) {
             let slice = tokens[i..<(i + phraseCount)]
+            guard let start = slice.first?.range.lowerBound, let end = slice.last?.range.upperBound else { continue }
             if zip(slice, phraseLemmas).allSatisfy({ $0.lemma == $1 }) {
-                let start = slice.first!.range.lowerBound
-                let end = slice.last!.range.upperBound
                 ranges.append(start..<end)
             }
         }
