@@ -5,16 +5,17 @@ import DesignSystem
 struct LevelProgressBar: View {
     let progressRatio: Double
     let status: LevelStatus
-    let levelColor: Color
-
-    private let inactiveColor = Color(red: 199/255, green: 201/255, blue: 206/255)
 
     var body: some View {
         ZStack(alignment: .leading) {
             RoundedRectangle(cornerRadius: 4)
                 .fill(DesignSystemAsset.progressTrack.swiftUIColor)
             RoundedRectangle(cornerRadius: 4)
-                .fill(status == .notStarted ? inactiveColor : levelColor)
+                .fill(
+                    status == .notStarted
+                        ? DesignSystemAsset.progressInactive.swiftUIColor
+                        : DesignSystemAsset.progressActive.swiftUIColor
+                )
                 .containerRelativeFrame(.horizontal) { width, _ in
                     width * max(0.03, min(1, progressRatio))
                 }
