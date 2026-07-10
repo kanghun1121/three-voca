@@ -45,8 +45,8 @@ extension LevelStatus {
         case .active:
             return (
                 "학습 중",
-                DesignSystemAsset.primary.swiftUIColor,
-                DesignSystemAsset.primary100.swiftUIColor
+                DesignSystemAsset.studying.swiftUIColor,
+                DesignSystemAsset.studying100.swiftUIColor
             )
         case .completed:
             return (
