@@ -18,7 +18,7 @@ struct LevelCardPresentationModel: Equatable, Identifiable {
 struct SessionRowPresentationModel: Equatable, Identifiable {
     let id: Int
     let sessionNumber: Int
-    let icon: SessionIconKind
+    let status: SessionCellStatus
 }
 
 enum LevelStatus: Equatable {
@@ -27,10 +27,8 @@ enum LevelStatus: Equatable {
     case notStarted
 }
 
-enum SessionIconKind: Equatable {
-    case completedHigh
-    case completedLow
-    case notStarted
-
-    var isCompleted: Bool { self != .notStarted }
+enum SessionCellStatus: Equatable {
+    case done
+    case current
+    case todo
 }
