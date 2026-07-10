@@ -28,17 +28,30 @@ private extension LevelSummary {
             completedSessions: completedSessions,
             totalSessions: totalSessions,
             progressRatio: totalSessions == 0 ? 0 : Double(completedSessions) / Double(totalSessions),
-            sessions: sessions.map { $0.toSessionRowPresentationModel() }
+            sessions: sessions.toSessionRowPresentationModels()
         )
     }
 }
 
-private extension SessionProgress {
-    func toSessionRowPresentationModel() -> SessionRowPresentationModel {
-        SessionRowPresentationModel(
-            id: Int(id) ?? 0,
-            sessionNumber: sessionNumber,
-            icon: status == .completed ? .completedHigh : .notStarted
-        )
+private extension [SessionProgress] {
+    /// 완료된 세션은 done, 완료되지 않은 첫 세션은 current, 나머지는 todo로 표시.
+    func toSessionRowPresentationModels() -> [SessionRowPresentationModel] {
+        var currentAssigned = false
+        return map { session in
+            let status: SessionCellStatus
+            if session.status == .completed {
+                status = .done
+            } else if !currentAssigned {
+                status = .current
+                currentAssigned = true
+            } else {
+                status = .todo
+            }
+            return SessionRowPresentationModel(
+                id: Int(session.id) ?? 0,
+                sessionNumber: session.sessionNumber,
+                status: status
+            )
+        }
     }
 }

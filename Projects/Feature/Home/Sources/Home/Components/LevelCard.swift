@@ -30,10 +30,11 @@ struct LevelCard: View {
             if isExpanded {
                 Divider()
                     .padding(.horizontal, 16)
-                LevelSessionList(
+                SessionGrid(
                     sessions: presentationModel.sessions,
                     onSessionTapped: onSessionTapped
                 )
+                .padding(16)
             }
         }
         .background(LevelCardBackground(isActive: isActive))
