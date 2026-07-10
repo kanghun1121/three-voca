@@ -28,9 +28,8 @@ struct CalendarLegendRow: View {
 
     private var countLabel: some View {
         HStack(spacing: 0) {
-            Text("이번 달 ")
             Text("\(studiedDaysCount)일")
-                .foregroundStyle(DesignSystemAsset.positive.swiftUIColor)
+                .foregroundStyle(DesignSystemAsset.growDeep.swiftUIColor)
             Text(" 학습")
         }
         .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 12))

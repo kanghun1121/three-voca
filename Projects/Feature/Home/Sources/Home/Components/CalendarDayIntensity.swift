@@ -7,16 +7,16 @@ enum CalendarDayIntensity {
 
     var background: Color {
         switch self {
-        case .lv0: DesignSystemAsset.calendarLight.swiftUIColor
-        case .lv1: DesignSystemAsset.calendarMid.swiftUIColor
-        case .lv2: DesignSystemAsset.positive.swiftUIColor.opacity(0.62)
-        case .lv3: DesignSystemAsset.positive.swiftUIColor
+        case .lv0: DesignSystemAsset.heatmap0.swiftUIColor
+        case .lv1: DesignSystemAsset.heatmap1.swiftUIColor
+        case .lv2: DesignSystemAsset.heatmap2.swiftUIColor
+        case .lv3: DesignSystemAsset.heatmap3.swiftUIColor
         }
     }
 
     var textColor: Color {
         switch self {
-        case .lv0, .lv1: DesignSystemAsset.positive.swiftUIColor
+        case .lv0, .lv1: DesignSystemAsset.growDeep.swiftUIColor
         case .lv2, .lv3: DesignSystemAsset.white.swiftUIColor
         }
     }

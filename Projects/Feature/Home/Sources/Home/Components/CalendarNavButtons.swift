@@ -13,10 +13,10 @@ struct CalendarNavButtons: View {
             if !isAtCurrentMonth {
                 Button("오늘로", action: onToday)
                     .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 12))
-                    .foregroundStyle(DesignSystemAsset.positive.swiftUIColor)
+                    .foregroundStyle(DesignSystemAsset.growDeep.swiftUIColor)
                     .padding(.horizontal, 10)
                     .padding(.vertical, 5)
-                    .background(DesignSystemAsset.positive.swiftUIColor.opacity(0.1))
+                    .background(DesignSystemAsset.growDeep.swiftUIColor.opacity(0.1))
                     .clipShape(.rect(cornerRadius: 8))
             }
             navButton(label: "이전 달", systemImage: "chevron.left", action: onPrevious, isEnabled: true)

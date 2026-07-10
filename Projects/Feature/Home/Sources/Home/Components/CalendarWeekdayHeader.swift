@@ -18,7 +18,7 @@ struct CalendarWeekdayHeader: View {
 
     private func foregroundColor(index: Int) -> Color {
         index == labels.count - 1
-            ? DesignSystemAsset.positive.swiftUIColor
+            ? DesignSystemAsset.growDeep.swiftUIColor
             : DesignSystemAsset.fgSubtle.swiftUIColor
     }
 }
