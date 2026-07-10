@@ -25,9 +25,7 @@ struct CalendarDayCell: View {
             dayLabel(day, color: DesignSystemAsset.fgSubtle.swiftUIColor, weight: DesignSystemFontFamily.Pretendard.semiBold)
 
         case .notStudied(let day):
-            RoundedRectangle(cornerRadius: 11)
-                .fill(DesignSystemAsset.bgSubtle.swiftUIColor)
-                .overlay { dayLabel(day, color: DesignSystemAsset.fgMuted.swiftUIColor, weight: DesignSystemFontFamily.Pretendard.semiBold) }
+            dayLabel(day, color: DesignSystemAsset.fgMuted.swiftUIColor, weight: DesignSystemFontFamily.Pretendard.semiBold)
 
         case .studied(let day, let intensity):
             RoundedRectangle(cornerRadius: 11)
@@ -39,12 +37,12 @@ struct CalendarDayCell: View {
                 .fill(intensity?.background ?? .clear)
                 .overlay {
                     RoundedRectangle(cornerRadius: 11)
-                        .strokeBorder(DesignSystemAsset.positive.swiftUIColor, lineWidth: 2.5)
+                        .strokeBorder(DesignSystemAsset.growDeep.swiftUIColor, lineWidth: 2.5)
                 }
                 .overlay {
                     dayLabel(
                         day,
-                        color: intensity?.textColor ?? DesignSystemAsset.positive.swiftUIColor,
+                        color: intensity?.textColor ?? DesignSystemAsset.growDeep.swiftUIColor,
                         weight: DesignSystemFontFamily.Pretendard.extraBold
                     )
                 }
