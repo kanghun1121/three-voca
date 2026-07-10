@@ -127,7 +127,7 @@ public extension VocabularyLibrary {
             LevelSummary(
                 id: "level_1",
                 level: 1,
-                name: "초등 기초",
+                name: "씨앗",
                 difficulty: "A1",
                 totalSessions: 42,
                 completedSessions: 4,
@@ -136,7 +136,7 @@ public extension VocabularyLibrary {
             LevelSummary(
                 id: "level_2",
                 level: 2,
-                name: "초등 심화",
+                name: "새싹",
                 difficulty: "A2",
                 totalSessions: 39,
                 completedSessions: 0,
@@ -155,8 +155,8 @@ public extension VocabularyLibrary {
             LevelSummary(
                 id: "level_3",
                 level: 3,
-                name: "중등 ~ 수능",
-                difficulty: "B1-B2",
+                name: "줄기",
+                difficulty: "B1",
                 totalSessions: 99,
                 completedSessions: 0,
                 sessions: (1...99).map { i in
@@ -174,8 +174,8 @@ public extension VocabularyLibrary {
             LevelSummary(
                 id: "level_4",
                 level: 4,
-                name: "수능 심화",
-                difficulty: "C1",
+                name: "가지",
+                difficulty: "B2",
                 totalSessions: 64,
                 completedSessions: 0,
                 sessions: (1...64).map { i in
@@ -183,6 +183,44 @@ public extension VocabularyLibrary {
                         id: "\(180 + i)",
                         sessionNumber: i,
                         totalWords: i == 64 ? 11 : 20,
+                        status: .notStarted,
+                        lastStudiedAt: nil,
+                        accuracy: nil,
+                        wordsCompleted: 0
+                    )
+                }
+            ),
+            LevelSummary(
+                id: "level_5",
+                level: 5,
+                name: "꽃",
+                difficulty: "C1",
+                totalSessions: 50,
+                completedSessions: 0,
+                sessions: (1...50).map { i in
+                    SessionProgress(
+                        id: "\(244 + i)",
+                        sessionNumber: i,
+                        totalWords: i == 50 ? 15 : 20,
+                        status: .notStarted,
+                        lastStudiedAt: nil,
+                        accuracy: nil,
+                        wordsCompleted: 0
+                    )
+                }
+            ),
+            LevelSummary(
+                id: "level_6",
+                level: 6,
+                name: "나무",
+                difficulty: "C2",
+                totalSessions: 30,
+                completedSessions: 0,
+                sessions: (1...30).map { i in
+                    SessionProgress(
+                        id: "\(294 + i)",
+                        sessionNumber: i,
+                        totalWords: i == 30 ? 18 : 20,
                         status: .notStarted,
                         lastStudiedAt: nil,
                         accuracy: nil,
