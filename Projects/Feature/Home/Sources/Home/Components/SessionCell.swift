@@ -44,10 +44,7 @@ struct SessionCell: View {
                 .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
                 .accessibilityHidden(true)
         case .current:
-            Image(systemName: "play.fill")
-                .font(.system(size: 11))
-                .foregroundStyle(DesignSystemAsset.progressActive.swiftUIColor)
-                .accessibilityHidden(true)
+            EmptyView()
         case .todo:
             Text("\(sessionNumber)")
                 .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 12))
