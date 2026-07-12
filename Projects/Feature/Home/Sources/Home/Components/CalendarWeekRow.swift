@@ -4,12 +4,6 @@ struct CalendarWeekRow: View {
     let days: [CalendarDay]
     let activityMap: [String: CalendarDayIntensity]
 
-    private static let dateFormatter: DateFormatter = {
-        let f = DateFormatter()
-        f.dateFormat = "yyyy-MM-dd"
-        return f
-    }()
-
     var body: some View {
         HStack(spacing: 4) {
             ForEach(days, id: \.date) { day in
@@ -20,7 +14,7 @@ struct CalendarWeekRow: View {
 
     private func cellKind(for day: CalendarDay) -> CalendarDayCellKind {
         guard day.isCurrentMonth else { return .empty }
-        let intensity = activityMap[Self.dateFormatter.string(from: day.date)]
+        let intensity = activityMap[day.date.calendarDateKey]
         if day.isToday { return .today(day.dayNumber, intensity) }
         if day.isFuture { return .future(day.dayNumber) }
         if let intensity { return .studied(day.dayNumber, intensity) }
