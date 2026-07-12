@@ -1,5 +1,3 @@
-import Foundation
-
 struct SessionRowPresentationModel: Equatable, Identifiable {
     let id: Int
     let sessionNumber: Int
