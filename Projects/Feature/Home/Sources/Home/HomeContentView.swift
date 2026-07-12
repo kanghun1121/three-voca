@@ -28,8 +28,5 @@ struct HomeContentView: View {
 }
 
 #Preview {
-    HomeContentView(
-        state: VocabularyLibrary.previewFixture.toHomePresentationModel(),
-        viewModel: HomeViewModel()
-    )
+    HomeContentView(state: VocabularyLibrary.previewFixture.toHomePresentationModel(), viewModel: HomeViewModel())
 }

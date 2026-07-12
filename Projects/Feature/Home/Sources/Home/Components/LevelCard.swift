@@ -23,18 +23,12 @@ struct LevelCard: View {
                 )
             }
             .buttonStyle(.plain)
-            LevelProgressBar(
-                progressRatio: presentationModel.progressRatio,
-                status: presentationModel.status
-            )
+            LevelProgressBar(progressRatio: presentationModel.progressRatio, status: presentationModel.status)
             if isExpanded {
                 Divider()
                     .padding(.horizontal, 16)
-                SessionGrid(
-                    sessions: presentationModel.sessions,
-                    onSessionTapped: onSessionTapped
-                )
-                .padding(16)
+                SessionGrid(sessions: presentationModel.sessions, onSessionTapped: onSessionTapped)
+                    .padding(16)
             }
         }
         .background(LevelCardBackground(isActive: isActive))
