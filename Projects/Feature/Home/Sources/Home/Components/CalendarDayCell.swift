@@ -7,6 +7,7 @@ struct CalendarDayCell: View {
 
     var body: some View {
         content
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
             .aspectRatio(1, contentMode: .fit)
             .scaleEffect(0.88)
     }
