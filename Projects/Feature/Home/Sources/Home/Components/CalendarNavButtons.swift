@@ -21,12 +21,27 @@ struct CalendarNavButtons: View {
                     .frame(minHeight: 44)
                     .contentShape(Rectangle())
             }
-            navButton(label: "이전 달", systemImage: "chevron.left", action: onPrevious, isEnabled: true)
-            navButton(label: "다음 달", systemImage: "chevron.right", action: onNext, isEnabled: !isAtCurrentMonth)
+            makeNavButton(
+                label: "이전 달",
+                systemImage: "chevron.left",
+                action: onPrevious,
+                isEnabled: true
+            )
+            makeNavButton(
+                label: "다음 달",
+                systemImage: "chevron.right",
+                action: onNext,
+                isEnabled: !isAtCurrentMonth
+            )
         }
     }
 
-    private func navButton(label: String, systemImage: String, action: @escaping () -> Void, isEnabled: Bool) -> some View {
+    private func makeNavButton(
+        label: String,
+        systemImage: String,
+        action: @escaping () -> Void,
+        isEnabled: Bool
+    ) -> some View {
         Button(label, systemImage: systemImage, action: action)
             .labelStyle(.iconOnly)
             .font(.system(size: 13, weight: .semibold))
