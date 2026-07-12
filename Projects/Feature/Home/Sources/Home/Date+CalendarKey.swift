@@ -6,7 +6,7 @@ extension Date {
         Self.formatter.string(from: self)
     }
 
-    private static let formatter: DateFormatter = {
+    private static let formatter = {
         let f = DateFormatter()
         f.dateFormat = "yyyy-MM-dd"
         return f

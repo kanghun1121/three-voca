@@ -1,5 +1,3 @@
-import Foundation
-
 struct LevelCardPresentationModel: Equatable, Identifiable {
     let id: String
     let level: Int
