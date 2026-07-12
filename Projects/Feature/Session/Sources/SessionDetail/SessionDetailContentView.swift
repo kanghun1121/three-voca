@@ -24,6 +24,6 @@ struct SessionDetailContentView: View {
             .padding(.vertical)
         }
         .scrollIndicators(.hidden)
-        .background(DesignSystemAsset.bg.swiftUIColor)
+        .background(DesignSystemAsset.background.swiftUIColor)
     }
 }

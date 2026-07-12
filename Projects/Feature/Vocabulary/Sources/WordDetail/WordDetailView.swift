@@ -28,9 +28,9 @@ public struct WordDetailView: View {
             }
         }
         .tabViewStyle(.page(indexDisplayMode: .never))
-        .background(DesignSystemAsset.bg.swiftUIColor)
+        .background(DesignSystemAsset.background.swiftUIColor)
         .navigationBarBackButtonHidden(true)
-        .toolbarBackground(DesignSystemAsset.bg.swiftUIColor, for: .navigationBar)
+        .toolbarBackground(DesignSystemAsset.background.swiftUIColor, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
