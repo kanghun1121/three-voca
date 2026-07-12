@@ -18,6 +18,9 @@ public final class HomeViewModel {
 
     let calendarToday: Date
     private(set) var calendarMonthOffset: Int = 0
+
+    @ObservationIgnored @Dependency(\.homeClient) private var homeClient
+
     private var cal: Calendar { .current }
 
     var calendarDisplayedDate: Date {
@@ -35,8 +38,6 @@ public final class HomeViewModel {
             Array(days[start..<min(start + 7, days.count)])
         }
     }
-
-    @ObservationIgnored @Dependency(\.homeClient) private var homeClient
 
     @CasePathable
     public enum Destination {
