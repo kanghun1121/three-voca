@@ -5,6 +5,20 @@ import DesignSystem
 struct CalendarLegendRow: View {
     let studiedDaysCount: Int
 
+    var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            Rectangle()
+                .fill(DesignSystemAsset.borderSubtle.swiftUIColor)
+                .frame(height: 1)
+            LegendContentRow(studiedDaysCount: studiedDaysCount)
+        }
+        .padding(.top, 16)
+    }
+}
+
+private struct LegendContentRow: View {
+    let studiedDaysCount: Int
+
     private static let swatchColors: [Color] = [
         CalendarDayIntensity.lv0.background,
         CalendarDayIntensity.lv1.background,
@@ -13,17 +27,11 @@ struct CalendarLegendRow: View {
     ]
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            Rectangle()
-                .fill(DesignSystemAsset.borderSubtle.swiftUIColor)
-                .frame(height: 1)
-            HStack(spacing: 0) {
-                countLabel
-                Spacer()
-                scale
-            }
+        HStack(spacing: 0) {
+            countLabel
+            Spacer()
+            scale
         }
-        .padding(.top, 16)
     }
 
     private var countLabel: some View {

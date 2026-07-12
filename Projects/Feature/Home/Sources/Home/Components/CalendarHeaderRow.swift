@@ -12,14 +12,7 @@ struct CalendarHeaderRow: View {
 
     var body: some View {
         HStack(spacing: 8) {
-            HStack(alignment: .lastTextBaseline, spacing: 7) {
-                Text("\(String(month))월")
-                    .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 19))
-                    .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
-                Text(String(year))
-                    .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 13))
-                    .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
-            }
+            MonthYearLabel(month: month, year: year)
             Spacer()
             CalendarNavButtons(
                 isAtCurrentMonth: isAtCurrentMonth,
@@ -27,6 +20,22 @@ struct CalendarHeaderRow: View {
                 onNext: onNext,
                 onToday: onToday
             )
+        }
+    }
+}
+
+private struct MonthYearLabel: View {
+    let month: Int
+    let year: Int
+
+    var body: some View {
+        HStack(alignment: .lastTextBaseline, spacing: 7) {
+            Text("\(String(month))월")
+                .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 19))
+                .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
+            Text(String(year))
+                .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 13))
+                .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
         }
     }
 }
