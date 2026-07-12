@@ -15,12 +15,12 @@ struct SessionGrid: View {
                     SessionCell(sessionNumber: session.sessionNumber, status: session.status)
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel(accessibilityLabel(for: session))
+                .accessibilityLabel(makeAccessibilityLabel(for: session))
             }
         }
     }
 
-    private func accessibilityLabel(for session: SessionRowPresentationModel) -> String {
+    private func makeAccessibilityLabel(for session: SessionRowPresentationModel) -> String {
         switch session.status {
         case .done: "\(session.sessionNumber)번 세션, 완료"
         case .current: "\(session.sessionNumber)번 세션, 진행 중"

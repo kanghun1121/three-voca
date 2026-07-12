@@ -7,12 +7,12 @@ struct CalendarWeekRow: View {
     var body: some View {
         HStack(spacing: 4) {
             ForEach(days, id: \.date) { day in
-                CalendarDayCell(kind: cellKind(for: day))
+                CalendarDayCell(kind: resolveCellKind(for: day))
             }
         }
     }
 
-    private func cellKind(for day: CalendarDay) -> CalendarDayCellKind {
+    private func resolveCellKind(for day: CalendarDay) -> CalendarDayCellKind {
         guard day.isCurrentMonth else { return .empty }
         let intensity = activityMap[day.date.calendarDateKey]
         if day.isToday { return .today(day.dayNumber, intensity) }
