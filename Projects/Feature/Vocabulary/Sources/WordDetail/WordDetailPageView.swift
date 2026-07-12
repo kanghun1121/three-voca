@@ -8,27 +8,29 @@ struct WordDetailPageView: View {
     let onChunkReaderTapped: (WordDetailPresentationModel.ExampleRow) -> Void
 
     var body: some View {
-        ScrollView {
+        Group {
             switch viewState {
             case .loaded(let state):
-                WordDetailContentView(
-                    state: state,
-                    onPronunciationTapped: onPronunciationTapped,
-                    onChunkReaderTapped: onChunkReaderTapped
-                )
+                ScrollView {
+                    WordDetailContentView(
+                        state: state,
+                        onPronunciationTapped: onPronunciationTapped,
+                        onChunkReaderTapped: onChunkReaderTapped
+                    )
+                }
+                .scrollIndicators(.hidden)
             case .error(let message):
-                Text(message)
-                    .foregroundStyle(.secondary)
-                    .frame(maxWidth: .infinity)
-                    .containerRelativeFrame(.vertical)
+                ScrollView {
+                    Text(message)
+                        .foregroundStyle(.secondary)
+                        .frame(maxWidth: .infinity)
+                        .containerRelativeFrame(.vertical)
+                }
+                .scrollIndicators(.hidden)
             case .loading, nil:
-                ProgressView()
-                    .frame(maxWidth: .infinity)
-                    .containerRelativeFrame(.vertical)
-                    .accessibilityLabel("단어 정보 불러오는 중")
+                WordDetailSkeletonView()
             }
         }
-        .scrollIndicators(.hidden)
-        .background(DesignSystemAsset.bg.swiftUIColor)
+        .background(DesignSystemAsset.background.swiftUIColor)
     }
 }
