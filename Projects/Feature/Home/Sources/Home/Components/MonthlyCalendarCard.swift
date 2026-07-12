@@ -5,12 +5,6 @@ import DesignSystem
 struct MonthlyCalendarCard: View {
     let viewModel: HomeViewModel
 
-    private static let dateFormatter: DateFormatter = {
-        let f = DateFormatter()
-        f.dateFormat = "yyyy-MM-dd"
-        return f
-    }()
-
     private var activityMap: [String: CalendarDayIntensity] {
         Dictionary(uniqueKeysWithValues: viewModel.activities.compactMap { activity -> (String, CalendarDayIntensity)? in
             let intensity: CalendarDayIntensity
@@ -28,7 +22,7 @@ struct MonthlyCalendarCard: View {
         viewModel.calendarRows
             .flatMap { $0 }
             .filter { $0.isCurrentMonth }
-            .filter { activityMap[Self.dateFormatter.string(from: $0.date)] != nil }
+            .filter { activityMap[$0.date.calendarDateKey] != nil }
             .count
     }
 
@@ -58,7 +52,7 @@ struct MonthlyCalendarCard: View {
                 .strokeBorder(DesignSystemAsset.borderSubtle.swiftUIColor, lineWidth: 1)
         }
         .shadow(
-            color: Color(red: 0.09, green: 0.09, blue: 0.09).opacity(0.06),
+            color: DesignSystemAsset.shadowSubtle.swiftUIColor.opacity(0.06),
             radius: 20,
             x: 0,
             y: 6
