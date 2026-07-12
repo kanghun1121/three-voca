@@ -6,13 +6,9 @@ struct CalendarDayCell: View {
     let kind: CalendarDayCellKind
 
     var body: some View {
-        GeometryReader { geometry in
-            let side = min(geometry.size.width, geometry.size.height) * 0.88
-            content
-                .frame(width: side, height: side)
-                .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
-        }
-        .aspectRatio(1, contentMode: .fit)
+        content
+            .aspectRatio(1, contentMode: .fit)
+            .scaleEffect(0.88)
     }
 
     @ViewBuilder

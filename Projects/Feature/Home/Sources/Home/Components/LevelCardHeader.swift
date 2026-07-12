@@ -43,19 +43,19 @@ extension LevelStatus {
     var badgeInfo: (text: String, fg: Color, bg: Color)? {
         switch self {
         case .active:
-            return (
+            (
                 "학습 중",
                 DesignSystemAsset.studying.swiftUIColor,
                 DesignSystemAsset.studying100.swiftUIColor
             )
         case .completed:
-            return (
+            (
                 "완료",
                 DesignSystemAsset.positive.swiftUIColor,
                 DesignSystemAsset.positive100.swiftUIColor
             )
         case .notStarted:
-            return nil
+            nil
         }
     }
 }
