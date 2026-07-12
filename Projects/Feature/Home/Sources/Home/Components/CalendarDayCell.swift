@@ -19,15 +19,29 @@ struct CalendarDayCell: View {
             Color.clear
 
         case .future(let day):
-            dayLabel(day, color: DesignSystemAsset.fgSubtle.swiftUIColor, weight: DesignSystemFontFamily.Pretendard.semiBold)
+            makeDayLabel(
+                day,
+                color: DesignSystemAsset.fgSubtle.swiftUIColor,
+                weight: DesignSystemFontFamily.Pretendard.semiBold
+            )
 
         case .notStudied(let day):
-            dayLabel(day, color: DesignSystemAsset.fgMuted.swiftUIColor, weight: DesignSystemFontFamily.Pretendard.semiBold)
+            makeDayLabel(
+                day,
+                color: DesignSystemAsset.fgMuted.swiftUIColor,
+                weight: DesignSystemFontFamily.Pretendard.semiBold
+            )
 
         case .studied(let day, let intensity):
             RoundedRectangle(cornerRadius: 11)
                 .fill(intensity.background)
-                .overlay { dayLabel(day, color: intensity.textColor, weight: DesignSystemFontFamily.Pretendard.extraBold) }
+                .overlay {
+                    makeDayLabel(
+                        day,
+                        color: intensity.textColor,
+                        weight: DesignSystemFontFamily.Pretendard.extraBold
+                    )
+                }
 
         case .today(let day, let intensity):
             RoundedRectangle(cornerRadius: 11)
@@ -37,7 +51,7 @@ struct CalendarDayCell: View {
                         .strokeBorder(DesignSystemAsset.growDeep.swiftUIColor, lineWidth: 2.5)
                 }
                 .overlay {
-                    dayLabel(
+                    makeDayLabel(
                         day,
                         color: intensity?.textColor ?? DesignSystemAsset.growDeep.swiftUIColor,
                         weight: DesignSystemFontFamily.Pretendard.extraBold
@@ -46,7 +60,11 @@ struct CalendarDayCell: View {
         }
     }
 
-    private func dayLabel(_ day: Int, color: Color, weight: DesignSystemFontConvertible) -> some View {
+    private func makeDayLabel(
+        _ day: Int,
+        color: Color,
+        weight: DesignSystemFontConvertible
+    ) -> some View {
         Text("\(day)")
             .font(weight.swiftUIFont(size: 12.5))
             .foregroundStyle(color)
