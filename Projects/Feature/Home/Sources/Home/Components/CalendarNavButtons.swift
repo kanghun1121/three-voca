@@ -18,6 +18,8 @@ struct CalendarNavButtons: View {
                     .padding(.vertical, 5)
                     .background(DesignSystemAsset.growDeep.swiftUIColor.opacity(0.1))
                     .clipShape(.rect(cornerRadius: 8))
+                    .frame(minHeight: 44)
+                    .contentShape(Rectangle())
             }
             navButton(label: "이전 달", systemImage: "chevron.left", action: onPrevious, isEnabled: true)
             navButton(label: "다음 달", systemImage: "chevron.right", action: onNext, isEnabled: !isAtCurrentMonth)
@@ -36,6 +38,7 @@ struct CalendarNavButtons: View {
             .frame(width: 30, height: 30)
             .background(DesignSystemAsset.bgSubtle.swiftUIColor)
             .clipShape(.rect(cornerRadius: 9))
+            .frame(width: 44, height: 44)
             .contentShape(Rectangle())
             .disabled(!isEnabled)
     }
