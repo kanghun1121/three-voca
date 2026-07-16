@@ -13,13 +13,13 @@ struct SplashContentView: View {
             Text("3초 단어")
                 .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 40))
                 .kerning(-1.8)
-                .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
+                .foregroundStyle(DesignSystemAsset.growDeep.swiftUIColor)
                 .padding(.top, 36)
 
             Text("한 장씩, 한 단어씩")
                 .font(DesignSystemFontFamily.Pretendard.regular.swiftUIFont(size: 15))
                 .kerning(-0.15)
-                .foregroundStyle(DesignSystemAsset.white.swiftUIColor.opacity(0.66))
+                .foregroundStyle(DesignSystemAsset.growDeep.swiftUIColor.opacity(0.66))
                 .padding(.top, 12)
         }
         .padding(.horizontal, 32)
