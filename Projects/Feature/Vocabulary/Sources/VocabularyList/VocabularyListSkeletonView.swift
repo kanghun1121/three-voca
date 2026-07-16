@@ -52,10 +52,7 @@ private struct SkeletonWordList: View {
     var body: some View {
         LazyVStack(spacing: 8) {
             ForEach(0..<8, id: \.self) { i in
-                SkeletonWordRow(
-                    en: enPool[i % enPool.count],
-                    ko: koPool[i % koPool.count]
-                )
+                SkeletonWordRow(en: enPool[i % enPool.count], ko: koPool[i % koPool.count])
             }
         }
     }
