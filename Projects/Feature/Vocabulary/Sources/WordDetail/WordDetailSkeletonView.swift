@@ -36,13 +36,19 @@ private struct SkeletonHeaderView: View {
             Text("promise")
                 .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 40))
                 .kerning(-0.025 * 40)
-            HStack(spacing: 10) {
-                Text("/ˈprɒm.ɪs/")
-                    .font(.system(size: 14, design: .monospaced))
-                Circle()
-                    .frame(width: 32, height: 32)
-            }
-            .padding(.top, 8)
+            SkeletonPronunciationRow()
+                .padding(.top, 8)
+        }
+    }
+}
+
+private struct SkeletonPronunciationRow: View {
+    var body: some View {
+        HStack(spacing: 10) {
+            Text("/ˈprɒm.ɪs/")
+                .font(.system(size: 14, design: .monospaced))
+            Circle()
+                .frame(width: 32, height: 32)
         }
     }
 }
@@ -68,10 +74,16 @@ private struct SkeletonDefinitionGroupView: View {
                 .padding(.vertical, 3)
                 .background(DesignSystemAsset.study100.swiftUIColor)
                 .clipShape(.rect(cornerRadius: 6))
-            VStack(alignment: .leading, spacing: 6) {
-                ForEach(0..<2, id: \.self) { _ in
-                    SkeletonMeaningRow()
-                }
+            SkeletonMeaningList()
+        }
+    }
+}
+
+private struct SkeletonMeaningList: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            ForEach(0..<2, id: \.self) { _ in
+                SkeletonMeaningRow()
             }
         }
     }
@@ -99,14 +111,26 @@ private struct SkeletonExamplesView: View {
             Divider()
                 .background(DesignSystemAsset.borderSubtle.swiftUIColor)
                 .padding(.bottom, 22)
-            VStack(alignment: .leading, spacing: 12) {
-                Text("예문")
-                    .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 13))
-                VStack(spacing: 10) {
-                    ForEach(0..<2, id: \.self) { _ in
-                        SkeletonExampleRow()
-                    }
-                }
+            SkeletonExamplesSection()
+        }
+    }
+}
+
+private struct SkeletonExamplesSection: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("예문")
+                .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 13))
+            SkeletonExampleList()
+        }
+    }
+}
+
+private struct SkeletonExampleList: View {
+    var body: some View {
+        VStack(spacing: 10) {
+            ForEach(0..<2, id: \.self) { _ in
+                SkeletonExampleRow()
             }
         }
     }

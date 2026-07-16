@@ -34,7 +34,11 @@ public struct WordDetailView: View {
         .toolbarBackground(.visible, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
-                Button("뒤로", systemImage: "chevron.left", action: dismiss.callAsFunction)
+                Button(
+                    "뒤로",
+                    systemImage: "chevron.left",
+                    action: dismiss.callAsFunction
+                )
                     .fontWeight(.semibold)
                     .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
             }
