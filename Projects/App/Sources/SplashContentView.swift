@@ -9,6 +9,7 @@ struct SplashContentView: View {
                 .resizable()
                 .scaledToFit()
                 .frame(width: 188, height: 213.6)
+                .accessibilityHidden(true)
 
             Text("3초 단어")
                 .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 40))
