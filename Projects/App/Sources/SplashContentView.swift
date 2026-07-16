@@ -4,24 +4,25 @@ import DesignSystem
 
 struct SplashContentView: View {
     var body: some View {
-        ZStack {
-            VStack(spacing: 8) {
-                Text("DAILY VOCABULARY")
-                    .font(.system(size: 14, weight: .bold))
-                    .kerning(4.2)
-                    .foregroundStyle(Color(red: 0, green: 0.4, blue: 1).opacity(0.55))
+        VStack(spacing: 0) {
+            DesignSystemAsset.splashBook.swiftUIImage
+                .resizable()
+                .scaledToFit()
+                .frame(width: 188, height: 213.6)
 
-                Text("\(Text("3초 ").foregroundStyle(Color(red: 0.039, green: 0.039, blue: 0.047)))\(Text("영단어").foregroundStyle(Color(red: 0, green: 0.4, blue: 1)))")
-                    .font(.system(size: 72, weight: .heavy))
-                    .kerning(-3.2)
-            }
+            Text("3초 단어")
+                .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 40))
+                .kerning(-1.8)
+                .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
+                .padding(.top, 36)
 
-            VStack {
-                Spacer()
-                DotLoaderView()
-                    .padding(.bottom, 60)
-            }
+            Text("한 장씩, 한 단어씩")
+                .font(DesignSystemFontFamily.Pretendard.regular.swiftUIFont(size: 15))
+                .kerning(-0.15)
+                .foregroundStyle(DesignSystemAsset.white.swiftUIColor.opacity(0.66))
+                .padding(.top, 12)
         }
+        .padding(.horizontal, 32)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
