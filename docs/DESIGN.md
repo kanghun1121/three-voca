@@ -39,9 +39,7 @@ DesignSystemAsset.Color.game100.swiftUIColor  // ~ game400
 DesignSystemAsset.Color.study100.swiftUIColor // ~ study300
 
 // Splash
-DesignSystemAsset.Color.splashGradientTop.swiftUIColor    // #1AAE51
-DesignSystemAsset.Color.splashGradientMid.swiftUIColor    // #128843
-DesignSystemAsset.Color.splashGradientBottom.swiftUIColor // #0B5E2D
+DesignSystemAsset.Color.splashBackground.swiftUIColor // #E7F3EA
 ```
 
 필요한 토큰이 없으면 임의로 색상을 추가하지 말고 먼저 물어본다.
