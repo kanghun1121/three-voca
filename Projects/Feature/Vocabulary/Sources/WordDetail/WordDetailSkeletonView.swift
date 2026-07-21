@@ -9,22 +9,28 @@ import DesignSystem
 struct WordDetailSkeletonView: View {
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 0) {
-                SkeletonHeaderView()
-                    .padding(.bottom, 22)
-                SkeletonDefinitionsView()
-                    .padding(.bottom, 28)
-                SkeletonExamplesView()
-            }
-            .padding(.horizontal, 20)
-            .padding(.top, 8)
-            .padding(.bottom, 32)
-            .redacted(reason: .placeholder)
+            WordDetailSkeletonContentView()
         }
         .scrollIndicators(.hidden)
         .background(DesignSystemAsset.background.swiftUIColor)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("단어 정보 불러오는 중")
+    }
+}
+
+struct WordDetailSkeletonContentView: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            SkeletonHeaderView()
+                .padding(.bottom, 22)
+            SkeletonDefinitionsView()
+                .padding(.bottom, 28)
+            SkeletonExamplesView()
+        }
+        .padding(.horizontal, 20)
+        .padding(.top, 8)
+        .padding(.bottom, 32)
+        .redacted(reason: .placeholder)
     }
 }
 
