@@ -31,6 +31,6 @@ struct MainTabView: View {
                 Label("마이페이지", systemImage: "person.fill")
             }
         }
-        .tint(DesignSystemAsset.primary.swiftUIColor)
+        .tint(DesignSystemAsset.growDeep.swiftUIColor)
     }
 }

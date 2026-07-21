@@ -17,7 +17,8 @@ struct WordDetailPageView: View {
                     onChunkReaderTapped: onChunkReaderTapped
                 )
             case .error(let message):
-                ContentUnavailableView(message, systemImage: "exclamationmark.triangle")
+                Text(message)
+                    .foregroundStyle(.secondary)
                     .frame(maxWidth: .infinity)
                     .containerRelativeFrame(.vertical)
             case .loading, nil:
