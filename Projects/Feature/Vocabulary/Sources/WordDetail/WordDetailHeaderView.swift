@@ -23,7 +23,7 @@ private struct PronunciationRow: View {
     let pronunciation: String
     let onPronunciationTapped: () -> Void
 
-    @ScaledMetric private var fontSize: CGFloat = 14
+    @ScaledMetric private var fontSize: Double = 14
 
     var body: some View {
         HStack(spacing: 10) {
@@ -38,20 +38,20 @@ private struct PronunciationRow: View {
 private struct AudioButton: View {
     let action: () -> Void
 
-    @ScaledMetric private var iconSize: CGFloat = 14
+    @ScaledMetric private var iconSize: Double = 14
 
     var body: some View {
-        Button(action: action) {
-            Image(systemName: "speaker.wave.2")
-                .font(.system(size: iconSize))
-                .foregroundStyle(DesignSystemAsset.study300.swiftUIColor)
-        }
-        .accessibilityLabel("발음 듣기")
-        .frame(width: 32, height: 32)
-        .background(DesignSystemAsset.background.swiftUIColor)
-        .clipShape(Circle())
-        .overlay { Circle().stroke(DesignSystemAsset.border.swiftUIColor, lineWidth: 1) }
-        .buttonStyle(.plain)
+        Button("발음 듣기", systemImage: "speaker.wave.2", action: action)
+            .labelStyle(.iconOnly)
+            .font(.system(size: iconSize))
+            .foregroundStyle(DesignSystemAsset.study300.swiftUIColor)
+            .frame(width: 32, height: 32)
+            .background(DesignSystemAsset.background.swiftUIColor)
+            .clipShape(Circle())
+            .overlay { Circle().stroke(DesignSystemAsset.border.swiftUIColor, lineWidth: 1) }
+            .frame(minWidth: 44, minHeight: 44)
+            .contentShape(.rect)
+            .buttonStyle(.plain)
     }
 }
 

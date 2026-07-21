@@ -7,7 +7,7 @@ struct WordDetailDefinitionsView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {
-            ForEach(groups, id: \.partOfSpeech) { group in
+            ForEach(groups) { group in
                 WordDetailDefinitionGroupView(group: group)
             }
         }

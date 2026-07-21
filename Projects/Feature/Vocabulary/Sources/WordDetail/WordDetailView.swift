@@ -18,9 +18,7 @@ public struct WordDetailView: View {
             ForEach(viewModel.wordIDs.indices, id: \.self) { index in
                 WordDetailPageView(
                     viewState: viewModel.viewStates[index],
-                    onPronunciationTapped: { term in
-                        Task { await viewModel.didTapPronunciationButton(term: term) }
-                    },
+                    onPronunciationTapped: viewModel.pronunciationTapped,
                     onChunkReaderTapped: viewModel.didTapChunkReader
                 )
                 .tag(index)
