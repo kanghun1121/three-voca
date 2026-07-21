@@ -13,5 +13,5 @@ public let env = ProjectEnvironment(
     organizationName: "FiveVoca",
     bundleIDPrefix: "com.kangdev.FiveVoca",
     deploymentTargets: .iOS("18.0"),
-    destinations: .iOS
+    destinations: [.iPhone]
 )
