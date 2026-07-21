@@ -32,6 +32,7 @@ struct DeleteAccountConfirmSheet: View {
             TextField("회원탈퇴", text: $confirmText)
                 .font(DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 16))
                 .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
+                .tint(DesignSystemAsset.primary.swiftUIColor)
                 .padding(.horizontal, 14)
                 .padding(.vertical, 13)
                 .background(
