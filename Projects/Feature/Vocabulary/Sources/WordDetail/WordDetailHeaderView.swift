@@ -41,7 +41,11 @@ private struct AudioButton: View {
     @ScaledMetric private var iconSize: Double = 14
 
     var body: some View {
-        Button("발음 듣기", systemImage: "speaker.wave.2", action: action)
+        Button(
+            "발음 듣기",
+            systemImage: "speaker.wave.2",
+            action: action
+        )
             .labelStyle(.iconOnly)
             .font(.system(size: iconSize))
             .foregroundStyle(DesignSystemAsset.study300.swiftUIColor)

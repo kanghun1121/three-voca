@@ -4,9 +4,10 @@ import DomainInterface
 
 struct WordDetailPresentationModel: Equatable {
     struct DefinitionGroup: Equatable, Identifiable {
-        var id: String { partOfSpeech }
         let partOfSpeech: String
         let meanings: [String]
+
+        var id: String { partOfSpeech }
     }
 
     struct ExampleRow: Equatable, Identifiable {
