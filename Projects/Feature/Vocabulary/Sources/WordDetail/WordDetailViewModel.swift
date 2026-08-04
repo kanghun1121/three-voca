@@ -26,8 +26,8 @@ public final class WordDetailViewModel {
     let wordIDs: [String]
 
     @ObservationIgnored @Dependency(\.getWordDetailUseCase) private var getWordDetailUseCase
-    @ObservationIgnored @Dependency(\.audioClient) private var audioClient
-    @ObservationIgnored @Dependency(\.audioPlayerClient) private var audioPlayerClient
+    @ObservationIgnored @Dependency(\.getAudioURLUseCase) private var getAudioURLUseCase
+    @ObservationIgnored @Dependency(\.playAudioUseCase) private var playAudioUseCase
 
     public init(wordIDs: [String], initialIndex: Int) {
         self.wordIDs = wordIDs
@@ -35,8 +35,8 @@ public final class WordDetailViewModel {
     }
 
     func didTapPronunciationButton(term: String) async {
-        guard let url = await audioClient.audioURL(term) else { return }
-        await audioPlayerClient.play(url)
+        guard let url = await getAudioURLUseCase.execute(term) else { return }
+        await playAudioUseCase.execute(url)
     }
 
     func didTapChunkReader(example: WordDetailPresentationModel.ExampleRow) {

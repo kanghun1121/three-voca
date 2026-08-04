@@ -26,7 +26,7 @@ public final class SessionDetailViewModel {
     var destination: Destination?
 
     @ObservationIgnored @Dependency(\.getSessionDetailUseCase) private var getSessionDetailUseCase
-    @ObservationIgnored @Dependency(\.audioClient) private var audioClient
+    @ObservationIgnored @Dependency(\.prefetchAudioUseCase) private var prefetchAudioUseCase
     private let sessionID: String
     private var audioPrefetchTask: Task<Void, Never>?
 
@@ -42,7 +42,7 @@ public final class SessionDetailViewModel {
             viewState = .loaded(session.toSessionDetailPresentationModel())
             // 게임/단어장 진입 전 대기 시간을 줄이기 위해, 세션 상세 화면에 머무는 동안 미리 오디오를 캐싱해둔다.
             let audioItems = session.words.map { ($0.term, $0.audioUrl) }
-            audioPrefetchTask = Task { await audioClient.prefetchAudio(audioItems) }
+            audioPrefetchTask = Task { await prefetchAudioUseCase.execute(audioItems) }
         } catch {
             viewState = .error("세션 정보를 불러오지 못했습니다.")
         }

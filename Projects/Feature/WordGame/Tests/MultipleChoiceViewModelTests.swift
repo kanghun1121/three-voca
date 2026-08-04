@@ -26,8 +26,10 @@ final class MultipleChoiceViewModelTests: XCTestCase {
         let word = GameWord(from: sessionWord)
         let vm = withDependencies {
             $0.soundClient = .previewValue
-            $0.audioClient = .previewValue
-            $0.audioPlayerClient = .previewValue
+            $0.prefetchAudioUseCase = .previewValue
+            $0.getAudioURLUseCase = .previewValue
+            $0.playAudioUseCase = .previewValue
+            $0.stopAudioUseCase = .previewValue
         } operation: {
             MultipleChoiceViewModel(
                 words: [word],
@@ -74,8 +76,10 @@ final class MultipleChoiceViewModelTests: XCTestCase {
         }
         let vm = withDependencies {
             $0.soundClient = .previewValue
-            $0.audioClient = .previewValue
-            $0.audioPlayerClient = .previewValue
+            $0.prefetchAudioUseCase = .previewValue
+            $0.getAudioURLUseCase = .previewValue
+            $0.playAudioUseCase = .previewValue
+            $0.stopAudioUseCase = .previewValue
         } operation: {
             MultipleChoiceViewModel(
                 words: words,
@@ -136,8 +140,10 @@ final class MultipleChoiceViewModelTests: XCTestCase {
         }
         let vm = withDependencies {
             $0.soundClient = .previewValue
-            $0.audioClient = .previewValue
-            $0.audioPlayerClient = .previewValue
+            $0.prefetchAudioUseCase = .previewValue
+            $0.getAudioURLUseCase = .previewValue
+            $0.playAudioUseCase = .previewValue
+            $0.stopAudioUseCase = .previewValue
         } operation: {
             MultipleChoiceViewModel(
                 words: words,
@@ -175,8 +181,10 @@ final class MultipleChoiceViewModelTests: XCTestCase {
         let word = GameWord(from: sessionWord)
         let vm = withDependencies {
             $0.soundClient = .previewValue
-            $0.audioClient = .previewValue
-            $0.audioPlayerClient = .previewValue
+            $0.prefetchAudioUseCase = .previewValue
+            $0.getAudioURLUseCase = .previewValue
+            $0.playAudioUseCase = .previewValue
+            $0.stopAudioUseCase = .previewValue
         } operation: {
             MultipleChoiceViewModel(
                 words: [word],
@@ -208,8 +216,10 @@ final class MultipleChoiceViewModelTests: XCTestCase {
         let word = GameWord(from: sessionWord)
         let vm = withDependencies {
             $0.soundClient = .previewValue
-            $0.audioClient = .previewValue
-            $0.audioPlayerClient = .previewValue
+            $0.prefetchAudioUseCase = .previewValue
+            $0.getAudioURLUseCase = .previewValue
+            $0.playAudioUseCase = .previewValue
+            $0.stopAudioUseCase = .previewValue
         } operation: {
             MultipleChoiceViewModel(
                 words: [word],
@@ -245,8 +255,10 @@ final class MultipleChoiceViewModelTests: XCTestCase {
         var isClosed = false
         let vm = withDependencies {
             $0.soundClient = .previewValue
-            $0.audioClient = .previewValue
-            $0.audioPlayerClient = .previewValue
+            $0.prefetchAudioUseCase = .previewValue
+            $0.getAudioURLUseCase = .previewValue
+            $0.playAudioUseCase = .previewValue
+            $0.stopAudioUseCase = .previewValue
         } operation: {
             MultipleChoiceViewModel(
                 words: [word],
@@ -279,8 +291,10 @@ final class MultipleChoiceViewModelTests: XCTestCase {
         var isCompleted = false
         let vm = withDependencies {
             $0.soundClient = .previewValue
-            $0.audioClient = .previewValue
-            $0.audioPlayerClient = .previewValue
+            $0.prefetchAudioUseCase = .previewValue
+            $0.getAudioURLUseCase = .previewValue
+            $0.playAudioUseCase = .previewValue
+            $0.stopAudioUseCase = .previewValue
         } operation: {
             MultipleChoiceViewModel(
                 words: [word],
