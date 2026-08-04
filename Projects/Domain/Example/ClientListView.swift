@@ -4,8 +4,8 @@ struct ClientListView: View {
     var body: some View {
         NavigationStack {
             List {
-                Section("HomeClient") {
-                    NavigationLink("fetchHomeOverview()") {
+                Section("GetHomeOverviewUseCase") {
+                    NavigationLink("execute()") {
                         EndpointDetailView(endpoint: .homeOverview)
                     }
                 }

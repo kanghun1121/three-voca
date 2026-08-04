@@ -10,6 +10,7 @@ struct DomainExampleApp: App {
     init() {
         prepareDependencies {
             $0.homeClient = .liveValue
+            $0.getHomeOverviewUseCase = .liveValue
             $0.sessionClient = .liveValue
             $0.wordClient = .liveValue
             $0.authClient = .liveValue
