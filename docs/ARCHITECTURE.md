@@ -6,10 +6,10 @@
 App
  └── Feature  ──→  Domain (Interface)
       └── ...  ──→  Shared
- └── Domain (Implements)  ──→  Core  ──→  Shared
-              └────────────→  Networking  ──→  NetworkingInterface
+ └── Domain (Implements)
  └── Data  ──→  Domain (Interface)
-      └────→  NetworkingInterface
+      └────→  Core  ──→  Shared
+      └────→  Networking  ──→  NetworkingInterface
 ```
 
 **허용되는 방향만 허용된다. 역방향은 없다.**
@@ -18,21 +18,25 @@ App
 |---|---|---|
 | `App` | 진입점. 의존성 주입 조립 | Feature, Domain, Data, Shared |
 | `Feature` | 화면과 UI 로직 | DomainInterface, Shared |
-| `Domain` | 비즈니스 로직 + Supabase 호출 | Core, Networking, NetworkingInterface, Shared |
-| `Data` | Repository의 liveValue(실제 API 구현) | DomainInterface, NetworkingInterface |
+| `Domain` | Repository/UseCase 선언 + UseCase의 liveValue(오케스트레이션) | 없음 |
+| `Data` | Repository의 liveValue(실제 API/시스템 호출 구현) | DomainInterface, Core, Networking, NetworkingInterface |
 | `Networking` | HTTP 클라이언트 실제 구현(`HTTPClient`) | NetworkingInterface |
 | `NetworkingInterface` | HTTP 클라이언트 포트(`HTTPClienting`, `Requestable` 등) | 없음 |
 | `Core` | Keychain 등 인프라 유틸리티 | Shared |
 | `Shared` | 디자인 시스템, 공통 유틸 | 없음 |
 
-네트워크 코드는 `Networking`(구현체)/`NetworkingInterface`(포트) 2-target으로 분리되어 있다(`Core`에는 더 이상 네트워크 코드가 없다 — Keychain만 남는다). `Domain`은 `Networking`(구현체, `HTTPClient` 직접 생성용)와 `NetworkingInterface`(포트, `Requestable`/`HTTPMethod`/`NetworkError`/`SupabaseConfig`/`httpClient` 의존성용)를 둘 다 참조한다. `Data`는 향후 Repository의 liveValue가 API를 호출할 때 `NetworkingInterface`의 `httpClient` 의존성만 보고 호출할 수 있도록 `NetworkingInterface`만 참조한다 — 구현체인 `Networking`에는 의존하지 않는다.
+네트워크 코드는 `Networking`(구현체)/`NetworkingInterface`(포트) 2-target으로 분리되어 있다(`Core`에는 더 이상 네트워크 코드가 없다 — Keychain만 남는다). 실제 API/시스템 호출은 전부 `Data` 모듈에 있다 — `Data`는 `Core`(Keychain), `Networking`(구현체, `HTTPClient` 직접 생성용), `NetworkingInterface`(포트, `Requestable`/`HTTPMethod`/`NetworkError`/`SupabaseConfig` 등)를 모두 참조한다. `Domain`은 더 이상 `Core`/`Networking`/`NetworkingInterface` 어느 것에도 의존하지 않는다 — Repository/UseCase 선언과 UseCase의 오케스트레이션 로직만 있다.
 
 ### Repository / UseCase 패턴
 
-- `Repository`, `UseCase`는 별도 모듈이 아니라 `Domain` 모듈 내부의 하위 개념이다. `Repository`는 외부 API를 추상화한 포트, `UseCase`는 화면이 실제로 호출하는 단위다. 둘 다 `Domain/Interface`(`DomainInterface` 타겟)에 struct-of-closures로 선언한다(`Client`와 동일한 형태 — `TestDependencyKey`/`DependencyValues` extension 포함).
-- `UseCase`의 `liveValue`는 `Domain/Sources`(`Domain` 타겟)에서 `@Dependency`로 Repository를 주입받아 호출한다. ViewModel은 Repository가 아닌 UseCase만 호출한다.
-- `Repository`의 `liveValue`(Supabase 등 실제 호출 구현)는 `Data` 모듈에 위치한다. `Data`는 `NetworkingInterface`의 `httpClient` 의존성으로 실제 API를 호출한다(`Requestable`을 준수하는 Request struct를 만들어 넘긴다). 현재는 DataSource 레이어 없이 Repository가 직접 API를 호출하는 형태이며, 필요해지면 Repository와 실제 호출 사이에 DataSource를 끼워 넣는다.
-- 기존 `Client` struct들(`WordClient` 등)은 위 패턴이 도입되기 전에 만들어진 것으로, Repository 없이 `Domain` 타겟에서 직접 API를 호출한다. 신규 기능은 Repository/UseCase 패턴을 따른다.
+FiveVoca의 모든 외부 의존성(Supabase 네트워크 호출, Keychain, AVFoundation 등)은 Repository/UseCase 패턴을 따른다. 과거 사용하던 `Client` struct(Repository+UseCase가 하나로 합쳐진 형태)는 전부 이 패턴으로 전환 완료됐고, `Domain/Interface/Client`·`Domain/Sources/Client` 디렉터리는 더 이상 존재하지 않는다.
+
+- **Repository**: 외부 API/시스템을 추상화한 포트. `Domain/Interface/Repository/`(`DomainInterface` 타겟)에 struct-of-closures로 선언한다. `testValue`(`unimplemented`)만 가지며 `previewValue`는 없다 — Repository는 ViewModel이 직접 보지 않기 때문이다.
+- **UseCase**: 화면(ViewModel)이 실제로 호출하는 단위. `Domain/Interface/UseCase/`(`DomainInterface` 타겟)에 struct-of-closures로 선언하며 `testValue`/`previewValue`를 모두 갖는다. **ViewModel은 Repository가 아닌 UseCase만 `@Dependency`로 주입받는다.**
+- **UseCase의 `liveValue`**는 `Domain/Sources/UseCase/`(`Domain` 타겟)에 위치하며, `@Dependency`로 Repository를 주입받아 호출한다(순수 오케스트레이션 — 여러 Repository를 조합하거나 결과를 가공할 수 있다. 예: `SignInWithAppleUseCase`는 `authRepository.signInWithApple`을 호출한 뒤 `authSessionRepository`에 토큰을 저장한다).
+- **Repository의 `liveValue`**는 `Data/Sources/<도메인별 폴더>/`에 위치하며, 실제 Supabase 호출(`HTTPClient(interceptor: TokenRefreshInterceptor())` + `Requestable` 준수 Request struct)이나 Keychain/AVFoundation 같은 시스템 API를 직접 다룬다. 캐싱(예: `WordDetailCache`, `SessionCache`, `AudioCache`)도 Repository의 liveValue 책임이다. `TokenRefreshInterceptor`(인증 헤더 부착 + 401 재시도)도 `Data/Sources`에 위치하며, 인증이 필요 없는 소수의 요청(`RefreshTokenRequest` 등)만 예외적으로 `NetworkingInterface`의 `httpClient`(NoopInterceptor) 의존성을 그대로 사용한다.
+- DataSource 레이어는 아직 없다 — Repository가 직접 API를 호출하며, 필요해지면 Repository와 실제 호출 사이에 DataSource를 끼워 넣는다.
+- `AudioPlayerRepository`처럼 "외부 API"가 아니라 로컬 시스템 프레임워크(AVFoundation)를 감싸는 경우도 있다 — Repository라는 이름이 정확히 들어맞지는 않지만, UseCase 테스트 용이성이라는 동일한 목적으로 같은 패턴을 적용한다.
 
 ---
 
@@ -56,16 +60,16 @@ Feature 모듈 하나는 4개 타겟으로 구성된다.
 
 ```
 Entity (DTO)  ──→  Domain Model  ──→  ViewState
-  (Domain)       (DomainInterface)     (Feature)
+   (Data)        (DomainInterface)     (Feature)
 ```
 
 **Entity (DTO)**
 - Supabase 응답을 그대로 매핑하는 `Decodable` struct
-- `Domain` 타겟 내부에만 존재. Feature에 절대 노출되지 않는다
+- `Data` 타겟 내부(`Data/Sources/<도메인별 폴더>`)에만 존재. `Domain`/`Feature`에 절대 노출되지 않는다 — Repository의 liveValue가 반환하기 전에 `.toDomain()`으로 변환한다
 
 **Domain Model**
 - 앱의 진짜 데이터 모델. UI와 무관하게 정의된다
-- `DomainInterface` 타겟에 위치. Feature와 Domain 양쪽이 참조한다
+- `DomainInterface` 타겟에 위치. `Feature`와 `Data` 양쪽이 참조한다(`Domain`은 Repository/UseCase 시그니처를 통해 다룰 뿐 DTO를 모른다)
 - 날짜는 `Date`, 수치는 `Double` — 포맷 없는 순수 값
 
 **ViewState**
@@ -78,7 +82,7 @@ Entity (DTO)  ──→  Domain Model  ──→  ViewState
 변환 함수는 **변환 대상 타입의 extension**으로 작성한다. 별도 Mapper 클래스를 만들지 않는다.
 
 ```swift
-// Entity → Domain: Domain 타겟 내부
+// Entity → Domain: Data 타겟 내부 (Repository의 liveValue가 호출)
 extension SessionDetailResponseDTO {
     func toDomain() -> Session { ... }
 }
@@ -132,26 +136,48 @@ View는 `destination`을 바인딩으로 연결하고, 분기 로직을 직접 �
 
 ## DI 패턴 — swift-dependencies
 
-모든 외부 의존성(Supabase, 시스템 API)은 `Client` struct로 감싼다.
+모든 외부 의존성(Supabase, Keychain, AVFoundation 등)은 struct-of-closures로 감싼다. Repository/UseCase 각각이 이 형태를 따른다 — 자세한 위치와 역할은 위 [Repository / UseCase 패턴](#repository--usecase-패턴) 참고.
 
 ```swift
-// DomainInterface에 선언
-public struct HomeClient: Sendable {
+// Repository — Domain/Interface/Repository/HomeRepository.swift
+public struct HomeRepository: Sendable {
     public var fetchHomeOverview: @Sendable () async throws -> VocabularyLibrary
 }
 
-extension HomeClient: TestDependencyKey {
-    public static let testValue = HomeClient(
+extension HomeRepository: TestDependencyKey {
+    public static let testValue = HomeRepository(
         fetchHomeOverview: unimplemented("\(Self.self).fetchHomeOverview")
     )
-    public static let previewValue = HomeClient(
-        fetchHomeOverview: { .previewFixture }
+    // previewValue 없음 — ViewModel이 직접 참조하지 않는다
+}
+
+// UseCase — Domain/Interface/UseCase/GetHomeOverviewUseCase.swift
+public struct GetHomeOverviewUseCase: Sendable {
+    public var execute: @Sendable () async throws -> VocabularyLibrary
+}
+
+extension GetHomeOverviewUseCase: TestDependencyKey {
+    public static let testValue = GetHomeOverviewUseCase(
+        execute: unimplemented("\(Self.self).execute")
+    )
+    public static let previewValue = GetHomeOverviewUseCase(
+        execute: { .previewFixture }
+    )
+}
+
+// UseCase의 liveValue — Domain/Sources/UseCase/GetHomeOverviewUseCase+Live.swift
+extension GetHomeOverviewUseCase: DependencyKey {
+    public static let liveValue = GetHomeOverviewUseCase(
+        execute: {
+            @Dependency(\.homeRepository) var homeRepository
+            return try await homeRepository.fetchHomeOverview()
+        }
     )
 }
 ```
 
-- `liveValue`: `Domain` 타겟에서 Supabase 실제 구현 (Repository/UseCase 패턴의 Repository `liveValue`는 `Data` 타겟에 위치 — 위 [Repository / UseCase 패턴](#repository--usecase-패턴) 참고)
+- Repository의 `liveValue`(Supabase 실제 호출)는 `Data/Sources/Home/HomeRepository+Live.swift`에 위치한다
 - `testValue`: `unimplemented` — 호출 시 테스트 즉시 실패. 의도하지 않은 호출 감지
-- `previewValue`: 고정 Fixture 반환
+- UseCase의 `previewValue`: 고정 Fixture 반환. ViewModel/Example 앱이 사용한다
 
 ---

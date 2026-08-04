@@ -78,7 +78,7 @@ let project = Project.makeModule(
 // 레이어 aggregator
 .feature          // Projects/Feature 전체
 .domain           // Domain Implements
-.domainInterface  // Domain Interface만 (Client, Repository, UseCase 선언 위치)
+.domainInterface  // Domain Interface만 (Repository, UseCase 선언 위치)
 .data              // Data (Repository의 liveValue 구현 위치)
 .networking        // Networking Implements (HTTPClient 등 실제 구현)
 .networkingInterface // Networking Interface만 (HTTPClienting, Requestable 등 포트)
