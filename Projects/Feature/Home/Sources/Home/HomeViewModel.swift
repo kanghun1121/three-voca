@@ -20,6 +20,7 @@ public final class HomeViewModel {
     private(set) var calendarMonthOffset: Int = 0
 
     @ObservationIgnored @Dependency(\.homeClient) private var homeClient
+    @ObservationIgnored @Dependency(\.getHomeOverviewUseCase) private var getHomeOverviewUseCase
 
     private var cal: Calendar { .current }
 
@@ -89,7 +90,7 @@ public final class HomeViewModel {
         isLoading = true
         defer { isLoading = false }
         do {
-            async let overview = homeClient.fetchHomeOverview()
+            async let overview = getHomeOverviewUseCase.execute()
             async let heatmap = homeClient.fetchHeatmapData()
             let (library, fetched) = try await (overview, heatmap)
             activities = fetched

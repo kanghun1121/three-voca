@@ -13,7 +13,7 @@ struct EndpointDetailView: View {
 
         var title: String {
             switch self {
-            case .homeOverview: "fetchHomeOverview()"
+            case .homeOverview: "GetHomeOverviewUseCase.execute()"
             case .sessionDetail: "fetchSessionDetail(id:)"
             case .wordDetail: "fetchWordDetail(id:)"
             case .authSignIn: "signInWithApple(identityToken:)"
@@ -52,7 +52,7 @@ struct EndpointDetailView: View {
     @State private var isLoading = false
     @State private var errorMessage: String?
 
-    @Dependency(\.homeClient) private var homeClient
+    @Dependency(\.getHomeOverviewUseCase) private var getHomeOverviewUseCase
     @Dependency(\.sessionClient) private var sessionClient
     @Dependency(\.wordClient) private var wordClient
     @Dependency(\.authClient) private var authClient
@@ -140,7 +140,7 @@ struct EndpointDetailView: View {
         do {
             switch endpoint {
             case .homeOverview:
-                let result = try await homeClient.fetchHomeOverview()
+                let result = try await getHomeOverviewUseCase.execute()
                 response = dumpString(result)
             case .sessionDetail:
                 let result = try await sessionClient.fetchSessionDetail(idInput)

@@ -39,6 +39,7 @@ let project = Project.makeModule(
             dependencies: [
                 .domain,
                 .domainInterface,
+                .data,
                 .dependencies,
             ],
             settings: .settings(
