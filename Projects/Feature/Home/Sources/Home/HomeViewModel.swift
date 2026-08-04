@@ -1,6 +1,6 @@
 import Foundation
 
-import UseCaseInterface
+import DomainInterface
 import FeatureSession
 
 import Dependencies

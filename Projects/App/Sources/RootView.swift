@@ -1,7 +1,7 @@
 import SwiftUI
 
-import UseCase
-import UseCaseInterface
+import Domain
+import DomainInterface
 import FeatureLogin
 
 import Dependencies

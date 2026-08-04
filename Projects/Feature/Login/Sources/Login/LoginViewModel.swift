@@ -2,7 +2,7 @@ import AuthenticationServices
 import Foundation
 import OSLog
 
-import UseCaseInterface
+import DomainInterface
 
 import Dependencies
 

@@ -16,7 +16,7 @@ let project = Project.makeModule(
         .feature(tests: .session, factory: .init(
             dependencies: [
                 .feature(implements: .session),
-                .useCaseInterface,
+                .domainInterface,
                 .dependencies,
             ]
         )),

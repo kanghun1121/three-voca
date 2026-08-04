@@ -1,6 +1,6 @@
 import Foundation
 
-import UseCaseInterface
+import DomainInterface
 
 extension VocabularyLibrary {
     func toHomePresentationModel() -> HomePresentationModel {

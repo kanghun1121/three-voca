@@ -1,7 +1,7 @@
 import SwiftUI
 
 import FeatureWordGame
-import UseCaseInterface
+import DomainInterface
 
 import Dependencies
 

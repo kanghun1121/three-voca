@@ -15,7 +15,7 @@ let project = Project.makeModule(
         .feature(tests: .vocabulary, factory: .init(
             dependencies: [
                 .feature(implements: .vocabulary),
-                .useCaseInterface,
+                .domainInterface,
                 .dependencies,
             ]
         )),

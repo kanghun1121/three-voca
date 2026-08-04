@@ -1,7 +1,7 @@
 import SwiftUI
 
 import DesignSystem
-import UseCaseInterface
+import DomainInterface
 
 struct HomeContentView: View {
     let state: HomePresentationModel

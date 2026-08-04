@@ -1,6 +1,6 @@
 import Foundation
 
-import UseCaseInterface
+import DomainInterface
 
 @Observable
 @MainActor
