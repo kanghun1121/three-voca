@@ -7,17 +7,26 @@ App
  └── Feature  ──→  Domain (Interface)
       └── ...  ──→  Shared
  └── Domain (Implements)  ──→  Core  ──→  Shared
+ └── Data  ──→  Domain (Interface)
 ```
 
 **허용되는 방향만 허용된다. 역방향은 없다.**
 
 | 레이어 | 역할 | 참조 가능한 레이어 |
 |---|---|---|
-| `App` | 진입점. 의존성 주입 조립 | Feature, Domain, Shared |
+| `App` | 진입점. 의존성 주입 조립 | Feature, Domain, Data, Shared |
 | `Feature` | 화면과 UI 로직 | DomainInterface, Shared |
 | `Domain` | 비즈니스 로직 + Supabase 호출 | Core, Shared |
+| `Data` | Repository의 liveValue(실제 API 구현) | DomainInterface |
 | `Core` | 네트워크/인프라 유틸리티 | Shared |
 | `Shared` | 디자인 시스템, 공통 유틸 | 없음 |
+
+### Repository / UseCase 패턴
+
+- `Repository`, `UseCase`는 별도 모듈이 아니라 `Domain` 모듈 내부의 하위 개념이다. `Repository`는 외부 API를 추상화한 포트, `UseCase`는 화면이 실제로 호출하는 단위다. 둘 다 `Domain/Interface`(`DomainInterface` 타겟)에 struct-of-closures로 선언한다(`Client`와 동일한 형태 — `TestDependencyKey`/`DependencyValues` extension 포함).
+- `UseCase`의 `liveValue`는 `Domain/Sources`(`Domain` 타겟)에서 `@Dependency`로 Repository를 주입받아 호출한다. ViewModel은 Repository가 아닌 UseCase만 호출한다.
+- `Repository`의 `liveValue`(Supabase 등 실제 호출 구현)는 `Data` 모듈에 위치한다. 현재는 DataSource 레이어 없이 Repository가 직접 API를 호출하는 형태이며, 필요해지면 Repository와 실제 호출 사이에 DataSource를 끼워 넣는다.
+- 기존 `Client` struct들(`WordClient` 등)은 위 패턴이 도입되기 전에 만들어진 것으로, Repository 없이 `Domain` 타겟에서 직접 API를 호출한다. 신규 기능은 Repository/UseCase 패턴을 따른다.
 
 ---
 
@@ -135,7 +144,7 @@ extension HomeClient: TestDependencyKey {
 }
 ```
 
-- `liveValue`: `Domain` 타겟에서 Supabase 실제 구현
+- `liveValue`: `Domain` 타겟에서 Supabase 실제 구현 (Repository/UseCase 패턴의 Repository `liveValue`는 `Data` 타겟에 위치 — 위 [Repository / UseCase 패턴](#repository--usecase-패턴) 참고)
 - `testValue`: `unimplemented` — 호출 시 테스트 즉시 실패. 의도하지 않은 호출 감지
 - `previewValue`: 고정 Fixture 반환
 
