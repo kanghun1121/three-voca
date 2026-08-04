@@ -1,6 +1,6 @@
 //
 //  HTTPClientTests.swift
-//  CoreTests
+//  NetworkTests
 //
 //  Created by 강대훈 on 7/6/26.
 //  Copyright © 2026 FiveVoca. All rights reserved.
@@ -8,7 +8,9 @@
 
 import XCTest
 
-@testable import Core
+import NetworkingInterface
+
+@testable import Networking
 
 final class HTTPClientTests: XCTestCase {
     override func tearDownWithError() throws {

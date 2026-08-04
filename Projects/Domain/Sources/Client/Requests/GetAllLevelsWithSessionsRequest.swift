@@ -1,6 +1,6 @@
 import Foundation
 
-import Core
+import NetworkingInterface
 
 struct GetAllLevelsWithSessionsRequest: Requestable {
     var baseURL: URL { SupabaseConfig.baseURL }

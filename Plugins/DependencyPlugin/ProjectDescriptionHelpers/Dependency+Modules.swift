@@ -39,6 +39,19 @@ public extension TargetDependency {
     )
 }
 
+// MARK: - Networking shorthands
+
+public extension TargetDependency {
+    static let networkingInterface: TargetDependency = .project(
+        target: "NetworkingInterface",
+        path: .relativeToRoot("Projects/Networking")
+    )
+    static let networking: TargetDependency = .project(
+        target: "Networking",
+        path: .relativeToRoot("Projects/Networking")
+    )
+}
+
 // MARK: - Shared sub-module shorthands
 
 public extension TargetDependency {

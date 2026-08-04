@@ -1,6 +1,6 @@
 import Foundation
 
-import Core
+import NetworkingInterface
 
 struct GetHeatmapDataRequest: Requestable {
     var baseURL: URL { SupabaseConfig.baseURL }

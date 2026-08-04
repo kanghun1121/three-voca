@@ -14,6 +14,7 @@ Projects/
   Feature/Session/Project.swift
   Domain/Project.swift
   Data/Project.swift
+  Networking/Project.swift
   Core/Project.swift
   Shared/Project.swift
   Shared/DesignSystem/Project.swift
@@ -78,8 +79,10 @@ let project = Project.makeModule(
 .feature          // Projects/Feature 전체
 .domain           // Domain Implements
 .domainInterface  // Domain Interface만 (Client, Repository, UseCase 선언 위치)
-.data             // Data (Repository의 liveValue 구현 위치)
-.core
+.data              // Data (Repository의 liveValue 구현 위치)
+.networking        // Networking Implements (HTTPClient 등 실제 구현)
+.networkingInterface // Networking Interface만 (HTTPClienting, Requestable 등 포트)
+.core              // Keychain 등 인프라 유틸리티 (네트워크 코드 없음)
 .shared
 
 // Feature 서브모듈

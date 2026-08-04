@@ -1,6 +1,6 @@
 //
 //  StubRequestable.swift
-//  CoreTests
+//  NetworkTests
 //
 //  Created by 강대훈 on 7/6/26.
 //  Copyright © 2026 FiveVoca. All rights reserved.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-@testable import Core
+import NetworkingInterface
 
 /// 테스트용 최소 `Requestable` 구현.
 struct StubRequestable: Requestable {

@@ -2,6 +2,8 @@ import Foundation
 
 import Core
 import DomainInterface
+import Networking
+import NetworkingInterface
 
 import Dependencies
 
