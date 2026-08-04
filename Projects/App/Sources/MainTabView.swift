@@ -16,8 +16,10 @@ struct MainTabView: View {
                 $0.completeSessionUseCase = .liveValue
                 $0.getWordDetailUseCase = .liveValue
                 $0.prefetchWordDetailsUseCase = .liveValue
-                $0.audioClient = .liveValue
-                $0.audioPlayerClient = .liveValue
+                $0.prefetchAudioUseCase = .liveValue
+                $0.getAudioURLUseCase = .liveValue
+                $0.playAudioUseCase = .liveValue
+                $0.stopAudioUseCase = .liveValue
             } operation: {
                 HomeViewModel()
             })

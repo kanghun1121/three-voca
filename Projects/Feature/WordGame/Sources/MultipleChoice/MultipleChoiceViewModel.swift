@@ -41,8 +41,10 @@ public final class MultipleChoiceViewModel {
     private(set) var advanceTask: Task<Void, Never>?
     private var audioTask: Task<Void, Never>?
     @ObservationIgnored @Dependency(\.soundClient) private var soundClient
-    @ObservationIgnored @Dependency(\.audioClient) private var audioClient
-    @ObservationIgnored @Dependency(\.audioPlayerClient) private var audioPlayerClient
+    @ObservationIgnored @Dependency(\.prefetchAudioUseCase) private var prefetchAudioUseCase
+    @ObservationIgnored @Dependency(\.getAudioURLUseCase) private var getAudioURLUseCase
+    @ObservationIgnored @Dependency(\.playAudioUseCase) private var playAudioUseCase
+    @ObservationIgnored @Dependency(\.stopAudioUseCase) private var stopAudioUseCase
 
     init(
         words: [GameWord],
@@ -79,7 +81,7 @@ public final class MultipleChoiceViewModel {
         case .confirmDiscard:
             advanceTask?.cancel()
             audioTask?.cancel()
-            audioPlayerClient.stop()
+            stopAudioUseCase.execute()
             onClose()
         case .none:
             break
@@ -127,12 +129,12 @@ public final class MultipleChoiceViewModel {
         audioTask?.cancel()
         audioTask = Task { [weak self] in
             guard let self else { return }
-            if await audioClient.audioURL(word.term) == nil {
-                await audioClient.prefetchAudio([(term: word.term, audioUrl: word.audioUrl)])
+            if await getAudioURLUseCase.execute(word.term) == nil {
+                await prefetchAudioUseCase.execute([(term: word.term, audioUrl: word.audioUrl)])
             }
-            guard let url = await audioClient.audioURL(word.term) else { return }
+            guard let url = await getAudioURLUseCase.execute(word.term) else { return }
             guard !Task.isCancelled else { return }
-            await audioPlayerClient.play(url)
+            await playAudioUseCase.execute(url)
         }
     }
 

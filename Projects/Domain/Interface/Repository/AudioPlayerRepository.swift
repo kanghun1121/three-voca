@@ -2,7 +2,8 @@ import Foundation
 
 import Dependencies
 
-public struct AudioPlayerClient: Sendable {
+/// 로컬 오디오 재생(AVFoundation)을 추상화한 포트. 실제 구현은 Data 모듈에서 제공한다.
+public struct AudioPlayerRepository: Sendable {
     public var play: @Sendable (_ url: URL) async -> Void
     public var stop: @Sendable () -> Void
 
@@ -15,21 +16,16 @@ public struct AudioPlayerClient: Sendable {
     }
 }
 
-extension AudioPlayerClient: TestDependencyKey {
-    public static let testValue = AudioPlayerClient(
+extension AudioPlayerRepository: TestDependencyKey {
+    public static let testValue = AudioPlayerRepository(
         play: unimplemented("\(Self.self).play", placeholder: ()),
         stop: unimplemented("\(Self.self).stop")
-    )
-
-    public static let previewValue = AudioPlayerClient(
-        play: { _ in },
-        stop: {}
     )
 }
 
 public extension DependencyValues {
-    var audioPlayerClient: AudioPlayerClient {
-        get { self[AudioPlayerClient.self] }
-        set { self[AudioPlayerClient.self] = newValue }
+    var audioPlayerRepository: AudioPlayerRepository {
+        get { self[AudioPlayerRepository.self] }
+        set { self[AudioPlayerRepository.self] = newValue }
     }
 }

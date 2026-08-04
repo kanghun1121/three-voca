@@ -5,8 +5,8 @@ import DomainInterface
 
 import Dependencies
 
-extension AudioPlayerClient: DependencyKey {
-    public static let liveValue: AudioPlayerClient = {
+extension AudioPlayerRepository: DependencyKey {
+    public static let liveValue: AudioPlayerRepository = {
         let player = AVPlayer()
         let session = AVAudioSession.sharedInstance()
         try? session.setCategory(
@@ -15,7 +15,7 @@ extension AudioPlayerClient: DependencyKey {
             options: [.mixWithOthers]
         )
         try? session.setActive(true)
-        return AudioPlayerClient(
+        return AudioPlayerRepository(
             play: { url in
                 let item = AVPlayerItem(url: url)
                 player.replaceCurrentItem(with: item)

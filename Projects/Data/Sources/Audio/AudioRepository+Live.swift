@@ -4,10 +4,10 @@ import DomainInterface
 
 import Dependencies
 
-extension AudioClient: DependencyKey {
-    public static let liveValue: AudioClient = {
+extension AudioRepository: DependencyKey {
+    public static let liveValue: AudioRepository = {
         let cache = AudioCache()
-        return AudioClient(
+        return AudioRepository(
             prefetchAudio: { words in
                 await withTaskGroup(of: Void.self) { group in
                     for (term, audioUrlString) in words {
@@ -29,7 +29,7 @@ extension AudioClient: DependencyKey {
     }()
 }
 
-private extension AudioClient {
+private extension AudioRepository {
     // 앱 재시작 전까지 유효한 임시 디렉토리에 저장한다.
     // AVPlayer는 URLCache를 사용하지 않으므로 file:// URL을 직접 전달해야 즉시 재생된다.
     static func downloadMP3(from url: URL, term: String) async -> URL? {

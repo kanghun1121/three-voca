@@ -19,8 +19,10 @@ final class RecognitionViewModelTests: XCTestCase {
         )
         let word = GameWord(from: sessionWord)
         let vm = withDependencies {
-            $0.audioClient = .previewValue
-            $0.audioPlayerClient = .previewValue
+            $0.prefetchAudioUseCase = .previewValue
+            $0.getAudioURLUseCase = .previewValue
+            $0.playAudioUseCase = .previewValue
+            $0.stopAudioUseCase = .previewValue
         } operation: {
             RecognitionViewModel(
                 words: [word],

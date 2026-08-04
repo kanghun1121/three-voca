@@ -32,8 +32,10 @@ public final class RecognitionViewModel {
     private(set) var totalWords: Int = 0
     var destination: Destination?
 
-    @ObservationIgnored @Dependency(\.audioClient) private var audioClient
-    @ObservationIgnored @Dependency(\.audioPlayerClient) private var audioPlayerClient
+    @ObservationIgnored @Dependency(\.prefetchAudioUseCase) private var prefetchAudioUseCase
+    @ObservationIgnored @Dependency(\.getAudioURLUseCase) private var getAudioURLUseCase
+    @ObservationIgnored @Dependency(\.playAudioUseCase) private var playAudioUseCase
+    @ObservationIgnored @Dependency(\.stopAudioUseCase) private var stopAudioUseCase
 
     private let words: [GameWord]
     private let onCompleted: () -> Void
@@ -81,7 +83,7 @@ public final class RecognitionViewModel {
         case .confirmDiscard:
             revealTask?.cancel()
             audioTask?.cancel()
-            audioPlayerClient.stop()
+            stopAudioUseCase.execute()
             onClose()
         case .none:
             startCountdown(remaining: remainingSeconds)
@@ -111,12 +113,12 @@ public final class RecognitionViewModel {
         audioTask?.cancel()
         audioTask = Task { [weak self] in
             guard let self else { return }
-            if await audioClient.audioURL(word.term) == nil {
-                await audioClient.prefetchAudio([(term: word.term, audioUrl: word.audioUrl)])
+            if await getAudioURLUseCase.execute(word.term) == nil {
+                await prefetchAudioUseCase.execute([(term: word.term, audioUrl: word.audioUrl)])
             }
-            guard let url = await audioClient.audioURL(word.term) else { return }
+            guard let url = await getAudioURLUseCase.execute(word.term) else { return }
             guard !Task.isCancelled else { return }
-            await audioPlayerClient.play(url)
+            await playAudioUseCase.execute(url)
         }
 
         startCountdown()

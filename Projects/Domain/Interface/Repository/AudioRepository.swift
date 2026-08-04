@@ -2,7 +2,8 @@ import Foundation
 
 import Dependencies
 
-public struct AudioClient: Sendable {
+/// 단어 발음 mp3 리소스를 추상화한 포트. 실제 구현은 Data 모듈에서 제공한다.
+public struct AudioRepository: Sendable {
     public var prefetchAudio: @Sendable (_ words: [(term: String, audioUrl: String)]) async -> Void
     public var audioURL: @Sendable (_ term: String) async -> URL?
 
@@ -15,21 +16,16 @@ public struct AudioClient: Sendable {
     }
 }
 
-extension AudioClient: TestDependencyKey {
-    public static let testValue = AudioClient(
+extension AudioRepository: TestDependencyKey {
+    public static let testValue = AudioRepository(
         prefetchAudio: unimplemented("\(Self.self).prefetchAudio", placeholder: ()),
         audioURL: unimplemented("\(Self.self).audioURL", placeholder: nil)
-    )
-
-    public static let previewValue = AudioClient(
-        prefetchAudio: { _ in },
-        audioURL: { _ in nil }
     )
 }
 
 public extension DependencyValues {
-    var audioClient: AudioClient {
-        get { self[AudioClient.self] }
-        set { self[AudioClient.self] = newValue }
+    var audioRepository: AudioRepository {
+        get { self[AudioRepository.self] }
+        set { self[AudioRepository.self] = newValue }
     }
 }
