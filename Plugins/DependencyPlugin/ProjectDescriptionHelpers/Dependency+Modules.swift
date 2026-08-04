@@ -17,16 +17,25 @@ public extension TargetDependency {
     )
 }
 
-// MARK: - Domain shorthands
+// MARK: - UseCase shorthands
 
 public extension TargetDependency {
-    static let domainInterface: TargetDependency = .project(
-        target: "DomainInterface",
-        path: .relativeToRoot("Projects/Domain")
+    static let useCaseInterface: TargetDependency = .project(
+        target: "UseCaseInterface",
+        path: .relativeToRoot("Projects/UseCase")
     )
-    static let domain: TargetDependency = .project(
-        target: "Domain",
-        path: .relativeToRoot("Projects/Domain")
+    static let useCase: TargetDependency = .project(
+        target: "UseCase",
+        path: .relativeToRoot("Projects/UseCase")
+    )
+}
+
+// MARK: - Data shorthand
+
+public extension TargetDependency {
+    static let data: TargetDependency = .project(
+        target: "Data",
+        path: .relativeToRoot("Projects/Data")
     )
 }
 

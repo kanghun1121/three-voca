@@ -6,7 +6,7 @@ let project = Project.makeModule(
     targets: [
         .feature(implements: .login, factory: .init(
             dependencies: [
-                .domainInterface,
+                .useCaseInterface,
                 .dependencies,
                 .designSystem,
                 .sdk(name: "AuthenticationServices", type: .framework, status: .required),

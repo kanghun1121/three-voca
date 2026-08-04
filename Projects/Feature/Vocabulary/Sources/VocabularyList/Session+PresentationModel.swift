@@ -1,4 +1,4 @@
-import DomainInterface
+import UseCaseInterface
 
 extension Session {
     func toVocabularyListPresentationModel() -> VocabularyListPresentationModel {
