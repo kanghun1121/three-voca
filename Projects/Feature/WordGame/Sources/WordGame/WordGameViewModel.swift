@@ -30,7 +30,8 @@ public final class WordGameViewModel {
     var dismiss = false
     private(set) var finishGameTask: Task<Void, Never>?
 
-    @ObservationIgnored @Dependency(\.sessionClient) private var sessionClient
+    @ObservationIgnored @Dependency(\.getSessionDetailUseCase) private var getSessionDetailUseCase
+    @ObservationIgnored @Dependency(\.completeSessionUseCase) private var completeSessionUseCase
 
     private let sessionID: String
     private let startingStage: StartingStage
@@ -48,7 +49,7 @@ public final class WordGameViewModel {
 
     func load() async {
         do {
-            let session = try await sessionClient.fetchSessionDetail(sessionID)
+            let session = try await getSessionDetailUseCase.execute(sessionID)
             await audioPrefetchTask.value
             let words = session.words.map { GameWord(from: $0) }
             switch startingStage {
@@ -116,7 +117,7 @@ public final class WordGameViewModel {
         finishGameTask = Task { [weak self] in
             guard let self else { return }
             if let id = Int(sessionID) {
-                try? await sessionClient.completeSession(id)
+                try? await completeSessionUseCase.execute(id)
             }
             dismiss = true
         }

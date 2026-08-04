@@ -25,7 +25,7 @@ public final class WordDetailViewModel {
     var destination: Destination?
     let wordIDs: [String]
 
-    @ObservationIgnored @Dependency(\.wordClient) private var wordClient
+    @ObservationIgnored @Dependency(\.getWordDetailUseCase) private var getWordDetailUseCase
     @ObservationIgnored @Dependency(\.audioClient) private var audioClient
     @ObservationIgnored @Dependency(\.audioPlayerClient) private var audioPlayerClient
 
@@ -52,7 +52,7 @@ public final class WordDetailViewModel {
         guard wordIDs.indices.contains(index), viewStates[index] == nil else { return }
         viewStates[index] = .loading
         do {
-            let detail = try await wordClient.fetchWordDetail(wordIDs[index])
+            let detail = try await getWordDetailUseCase.execute(wordIDs[index])
             viewStates[index] = .loaded(detail.toWordDetailPresentationModel())
         } catch {
             print("[WordDetail] 단어 로드 실패 (index: \(index)):", error)

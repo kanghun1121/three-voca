@@ -8,7 +8,7 @@ import Dependencies
 final class VocabularyListViewModelTests: XCTestCase {
     func test_load_실패시_viewState가_error로_전환된다() async {
         let vm = withDependencies {
-            $0.sessionClient.fetchSessionDetail = { _ in throw MockError.stub }
+            $0.getSessionDetailUseCase.execute = { _ in throw MockError.stub }
         } operation: {
             VocabularyListViewModel(sessionID: "t")
         }
@@ -23,8 +23,8 @@ final class VocabularyListViewModelTests: XCTestCase {
 
     func test_load_성공시_viewState가_loaded이며_Mock데이터가_올바르다() async {
         let vm = withDependencies {
-            $0.sessionClient = .previewValue
-            $0.wordClient.prefetchWordDetails = { _ in }
+            $0.getSessionDetailUseCase = .previewValue
+            $0.prefetchWordDetailsUseCase.execute = { _ in }
             $0.audioClient.prefetchAudio = { _ in }
         } operation: {
             VocabularyListViewModel(sessionID: "t")
@@ -44,8 +44,8 @@ final class VocabularyListViewModelTests: XCTestCase {
 
     func test_didTapWord_잘못된ID_호출시_destination이_nil이다() async {
         let vm = withDependencies {
-            $0.sessionClient = .previewValue
-            $0.wordClient.prefetchWordDetails = { _ in }
+            $0.getSessionDetailUseCase = .previewValue
+            $0.prefetchWordDetailsUseCase.execute = { _ in }
             $0.audioClient.prefetchAudio = { _ in }
         } operation: {
             VocabularyListViewModel(sessionID: "t")
@@ -59,8 +59,8 @@ final class VocabularyListViewModelTests: XCTestCase {
 
     func test_didTapWord_정상ID_호출시_destination이_wordDetail로_설정된다() async {
         let vm = withDependencies {
-            $0.sessionClient = .previewValue
-            $0.wordClient.prefetchWordDetails = { _ in }
+            $0.getSessionDetailUseCase = .previewValue
+            $0.prefetchWordDetailsUseCase.execute = { _ in }
             $0.audioClient.prefetchAudio = { _ in }
         } operation: {
             VocabularyListViewModel(sessionID: "t")

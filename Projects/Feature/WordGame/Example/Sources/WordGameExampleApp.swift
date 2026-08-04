@@ -9,7 +9,8 @@ import Dependencies
 struct WordGameExampleApp: App {
     init() {
         prepareDependencies {
-            $0.sessionClient = .previewWith3Words
+            $0.getSessionDetailUseCase = .previewWith3Words
+            $0.completeSessionUseCase = .previewValue
         }
     }
 
@@ -20,9 +21,9 @@ struct WordGameExampleApp: App {
     }
 }
 
-private extension SessionClient {
-    static let previewWith3Words = SessionClient(
-        fetchSessionDetail: { id in
+private extension GetSessionDetailUseCase {
+    static let previewWith3Words = GetSessionDetailUseCase(
+        execute: { id in
             Session(
                 id: id,
                 level: 1,
@@ -57,8 +58,7 @@ private extension SessionClient {
                 ],
                 record: nil
             )
-        },
-        completeSession: { _ in }
+        }
     )
 }
 

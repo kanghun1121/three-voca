@@ -22,11 +22,11 @@ private actor SessionCache {
     }
 }
 
-extension SessionClient: DependencyKey {
-    public static let liveValue: SessionClient = {
+extension SessionRepository: DependencyKey {
+    public static let liveValue: SessionRepository = {
         let http = HTTPClient(interceptor: TokenRefreshInterceptor())
         let cache = SessionCache()
-        return SessionClient(
+        return SessionRepository(
             fetchSessionDetail: { id in
                 if let cached = await cache.fetch(id) { return cached }
                 let request = GetSessionDetailRequest(sessionID: id)

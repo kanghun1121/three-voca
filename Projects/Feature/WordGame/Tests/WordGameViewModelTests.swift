@@ -10,7 +10,7 @@ import Dependencies
 final class WordGameViewModelTests: XCTestCase {
     func test_startingFrom에_spelling을_주입한경우_activeStage가_spelling이_된다() async {
         let vm = withDependencies {
-            $0.sessionClient = .previewValue
+            $0.getSessionDetailUseCase = .previewValue
         } operation: {
             WordGameViewModel(
                 sessionID: "t",
@@ -50,8 +50,8 @@ final class WordGameViewModelTests: XCTestCase {
         // SpellingViewModel은 load() 내부에서 뒤늦게 생성되므로, soundClient 오버라이드가
         // 전파되도록 상호작용 전체를 async withDependencies 스코프 안에서 수행한다.
         await withDependencies {
-            $0.sessionClient.fetchSessionDetail = { _ in session }
-            $0.sessionClient.completeSession = { id in await recorder.record(id) }
+            $0.getSessionDetailUseCase.execute = { _ in session }
+            $0.completeSessionUseCase.execute = { id in await recorder.record(id) }
             $0.soundClient = .previewValue
         } operation: {
             let vm = WordGameViewModel(

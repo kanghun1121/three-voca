@@ -17,7 +17,7 @@ struct RootView: View {
                 switch viewModel.authState {
                 case .unauthenticated:
                     LoginView(viewModel: withDependencies {
-                        $0.authClient = .liveValue
+                        $0.signInWithAppleUseCase = .liveValue
                     } operation: {
                         LoginViewModel()
                     })

@@ -10,27 +10,28 @@ final class AppViewModel {
     var authState: AuthState = .unauthenticated
     var isCheckingSession = true
 
-    @ObservationIgnored @Dependency(\.authSessionClient) private var authSessionClient
-    @ObservationIgnored @Dependency(\.authClient) private var authClient
+    @ObservationIgnored @Dependency(\.checkAuthSessionUseCase) private var checkAuthSessionUseCase
+    @ObservationIgnored @Dependency(\.observeAuthStateUseCase) private var observeAuthStateUseCase
+    @ObservationIgnored @Dependency(\.refreshAuthSessionUseCase) private var refreshAuthSessionUseCase
 
     private var streamTask: Task<Void, Never>?
 
     init() {
-        authState = (try? authSessionClient.getRefreshToken()) != nil ? .authenticated : .unauthenticated
+        authState = checkAuthSessionUseCase.execute() ? .authenticated : .unauthenticated
     }
 
     func onAppear() {
         guard streamTask == nil else { return }
         streamTask = Task { [weak self] in
             guard let self else { return }
-            for await state in authSessionClient.authStateStream() {
+            for await state in observeAuthStateUseCase.execute() {
                 authState = state
             }
         }
 
         Task { [weak self] in
             guard let self else { return }
-            await authClient.checkSession()
+            await refreshAuthSessionUseCase.execute()
             isCheckingSession = false
         }
     }

@@ -8,8 +8,8 @@ import Dependencies
 struct HomeExampleApp: App {
     init() {
         prepareDependencies {
-            $0.homeClient = .previewValue
             $0.getHomeOverviewUseCase = .previewValue
+            $0.getHeatmapDataUseCase = .previewValue
         }
     }
 

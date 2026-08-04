@@ -14,7 +14,7 @@ public final class LoginViewModel {
     var isTermsPresented = false
     var isPrivacyPresented = false
 
-    @ObservationIgnored @Dependency(\.authClient) private var authClient
+    @ObservationIgnored @Dependency(\.signInWithAppleUseCase) private var signInWithAppleUseCase
     
     public init() {}
 
@@ -38,10 +38,10 @@ public final class LoginViewModel {
                   let identityToken = String(data: tokenData, encoding: .utf8) else { return }
             Task {
                 do {
-                    _ = try await authClient.signInWithApple(identityToken)
+                    _ = try await signInWithAppleUseCase.execute(identityToken)
                 } catch {
                     logger.error("signInWithApple 실패: \(error.localizedDescription)")
-                    print("[AuthClient] error:", error.localizedDescription)
+                    print("[SignInWithAppleUseCase] error:", error.localizedDescription)
                 }
             }
         case .failure(let error):

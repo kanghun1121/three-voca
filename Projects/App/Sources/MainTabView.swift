@@ -10,10 +10,12 @@ struct MainTabView: View {
     var body: some View {
         TabView {
             HomeView(viewModel: withDependencies {
-                $0.homeClient = .liveValue
                 $0.getHomeOverviewUseCase = .liveValue
-                $0.sessionClient = .liveValue
-                $0.wordClient = .liveValue
+                $0.getHeatmapDataUseCase = .liveValue
+                $0.getSessionDetailUseCase = .liveValue
+                $0.completeSessionUseCase = .liveValue
+                $0.getWordDetailUseCase = .liveValue
+                $0.prefetchWordDetailsUseCase = .liveValue
                 $0.audioClient = .liveValue
                 $0.audioPlayerClient = .liveValue
             } operation: {
@@ -24,7 +26,8 @@ struct MainTabView: View {
             }
 
             MyPageView(viewModel: withDependencies {
-                $0.authSessionClient = .liveValue
+                $0.logoutUseCase = .liveValue
+                $0.deleteAccountUseCase = .liveValue
             } operation: {
                 MyPageViewModel()
             })
