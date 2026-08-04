@@ -30,6 +30,15 @@ public extension TargetDependency {
     )
 }
 
+// MARK: - Data shorthand
+
+public extension TargetDependency {
+    static let data: TargetDependency = .project(
+        target: "Data",
+        path: .relativeToRoot("Projects/Data")
+    )
+}
+
 // MARK: - Shared sub-module shorthands
 
 public extension TargetDependency {
