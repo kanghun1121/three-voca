@@ -1,6 +1,6 @@
 import Foundation
 
-import Core
+import NetworkingInterface
 
 struct ExchangeAppleTokenRequest: Requestable {
     let identityToken: String

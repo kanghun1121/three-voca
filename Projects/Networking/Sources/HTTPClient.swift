@@ -1,5 +1,7 @@
 import Foundation
 
+import NetworkingInterface
+
 public struct HTTPClient<Interceptor: HTTPInterceptor>: HTTPClienting {
     private let session: URLSession
     private let decoder: JSONDecoder

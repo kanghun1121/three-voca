@@ -1,6 +1,6 @@
 //
 //  SpyHTTPInterceptor.swift
-//  CoreTests
+//  NetworkTests
 //
 //  Created by 강대훈 on 7/6/26.
 //  Copyright © 2026 FiveVoca. All rights reserved.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-@testable import Core
+import NetworkingInterface
 
 /// `adapt`/`retry` 호출 여부·횟수·결과를 기록하는 스파이 인터셉터.
 final class SpyHTTPInterceptor: HTTPInterceptor, @unchecked Sendable {

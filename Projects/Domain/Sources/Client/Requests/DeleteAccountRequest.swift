@@ -1,6 +1,6 @@
 import Foundation
 
-import Core
+import NetworkingInterface
 
 struct DeleteAccountRequest: Requestable {
     let accessToken: String

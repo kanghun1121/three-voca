@@ -1,6 +1,6 @@
 import Foundation
 
-import Core
+import NetworkingInterface
 
 struct GetWordDetailRequest: Requestable {
     let wordID: String

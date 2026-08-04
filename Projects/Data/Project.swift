@@ -7,6 +7,7 @@ let project = Project.makeModule(
         .data(factory: .init(
             dependencies: [
                 .domainInterface,
+                .networkingInterface,
                 .dependencies,
             ]
         )),

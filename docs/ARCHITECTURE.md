@@ -7,7 +7,9 @@ App
  └── Feature  ──→  Domain (Interface)
       └── ...  ──→  Shared
  └── Domain (Implements)  ──→  Core  ──→  Shared
+              └────────────→  Networking  ──→  NetworkingInterface
  └── Data  ──→  Domain (Interface)
+      └────→  NetworkingInterface
 ```
 
 **허용되는 방향만 허용된다. 역방향은 없다.**
@@ -16,16 +18,20 @@ App
 |---|---|---|
 | `App` | 진입점. 의존성 주입 조립 | Feature, Domain, Data, Shared |
 | `Feature` | 화면과 UI 로직 | DomainInterface, Shared |
-| `Domain` | 비즈니스 로직 + Supabase 호출 | Core, Shared |
-| `Data` | Repository의 liveValue(실제 API 구현) | DomainInterface |
-| `Core` | 네트워크/인프라 유틸리티 | Shared |
+| `Domain` | 비즈니스 로직 + Supabase 호출 | Core, Networking, NetworkingInterface, Shared |
+| `Data` | Repository의 liveValue(실제 API 구현) | DomainInterface, NetworkingInterface |
+| `Networking` | HTTP 클라이언트 실제 구현(`HTTPClient`) | NetworkingInterface |
+| `NetworkingInterface` | HTTP 클라이언트 포트(`HTTPClienting`, `Requestable` 등) | 없음 |
+| `Core` | Keychain 등 인프라 유틸리티 | Shared |
 | `Shared` | 디자인 시스템, 공통 유틸 | 없음 |
+
+네트워크 코드는 `Networking`(구현체)/`NetworkingInterface`(포트) 2-target으로 분리되어 있다(`Core`에는 더 이상 네트워크 코드가 없다 — Keychain만 남는다). `Domain`은 `Networking`(구현체, `HTTPClient` 직접 생성용)와 `NetworkingInterface`(포트, `Requestable`/`HTTPMethod`/`NetworkError`/`SupabaseConfig`/`httpClient` 의존성용)를 둘 다 참조한다. `Data`는 향후 Repository의 liveValue가 API를 호출할 때 `NetworkingInterface`의 `httpClient` 의존성만 보고 호출할 수 있도록 `NetworkingInterface`만 참조한다 — 구현체인 `Networking`에는 의존하지 않는다.
 
 ### Repository / UseCase 패턴
 
 - `Repository`, `UseCase`는 별도 모듈이 아니라 `Domain` 모듈 내부의 하위 개념이다. `Repository`는 외부 API를 추상화한 포트, `UseCase`는 화면이 실제로 호출하는 단위다. 둘 다 `Domain/Interface`(`DomainInterface` 타겟)에 struct-of-closures로 선언한다(`Client`와 동일한 형태 — `TestDependencyKey`/`DependencyValues` extension 포함).
 - `UseCase`의 `liveValue`는 `Domain/Sources`(`Domain` 타겟)에서 `@Dependency`로 Repository를 주입받아 호출한다. ViewModel은 Repository가 아닌 UseCase만 호출한다.
-- `Repository`의 `liveValue`(Supabase 등 실제 호출 구현)는 `Data` 모듈에 위치한다. 현재는 DataSource 레이어 없이 Repository가 직접 API를 호출하는 형태이며, 필요해지면 Repository와 실제 호출 사이에 DataSource를 끼워 넣는다.
+- `Repository`의 `liveValue`(Supabase 등 실제 호출 구현)는 `Data` 모듈에 위치한다. `Data`는 `NetworkingInterface`의 `httpClient` 의존성으로 실제 API를 호출한다(`Requestable`을 준수하는 Request struct를 만들어 넘긴다). 현재는 DataSource 레이어 없이 Repository가 직접 API를 호출하는 형태이며, 필요해지면 Repository와 실제 호출 사이에 DataSource를 끼워 넣는다.
 - 기존 `Client` struct들(`WordClient` 등)은 위 패턴이 도입되기 전에 만들어진 것으로, Repository 없이 `Domain` 타겟에서 직접 API를 호출한다. 신규 기능은 Repository/UseCase 패턴을 따른다.
 
 ---

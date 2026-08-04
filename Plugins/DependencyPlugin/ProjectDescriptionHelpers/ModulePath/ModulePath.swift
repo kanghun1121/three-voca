@@ -6,4 +6,5 @@ public enum ModulePath {
     case shared(Shared)
     case domain(Domain)
     case data(Data)
+    case networking(Networking)
 }

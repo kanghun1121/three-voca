@@ -1,7 +1,7 @@
 import Foundation
 
-import Core
 import DomainInterface
+import NetworkingInterface
 
 import Dependencies
 

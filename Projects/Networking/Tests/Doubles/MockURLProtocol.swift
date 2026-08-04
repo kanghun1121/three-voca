@@ -1,6 +1,6 @@
 //
 //  MockURLProtocol.swift
-//  CoreTests
+//  NetworkTests
 //
 //  Created by 강대훈 on 7/6/26.
 //
