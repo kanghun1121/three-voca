@@ -1,6 +1,6 @@
 import XCTest
 
-import DomainInterface
+import UseCaseInterface
 
 import Dependencies
 

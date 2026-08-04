@@ -15,7 +15,7 @@ let project = Project.makeModule(
         .feature(tests: .home, factory: .init(
             dependencies: [
                 .feature(implements: .home),
-                .domainInterface,
+                .useCaseInterface,
                 .dependencies,
             ]
         )),

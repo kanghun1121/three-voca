@@ -12,7 +12,8 @@ Projects/
   Feature/Project.swift         ← Feature aggregator
   Feature/Home/Project.swift    ← 모듈별 5-target 선언
   Feature/Session/Project.swift
-  Domain/Project.swift
+  UseCase/Project.swift
+  Data/Project.swift
   Core/Project.swift
   Shared/Project.swift
   Shared/DesignSystem/Project.swift
@@ -40,7 +41,7 @@ let project = Project.makeModule(
     name: ModulePath.Feature.name + ModulePath.Feature.home.rawValue,
     targets: [
         .feature(interface: .home, factory: .init(
-            dependencies: [.domainInterface]
+            dependencies: [.useCaseInterface]
         )),
         .feature(implements: .home, factory: .init(
             dependencies: [
@@ -75,8 +76,9 @@ let project = Project.makeModule(
 ```swift
 // 레이어 aggregator
 .feature          // Projects/Feature 전체
-.domain           // Domain Implements
-.domainInterface  // Domain Interface만
+.useCase          // UseCase Implements
+.useCaseInterface // UseCase Interface만 (Repository/UseCase 선언 위치)
+.data             // Data (Repository의 liveValue 구현 위치)
 .core
 .shared
 

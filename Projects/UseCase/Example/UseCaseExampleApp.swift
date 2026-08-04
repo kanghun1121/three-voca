@@ -1,0 +1,25 @@
+import SwiftUI
+
+import UseCase
+import UseCaseInterface
+
+import Dependencies
+
+@main
+struct UseCaseExampleApp: App {
+    init() {
+        prepareDependencies {
+            $0.homeClient = .liveValue
+            $0.sessionClient = .liveValue
+            $0.wordClient = .liveValue
+            $0.authClient = .liveValue
+            $0.authSessionClient = .liveValue
+        }
+    }
+
+    var body: some Scene {
+        WindowGroup {
+            ClientListView()
+        }
+    }
+}

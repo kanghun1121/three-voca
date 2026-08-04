@@ -8,7 +8,7 @@ let project = Project.makeModule(
             dependencies: [
                 .dependencies,
                 .designSystem,
-                .domainInterface,
+                .useCaseInterface,
                 .swiftUINavigation,
             ]
         )),

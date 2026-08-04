@@ -1,6 +1,6 @@
 import Foundation
 
-import DomainInterface
+import UseCaseInterface
 
 struct WordDetailPresentationModel: Equatable {
     struct DefinitionGroup: Equatable {
