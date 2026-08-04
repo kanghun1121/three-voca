@@ -8,7 +8,7 @@ import Dependencies
 final class WordDetailViewModelTests: XCTestCase {
     func test_requestIfNeeded_index1_loaded이며_데이터가_올바르다() async {
         let vm = withDependencies {
-            $0.wordClient = .previewValue
+            $0.getWordDetailUseCase = .previewValue
         } operation: {
             WordDetailViewModel(wordIDs: ["word_001", "word_766"], initialIndex: 0)
         }
@@ -27,8 +27,7 @@ final class WordDetailViewModelTests: XCTestCase {
 
     func test_requestIfNeeded_실패시_viewState가_error로_전환된다() async {
         let vm = withDependencies {
-            $0.wordClient.fetchWordDetail = { _ in throw MockError.stub }
-            $0.wordClient.prefetchWordDetails = { _ in }
+            $0.getWordDetailUseCase.execute = { _ in throw MockError.stub }
         } operation: {
             WordDetailViewModel(wordIDs: ["word_001"], initialIndex: 0)
         }
@@ -44,7 +43,7 @@ final class WordDetailViewModelTests: XCTestCase {
     func test_requestIfNeeded_index1부터5까지_모두_loaded로_전환된다() async {
         let wordIDs = (0...5).map { "word_\(String(format: "%03d", $0))" }
         let vm = withDependencies {
-            $0.wordClient = .previewValue
+            $0.getWordDetailUseCase = .previewValue
         } operation: {
             WordDetailViewModel(wordIDs: wordIDs, initialIndex: 0)
         }

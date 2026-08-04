@@ -53,9 +53,9 @@ struct EndpointDetailView: View {
     @State private var errorMessage: String?
 
     @Dependency(\.getHomeOverviewUseCase) private var getHomeOverviewUseCase
-    @Dependency(\.sessionClient) private var sessionClient
-    @Dependency(\.wordClient) private var wordClient
-    @Dependency(\.authClient) private var authClient
+    @Dependency(\.getSessionDetailUseCase) private var getSessionDetailUseCase
+    @Dependency(\.getWordDetailUseCase) private var getWordDetailUseCase
+    @Dependency(\.signInWithAppleUseCase) private var signInWithAppleUseCase
 
     var body: some View {
         Form {
@@ -143,13 +143,13 @@ struct EndpointDetailView: View {
                 let result = try await getHomeOverviewUseCase.execute()
                 response = dumpString(result)
             case .sessionDetail:
-                let result = try await sessionClient.fetchSessionDetail(idInput)
+                let result = try await getSessionDetailUseCase.execute(idInput)
                 response = dumpString(result)
             case .wordDetail:
-                let result = try await wordClient.fetchWordDetail(idInput)
+                let result = try await getWordDetailUseCase.execute(idInput)
                 response = dumpString(result)
             case .authSignIn:
-                let result = try await authClient.signInWithApple(idInput)
+                let result = try await signInWithAppleUseCase.execute(idInput)
                 response = dumpString(result)
             }
         } catch {

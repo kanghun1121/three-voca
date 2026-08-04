@@ -8,8 +8,9 @@ import Dependencies
 struct VocabularyExampleApp: App {
     init() {
         prepareDependencies {
-            $0.sessionClient = .previewValue
-            $0.wordClient = .previewValue
+            $0.getSessionDetailUseCase = .previewValue
+            $0.prefetchWordDetailsUseCase = .previewValue
+            $0.getWordDetailUseCase = .previewValue
         }
     }
 

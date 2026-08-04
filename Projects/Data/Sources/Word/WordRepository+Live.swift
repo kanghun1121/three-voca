@@ -6,11 +6,11 @@ import NetworkingInterface
 
 import Dependencies
 
-extension WordClient: DependencyKey {
-    public static let liveValue: WordClient = {
+extension WordRepository: DependencyKey {
+    public static let liveValue: WordRepository = {
         let http = HTTPClient(interceptor: TokenRefreshInterceptor())
         let cache = WordDetailCache()
-        return WordClient(
+        return WordRepository(
             fetchWordDetail: { id in
                 if let cached = await cache.get(id) { return cached }
                 let request = GetWordDetailRequest(wordID: id)

@@ -9,18 +9,18 @@ struct ClientListView: View {
                         EndpointDetailView(endpoint: .homeOverview)
                     }
                 }
-                Section("SessionClient") {
-                    NavigationLink("fetchSessionDetail(id:)") {
+                Section("GetSessionDetailUseCase") {
+                    NavigationLink("execute(id:)") {
                         EndpointDetailView(endpoint: .sessionDetail)
                     }
                 }
-                Section("WordClient") {
-                    NavigationLink("fetchWordDetail(id:)") {
+                Section("GetWordDetailUseCase") {
+                    NavigationLink("execute(id:)") {
                         EndpointDetailView(endpoint: .wordDetail)
                     }
                 }
-                Section("AuthClient") {
-                    NavigationLink("signInWithApple(identityToken:)") {
+                Section("SignInWithAppleUseCase") {
+                    NavigationLink("execute(identityToken:)") {
                         EndpointDetailView(endpoint: .authSignIn)
                     }
                 }

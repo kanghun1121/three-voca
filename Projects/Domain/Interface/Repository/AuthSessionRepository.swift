@@ -2,7 +2,8 @@ import Foundation
 
 import Dependencies
 
-public struct AuthSessionClient: Sendable {
+/// 인증 세션 상태(access/refresh token, 인증 상태 스트림)를 관리하는 포트. 실제 구현은 Data 모듈에서 제공한다.
+public struct AuthSessionRepository: Sendable {
     public var getAccessToken: @Sendable () async -> String?
     public var setAccessToken: @Sendable (String) async -> Void
     public var getRefreshToken: @Sendable () throws -> String
@@ -33,8 +34,8 @@ public struct AuthSessionClient: Sendable {
     }
 }
 
-extension AuthSessionClient: TestDependencyKey {
-    public static let testValue = AuthSessionClient(
+extension AuthSessionRepository: TestDependencyKey {
+    public static let testValue = AuthSessionRepository(
         getAccessToken: unimplemented("\(Self.self).getAccessToken"),
         setAccessToken: unimplemented("\(Self.self).setAccessToken"),
         getRefreshToken: unimplemented("\(Self.self).getRefreshToken"),
@@ -44,22 +45,11 @@ extension AuthSessionClient: TestDependencyKey {
         refreshAccessToken: unimplemented("\(Self.self).refreshAccessToken"),
         authStateStream: unimplemented("\(Self.self).authStateStream")
     )
-
-    public static let previewValue = AuthSessionClient(
-        getAccessToken: { AuthToken.previewFixture.accessToken },
-        setAccessToken: { _ in },
-        getRefreshToken: { AuthToken.previewFixture.refreshToken },
-        setRefreshToken: { _ in },
-        clearSession: {},
-        deleteAccount: {},
-        refreshAccessToken: { true },
-        authStateStream: { AsyncStream { _ in } }
-    )
 }
 
 public extension DependencyValues {
-    var authSessionClient: AuthSessionClient {
-        get { self[AuthSessionClient.self] }
-        set { self[AuthSessionClient.self] = newValue }
+    var authSessionRepository: AuthSessionRepository {
+        get { self[AuthSessionRepository.self] }
+        set { self[AuthSessionRepository.self] = newValue }
     }
 }

@@ -10,9 +10,6 @@ let project = Project.makeModule(
         .domain(implements: .init(
             dependencies: [
                 .domainInterface,
-                .core,
-                .networking,
-                .networkingInterface,
                 .dependencies,
             ]
         )),
@@ -20,8 +17,6 @@ let project = Project.makeModule(
             dependencies: [
                 .domain,
                 .domainInterface,
-                .core,
-                .networkingInterface,
                 .dependencies,
             ]
         )),

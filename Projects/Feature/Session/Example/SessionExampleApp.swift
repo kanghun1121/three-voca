@@ -8,7 +8,7 @@ import Dependencies
 struct VocaExampleApp: App {
     init() {
         prepareDependencies {
-            $0.sessionClient = .previewValue
+            $0.getSessionDetailUseCase = .previewValue
         }
     }
 

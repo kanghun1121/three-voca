@@ -1,20 +1,22 @@
 //
 //  TokenRefreshInterceptorTests.swift
-//  DomainTests
+//  DataTests
 //
 //  Created by 강대훈 on 7/6/26.
 //
 
 import XCTest
 
+import DomainInterface
+
 import Dependencies
 
-@testable import Domain
+@testable import Data
 
 final class TokenRefreshInterceptorTests: XCTestCase {
     func test_adapt_accessToken이_있으면_Authorization_헤더를_부착한다() async throws {
         let sut = withDependencies {
-            $0.authSessionClient.getAccessToken = { "access-token-123" }
+            $0.authSessionRepository.getAccessToken = { "access-token-123" }
         } operation: {
             TokenRefreshInterceptor()
         }
@@ -27,7 +29,7 @@ final class TokenRefreshInterceptorTests: XCTestCase {
 
     func test_adapt_accessToken이_없으면_원본_요청을_그대로_반환한다() async throws {
         let sut = withDependencies {
-            $0.authSessionClient.getAccessToken = { nil }
+            $0.authSessionRepository.getAccessToken = { nil }
         } operation: {
             TokenRefreshInterceptor()
         }
@@ -54,9 +56,9 @@ final class TokenRefreshInterceptorTests: XCTestCase {
         XCTAssertFalse(result)
     }
 
-    func test_retry_401이면_authSessionClient의_refreshAccessToken_결과를_그대로_반환한다() async {
+    func test_retry_401이면_authSessionRepository의_refreshAccessToken_결과를_그대로_반환한다() async {
         let sut = withDependencies {
-            $0.authSessionClient.refreshAccessToken = { true }
+            $0.authSessionRepository.refreshAccessToken = { true }
         } operation: {
             TokenRefreshInterceptor()
         }
@@ -75,7 +77,7 @@ final class TokenRefreshInterceptorTests: XCTestCase {
 
     func test_retry_401이고_refreshAccessToken이_실패하면_false를_반환한다() async {
         let sut = withDependencies {
-            $0.authSessionClient.refreshAccessToken = { false }
+            $0.authSessionRepository.refreshAccessToken = { false }
         } operation: {
             TokenRefreshInterceptor()
         }
