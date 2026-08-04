@@ -1,4 +1,4 @@
-import UseCaseInterface
+import DomainInterface
 
 extension WordDetail {
     func toWordDetailPresentationModel() -> WordDetailPresentationModel {

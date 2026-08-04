@@ -1,6 +1,6 @@
 import Foundation
 
-import UseCaseInterface
+import DomainInterface
 
 struct GameWord: Equatable, Identifiable {
     let id: String

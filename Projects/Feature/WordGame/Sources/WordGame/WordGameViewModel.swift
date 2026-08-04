@@ -1,7 +1,7 @@
 import Foundation
 import SwiftUI
 
-import UseCaseInterface
+import DomainInterface
 
 import Dependencies
 

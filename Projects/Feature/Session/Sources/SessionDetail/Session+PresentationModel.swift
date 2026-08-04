@@ -1,4 +1,4 @@
-import UseCaseInterface
+import DomainInterface
 
 extension Session {
     func toSessionDetailPresentationModel() -> SessionDetailPresentationModel {

@@ -1,6 +1,6 @@
 import SwiftUI
 
-import UseCaseInterface
+import DomainInterface
 import FeatureAnalysis
 
 @main

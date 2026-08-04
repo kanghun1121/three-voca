@@ -32,7 +32,7 @@ let project = Project.makeModule(
             sources: ["Sources/**"],
             resources: ["Resources/**"],
             entitlements: .file(path: "FiveVoca.entitlements"),
-            dependencies: [.feature, .useCase, .data, .designSystem],
+            dependencies: [.feature, .domain, .designSystem],
             settings: .settings(
                 configurations: [
                     .debug(name: "Debug", xcconfig: "Secrets.xcconfig"),

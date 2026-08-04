@@ -7,7 +7,7 @@ let project = Project.makeModule(
         .feature(implements: .wordGame, factory: .init(
             resources: ["Resources/**"],
             dependencies: [
-                .useCaseInterface,
+                .domainInterface,
                 .dependencies,
                 .designSystem,
                 .swiftUINavigation,

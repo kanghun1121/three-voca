@@ -1,6 +1,6 @@
 import Foundation
 
-import UseCaseInterface
+import DomainInterface
 
 struct ChunkReaderPresentationModel: Equatable {
     struct Chunk: Equatable, Identifiable {
