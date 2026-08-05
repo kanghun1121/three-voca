@@ -1,7 +1,6 @@
 import Foundation
 
 import DomainInterface
-import Networking
 import NetworkingInterface
 
 import Dependencies
@@ -24,7 +23,7 @@ private actor SessionCache {
 
 extension SessionRepository: DependencyKey {
     public static let liveValue: SessionRepository = {
-        let http = HTTPClient(interceptor: TokenRefreshInterceptor())
+        @Dependency(\.authenticatedHTTPClient) var http
         let cache = SessionCache()
         return SessionRepository(
             fetchSessionDetail: { id in

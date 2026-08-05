@@ -2,7 +2,6 @@ import Foundation
 
 import Core
 import DomainInterface
-import Networking
 import NetworkingInterface
 
 import Dependencies
@@ -50,7 +49,7 @@ extension AuthSessionRepository: DependencyKey {
                 guard let token = await store.value else {
                     throw NetworkError.invalidRequest
                 }
-                let httpClient = HTTPClient()
+                @Dependency(\.httpClient) var httpClient
                 try await httpClient.request(DeleteAccountRequest(accessToken: token))
                 await store.clear()
                 continuation.yield(.unauthenticated)
