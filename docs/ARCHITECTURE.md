@@ -5,27 +5,29 @@
 ```
 App
  └── Feature  ──→  Domain (Interface)
-      └── ...  ──→  Shared
+      └── ...  ──→  DesignSystem
  └── Domain (Implements)
  └── Data  ──→  Domain (Interface)
-      └────→  Core  ──→  Shared
-      └────→  Networking  ──→  NetworkingInterface
+      └────→  Core
+      └────→  NetworkingInterface  ←──  Networking
 ```
 
 **허용되는 방향만 허용된다. 역방향은 없다.**
 
 | 레이어 | 역할 | 참조 가능한 레이어 |
 |---|---|---|
-| `App` | 진입점. 의존성 주입 조립 | Feature, Domain, Data, Shared |
-| `Feature` | 화면과 UI 로직 | DomainInterface, Shared |
+| `App` | 진입점. 의존성 주입 조립 | Feature, Domain, Data, DesignSystem |
+| `Feature` | 화면과 UI 로직 | DomainInterface, DesignSystem |
 | `Domain` | Repository/UseCase 선언 + UseCase의 liveValue(오케스트레이션) | 없음 |
-| `Data` | Repository의 liveValue(실제 API/시스템 호출 구현) | DomainInterface, Core, Networking, NetworkingInterface |
-| `Networking` | HTTP 클라이언트 실제 구현(`HTTPClient`) | NetworkingInterface |
-| `NetworkingInterface` | HTTP 클라이언트 포트(`HTTPClienting`, `Requestable` 등) | 없음 |
-| `Core` | Keychain 등 인프라 유틸리티 | Shared |
-| `Shared` | 디자인 시스템, 공통 유틸 | 없음 |
+| `Data` | Repository의 liveValue(실제 API/시스템 호출 구현) | DomainInterface, Core, NetworkingInterface |
+| `Networking` | HTTP 클라이언트 실제 구현(`HTTPClient`), 인증 인터셉터(`TokenRefreshInterceptor`) | NetworkingInterface |
+| `NetworkingInterface` | HTTP 클라이언트 포트(`HTTPClienting`, `Requestable`, `TokenProvider` 등) | 없음 |
+| `Core` | Keychain 등 인프라 유틸리티 | 없음 |
+| `DesignSystem` | 컬러/폰트 등 디자인 토큰 | 없음 |
 
-네트워크 코드는 `Networking`(구현체)/`NetworkingInterface`(포트) 2-target으로 분리되어 있다(`Core`에는 더 이상 네트워크 코드가 없다 — Keychain만 남는다). 실제 API/시스템 호출은 전부 `Data` 모듈에 있다 — `Data`는 `Core`(Keychain), `Networking`(구현체, `HTTPClient` 직접 생성용), `NetworkingInterface`(포트, `Requestable`/`HTTPMethod`/`NetworkError`/`SupabaseConfig` 등)를 모두 참조한다. `Domain`은 더 이상 `Core`/`Networking`/`NetworkingInterface` 어느 것에도 의존하지 않는다 — Repository/UseCase 선언과 UseCase의 오케스트레이션 로직만 있다.
+네트워크 코드는 `Networking`(구현체)/`NetworkingInterface`(포트) 2-target으로 분리되어 있다(`Core`에는 더 이상 네트워크 코드가 없다 — Keychain만 남는다). `Data`는 실제 API/시스템 호출을 전담하지만 **`NetworkingInterface`만 참조하고 구현체인 `Networking`에는 의존하지 않는다** — `Data`는 오직 `@Dependency(\.authenticatedHTTPClient)`/`@Dependency(\.httpClient)`(둘 다 `NetworkingInterface`의 DependencyValue)로만 네트워크를 호출한다. 인증된 클라이언트(`TokenRefreshInterceptor` 적용)를 실제로 만드는 코드는 `Networking`(구현체) 안에 있다 — `Networking`은 인증 토큰을 직접 알지 못하고, `NetworkingInterface`에 선언된 저수준 포트 `TokenProvider`(`getAccessToken`/`refreshAccessToken`)에만 의존한다. 이 `TokenProvider`의 실제 구현(→ `DomainInterface`의 `authSessionRepository` 브릿지)은 `Data`가 제공한다 — 즉 인증 방향은 `Networking → NetworkingInterface ← Data`로, `Networking`이 `Data`/`Domain`을 몰라도 되는 구조를 유지한다. `Domain`은 `Core`/`Networking`/`NetworkingInterface` 어느 것에도 의존하지 않는다 — Repository/UseCase 선언과 UseCase의 오케스트레이션 로직만 있다.
+
+`Shared`는 DesignSystem 하나만 감싸는 빈 aggregator였기 때문에 제거됐다 — `DesignSystem`은 `Projects/DesignSystem`으로 독립된 최상위 모듈이다.
 
 ### Repository / UseCase 패턴
 
@@ -34,7 +36,7 @@ FiveVoca의 모든 외부 의존성(Supabase 네트워크 호출, Keychain, AVFo
 - **Repository**: 외부 API/시스템을 추상화한 포트. `Domain/Interface/Repository/`(`DomainInterface` 타겟)에 struct-of-closures로 선언한다. `testValue`(`unimplemented`)만 가지며 `previewValue`는 없다 — Repository는 ViewModel이 직접 보지 않기 때문이다.
 - **UseCase**: 화면(ViewModel)이 실제로 호출하는 단위. `Domain/Interface/UseCase/`(`DomainInterface` 타겟)에 struct-of-closures로 선언하며 `testValue`/`previewValue`를 모두 갖는다. **ViewModel은 Repository가 아닌 UseCase만 `@Dependency`로 주입받는다.**
 - **UseCase의 `liveValue`**는 `Domain/Sources/UseCase/`(`Domain` 타겟)에 위치하며, `@Dependency`로 Repository를 주입받아 호출한다(순수 오케스트레이션 — 여러 Repository를 조합하거나 결과를 가공할 수 있다. 예: `SignInWithAppleUseCase`는 `authRepository.signInWithApple`을 호출한 뒤 `authSessionRepository`에 토큰을 저장한다).
-- **Repository의 `liveValue`**는 `Data/Sources/<도메인별 폴더>/`에 위치하며, 실제 Supabase 호출(`HTTPClient(interceptor: TokenRefreshInterceptor())` + `Requestable` 준수 Request struct)이나 Keychain/AVFoundation 같은 시스템 API를 직접 다룬다. 캐싱(예: `WordDetailCache`, `SessionCache`, `AudioCache`)도 Repository의 liveValue 책임이다. `TokenRefreshInterceptor`(인증 헤더 부착 + 401 재시도)도 `Data/Sources`에 위치하며, 인증이 필요 없는 소수의 요청(`RefreshTokenRequest` 등)만 예외적으로 `NetworkingInterface`의 `httpClient`(NoopInterceptor) 의존성을 그대로 사용한다.
+- **Repository의 `liveValue`**는 `Data/Sources/<도메인별 폴더>/`에 위치하며, 실제 Supabase 호출(`@Dependency(\.authenticatedHTTPClient)` + `Requestable` 준수 Request struct)이나 Keychain/AVFoundation 같은 시스템 API를 직접 다룬다. 캐싱(예: `WordDetailCache`, `SessionCache`, `AudioCache`)도 Repository의 liveValue 책임이다. 인증이 필요 없거나 재귀(토큰 갱신 자기 호출)를 피해야 하는 소수의 요청(`RefreshTokenRequest`, `DeleteAccountRequest`)만 예외적으로 `NetworkingInterface`의 `httpClient`(NoopInterceptor) 의존성을 그대로 사용한다.
 - DataSource 레이어는 아직 없다 — Repository가 직접 API를 호출하며, 필요해지면 Repository와 실제 호출 사이에 DataSource를 끼워 넣는다.
 - `AudioPlayerRepository`처럼 "외부 API"가 아니라 로컬 시스템 프레임워크(AVFoundation)를 감싸는 경우도 있다 — Repository라는 이름이 정확히 들어맞지는 않지만, UseCase 테스트 용이성이라는 동일한 목적으로 같은 패턴을 적용한다.
 
