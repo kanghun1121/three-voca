@@ -29,7 +29,7 @@ private actor AccessTokenStore {
 extension AuthSessionRepository: DependencyKey {
     public static let liveValue: AuthSessionRepository = {
         let store = AccessTokenStore()
-        let keychain = KeychainClient.live
+        @Dependency(\.keychainClient) var keychain
         let (stream, continuation) = AsyncStream<AuthState>.makeStream()
         return AuthSessionRepository(
             getAccessToken: { await store.value },
