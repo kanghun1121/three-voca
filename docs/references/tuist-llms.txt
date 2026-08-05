@@ -16,8 +16,7 @@ Projects/
   Data/Project.swift
   Networking/Project.swift
   Core/Project.swift
-  Shared/Project.swift
-  Shared/DesignSystem/Project.swift
+  DesignSystem/Project.swift
 ```
 
 ## 새 Feature 모듈 추가 시 필수 수정 파일
@@ -79,19 +78,16 @@ let project = Project.makeModule(
 .feature          // Projects/Feature 전체
 .domain           // Domain Implements
 .domainInterface  // Domain Interface만 (Repository, UseCase 선언 위치)
-.data              // Data (Repository의 liveValue 구현 위치)
-.networking        // Networking Implements (HTTPClient 등 실제 구현)
-.networkingInterface // Networking Interface만 (HTTPClienting, Requestable 등 포트)
+.data              // Data (Repository의 liveValue 구현 위치, NetworkingInterface만 참조)
+.networking        // Networking Implements (HTTPClient, TokenRefreshInterceptor 등 실제 구현 — Data는 이걸 참조하지 않는다)
+.networkingInterface // Networking Interface만 (HTTPClienting, Requestable, TokenProvider 등 포트)
 .core              // Keychain 등 인프라 유틸리티 (네트워크 코드 없음)
-.shared
+.designSystem      // DesignSystem (독립 모듈)
 
 // Feature 서브모듈
 .feature(interface: .home)    // FeatureHomeInterface
 .feature(implements: .home)   // FeatureHome
 .feature(testing: .home)      // FeatureHomeTesting
-
-// Shared 서브모듈
-.designSystem                 // DesignSystem
 
 // SPM External
 .dependencies                 // swift-dependencies
