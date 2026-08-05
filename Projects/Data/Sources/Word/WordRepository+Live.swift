@@ -1,14 +1,13 @@
 import Foundation
 
 import DomainInterface
-import Networking
 import NetworkingInterface
 
 import Dependencies
 
 extension WordRepository: DependencyKey {
     public static let liveValue: WordRepository = {
-        let http = HTTPClient(interceptor: TokenRefreshInterceptor())
+        @Dependency(\.authenticatedHTTPClient) var http
         let cache = WordDetailCache()
         return WordRepository(
             fetchWordDetail: { id in

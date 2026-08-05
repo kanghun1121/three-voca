@@ -8,15 +8,6 @@ let project = Project.makeModule(
             dependencies: [
                 .domainInterface,
                 .core,
-                .networking,
-                .networkingInterface,
-                .dependencies,
-            ]
-        )),
-        .data(tests: .init(
-            dependencies: [
-                .data,
-                .domainInterface,
                 .networkingInterface,
                 .dependencies,
             ]
