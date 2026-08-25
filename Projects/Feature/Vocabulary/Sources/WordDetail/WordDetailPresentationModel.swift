@@ -3,9 +3,11 @@ import Foundation
 import DomainInterface
 
 struct WordDetailPresentationModel: Equatable {
-    struct DefinitionGroup: Equatable {
+    struct DefinitionGroup: Equatable, Identifiable {
         let partOfSpeech: String
         let meanings: [String]
+
+        var id: String { partOfSpeech }
     }
 
     struct ExampleRow: Equatable, Identifiable {
