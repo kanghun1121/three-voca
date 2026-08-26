@@ -65,3 +65,6 @@ allowed-tools:
 - 스테이지된 파일이 있으면 해당 파일만 커밋
 - 분할 제안을 위한 diff 분석
 - **커밋에 Claude 서명 절대 추가하지 않음**
+- git pre-commit 훅으로 테스트를 강제하지 않는다 — 빌드/테스트 검증은 이미 응답을 끝내기 전
+  `.claude/hooks/run-tests-after-edit.sh` + `block-stop-without-tests.sh`(Stop 훅)에서 끝난
+  상태이므로, 커밋 시점에 별도로 테스트를 다시 실행하지 않는다.
