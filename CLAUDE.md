@@ -1,78 +1,73 @@
 # CLAUDE.md
 
-Claude가 따라야 할 프로젝트 운영 규칙.
+Scope
 
----
+Only work inside this repository.
 
-## 작업 사이클
+Do not access:
 
-모든 구현 작업은 **5단계를 순서대로** 따른다. 단계를 건너뛰지 않는다.  
-검증 실패 시 1단계부터 다시 시작한다.
+parent directories
+home directory
+downloads folder
+desktop folder
+SSH keys
+browser data
+personal files
 
----
+Starting From an Issue
 
-### 1단계 — PLAN 생성
+When the user hands you a GitHub issue (a number like `#87` or a link), do this immediately,
+in order, before anything else:
 
-```bash
-bash scripts/start-task.sh <task-id> <description>
-```
+1. Check the issue (`gh issue view <number>`) to get its title and body.
+2. Run the `setup-worktree` skill to create the branch/worktree for it (task-id per the
+   Branches rule below) and prepare the Xcode environment.
+3. Inside that new worktree, create the problem definition file
+   (`.harness/problems/<issue-number-3-digit>-<domain-title>.md`) from the issue content.
+4. Only then proceed with Required Workflow below (`harness-plan` first).
 
-스크립트가 자동으로 생성한다:
+Do not write the problem definition file before the worktree exists — it belongs inside
+the worktree that will hold the rest of the task's work, not in the main checkout.
 
-| 산출물 | 경로 |
-|---|---|
-| 계획서 | `.harness/exec-plans/active/<task-id>/PLAN.md` |
-| 격리 브랜치 | `.harness/worktrees/<task-id>/` |
-| 로그 디렉토리 | `.harness/logs/<task-id>/` |
+If there is no existing issue yet, use the `create-issue` skill instead — it creates the
+GitHub issue first, then runs the same setup-worktree flow, leaving the problem definition
+file as an empty skeleton for the user to write (do not draft its content yourself).
 
-계획서를 작성하기 전에 **`docs/HARNESS.md`와 `docs/AGENTS_DOC_INDEX.md`를 확인**하고, 이번 작업에 필요한 문서를 읽는다.
-**계획서를 먼저 작성한다.** 계획 없이 코드를 먼저 작성하지 않는다.
+Required Workflow
 
----
+For every Code Craft task:
 
-### 2단계 — Worktree 작업
+Use the harness-plan skill first.
+Define the expected output before implementation.
+Define input data models.
+Define constraints and edge cases.
+Identify change points.
+Split responsibilities.
+Use the solid-review skill before implementation.
+Write or update tests.
+Run tests.
+Summarize changed files and verification results.
+Rules
+Do not implement before creating a plan.
+Do not invent production data.
+Do not modify files outside this repository.
+Do not skip tests.
+If tests fail, explain the failing requirement before modifying code again.
+Separate test-verified claims from code-inspection-only assumptions in every summary.
+When a test fails, only inspect and modify the files related to the failing responsibility.
 
-생성된 Worktree 디렉토리로 이동하여 작업한다.
+Branches
 
-```bash
-cd .harness/worktrees/<task-id>
-```
+When starting a new task, use the `setup-worktree` skill (it creates the branch, worktree,
+PLAN.md, and log directory, then prepares the Xcode environment). The `task-id` (which
+becomes the branch and worktree name) must follow:
 
-이동 후 **`/setup-worktree` 스킬을 실행**한다. xcconfig 복사 + `tuist install`이 완료되면 이후 `tuist generate`만으로 Xcode를 열 수 있다.
+`<issue-number-3-digit>-<type>-<kebab-case-description>`
 
-- `master`, `dev` 브랜치에서 직접 코드를 수정하지 않는다.
-- 계획서(`PLAN.md`)에 없는 코드는 추가하지 않는다.
+- `<issue-number-3-digit>` is the GitHub issue number, zero-padded to 3 digits (`#87` → `087`).
+- `<type>` is lowercase: feature, fix, refactor, chore, docs.
+- Example: issue `#87`, a feature about vocabulary search filter → `087-feature-vocabulary-search-filter`
 
----
-
-### 3단계 — 테스트 작성 (선택)
-
-**테스트는 사용자가 명시적으로 요청할 때만 작성한다.**  
-무엇을 테스트할지는 사용자가 직접 결정하여 지시한다. Claude가 자의적으로 테스트를 추가하지 않는다.
-
----
-
-### 4단계 — 검증
-
-```bash
-bash scripts/verify-task.sh <task-id>
-```
-
-검증 항목:
-
-- [ ] 빌드 (error 0개)
-- [ ] 단위 테스트 전체 통과
-- [ ] 아키텍처 의존성 (역방향 import 없음)
-
-검증을 통과하지 못하면 커밋하지 않는다. 원인을 수정한 뒤 재시도한다.
-상세 검증은 `docs/VERIFICATION.md`의 3-Layer 프로세스를 따른다.
-
----
-
-### 5단계 — 커밋
-
-`git:commit` 스킬 또는 컨벤셔널 커밋 메시지로 커밋한다.
-
-**pre-commit 훅이 Swift 파일 변경 시 테스트를 자동 실행한다.** 실패 시 커밋이 차단된다.  
-
-완료 후 `.harness/exec-plans/active/<task-id>/PLAN.md` 를 `.harness/exec-plans/completed/` 로 이동한다.
+Commit message and PR conventions (format, type tags, no-emoji rule) live in
+`.claude/commands/git/commit.md` and `.claude/commands/git/pr.md` — follow those files
+directly instead of duplicating the rules here.
