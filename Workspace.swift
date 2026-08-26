@@ -10,7 +10,10 @@ let workspace = Workspace(
                 .project(path: "Projects/Core", target: "CoreTests"),
                 .project(path: "Projects/Domain", target: "DomainTests"),
                 .project(path: "Projects/Networking", target: "NetworkingTests"),
+                .project(path: "Projects/Feature/Analysis", target: "FeatureAnalysisTests"),
                 .project(path: "Projects/Feature/Home", target: "FeatureHomeTests"),
+                .project(path: "Projects/Feature/Login", target: "FeatureLoginTests"),
+                .project(path: "Projects/Feature/MyPage", target: "FeatureMyPageTests"),
                 .project(path: "Projects/Feature/Session", target: "FeatureSessionTests"),
                 .project(path: "Projects/Feature/Vocabulary", target: "FeatureVocabularyTests"),
                 .project(path: "Projects/Feature/WordGame", target: "FeatureWordGameTests"),
@@ -26,7 +29,16 @@ let workspace = Workspace(
                     target: .project(path: "Projects/Networking", target: "NetworkingTests")
                 ),
                 .testableTarget(
+                    target: .project(path: "Projects/Feature/Analysis", target: "FeatureAnalysisTests")
+                ),
+                .testableTarget(
                     target: .project(path: "Projects/Feature/Home", target: "FeatureHomeTests")
+                ),
+                .testableTarget(
+                    target: .project(path: "Projects/Feature/Login", target: "FeatureLoginTests")
+                ),
+                .testableTarget(
+                    target: .project(path: "Projects/Feature/MyPage", target: "FeatureMyPageTests")
                 ),
                 .testableTarget(
                     target: .project(path: "Projects/Feature/Session", target: "FeatureSessionTests")
