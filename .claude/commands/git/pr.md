@@ -70,11 +70,17 @@ GitHub Pull Request를 자동으로 생성하고 관리하는 통합 도구입�
 
 1. **제목 생성 규칙**
 
+   형식: `[T-<issue-number>] [<Type>] <description>` — 이모지 사용 금지.
+
+   - `<issue-number>`: 이 PR이 닫는 GitHub 이슈 번호 (`#87` → `T-87`)
+   - `<Type>`: Feature, Fix, Refactor, Chore, Docs 중 하나
+   - 브랜치명(`087-feature-...`)에서 이슈 번호와 type을 그대로 추출한다
+
    ```
-   브랜치 유형별 제목 패턴:
-   feature/user-auth  → "✨ feat: 사용자 인증 기능 추가"
-   fix/login-bug      → "🐛 fix: 로그인 버그 수정"
-   docs/readme        → "📝 docs: README 문서 업데이트"
+   브랜치 → 제목 패턴:
+   087-feature-vocabulary-search-filter → "[T-87] [Feature] 어휘 검색 필터 추가"
+   088-fix-login-bug                    → "[T-88] [Fix] 로그인 버그 수정"
+   089-docs-readme-update               → "[T-89] [Docs] README 문서 업데이트"
    ```
 
 2. **설명 자동 생성**
@@ -113,81 +119,22 @@ GitHub Pull Request를 자동으로 생성하고 관리하는 통합 도구입�
 
 ## PR 템플릿
 
-### 기본 PR 템플릿
+이 저장소는 `.github/PULL_REQUEST_TEMPLATE.md`를 유일한 PR 본문 템플릿으로 쓴다.
 
 ```markdown
-## 📋 변경사항 요약
+## 연관 이슈
 
-[자동 생성된 변경사항 요약]
+> ex) <#14>, <#15>
 
-## 🎯 목적 및 배경
+## 📝 작업 내용
 
-[브랜치명과 커밋 메시지 기반 목적 설명]
 
-## 🔧 주요 변경내용
-
-- [ ] [변경사항 1]
-- [ ] [변경사항 2]
-- [ ] [변경사항 3]
-
-## ✅ 체크리스트
-
-### 코드 품질
-
-- [ ] 코드가 프로젝트의 스타일 가이드를 따름
-- [ ] Self-review 완료
-- [ ] 적절한 주석 추가
-- [ ] 불필요한 console.log/debug 코드 제거
-
-### 테스트
-
-- [ ] 기존 테스트 모두 통과
-- [ ] 새로운 기능에 대한 테스트 추가
-- [ ] 엣지 케이스 테스트 포함
-
-### 문서화
-
-- [ ] 코드 변경에 따른 문서 업데이트
-- [ ] README.md 업데이트 (필요시)
-- [ ] API 문서 업데이트 (필요시)
-
-## 🧪 테스트 방법
-
-[테스트 시나리오 및 확인 방법]
-
-## 📸 스크린샷 (UI 변경 시)
-
-[필요시 Before/After 스크린샷]
-
-## 🔗 관련 이슈
-
-Closes #[issue-number]
-
-## 📝 추가 노트
-
-[리뷰어가 알아야 할 추가 정보]
+## 🖼️ 스크린샷 (선택)
 ```
 
-### 특화된 템플릿
-
-#### Feature PR 템플릿
-
-- 기능 명세 및 요구사항
-- 사용자 시나리오
-- 성능 영향도 분석
-
-#### Bugfix PR 템플릿
-
-- 버그 재현 방법
-- 근본 원인 분석
-- 수정 방법 설명
-- 회귀 방지 계획
-
-#### Documentation PR 템플릿
-
-- 문서 변경 범위
-- 독자 대상
-- 검토 포인트
+`gh pr create`를 `--body`/`--body-file` 없이 호출하면 이 템플릿이 자동으로 채워진다.
+직접 body를 구성해야 하면 이 구조를 그대로 따르고, 템플릿에 없는 섹션(체크리스트,
+라벨 안내, 리뷰어 추천 문구 등)을 임의로 추가하지 않는다.
 
 ## 대화형 PR 생성
 
@@ -198,14 +145,14 @@ Closes #[issue-number]
 
 1. 📊 변경사항 분석 중...
    ✅ 파일 15개 변경됨 (+234, -67)
-   ✅ 브랜치: feature/user-authentication
-   ✅ 기반 브랜치: main
+   ✅ 브랜치: 087-feature-user-authentication
+   ✅ 기반 브랜치: dev
 
 2. 🏷️  PR 유형 자동 감지
-   → ✨ Feature: 새로운 기능 추가
+   → Feature: 새로운 기능 추가
 
 3. 📝 PR 제목 제안
-   → "✨ feat: 사용자 인증 시스템 구현"
+   → "[T-87] [Feature] 사용자 인증 시스템 구현"
 
 4. 👥 리뷰어 추천
    → @frontend-team, @security-team
@@ -227,7 +174,7 @@ PR을 생성하시겠습니까? (y/N)
   3. 버그 수정 템플릿
   4. 문서 업데이트 템플릿
 
-🎯 대상 브랜치: main ▼
+🎯 대상 브랜치: dev ▼
 👥 리뷰어: @team-frontend ▼
 🏷️  라벨: feature, ui ▼
 📌 마일스톤: v2.1.0 ▼

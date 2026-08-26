@@ -1,5 +1,5 @@
 ---
-description: '이모지와 컨벤셔널 커밋 메시지로 잘 포맷된 커밋을 생성합니다'
+description: '[Type] 태그 기반 커밋 메시지로 잘 포맷된 커밋을 생성합니다 (이모지 없음)'
 allowed-tools:
   [
     'Bash(git add:*)',
@@ -12,7 +12,7 @@ allowed-tools:
 
 # Claude 명령어: Commit
 
-이모지와 컨벤셔널 커밋 메시지로 잘 포맷된 커밋을 생성합니다.
+`[Type]` 태그 기반 커밋 메시지로 잘 포맷된 커밋을 생성합니다. 이모지는 사용하지 않습니다.
 
 ## 사용법
 
@@ -25,33 +25,36 @@ allowed-tools:
 1. 스테이지된 파일 확인, 스테이지된 파일이 있으면 해당 파일만 커밋
 2. 여러 논리적 변경사항에 대한 diff 분석
 3. 필요시 분할 제안
-4. 이모지 컨벤셔널 포맷으로 커밋 생성
+4. `[Type]` 포맷으로 커밋 생성
 
 ## 커밋 포맷
 
-`<이모지> <타입>: <설명>`
+`[<Type>] <설명>`
 
-**타입:**
+**타입** (PR 제목의 Type과 동일):
 
-- `feat`: 새로운 기능
-- `fix`: 버그 수정
-- `docs`: 문서화
-- `style`: 포맷팅
-- `refactor`: 코드 리팩토링
-- `perf`: 성능 개선
-- `test`: 테스트
-- `chore`: 빌드/도구
+- `Feature`: 새로운 기능
+- `Fix`: 버그 수정
+- `Refactor`: 코드 리팩토링
+- `Chore`: 빌드/도구/설정
+- `Docs`: 문서화
 
 **규칙:**
 
-- 명령형 어조 ("추가" not "추가됨")
+- 이모지 사용 금지
+- 이슈 번호는 커밋 메시지에 넣지 않는다 (PR 제목의 `[T-<번호>]`에만 사용)
+- 설명은 한국어, 명령형 어조 ("추가" not "추가됨")
 - 첫 줄 72자 미만
 - 원자적 커밋 (단일 목적)
 - 관련 없는 변경사항 분할
 
-## 이모지 맵
+## 예시
 
-✨ feat | 🐛 fix | 📝 docs | 💄 style | ♻️ refactor | ⚡ perf | ✅ test | 🔧 chore | 🚀 ci | 🚨 warnings | 🔒️ security | 🚚 move | 🏗️ architecture | ➕ add-dep | ➖ remove-dep | 🌱 seed | 🧑‍💻 dx | 🏷️ types | 👔 business | 🚸 ux | 🩹 minor-fix | 🥅 errors | 🔥 remove | 🎨 structure | 🚑️ hotfix | 🎉 init | 🔖 release | 🚧 wip | 💚 ci-fix | 📌 pin-deps | 👷 ci-build | 📈 analytics | ✏️ typos | ⏪️ revert | 📄 license | 💥 breaking | 🍱 assets | ♿️ accessibility | 💡 comments | 🗃️ db | 🔊 logs | 🔇 remove-logs | 🙈 gitignore | 📸 snapshots | ⚗️ experiment | 🚩 flags | 💫 animations | ⚰️ dead-code | 🦺 validation | ✈️ offline
+```
+[Feature] 어휘 검색 필터 추가
+[Fix] 로그인 후 세션 만료 처리 수정
+[Chore] Shared 제거 마무리
+```
 
 ## 분할 기준
 
