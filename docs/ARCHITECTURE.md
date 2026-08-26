@@ -42,9 +42,9 @@ FiveVoca의 모든 외부 의존성(Supabase 네트워크 호출, Keychain, AVFo
 
 ---
 
-## 4-Target 패턴
+## Feature 모듈 타겟 구성
 
-Feature 모듈 하나는 4개 타겟으로 구성된다.
+Feature 모듈 하나는 기본 3개 타겟으로 구성된다.
 
 | 타겟 | 네이밍 예시 | 역할 |
 |---|---|---|

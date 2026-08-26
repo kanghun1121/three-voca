@@ -22,7 +22,7 @@ SwiftUI 코드를 작성하기 전에 읽는 규칙.
 @MainActor
 final class HomeViewModel {
     @ObservationIgnored
-    @Dependency(\.homeClient) private var homeClient
+    @Dependency(\.getHomeOverviewUseCase) private var getHomeOverviewUseCase
 }
 ```
 
