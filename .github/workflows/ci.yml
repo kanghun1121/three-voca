@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    runs-on: macos-26
+    timeout-minutes: 60
+
+    steps:
+      - name: 체크아웃
+        uses: actions/checkout@v4
+
+      - name: mise 설치
+        uses: jdx/mise-action@v2
+
+      - name: Secrets.xcconfig 생성
+        run: |
+          cat > Projects/App/Secrets.xcconfig << EOF
+          SUPABASE_ANON_KEY = ${{ secrets.SUPABASE_ANON_KEY }}
+          MW_DICTIONARY_API_KEY = ${{ secrets.MW_DICTIONARY_API_KEY }}
+          EOF
+
+      - name: tuist install & generate
+        run: |
+          tuist install
+          tuist generate --no-open
+
+      - name: 빌드 및 테스트 (AllTest)
+        run: |
+          set -o pipefail
+          tuist test AllTest 2>&1 | tee $RUNNER_TEMP/tuist-test.log
+
+      - name: 테스트 로그 업로드 (실패 시)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tuist-test-log
+          path: ${{ runner.temp }}/tuist-test.log
+          if-no-files-found: ignore
