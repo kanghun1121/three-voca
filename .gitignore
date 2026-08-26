@@ -76,6 +76,7 @@ shrimp_data/
 .claude/worktrees/
 .claude/logs/
 .claude/exec-plans/
+.claude/last-test-status
 
 ### 시크릿 ###
 Projects/Core/Example/Secrets.xcconfig

@@ -4,30 +4,32 @@
       "Read(**/*.xcconfig)",
       "Read(**/.env)",
       "Read(*.env)",
-      "Bash(rm -rf *)",
-      "Write(**/*.sh)",
-      "Edit(**/*.sh)"
+      "Bash(rm -rf *)"
     ]
   },
   "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/block-sensitive-paths.sh"
+          }
+        ]
+      }
+    ],
     "Stop": [
       {
         "hooks": [
           {
             "type": "command",
-            "command": "/Users/kanghun/Desktop/FiveVoca/scripts/verify-build-hook.sh",
-            "timeout": 120
-          }
-        ]
-      }
-    ],
-    "PreToolUse": [
-      {
-        "matcher": "Write|Edit",
-        "hooks": [
+            "command": "bash .claude/hooks/run-tests-after-edit.sh",
+            "timeout": 300
+          },
           {
             "type": "command",
-            "command": "/Users/kanghun/Desktop/FiveVoca/scripts/phase-guard-hook.sh"
+            "command": "bash .claude/hooks/block-stop-without-tests.sh"
           }
         ]
       }
