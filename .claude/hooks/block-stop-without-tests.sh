@@ -6,23 +6,10 @@
 set -uo pipefail
 
 PROJECT_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
-source "$PROJECT_ROOT/.claude/hooks/harness-config.sh"
 
-ACTIVE_TASK=$(cat "$HARNESS_ACTIVE_TASK_FILE" 2>/dev/null)
-if [ -z "$ACTIVE_TASK" ]; then
-  ACTIVE_TASK=$(cat "$LEGACY_ACTIVE_TASK_FILE" 2>/dev/null)
-fi
-
-WORKTREE_PATH="$HARNESS_WORKTREES_DIR/$ACTIVE_TASK"
-if [ ! -d "$WORKTREE_PATH" ]; then
-  WORKTREE_PATH="$LEGACY_WORKTREES_DIR/$ACTIVE_TASK"
-fi
-
-if [ -n "$ACTIVE_TASK" ] && [ -d "$WORKTREE_PATH" ]; then
-  SOURCE_ROOT="$WORKTREE_PATH"
-else
-  SOURCE_ROOT="$PROJECT_ROOT"
-fi
+# run-tests-after-edit.sh와 동일한 이유로 active-task 기반 워크트리 리다이렉트를 제거했다.
+# 각 워크트리는 독립된 .claude/hooks 사본을 가지므로 PROJECT_ROOT가 곧 현재 워크트리다.
+SOURCE_ROOT="$PROJECT_ROOT"
 
 STATUS_FILE="$SOURCE_ROOT/.claude/last-test-status"
 
