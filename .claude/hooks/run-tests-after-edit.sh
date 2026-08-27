@@ -6,23 +6,12 @@
 set -uo pipefail
 
 PROJECT_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
-source "$PROJECT_ROOT/.claude/hooks/harness-config.sh"
 
-ACTIVE_TASK=$(cat "$HARNESS_ACTIVE_TASK_FILE" 2>/dev/null)
-if [ -z "$ACTIVE_TASK" ]; then
-  ACTIVE_TASK=$(cat "$LEGACY_ACTIVE_TASK_FILE" 2>/dev/null)
-fi
-
-WORKTREE_PATH="$HARNESS_WORKTREES_DIR/$ACTIVE_TASK"
-if [ ! -d "$WORKTREE_PATH" ]; then
-  WORKTREE_PATH="$LEGACY_WORKTREES_DIR/$ACTIVE_TASK"
-fi
-
-if [ -n "$ACTIVE_TASK" ] && [ -d "$WORKTREE_PATH" ]; then
-  SOURCE_ROOT="$WORKTREE_PATH"
-else
-  SOURCE_ROOT="$PROJECT_ROOT"
-fi
+# 각 워크트리는 자신만의 .claude/hooks 사본을 가진 독립된 git worktree이므로,
+# 훅 스크립트 자신의 위치로 계산한 PROJECT_ROOT가 곧 "지금 세션이 작업 중인 워크트리"다.
+# 예전에는 .harness/active-task로 다른 워크트리를 가리켜 재검증했는데, 이는 여러
+# 워크트리 세션이 공유하는 전역 파일이라 서로의 상태를 오염시켜 제거했다.
+SOURCE_ROOT="$PROJECT_ROOT"
 
 STATUS_FILE="$SOURCE_ROOT/.claude/last-test-status"
 SCHEME="FiveVoca"

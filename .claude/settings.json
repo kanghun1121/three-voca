@@ -1,7 +1,7 @@
 {
   "permissions": {
     "deny": [
-      "Read(**/*.xcconfig)",
+      "Read(**/Secrets.xcconfig)",
       "Read(**/.env)",
       "Read(*.env)",
       "Bash(rm -rf *)"
