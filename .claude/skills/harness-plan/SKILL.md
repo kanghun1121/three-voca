@@ -92,9 +92,20 @@ Use these questions:
 - ISP: Which interfaces should be split?
 - DIP: Which concrete dependencies should be injected?
 
-### 7. Propose test cases to cover
+### 7. Decide test scope, then propose test cases where needed
 
-These are written after implementation, with the harness-test skill. Include:
+Not every responsibility needs new tests. Some do, some don't — that split is a judgment
+call for whoever is writing the plan, not a default.
+
+For each responsibility from step 5, mark it `테스트 필요` or `테스트 불필요`:
+
+- If the user has already stated which parts need tests (in the problem file, or earlier
+  in the conversation), use that.
+- If they haven't, ask them directly before finalizing the plan. Do not default to
+  `테스트 필요` for everything, and do not default to `테스트 불필요` either — ask.
+
+For each responsibility marked `테스트 필요`, propose test cases to cover (written after
+implementation, with the harness-test skill). Include:
 
 - happy path
 - empty input
@@ -102,6 +113,10 @@ These are written after implementation, with the harness-test skill. Include:
 - permission or visibility case
 - policy change case
 - sorting case
+
+Responsibilities marked `테스트 불필요` get no test cases here. This does not exempt them
+from build verification — see step 9, which is never optional regardless of a
+responsibility's test decision.
 
 ### 8. Label assumptions
 
@@ -114,6 +129,14 @@ Every plan must ship with a checklist, written as markdown checkboxes into the t
 `PLAN.md` (`.harness/exec-plans/active/<task-id>/PLAN.md`), broken down from the
 responsibilities in step 5 and the test cases in step 7 — one checkbox per concrete step,
 not one giant "implement the feature" line.
+
+Two things are non-negotiable regardless of the step 7 test decisions:
+
+- Include exactly one build verification checkbox (e.g. "빌드 성공 확인") that covers the
+  whole task. It applies even when every responsibility is marked `테스트 불필요`.
+- Only add test-case checkboxes for responsibilities marked `테스트 필요` in step 7.
+  Responsibilities marked `테스트 불필요` get no test checkboxes — the build verification
+  checkbox is their only required verification.
 
 This checklist is the persistent record of progress. A session can end or restart at any
 point; `PLAN.md` on disk, not conversation memory, is what says how far the task got. Check

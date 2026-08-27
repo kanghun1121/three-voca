@@ -7,7 +7,10 @@ description: Use this skill when writing or updating tests for a Code Craft impl
 
 ## Goal
 
-After implementation is complete, cover it with the following tests.
+After implementation is complete, cover it with the following tests — but only for the
+responsibilities the plan's `PLAN.md` marked as `테스트 필요` in `harness-plan` step 7.
+Responsibilities marked `테스트 불필요` are out of scope for this skill; they're verified
+by the build check only.
 
 - 정상 케이스 (Happy path)
 - 빈 입력 (Empty input)
