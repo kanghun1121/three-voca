@@ -47,15 +47,18 @@ Write a checklist into the plan's PLAN.md, broken down by responsibility, and ch
 off as they're completed.
 Use the solid-review skill before implementation.
 Implement the approved plan.
-Write or update tests.
-Run tests.
+Write or update tests, but only for responsibilities the plan marks as needing them
+(harness-plan step 7 decides this per responsibility, not by default).
+Always run build verification, regardless of test decisions.
+Run tests for the responsibilities that need them.
 Summarize changed files and verification results.
 Rules
 Do not implement before creating a plan.
 Do not create a plan without a checklist in its PLAN.md.
 Do not invent production data.
 Do not modify files outside this repository.
-Do not skip tests.
+Do not skip build verification — it applies to every task, with no exceptions.
+Do not skip tests for a responsibility the plan marks as needing them.
 If tests fail, explain the failing requirement before modifying code again.
 Separate test-verified claims from code-inspection-only assumptions in every summary.
 When a test fails, only inspect and modify the files related to the failing responsibility.
