@@ -1,9 +1,10 @@
 import SwiftUI
 
 import DesignSystem
+import DomainInterface
 
 struct VocabularyWordRow: View {
-    let word: VocabularyListPresentationModel.WordRow
+    let word: Session.Word
     let blurMode: BlurMode
     let isRevealed: Bool
     let onTapped: () -> Void
@@ -39,7 +40,7 @@ struct VocabularyWordRow: View {
 // MARK: - Word Text Stack
 
 private struct WordTextStack: View {
-    let word: VocabularyListPresentationModel.WordRow
+    let word: Session.Word
     let blurMode: BlurMode
     let isRevealed: Bool
 

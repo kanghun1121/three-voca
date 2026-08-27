@@ -51,7 +51,7 @@ public final class WordGameViewModel {
         do {
             let session = try await getSessionDetailUseCase.execute(sessionID)
             await audioPrefetchTask.value
-            let words = session.words.map { GameWord(from: $0) }
+            let words = session.words
             switch startingStage {
             case .recognition:    showLaunch(words: words)
             case .multipleChoice: startMultipleChoice(words: words)
@@ -62,13 +62,13 @@ public final class WordGameViewModel {
         }
     }
 
-    private func showLaunch(words: [GameWord]) {
+    private func showLaunch(words: [Session.Word]) {
         withAnimation(.easeInOut(duration: 0.3)) {
             activeStage = .launch(onStart: { [weak self] in self?.startRecognition(words: words) })
         }
     }
 
-    private func startRecognition(words: [GameWord]) {
+    private func startRecognition(words: [Session.Word]) {
         let vm = RecognitionViewModel(
             words: words,
             onCompleted: { [weak self] in self?.showStageEnd(title: "인식 단계 종료!", onContinue: { self?.startMultipleChoice(words: words) }) },
@@ -79,7 +79,7 @@ public final class WordGameViewModel {
         }
     }
 
-    private func startMultipleChoice(words: [GameWord]) {
+    private func startMultipleChoice(words: [Session.Word]) {
         let vm = MultipleChoiceViewModel(
             words: words,
             onCompleted: { [weak self] in self?.showStageEnd(title: "뜻 단계 종료!", onContinue: { self?.startSpelling(words: words) }) },
@@ -90,7 +90,7 @@ public final class WordGameViewModel {
         }
     }
 
-    private func startSpelling(words: [GameWord]) {
+    private func startSpelling(words: [Session.Word]) {
         let vm = SpellingViewModel(
             words: words,
             onCompleted: { [weak self] in self?.showGameComplete(wordCount: words.count) },

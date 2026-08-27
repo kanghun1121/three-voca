@@ -5,12 +5,14 @@ import DomainInterface
 @Observable
 @MainActor
 public final class ChunkReaderViewModel {
-    let presentationModel: ChunkReaderPresentationModel
+    let chunks: [Indexed<WordDetail.Example.Chunk>]
+    let words: [Indexed<WordDetail.Example.Word>]
     var selectedChunkID: Int?
 
     public init(chunks: [WordDetail.Example.Chunk], words: [WordDetail.Example.Word]) {
-        self.presentationModel = ChunkReaderPresentationModel(chunks: chunks, words: words)
-        self.selectedChunkID = presentationModel.chunks.first?.id
+        self.chunks = chunks.indexed()
+        self.words = words.indexed()
+        self.selectedChunkID = self.chunks.first?.id
     }
 
     func didTapChunk(id: Int) {

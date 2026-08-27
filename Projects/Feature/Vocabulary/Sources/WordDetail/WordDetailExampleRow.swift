@@ -2,11 +2,12 @@ import NaturalLanguage
 import SwiftUI
 
 import DesignSystem
+import DomainInterface
 
 struct WordDetailExampleRow: View {
     let term: String
-    let example: WordDetailPresentationModel.ExampleRow
-    let onChunkReaderTapped: (WordDetailPresentationModel.ExampleRow) -> Void
+    let example: WordDetail.Example
+    let onChunkReaderTapped: (WordDetail.Example) -> Void
     // NLTagger 파이프라인은 view 생성/body 평가를 막지 않도록 task()에서 채운다
     @State private var highlightedEnText: Text? = nil
 

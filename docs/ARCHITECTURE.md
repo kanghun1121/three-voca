@@ -56,13 +56,13 @@ Feature 모듈 하나는 기본 3개 타겟으로 구성된다.
 
 ---
 
-## 3-Layer 데이터 모델
+## 데이터 모델: DTO → Domain Model
 
-데이터는 항상 한 방향으로만 변환된다.
+데이터는 한 방향으로만 변환된다.
 
 ```
-Entity (DTO)  ──→  Domain Model  ──→  ViewState
-   (Data)        (DomainInterface)     (Feature)
+Entity (DTO)  ──→  Domain Model
+   (Data)        (DomainInterface)
 ```
 
 **Entity (DTO)**
@@ -74,11 +74,6 @@ Entity (DTO)  ──→  Domain Model  ──→  ViewState
 - `DomainInterface` 타겟에 위치. `Feature`와 `Data` 양쪽이 참조한다(`Domain`은 Repository/UseCase 시그니처를 통해 다룰 뿐 DTO를 모른다)
 - 날짜는 `Date`, 수치는 `Double` — 포맷 없는 순수 값
 
-**ViewState**
-- View가 바로 렌더링할 수 있는 표시용 struct
-- `Feature` 타겟 내부에만 존재. Domain으로 역참조하지 않는다
-- 날짜는 `"2024.01.15"`, 정확도는 `"87%"` — 이미 포맷된 문자열
-
 ### 변환 규칙
 
 변환 함수는 **변환 대상 타입의 extension**으로 작성한다. 별도 Mapper 클래스를 만들지 않는다.
@@ -88,15 +83,51 @@ Entity (DTO)  ──→  Domain Model  ──→  ViewState
 extension SessionDetailResponseDTO {
     func toDomain() -> Session { ... }
 }
+```
 
-// Domain Model → ViewState: Feature 타겟 내부 (Session+ViewState.swift)
-extension Session {
-    func toSessionDetailViewState() -> SessionDetailViewState { ... }
+### Feature는 Domain Model을 직접 다룬다
+
+과거에는 Domain Model을 표시용 PresentationModel(구 ViewState)로 한 번 더 변환하는 계층이 있었다.
+이 계층은 제거됐다 — ViewModel은 UseCase가 반환한 Domain Model을 그대로 상태로 보유하고, View는
+Domain Model을 직접 렌더링한다.
+
+```swift
+@Observable
+final class WordDetailViewModel {
+    enum ViewState {
+        case loading
+        case loaded(WordDetail)   // Domain Model을 그대로 보유. 별도 PresentationModel 없음
+        case error(String)
+    }
 }
 ```
 
-**ViewState에 비즈니스 로직을 넣지 않는다.**  
-`lowAccuracyThreshold` 같은 임곗값 판단은 ViewState 변환 시점에 처리하되, 판단 결과는 enum(`SessionIconKind`)으로 표현한다. View는 분기하지 않고 값을 그대로 쓴다.
+**화면에 필요한 파생값(그룹핑, 상태 판정, 라벨 변환)은 Domain Model의 extension으로 표현한다.**
+새 struct 계층을 만드는 대신, Domain 타입에 계산 프로퍼티/함수를 추가하되 **extension은 Feature
+모듈 안에 둔다** — Domain 타입 자체(`DomainInterface`)는 UI 관심사를 모른다.
+
+```swift
+// Feature/Vocabulary/Sources/WordDetail/WordDetail+DefinitionGrouping.swift
+extension WordDetail {
+    struct DefinitionGroup: Equatable, Identifiable { ... }  // 그룹핑 산물만 별도 타입
+    func groupedDefinitions() -> [DefinitionGroup] { ... }
+}
+
+// Feature/Home/Sources/Home/LevelSummary+Status.swift
+extension LevelSummary {
+    var status: LevelStatus { ... }  // 임곗값 판단 결과는 enum으로 표현
+}
+```
+
+**판단 결과는 enum으로 표현한다.** `completedSessions == totalSessions` 같은 임곗값 판단은 이
+extension 안에서 처리하되, 판단 결과는 `LevelStatus`/`SessionCellStatus` 같은 enum으로 반환한다.
+View는 분기하지 않고 값을 그대로 쓴다. 색상/아이콘 등 DesignSystem 매핑은 이 enum을 받는 View
+extension에서 담당한다(예: `LevelStatus.badgeInfo`) — 파생 로직에도 DesignSystem 의존을 넣지 않는다.
+
+같은 Domain 타입을 여러 Feature 모듈이 각자 가공해야 할 때(예: `Session.Word`가 Session/
+Vocabulary/WordGame 세 화면에서 쓰일 때), 모듈 의존 방향이 순환되지 않는 한 공유 확장을 새로
+만들지 않고 각 모듈에 필요한 만큼만 개별적으로(짧은 중복을 감수하고) 확장한다. 파생 프로퍼티가
+한두 줄 수준이면 이 중복이 잘못된 방향의 모듈 의존(순환 의존)보다 싸다.
 
 ---
 

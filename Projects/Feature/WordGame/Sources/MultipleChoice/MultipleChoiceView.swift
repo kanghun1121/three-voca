@@ -1,7 +1,9 @@
 import SwiftUI
 
+import DomainInterface
+
 struct MultipleChoiceView: View {
-    let word: GameWord
+    let word: Session.Word
     let choices: [String]
     let viewState: MultipleChoiceViewModel.ViewState
     let onChoiceTap: (String) -> Void

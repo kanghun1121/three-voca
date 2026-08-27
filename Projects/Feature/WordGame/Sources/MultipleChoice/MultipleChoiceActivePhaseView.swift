@@ -1,7 +1,9 @@
 import SwiftUI
 
+import DomainInterface
+
 struct MultipleChoiceActivePhaseView: View {
-    let word: GameWord
+    let word: Session.Word
     let choices: [String]
     let viewState: MultipleChoiceViewModel.ViewState
     let onDismiss: () -> Void

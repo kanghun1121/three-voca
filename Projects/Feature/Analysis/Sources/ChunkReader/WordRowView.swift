@@ -1,23 +1,24 @@
 import SwiftUI
 
 import DesignSystem
+import DomainInterface
 
 struct WordRowView: View {
-    let word: ChunkReaderPresentationModel.WordRow
+    let word: Indexed<WordDetail.Example.Word>
 
     var body: some View {
         HStack(alignment: .firstTextBaseline, spacing: 10) {
-            Text(word.word)
+            Text(word.element.word)
                 .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 16))
                 .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
                 .frame(minWidth: 70, alignment: .leading)
 
-            Text(word.meaning)
+            Text(word.element.meaning)
                 .font(DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 15))
                 .foregroundStyle(DesignSystemAsset.fg.swiftUIColor)
                 .frame(maxWidth: .infinity, alignment: .leading)
 
-            Text(word.partOfSpeech)
+            Text(word.element.pos.koreanPartOfSpeechLabel)
                 .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 11))
                 .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
                 .padding(.horizontal, 8)

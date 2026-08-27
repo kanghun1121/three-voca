@@ -1,9 +1,10 @@
 import SwiftUI
 
 import DesignSystem
+import DomainInterface
 
 struct MultipleChoiceWordHeader: View {
-    let word: GameWord
+    let word: Session.Word
 
     var body: some View {
         VStack(spacing: 10) {

@@ -1,11 +1,12 @@
 import SwiftUI
 
 import DesignSystem
+import DomainInterface
 
 struct WordDetailExamplesView: View {
     let term: String
-    let examples: [WordDetailPresentationModel.ExampleRow]
-    let onChunkReaderTapped: (WordDetailPresentationModel.ExampleRow) -> Void
+    let examples: [WordDetail.Example]
+    let onChunkReaderTapped: (WordDetail.Example) -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -24,8 +25,8 @@ struct WordDetailExamplesView: View {
 
 private struct ExamplesSection: View {
     let term: String
-    let examples: [WordDetailPresentationModel.ExampleRow]
-    let onChunkReaderTapped: (WordDetailPresentationModel.ExampleRow) -> Void
+    let examples: [WordDetail.Example]
+    let onChunkReaderTapped: (WordDetail.Example) -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -43,8 +44,8 @@ private struct ExamplesSection: View {
 
 private struct ExampleList: View {
     let term: String
-    let examples: [WordDetailPresentationModel.ExampleRow]
-    let onChunkReaderTapped: (WordDetailPresentationModel.ExampleRow) -> Void
+    let examples: [WordDetail.Example]
+    let onChunkReaderTapped: (WordDetail.Example) -> Void
 
     var body: some View {
         LazyVStack(spacing: 10) {

@@ -17,7 +17,7 @@ final class RecognitionViewModelTests: XCTestCase {
             distractors: [],
             audioUrl: ""
         )
-        let word = GameWord(from: sessionWord)
+        let word = sessionWord
         let vm = withDependencies {
             $0.prefetchAudioUseCase = .previewValue
             $0.getAudioURLUseCase = .previewValue

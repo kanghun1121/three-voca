@@ -23,7 +23,7 @@ final class MultipleChoiceViewModelTests: XCTestCase {
             distractors: ["개", "새"],
             audioUrl: ""
         )
-        let word = GameWord(from: sessionWord)
+        let word = sessionWord
         let vm = withDependencies {
             $0.soundClient = .previewValue
             $0.prefetchAudioUseCase = .previewValue
@@ -57,7 +57,7 @@ final class MultipleChoiceViewModelTests: XCTestCase {
             ("cup", "컵", ["접시", "그릇"]),
             ("run", "달리다", ["걷다", "서다"])
         ]
-        let words = entries.enumerated().map { index, entry -> GameWord in
+        let words = entries.enumerated().map { index, entry -> Session.Word in
             let sessionWord = Session.Word(
                 id: "w\(index)",
                 term: entry.term,
@@ -72,7 +72,7 @@ final class MultipleChoiceViewModelTests: XCTestCase {
                 distractors: entry.distractors,
                 audioUrl: ""
             )
-            return GameWord(from: sessionWord)
+            return sessionWord
         }
         let vm = withDependencies {
             $0.soundClient = .previewValue
@@ -121,7 +121,7 @@ final class MultipleChoiceViewModelTests: XCTestCase {
             ("dog", "개", ["고양이", "새"]),
             ("sun", "태양", ["달", "별"])
         ]
-        let words = entries.enumerated().map { index, entry -> GameWord in
+        let words = entries.enumerated().map { index, entry -> Session.Word in
             let sessionWord = Session.Word(
                 id: "w\(index)",
                 term: entry.term,
@@ -136,7 +136,7 @@ final class MultipleChoiceViewModelTests: XCTestCase {
                 distractors: entry.distractors,
                 audioUrl: ""
             )
-            return GameWord(from: sessionWord)
+            return sessionWord
         }
         let vm = withDependencies {
             $0.soundClient = .previewValue
@@ -178,7 +178,7 @@ final class MultipleChoiceViewModelTests: XCTestCase {
             distractors: ["개", "새"],
             audioUrl: ""
         )
-        let word = GameWord(from: sessionWord)
+        let word = sessionWord
         let vm = withDependencies {
             $0.soundClient = .previewValue
             $0.prefetchAudioUseCase = .previewValue
@@ -213,7 +213,7 @@ final class MultipleChoiceViewModelTests: XCTestCase {
             distractors: ["개", "새"],
             audioUrl: ""
         )
-        let word = GameWord(from: sessionWord)
+        let word = sessionWord
         let vm = withDependencies {
             $0.soundClient = .previewValue
             $0.prefetchAudioUseCase = .previewValue
@@ -251,7 +251,7 @@ final class MultipleChoiceViewModelTests: XCTestCase {
             distractors: ["개", "새"],
             audioUrl: ""
         )
-        let word = GameWord(from: sessionWord)
+        let word = sessionWord
         var isClosed = false
         let vm = withDependencies {
             $0.soundClient = .previewValue
@@ -287,7 +287,7 @@ final class MultipleChoiceViewModelTests: XCTestCase {
             distractors: ["개", "새"],
             audioUrl: ""
         )
-        let word = GameWord(from: sessionWord)
+        let word = sessionWord
         var isCompleted = false
         let vm = withDependencies {
             $0.soundClient = .previewValue

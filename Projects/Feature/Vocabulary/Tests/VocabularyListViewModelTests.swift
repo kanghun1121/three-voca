@@ -32,14 +32,13 @@ final class VocabularyListViewModelTests: XCTestCase {
 
         await vm.load()
 
-        guard case .loaded(let pm) = vm.viewState else {
+        guard case .loaded(let session) = vm.viewState else {
             XCTFail("viewState가 .loaded여야 합니다. 실제: \(vm.viewState)")
             return
         }
-        XCTAssertEqual(pm.level, 1)
-        XCTAssertEqual(pm.sessionNumber, 2)
-        XCTAssertEqual(pm.wordCount, 15)
-        XCTAssertEqual(pm.words.count, 15)
+        XCTAssertEqual(session.level, 1)
+        XCTAssertEqual(session.sessionNumber, 2)
+        XCTAssertEqual(session.words.count, 15)
     }
 
     func test_didTapWord_잘못된ID_호출시_destination이_nil이다() async {

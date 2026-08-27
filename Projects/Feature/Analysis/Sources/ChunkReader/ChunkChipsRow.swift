@@ -1,7 +1,9 @@
 import SwiftUI
 
+import DomainInterface
+
 struct ChunkChipsRow: View {
-    let chunks: [ChunkReaderPresentationModel.Chunk]
+    let chunks: [Indexed<WordDetail.Example.Chunk>]
     let selectedChunkID: Int?
     let onChunkTapped: (Int) -> Void
 

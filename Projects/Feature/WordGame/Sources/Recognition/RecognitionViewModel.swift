@@ -25,7 +25,7 @@ public final class RecognitionViewModel {
     }
 
     private(set) var viewState: ViewState = .loading
-    private(set) var currentWord: GameWord?
+    private(set) var currentWord: Session.Word?
     private(set) var countdown: Int = 3
     private(set) var ringProgress: Double = 1.0
     private(set) var wordIndex: Int = 0
@@ -37,7 +37,7 @@ public final class RecognitionViewModel {
     @ObservationIgnored @Dependency(\.playAudioUseCase) private var playAudioUseCase
     @ObservationIgnored @Dependency(\.stopAudioUseCase) private var stopAudioUseCase
 
-    private let words: [GameWord]
+    private let words: [Session.Word]
     private let onCompleted: () -> Void
     private let onClose: () -> Void
 
@@ -47,7 +47,7 @@ public final class RecognitionViewModel {
     private let totalCountdown: Double = 3.0
     private var remainingSeconds: Double = 3.0
 
-    init(words: [GameWord], onCompleted: @escaping () -> Void, onClose: @escaping () -> Void) {
+    init(words: [Session.Word], onCompleted: @escaping () -> Void, onClose: @escaping () -> Void) {
         self.words = words
         self.totalWords = words.count
         self.onCompleted = onCompleted
@@ -124,7 +124,7 @@ public final class RecognitionViewModel {
         startCountdown()
     }
 
-    private func setCurrentWord(at index: Int) -> GameWord {
+    private func setCurrentWord(at index: Int) -> Session.Word {
         let word = words[index]
         wordIndex = index
         currentWord = word

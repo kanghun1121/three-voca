@@ -1,6 +1,8 @@
 import SwiftUI
 
 import DesignSystem
+import DomainInterface
+
 import SwiftUINavigation
 
 public struct RecognitionGameView: View {
@@ -44,7 +46,7 @@ public struct RecognitionGameView: View {
 // MARK: - 활성/공개 단계
 
 private struct RecognitionActivePhaseView: View {
-    let word: GameWord
+    let word: Session.Word
     let isRevealing: Bool
     let countdown: Int
     let ringProgress: Double

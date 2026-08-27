@@ -1,18 +1,6 @@
 public struct Session: Equatable {
     public struct Word: Equatable, Identifiable {
         public struct Definition: Equatable, Identifiable {
-            public enum PartOfSpeech: String, Equatable {
-                case noun
-                case verb
-                case adjective
-                case adverb
-                case preposition
-                case conjunction
-                case interjection
-                case pronoun
-                case unknown
-            }
-
             public let id: String
             public let partOfSpeech: PartOfSpeech
             public let meaning: String

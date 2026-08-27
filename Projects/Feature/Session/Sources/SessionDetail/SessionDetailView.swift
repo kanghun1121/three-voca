@@ -1,5 +1,6 @@
 import SwiftUI
 
+import DomainInterface
 import FeatureVocabulary
 import FeatureWordGame
 
@@ -17,7 +18,7 @@ public struct SessionDetailView: View {
             switch viewModel.viewState {
             case .loading:
                 SessionDetailContentView(
-                    state: .placeholder,
+                    state: .previewWithRecord(id: "placeholder"),
                     onGameTapped: {},
                     onVocabularyListTapped: {}
                 )

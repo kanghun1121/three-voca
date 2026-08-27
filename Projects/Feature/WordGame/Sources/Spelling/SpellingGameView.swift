@@ -1,6 +1,7 @@
 import SwiftUI
 
 import DesignSystem
+import DomainInterface
 
 import SwiftUINavigation
 
@@ -59,7 +60,7 @@ public struct SpellingGameView: View {
 // MARK: - 활성 단계
 
 private struct SpellingActivePhaseView: View {
-    let word: GameWord
+    let word: Session.Word
     let slots: [SpellingViewModel.SlotState]
     let viewState: SpellingViewModel.ViewState
     let onDismiss: () -> Void
