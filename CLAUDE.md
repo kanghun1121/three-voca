@@ -43,6 +43,8 @@ Define input data models.
 Define constraints and edge cases.
 Identify change points.
 Split responsibilities.
+Write a checklist into the plan's PLAN.md, broken down by responsibility, and check items
+off as they're completed.
 Use the solid-review skill before implementation.
 Implement the approved plan.
 Write or update tests.
@@ -50,12 +52,15 @@ Run tests.
 Summarize changed files and verification results.
 Rules
 Do not implement before creating a plan.
+Do not create a plan without a checklist in its PLAN.md.
 Do not invent production data.
 Do not modify files outside this repository.
 Do not skip tests.
 If tests fail, explain the failing requirement before modifying code again.
 Separate test-verified claims from code-inspection-only assumptions in every summary.
 When a test fails, only inspect and modify the files related to the failing responsibility.
+A session can end or restart mid-task; PLAN.md's checklist, not conversation memory, is
+what records how far a task got, so keep it current.
 
 Branches
 
