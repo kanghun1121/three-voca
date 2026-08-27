@@ -10,7 +10,7 @@ import SwiftUINavigation
 public final class VocabularyListViewModel {
     enum ViewState {
         case loading
-        case loaded(VocabularyListPresentationModel)
+        case loaded(Session)
         case error(String)
     }
 
@@ -34,7 +34,7 @@ public final class VocabularyListViewModel {
         viewState = .loading
         do {
             let session = try await getSessionDetailUseCase.execute(sessionID)
-            viewState = .loaded(session.toVocabularyListPresentationModel())
+            viewState = .loaded(session)
             let wordIDs = session.words.map(\.id)
             // 오디오 캐싱은 SessionDetailViewModel 진입 시점에 이미 시작되므로 여기서 중복 호출하지 않는다.
             Task { await prefetchWordDetailsUseCase.execute(wordIDs) }
@@ -45,8 +45,8 @@ public final class VocabularyListViewModel {
     }
 
     public func didTapWord(id: String) {
-        guard case .loaded(let state) = viewState else { return }
-        let wordIDs = state.words.map(\.id)
+        guard case .loaded(let session) = viewState else { return }
+        let wordIDs = session.words.map(\.id)
         guard let index = wordIDs.firstIndex(of: id) else { return }
         destination = .wordDetail(WordDetailViewModel(wordIDs: wordIDs, initialIndex: index))
     }

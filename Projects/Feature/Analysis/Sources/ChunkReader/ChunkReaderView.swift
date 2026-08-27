@@ -14,12 +14,12 @@ public struct ChunkReaderView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 ChunkReaderSentenceView(
-                    chunks: viewModel.presentationModel.chunks,
+                    chunks: viewModel.chunks,
                     selectedChunkID: viewModel.selectedChunkID,
                     onChunkTapped: viewModel.didTapChunk
                 )
 
-                ChunkReaderWordListView(words: viewModel.presentationModel.words)
+                ChunkReaderWordListView(words: viewModel.words)
             }
             .padding(.horizontal, 20)
             .padding(.top, 16)

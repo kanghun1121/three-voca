@@ -1,31 +1,32 @@
 import SwiftUI
 
 import DesignSystem
+import DomainInterface
 
 struct LevelCard: View {
-    let presentationModel: LevelCardPresentationModel
+    let level: LevelSummary
     let isExpanded: Bool
     let action: () -> Void
-    let onSessionTapped: (Int) -> Void
+    let onSessionTapped: (String) -> Void
 
-    private var isActive: Bool { presentationModel.status == .active }
+    private var isActive: Bool { level.status == .active }
 
     var body: some View {
         VStack(spacing: 0) {
             Button(action: action) {
                 LevelCardHeader(
-                    level: presentationModel.level,
-                    name: presentationModel.name,
-                    status: presentationModel.status,
-                    completedSessions: presentationModel.completedSessions,
-                    totalSessions: presentationModel.totalSessions,
+                    level: level.level,
+                    name: level.name,
+                    status: level.status,
+                    completedSessions: level.completedSessions,
+                    totalSessions: level.totalSessions,
                     isExpanded: isExpanded
                 )
             }
             .buttonStyle(.plain)
-            LevelProgressBar(progressRatio: presentationModel.progressRatio, status: presentationModel.status)
+            LevelProgressBar(progressRatio: level.progressRatio, status: level.status)
             if isExpanded {
-                SessionGrid(sessions: presentationModel.sessions, onSessionTapped: onSessionTapped)
+                SessionGrid(sessions: level.sessions, onSessionTapped: onSessionTapped)
                     .padding(16)
             }
         }

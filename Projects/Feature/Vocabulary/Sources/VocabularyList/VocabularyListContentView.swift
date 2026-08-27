@@ -1,9 +1,10 @@
 import SwiftUI
 
 import DesignSystem
+import DomainInterface
 
 struct VocabularyListContentView: View {
-    let state: VocabularyListPresentationModel
+    let state: Session
     let onWordTapped: (String) -> Void
 
     @State private var blurMode: BlurMode = .off
@@ -15,7 +16,7 @@ struct VocabularyListContentView: View {
                 VocabularyListHeaderView(
                     level: state.level,
                     sessionNumber: state.sessionNumber,
-                    wordCount: state.wordCount
+                    wordCount: state.words.count
                 )
                 .padding(.bottom, 14)
                 BlurModeSelector(selected: $blurMode)
@@ -95,7 +96,7 @@ private struct BlurModeButton: View {
 // MARK: - Word List
 
 private struct WordList: View {
-    let words: [VocabularyListPresentationModel.WordRow]
+    let words: [Session.Word]
     let blurMode: BlurMode
     let revealedIDs: Set<String>
     let onTapped: (String) -> Void

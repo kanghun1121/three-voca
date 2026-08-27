@@ -1,5 +1,7 @@
 import Foundation
 
+import DomainInterface
+
 import Dependencies
 import SwiftUINavigation
 
@@ -31,18 +33,18 @@ public final class SpellingViewModel {
     }
 
     private(set) var viewState: ViewState = .active
-    private(set) var currentWord: GameWord?
+    private(set) var currentWord: Session.Word?
     private(set) var wordIndex: Int = 0
     private(set) var totalWords: Int = 0
     private(set) var isReviewRound: Bool = false
     var destination: Destination?
 
-    private let words: [GameWord]
+    private let words: [Session.Word]
     private let onCompleted: () -> Void
     private let onClose: () -> Void
     private let clock: any Clock<Duration>
 
-    private var reviewWords: [GameWord] = []
+    private var reviewWords: [Session.Word] = []
     private var incorrectWordIDs: Set<String> = []
     private(set) var advanceTask: Task<Void, Never>?
 
@@ -58,7 +60,7 @@ public final class SpellingViewModel {
     }
 
     init(
-        words: [GameWord],
+        words: [Session.Word],
         onCompleted: @escaping () -> Void,
         onClose: @escaping () -> Void,
         clock: any Clock<Duration> = ContinuousClock()
@@ -183,17 +185,17 @@ public final class SpellingViewModel {
         viewState = .active
     }
     
-    private func isCorrectAnswer(for word: GameWord) -> Bool {
+    private func isCorrectAnswer(for word: Session.Word) -> Bool {
         inputText == word.term.lowercased()
     }
 
     /// 메인 라운드에서 처음 틀린 단어인지 확인한다.
-    private func shouldAddToReview(_ word: GameWord) -> Bool {
+    private func shouldAddToReview(_ word: Session.Word) -> Bool {
         !isReviewRound && !incorrectWordIDs.contains(word.id)
     }
 
     /// 복습 라운드면 첫 글자를 힌트로 채우고, 아니면 빈 문자열로 초기화한다.
-    private func resetInput(for word: GameWord) {
+    private func resetInput(for word: Session.Word) {
         if isReviewRound, let firstChar = word.term.first {
             inputText = String(firstChar).lowercased()
         } else {

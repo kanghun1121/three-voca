@@ -1,9 +1,10 @@
 import SwiftUI
 
 import DesignSystem
+import DomainInterface
 
 struct SpellingView: View {
-    let word: GameWord
+    let word: Session.Word
     let slots: [SpellingViewModel.SlotState]
     let viewState: SpellingViewModel.ViewState
     let onSkip: () -> Void

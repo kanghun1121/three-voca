@@ -17,7 +17,7 @@ final class SpellingViewModelTests: XCTestCase {
             distractors: [],
             audioUrl: ""
         )
-        let word = GameWord(from: sessionWord)
+        let word = sessionWord
         let vm = withDependencies {
             $0.soundClient = .previewValue
         } operation: {
@@ -40,7 +40,7 @@ final class SpellingViewModelTests: XCTestCase {
 
     func test_5개중_3개_오답_2개_정답이면_복습라운드에_오답3개가_순서대로_들어간다() async {
         let terms = ["cat", "dog", "sun", "cup", "run"]
-        let words = terms.enumerated().map { index, term -> GameWord in
+        let words = terms.enumerated().map { index, term -> Session.Word in
             let sessionWord = Session.Word(
                 id: "w\(index)",
                 term: term,
@@ -49,7 +49,7 @@ final class SpellingViewModelTests: XCTestCase {
                 distractors: [],
                 audioUrl: ""
             )
-            return GameWord(from: sessionWord)
+            return sessionWord
         }
         let vm = withDependencies {
             $0.soundClient = .previewValue
@@ -90,7 +90,7 @@ final class SpellingViewModelTests: XCTestCase {
 
     func test_메인라운드에서_스킵버튼을_모두_누르면_전부_복습배열에_들어간다() async {
         let terms = ["cat", "dog", "sun"]
-        let words = terms.enumerated().map { index, term -> GameWord in
+        let words = terms.enumerated().map { index, term -> Session.Word in
             let sessionWord = Session.Word(
                 id: "w\(index)",
                 term: term,
@@ -99,7 +99,7 @@ final class SpellingViewModelTests: XCTestCase {
                 distractors: [],
                 audioUrl: ""
             )
-            return GameWord(from: sessionWord)
+            return sessionWord
         }
         let vm = withDependencies {
             $0.soundClient = .previewValue
@@ -131,7 +131,7 @@ final class SpellingViewModelTests: XCTestCase {
             distractors: [],
             audioUrl: ""
         )
-        let word = GameWord(from: sessionWord)
+        let word = sessionWord
         let vm = withDependencies {
             $0.soundClient = .previewValue
         } operation: {
@@ -157,7 +157,7 @@ final class SpellingViewModelTests: XCTestCase {
             distractors: [],
             audioUrl: ""
         )
-        let word = GameWord(from: sessionWord)
+        let word = sessionWord
         let vm = withDependencies {
             $0.soundClient = .previewValue
         } operation: {
@@ -185,7 +185,7 @@ final class SpellingViewModelTests: XCTestCase {
             distractors: [],
             audioUrl: ""
         )
-        let word = GameWord(from: sessionWord)
+        let word = sessionWord
         let vm = withDependencies {
             $0.soundClient = .previewValue
         } operation: {
@@ -213,7 +213,7 @@ final class SpellingViewModelTests: XCTestCase {
             distractors: [],
             audioUrl: ""
         )
-        let word = GameWord(from: sessionWord)
+        let word = sessionWord
         let vm = withDependencies {
             $0.soundClient = .previewValue
         } operation: {
@@ -238,7 +238,7 @@ final class SpellingViewModelTests: XCTestCase {
             distractors: [],
             audioUrl: ""
         )
-        let word = GameWord(from: sessionWord)
+        let word = sessionWord
         let vm = withDependencies {
             $0.soundClient = .previewValue
         } operation: {
@@ -271,7 +271,7 @@ final class SpellingViewModelTests: XCTestCase {
             distractors: [],
             audioUrl: ""
         )
-        let word = GameWord(from: sessionWord)
+        let word = sessionWord
         var isCompleted = false
         let vm = withDependencies {
             $0.soundClient = .previewValue

@@ -1,9 +1,10 @@
 import SwiftUI
 
 import DesignSystem
+import DomainInterface
 
 struct ChunkReaderWordListView: View {
-    let words: [ChunkReaderPresentationModel.WordRow]
+    let words: [Indexed<WordDetail.Example.Word>]
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {

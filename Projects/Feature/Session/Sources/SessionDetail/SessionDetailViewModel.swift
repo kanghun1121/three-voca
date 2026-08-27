@@ -12,7 +12,7 @@ import SwiftUINavigation
 public final class SessionDetailViewModel {
     enum ViewState {
         case loading
-        case loaded(SessionDetailPresentationModel)
+        case loaded(Session)
         case error(String)
     }
 
@@ -39,7 +39,7 @@ public final class SessionDetailViewModel {
         
         do {
             let session = try await getSessionDetailUseCase.execute(sessionID)
-            viewState = .loaded(session.toSessionDetailPresentationModel())
+            viewState = .loaded(session)
             // 게임/단어장 진입 전 대기 시간을 줄이기 위해, 세션 상세 화면에 머무는 동안 미리 오디오를 캐싱해둔다.
             let audioItems = session.words.map { ($0.term, $0.audioUrl) }
             audioPrefetchTask = Task { await prefetchAudioUseCase.execute(audioItems) }

@@ -15,14 +15,14 @@ final class WordDetailViewModelTests: XCTestCase {
 
         await vm.requestIfNeeded(at: 1)
 
-        guard case .loaded(let pm) = vm.viewStates[1] else {
+        guard case .loaded(let detail) = vm.viewStates[1] else {
             XCTFail("viewStates[1]이 .loaded여야 합니다. 실제: \(String(describing: vm.viewStates[1]))")
             return
         }
-        XCTAssertEqual(pm.term, "dark")
-        XCTAssertEqual(pm.pronunciation, "/dɑːrk/")
-        XCTAssertEqual(pm.definitionGroups.count, 2)
-        XCTAssertEqual(pm.examples.count, 2)
+        XCTAssertEqual(detail.term, "dark")
+        XCTAssertEqual(detail.pronunciation, "/dɑːrk/")
+        XCTAssertEqual(detail.groupedDefinitions().count, 2)
+        XCTAssertEqual(detail.examples.count, 2)
     }
 
     func test_requestIfNeeded_실패시_viewState가_error로_전환된다() async {

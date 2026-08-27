@@ -1,11 +1,12 @@
 import SwiftUI
 
 import DesignSystem
+import DomainInterface
 
 struct WordDetailContentView: View {
-    let state: WordDetailPresentationModel
+    let state: WordDetail
     let onPronunciationTapped: (String) -> Void
-    let onChunkReaderTapped: (WordDetailPresentationModel.ExampleRow) -> Void
+    let onChunkReaderTapped: (WordDetail.Example) -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -14,13 +15,13 @@ struct WordDetailContentView: View {
             }
             .padding(.bottom, 22)
 
-            WordDetailDefinitionsView(groups: state.definitionGroups)
+            WordDetailDefinitionsView(groups: state.groupedDefinitions())
                 .padding(.bottom, 28)
 
             if !state.examples.isEmpty {
                 WordDetailExamplesView(
                     term: state.term,
-                    examples: state.examples,
+                    examples: state.sortedExamples,
                     onChunkReaderTapped: onChunkReaderTapped
                 )
             }
