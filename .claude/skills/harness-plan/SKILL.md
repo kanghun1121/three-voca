@@ -108,7 +108,19 @@ These are written after implementation, with the harness-test skill. Include:
 If a requirement is not supported by the `.harness/problems/` file from step 0, label it
 explicitly as an assumption.
 
-### 9. Ask for approval
+### 9. Write a checklist into the plan file
+
+Every plan must ship with a checklist, written as markdown checkboxes into the task's
+`PLAN.md` (`.harness/exec-plans/active/<task-id>/PLAN.md`), broken down from the
+responsibilities in step 5 and the test cases in step 7 — one checkbox per concrete step,
+not one giant "implement the feature" line.
+
+This checklist is the persistent record of progress. A session can end or restart at any
+point; `PLAN.md` on disk, not conversation memory, is what says how far the task got. Check
+items off as they're completed instead of leaving that to a separate summary, so a new
+session can resume from the file alone.
+
+### 10. Ask for approval
 
 End with:
 "Please review this plan before I implement."
