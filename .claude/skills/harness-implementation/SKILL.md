@@ -1,6 +1,6 @@
 ---
 name: harness-implementation
-description: Use this skill when implementing a Code Craft solution after the plan, SOLID review, and tests have been approved. It enforces scope discipline, minimal implementation, and verification before and after coding.
+description: Use this skill when implementing a Code Craft solution after the plan and SOLID review have been approved. It enforces scope discipline, minimal implementation, and verification before and after coding. Tests are written after this skill, with harness-test.
 ---
 
 # harness-implementation

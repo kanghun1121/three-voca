@@ -1,13 +1,13 @@
 ---
 name: harness-test
-description: Use this skill when writing or updating tests for a Code Craft implementation before writing production code. It defines a standard set of test cases to cover before implementation.
+description: Use this skill when writing or updating tests for a Code Craft implementation after production code has been written. It defines a standard set of test cases to cover.
 ---
 
 # harness-test
 
 ## Goal
 
-Implement the following tests before proceeding with implementation.
+After implementation is complete, cover it with the following tests.
 
 - 정상 케이스 (Happy path)
 - 빈 입력 (Empty input)

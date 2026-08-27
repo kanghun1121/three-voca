@@ -44,6 +44,7 @@ Define constraints and edge cases.
 Identify change points.
 Split responsibilities.
 Use the solid-review skill before implementation.
+Implement the approved plan.
 Write or update tests.
 Run tests.
 Summarize changed files and verification results.

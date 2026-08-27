@@ -92,9 +92,9 @@ Use these questions:
 - ISP: Which interfaces should be split?
 - DIP: Which concrete dependencies should be injected?
 
-### 7. Propose tests before implementation
+### 7. Propose test cases to cover
 
-Include:
+These are written after implementation, with the harness-test skill. Include:
 
 - happy path
 - empty input
