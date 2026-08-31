@@ -5,6 +5,7 @@ let targets: [Target] = [
     .feature(factory: .init(
         dependencies: [
             .feature(implements: .analysis),
+            .feature(implements: .chatBot),
             .feature(implements: .home),
             .feature(implements: .login),
             .feature(implements: .session),

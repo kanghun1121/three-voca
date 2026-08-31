@@ -11,6 +11,7 @@ let workspace = Workspace(
                 .project(path: "Projects/Domain", target: "DomainTests"),
                 .project(path: "Projects/Networking", target: "NetworkingTests"),
                 .project(path: "Projects/Feature/Analysis", target: "FeatureAnalysisTests"),
+                .project(path: "Projects/Feature/ChatBot", target: "FeatureChatBotTests"),
                 .project(path: "Projects/Feature/Home", target: "FeatureHomeTests"),
                 .project(path: "Projects/Feature/Login", target: "FeatureLoginTests"),
                 .project(path: "Projects/Feature/MyPage", target: "FeatureMyPageTests"),
@@ -30,6 +31,9 @@ let workspace = Workspace(
                 ),
                 .testableTarget(
                     target: .project(path: "Projects/Feature/Analysis", target: "FeatureAnalysisTests")
+                ),
+                .testableTarget(
+                    target: .project(path: "Projects/Feature/ChatBot", target: "FeatureChatBotTests")
                 ),
                 .testableTarget(
                     target: .project(path: "Projects/Feature/Home", target: "FeatureHomeTests")
