@@ -30,6 +30,9 @@ public struct HomeView: View {
             .navigationDestination(item: $viewModel.destination.session) { detailVM in
                 SessionDetailView(viewModel: detailVM)
             }
+            .navigationDestination(item: $viewModel.destination.levelLibrary) { libraryVM in
+                LevelLibraryView(viewModel: libraryVM)
+            }
         }
         .tint(DesignSystemAsset.fgStrong.swiftUIColor)
         .toolbar(viewModel.destination != nil ? .hidden : .visible, for: .tabBar)

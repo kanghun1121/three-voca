@@ -19,7 +19,7 @@ struct HomeLoadingView: View {
                 .foregroundStyle(DesignSystemAsset.fgSubtle.swiftUIColor)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(DesignSystemAsset.bg.swiftUIColor)
+        .background(DesignSystemAsset.background.swiftUIColor)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("학습 기록을 불러오는 중")
         .accessibilityAddTraits(.updatesFrequently)
