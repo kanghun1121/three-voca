@@ -9,7 +9,6 @@ struct HomeExampleApp: App {
     init() {
         prepareDependencies {
             $0.getHomeOverviewUseCase = .previewValue
-            $0.getHeatmapDataUseCase = .previewValue
         }
     }
 
