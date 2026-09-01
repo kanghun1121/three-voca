@@ -73,13 +73,15 @@ public struct VocabularyLibrary: Equatable {
 
 public extension VocabularyLibrary {
     static let previewFixture: VocabularyLibrary = {
+        // "오늘" 기준 상대 날짜로 구성 — 실행 시점과 무관하게 항상 다양한 캘린더 케이스(당일 3건 캡 경계,
+        // 다른 날 1건, 오늘은 0건)가 현재 달 화면에서 바로 보이도록 한다.
         let level1Completed: [SessionProgress] = [
             SessionProgress(
                 id: "1",
                 sessionNumber: 1,
                 totalWords: 20,
                 status: .completed,
-                lastStudiedAt: iso.date(from: "2026-05-03T14:20:00Z"),
+                lastStudiedAt: daysAgo(5, hour: 9, minute: 20),
                 accuracy: 0.92,
                 wordsCompleted: 20
             ),
@@ -88,7 +90,7 @@ public extension VocabularyLibrary {
                 sessionNumber: 2,
                 totalWords: 20,
                 status: .completed,
-                lastStudiedAt: iso.date(from: "2026-05-09T10:15:00Z"),
+                lastStudiedAt: daysAgo(5, hour: 14, minute: 5),
                 accuracy: 0.87,
                 wordsCompleted: 20
             ),
@@ -97,7 +99,7 @@ public extension VocabularyLibrary {
                 sessionNumber: 3,
                 totalWords: 20,
                 status: .completed,
-                lastStudiedAt: iso.date(from: "2026-05-06T20:45:00Z"),
+                lastStudiedAt: daysAgo(5, hour: 21, minute: 40),
                 accuracy: 0.58,
                 wordsCompleted: 20
             ),
@@ -106,7 +108,7 @@ public extension VocabularyLibrary {
                 sessionNumber: 4,
                 totalWords: 20,
                 status: .completed,
-                lastStudiedAt: iso.date(from: "2026-05-08T08:10:00Z"),
+                lastStudiedAt: daysAgo(2, hour: 19, minute: 10),
                 accuracy: 0.88,
                 wordsCompleted: 20
             ),
@@ -231,9 +233,9 @@ public extension VocabularyLibrary {
         ])
     }()
 
-    private static let iso: ISO8601DateFormatter = {
-        let f = ISO8601DateFormatter()
-        f.formatOptions = [.withInternetDateTime]
-        return f
-    }()
+    private static func daysAgo(_ days: Int, hour: Int, minute: Int) -> Date {
+        let calendar = Calendar.current
+        let base = calendar.date(byAdding: .day, value: -days, to: Date()) ?? Date()
+        return calendar.date(bySettingHour: hour, minute: minute, second: 0, of: base) ?? base
+    }
 }
