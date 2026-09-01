@@ -1,61 +1,72 @@
 import SwiftUI
 
-import DesignSystem
-
 struct MonthlyCalendarCard: View {
     let viewModel: HomeViewModel
 
-    private var activityMap: [String: CalendarDayIntensity] {
-        Dictionary(uniqueKeysWithValues: viewModel.activities.compactMap { activity -> (String, CalendarDayIntensity)? in
-            let intensity: CalendarDayIntensity
-            switch activity.sessionsCount {
-            case 1:    intensity = .lv0
-            case 2:    intensity = .lv1
-            case 3:    intensity = .lv2
-            default:   intensity = .lv3
-            }
-            return (activity.date, intensity)
-        })
+    @State private var monthOffset = 0
+
+    private var cal: Calendar { .current }
+
+    private var displayedMonth: Date {
+        cal.homeDisplayedMonth(today: viewModel.today, offset: monthOffset)
     }
 
-    private var studiedDaysCount: Int {
-        viewModel.calendarRows
-            .flatMap { $0 }
-            .filter { $0.isCurrentMonth }
-            .filter { activityMap[$0.date.calendarDateKey] != nil }
-            .count
+    private var rows: [[CalendarDay]] {
+        cal.homeCalendarRows(
+            displayedMonth: displayedMonth,
+            today: viewModel.today,
+            selectedDate: viewModel.selectedDate,
+            recordsByDate: viewModel.dayRecordsByDate
+        )
     }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             CalendarHeaderRow(
-                year: viewModel.calendarYear,
-                month: viewModel.calendarMonth,
-                isAtCurrentMonth: viewModel.isCalendarAtCurrentMonth,
-                onPrevious: viewModel.calendarPreviousMonth,
-                onNext: viewModel.calendarNextMonth,
-                onToday: viewModel.calendarGoToToday
+                title: cal.homeMonthTitle(for: displayedMonth),
+                isAtCurrentMonth: monthOffset == 0,
+                onPrevious: previousMonth,
+                onNext: nextMonth,
+                onToday: { monthOffset = 0 }
             )
             .padding(.bottom, 16)
             CalendarWeekdayHeader()
                 .padding(.bottom, 6)
-            CalendarGridSection(rows: viewModel.calendarRows, activityMap: activityMap)
-            CalendarLegendRow(studiedDaysCount: studiedDaysCount)
+            CalendarGridSection(rows: rows) { date in
+                viewModel.dateTapped(date)
+            }
+            .contentShape(Rectangle())
+            .simultaneousGesture(monthSwipeGesture)
         }
-        .padding(.horizontal, 18)
-        .padding(.top, 18)
-        .padding(.bottom, 20)
-        .background(DesignSystemAsset.white.swiftUIColor)
-        .clipShape(.rect(cornerRadius: 26))
-        .overlay {
-            RoundedRectangle(cornerRadius: 26)
-                .strokeBorder(DesignSystemAsset.borderSubtle.swiftUIColor, lineWidth: 1)
+        .padding(.horizontal, 14)
+        .onChange(of: viewModel.selectedDate) { _, newValue in
+            if cal.isDate(newValue, inSameDayAs: viewModel.today) {
+                monthOffset = 0
+            }
         }
-        .shadow(
-            color: DesignSystemAsset.shadowSubtle.swiftUIColor.opacity(0.06),
-            radius: 20,
-            x: 0,
-            y: 6
-        )
+    }
+
+    private func previousMonth() {
+        monthOffset = cal.homeMonthOffset(monthOffset, movedBy: -1)
+    }
+
+    private func nextMonth() {
+        monthOffset = cal.homeMonthOffset(monthOffset, movedBy: 1)
+    }
+
+    private var monthSwipeGesture: some Gesture {
+        DragGesture(minimumDistance: 24)
+            .onEnded { value in
+                let horizontal = value.translation.width
+                let vertical = value.translation.height
+                guard abs(horizontal) > abs(vertical) else { return }
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    if horizontal < 0 {
+                        nextMonth()
+                    } else {
+                        previousMonth()
+                    }
+                }
+            }
     }
 }

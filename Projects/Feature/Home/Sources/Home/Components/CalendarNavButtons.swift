@@ -13,10 +13,10 @@ struct CalendarNavButtons: View {
             if !isAtCurrentMonth {
                 Button("오늘로", action: onToday)
                     .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 12))
-                    .foregroundStyle(DesignSystemAsset.growDeep.swiftUIColor)
+                    .foregroundStyle(DesignSystemAsset.study300.swiftUIColor)
                     .padding(.horizontal, 10)
                     .padding(.vertical, 5)
-                    .background(DesignSystemAsset.growDeep.swiftUIColor.opacity(0.1))
+                    .background(DesignSystemAsset.study300.swiftUIColor.opacity(0.1))
                     .clipShape(.rect(cornerRadius: 8))
                     .frame(minHeight: 44)
                     .contentShape(Rectangle())
@@ -44,16 +44,13 @@ struct CalendarNavButtons: View {
     ) -> some View {
         Button(label, systemImage: systemImage, action: action)
             .labelStyle(.iconOnly)
-            .font(.system(size: 13, weight: .semibold))
+            .font(.system(size: 14, weight: .semibold))
             .foregroundStyle(
                 isEnabled
                     ? DesignSystemAsset.fgMuted.swiftUIColor
                     : DesignSystemAsset.fgSubtle.swiftUIColor
             )
-            .frame(width: 30, height: 30)
-            .background(DesignSystemAsset.bgSubtle.swiftUIColor)
-            .clipShape(.rect(cornerRadius: 9))
-            .frame(width: 44, height: 44)
+            .frame(width: 26, height: 26)
             .contentShape(Rectangle())
             .disabled(!isEnabled)
     }

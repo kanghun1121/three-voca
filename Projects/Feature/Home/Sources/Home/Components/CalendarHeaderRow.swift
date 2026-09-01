@@ -3,8 +3,7 @@ import SwiftUI
 import DesignSystem
 
 struct CalendarHeaderRow: View {
-    let year: Int
-    let month: Int
+    let title: String
     let isAtCurrentMonth: Bool
     let onPrevious: () -> Void
     let onNext: () -> Void
@@ -12,7 +11,9 @@ struct CalendarHeaderRow: View {
 
     var body: some View {
         HStack(spacing: 8) {
-            MonthYearLabel(month: month, year: year)
+            Text(title)
+                .homeTypography(.monthHeader)
+                .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
             Spacer()
             CalendarNavButtons(
                 isAtCurrentMonth: isAtCurrentMonth,
@@ -21,21 +22,6 @@ struct CalendarHeaderRow: View {
                 onToday: onToday
             )
         }
-    }
-}
-
-private struct MonthYearLabel: View {
-    let month: Int
-    let year: Int
-
-    var body: some View {
-        HStack(alignment: .lastTextBaseline, spacing: 7) {
-            Text("\(String(month))월")
-                .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 19))
-                .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
-            Text(String(year))
-                .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 13))
-                .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
-        }
+        .frame(minHeight: 44)
     }
 }

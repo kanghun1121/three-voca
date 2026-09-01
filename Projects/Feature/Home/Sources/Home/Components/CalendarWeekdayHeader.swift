@@ -7,18 +7,12 @@ struct CalendarWeekdayHeader: View {
 
     var body: some View {
         HStack(spacing: 4) {
-            ForEach(labels.indices, id: \.self) { index in
-                Text(labels[index])
-                    .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 11))
-                    .foregroundStyle(foregroundColor(index: index))
+            ForEach(labels, id: \.self) { label in
+                Text(label)
+                    .homeTypography(.weekdayHeader)
+                    .foregroundStyle(DesignSystemAsset.fgSubtle.swiftUIColor)
                     .frame(maxWidth: .infinity)
             }
         }
-    }
-
-    private func foregroundColor(index: Int) -> Color {
-        index == labels.count - 1
-            ? DesignSystemAsset.growDeep.swiftUIColor
-            : DesignSystemAsset.fgSubtle.swiftUIColor
     }
 }

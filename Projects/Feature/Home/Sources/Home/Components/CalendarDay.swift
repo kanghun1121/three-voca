@@ -6,4 +6,6 @@ struct CalendarDay: Equatable {
     let isCurrentMonth: Bool
     let isToday: Bool
     let isFuture: Bool
+    let isSelected: Bool
+    let dotCount: Int
 }
