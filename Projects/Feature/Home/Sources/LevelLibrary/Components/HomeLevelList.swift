@@ -12,10 +12,7 @@ struct HomeLevelList: View {
     var body: some View {
         LazyVStack(spacing: 14) {
             ForEach(levels) { level in
-                LevelCard(
-                    level: level,
-                    isExpanded: expandedLevelIDs.contains(level.id)
-                ) {
+                LevelCard(level: level, isExpanded: expandedLevelIDs.contains(level.id)) {
                     onLevelTapped(level.id)
                 } onSessionTapped: { id in
                     onSessionTapped(id)

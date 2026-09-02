@@ -1,9 +1,9 @@
 import XCTest
 
-import Dependencies
-
-@testable import FeatureHome
 import DomainInterface
+@testable import FeatureHome
+
+import Dependencies
 
 @MainActor
 final class HomeViewModelLoadTests: XCTestCase {

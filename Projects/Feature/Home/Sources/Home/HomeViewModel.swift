@@ -61,7 +61,7 @@ public final class HomeViewModel {
         }
     }
 
-    func dateTapped(_ date: Date) {
+    func didTapDate(_ date: Date) {
         selectedDate = date
     }
 
@@ -69,11 +69,11 @@ public final class HomeViewModel {
         selectedDate = today
     }
 
-    func ctaTapped() {
+    func didTapCTA() {
         destination = .levelLibrary(LevelLibraryViewModel())
     }
 
-    public func sessionTapped(id: String) {
+    public func didTapSession(id: String) {
         destination = .session(SessionDetailViewModel(sessionID: id))
     }
 }

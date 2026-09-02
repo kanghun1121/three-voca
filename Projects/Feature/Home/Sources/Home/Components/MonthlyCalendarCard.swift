@@ -33,7 +33,7 @@ struct MonthlyCalendarCard: View {
             CalendarWeekdayHeader()
                 .padding(.bottom, 6)
             CalendarGridSection(rows: rows) { date in
-                viewModel.dateTapped(date)
+                viewModel.didTapDate(date)
             }
             .contentShape(Rectangle())
             .simultaneousGesture(monthSwipeGesture)

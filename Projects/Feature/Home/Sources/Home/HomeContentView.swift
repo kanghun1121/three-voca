@@ -10,7 +10,7 @@ struct HomeContentView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
-                HomeTopBar(onTapped: viewModel.ctaTapped)
+                HomeTopBar(onTapped: viewModel.didTapCTA)
                 MonthlyCalendarCard(viewModel: viewModel)
                     .padding(.top, 18)
                 divider
@@ -19,7 +19,7 @@ struct HomeContentView: View {
                     isToday: viewModel.isSelectedDateToday,
                     recordCount: viewModel.dayState.recordCount
                 )
-                dayStateContent
+                DayStateContent(dayState: viewModel.dayState, viewModel: viewModel)
             }
             .padding(.bottom, 40)
         }
@@ -35,31 +35,40 @@ struct HomeContentView: View {
             .padding(.top, 34)
     }
 
-    @ViewBuilder
-    private var dayStateContent: some View {
-        switch viewModel.dayState {
-        case .today(let records):
-            VStack(spacing: 8) {
-                StudyCTACard(onTapped: viewModel.ctaTapped)
-                    .padding(.horizontal, 24)
-                recordList(records)
+    private struct DayStateContent: View {
+        let dayState: HomeDayState
+        let viewModel: HomeViewModel
+
+        var body: some View {
+            switch dayState {
+            case .today(let records):
+                VStack(spacing: 8) {
+                    StudyCTACard(onTapped: viewModel.didTapCTA)
+                        .padding(.horizontal, 24)
+                    RecordList(records: records, viewModel: viewModel)
+                }
+                .padding(.top, 16)
+
+            case .past(let records):
+                RecordList(records: records, viewModel: viewModel)
+                    .padding(.top, 8)
+
+            case .empty(let isFuture):
+                EmptyDayView(isFuture: isFuture, onGoToToday: viewModel.selectToday)
             }
-            .padding(.top, 16)
-
-        case .past(let records):
-            recordList(records)
-                .padding(.top, 8)
-
-        case .empty(let isFuture):
-            EmptyDayView(isFuture: isFuture, onGoToToday: viewModel.selectToday)
         }
     }
 
-    private func recordList(_ records: [DayRecord]) -> some View {
-        LazyVStack(spacing: 0) {
-            ForEach(records) { record in
-                RecordRow(record: record) {
-                    viewModel.sessionTapped(id: record.sessionID)
+    private struct RecordList: View {
+        let records: [DayRecord]
+        let viewModel: HomeViewModel
+
+        var body: some View {
+            LazyVStack(spacing: 0) {
+                ForEach(records) { record in
+                    RecordRow(record: record) {
+                        viewModel.didTapSession(id: record.sessionID)
+                    }
                 }
             }
         }
