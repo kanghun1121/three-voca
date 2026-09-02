@@ -6,6 +6,7 @@ struct WordDetailPageView: View {
     let viewState: WordDetailViewModel.ViewState?
     let onPronunciationTapped: (String) -> Void
     let onChunkReaderTapped: (WordDetailPresentationModel.ExampleRow) -> Void
+    let onChatBotTapped: (WordDetailPresentationModel, WordDetailPresentationModel.ExampleRow) -> Void
 
     var body: some View {
         ScrollView {
@@ -14,7 +15,8 @@ struct WordDetailPageView: View {
                 WordDetailContentView(
                     state: state,
                     onPronunciationTapped: onPronunciationTapped,
-                    onChunkReaderTapped: onChunkReaderTapped
+                    onChunkReaderTapped: onChunkReaderTapped,
+                    onChatBotTapped: { example in onChatBotTapped(state, example) }
                 )
             case .error(let message):
                 Text(message)

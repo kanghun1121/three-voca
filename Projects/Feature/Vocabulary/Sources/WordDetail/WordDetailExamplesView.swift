@@ -6,6 +6,7 @@ struct WordDetailExamplesView: View {
     let term: String
     let examples: [WordDetailPresentationModel.ExampleRow]
     let onChunkReaderTapped: (WordDetailPresentationModel.ExampleRow) -> Void
+    let onChatBotTapped: (WordDetailPresentationModel.ExampleRow) -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -15,7 +16,8 @@ struct WordDetailExamplesView: View {
             ExamplesSection(
                 term: term,
                 examples: examples,
-                onChunkReaderTapped: onChunkReaderTapped
+                onChunkReaderTapped: onChunkReaderTapped,
+                onChatBotTapped: onChatBotTapped
             )
         }
         .padding(.bottom, 24)
@@ -26,6 +28,7 @@ private struct ExamplesSection: View {
     let term: String
     let examples: [WordDetailPresentationModel.ExampleRow]
     let onChunkReaderTapped: (WordDetailPresentationModel.ExampleRow) -> Void
+    let onChatBotTapped: (WordDetailPresentationModel.ExampleRow) -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -35,7 +38,8 @@ private struct ExamplesSection: View {
             ExampleList(
                 term: term,
                 examples: examples,
-                onChunkReaderTapped: onChunkReaderTapped
+                onChunkReaderTapped: onChunkReaderTapped,
+                onChatBotTapped: onChatBotTapped
             )
         }
     }
@@ -45,6 +49,7 @@ private struct ExampleList: View {
     let term: String
     let examples: [WordDetailPresentationModel.ExampleRow]
     let onChunkReaderTapped: (WordDetailPresentationModel.ExampleRow) -> Void
+    let onChatBotTapped: (WordDetailPresentationModel.ExampleRow) -> Void
 
     var body: some View {
         LazyVStack(spacing: 10) {
@@ -52,7 +57,8 @@ private struct ExampleList: View {
                 WordDetailExampleRow(
                     term: term,
                     example: example,
-                    onChunkReaderTapped: onChunkReaderTapped
+                    onChunkReaderTapped: onChunkReaderTapped,
+                    onChatBotTapped: onChatBotTapped
                 )
             }
         }

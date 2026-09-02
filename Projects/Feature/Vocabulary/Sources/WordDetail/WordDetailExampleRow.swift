@@ -6,6 +6,7 @@ struct WordDetailExampleRow: View {
     let term: String
     let example: WordDetailPresentationModel.ExampleRow
     let onChunkReaderTapped: (WordDetailPresentationModel.ExampleRow) -> Void
+    let onChatBotTapped: (WordDetailPresentationModel.ExampleRow) -> Void
     // NLTagger 파이프라인은 view 생성/body 평가를 막지 않도록 task()에서 채운다
     @State private var highlightedEnText: Text? = nil
 
@@ -19,22 +20,15 @@ struct WordDetailExampleRow: View {
                 .font(DesignSystemFontFamily.Pretendard.regular.swiftUIFont(size: 13))
                 .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
 
-            if let chunks = example.chunks, !chunks.isEmpty {
-                Button {
+            // 끊어읽기·챗봇 둘 다 모든 예문에 항상 노출한다 — chunks는 모든 예문에
+            // 존재하고, 챗봇에는 어떤 예문이든 물어볼 수 있어야 한다.
+            HStack(spacing: 12) {
+                actionButton(icon: DesignSystemAsset.alignLeft, title: "끊어읽기") {
                     onChunkReaderTapped(example)
-                } label: {
-                    Label {
-                        Text("끊어읽기")
-                            .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 12))
-                    } icon: {
-                        Image(systemName: "text.word.spacing")
-                            .font(.system(size: 13))
-                    }
-                    .foregroundStyle(DesignSystemAsset.study300.swiftUIColor)
                 }
-                .padding(.vertical, 8)
-                .contentShape(.rect)
-                .buttonStyle(.plain)
+                actionButton(icon: DesignSystemAsset.messageSquare, title: "챗봇") {
+                    onChatBotTapped(example)
+                }
             }
         }
         .padding(16)
@@ -53,5 +47,24 @@ struct WordDetailExampleRow: View {
                 highlightFont: DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 16)
             ))
         }
+    }
+
+    private func actionButton(icon: DesignSystemImages, title: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Label {
+                Text(title)
+                    .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 13))
+            } icon: {
+                icon.swiftUIImage
+                    .renderingMode(.template)
+                    .resizable()
+                    .frame(width: 14, height: 14)
+            }
+            .foregroundStyle(DesignSystemAsset.study300.swiftUIColor)
+        }
+        .padding(.horizontal, 8)
+        .padding(.vertical, 6)
+        .contentShape(.rect)
+        .buttonStyle(.plain)
     }
 }

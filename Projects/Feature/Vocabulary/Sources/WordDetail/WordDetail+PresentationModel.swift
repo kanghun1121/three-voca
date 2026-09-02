@@ -4,6 +4,7 @@ extension WordDetail {
     func toWordDetailPresentationModel() -> WordDetailPresentationModel {
         WordDetailPresentationModel(
             term: term,
+            level: level,
             pronunciation: pronunciation,
             definitionGroups: groupedDefinitions(),
             examples: examples

@@ -6,6 +6,7 @@ struct WordDetailContentView: View {
     let state: WordDetailPresentationModel
     let onPronunciationTapped: (String) -> Void
     let onChunkReaderTapped: (WordDetailPresentationModel.ExampleRow) -> Void
+    let onChatBotTapped: (WordDetailPresentationModel.ExampleRow) -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -21,7 +22,8 @@ struct WordDetailContentView: View {
                 WordDetailExamplesView(
                     term: state.term,
                     examples: state.examples,
-                    onChunkReaderTapped: onChunkReaderTapped
+                    onChunkReaderTapped: onChunkReaderTapped,
+                    onChatBotTapped: onChatBotTapped
                 )
             }
         }

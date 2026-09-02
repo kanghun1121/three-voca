@@ -7,6 +7,7 @@ let project = Project.makeModule(
         .feature(implements: .vocabulary, factory: .init(
             dependencies: [
                 .feature(implements: .analysis),
+                .feature(implements: .chatBot),
                 .dependencies,
                 .designSystem,
                 .swiftUINavigation,

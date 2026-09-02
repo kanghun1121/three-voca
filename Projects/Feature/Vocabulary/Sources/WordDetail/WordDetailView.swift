@@ -2,6 +2,7 @@ import SwiftUI
 
 import DesignSystem
 import FeatureAnalysis
+import FeatureChatBot
 
 import SwiftUINavigation
 
@@ -19,7 +20,8 @@ public struct WordDetailView: View {
                 WordDetailPageView(
                     viewState: viewModel.viewStates[index],
                     onPronunciationTapped: viewModel.pronunciationTapped,
-                    onChunkReaderTapped: viewModel.didTapChunkReader
+                    onChunkReaderTapped: viewModel.didTapChunkReader,
+                    onChatBotTapped: viewModel.didTapChatBot
                 )
                 .tag(index)
                 .task { await viewModel.requestIfNeeded(at: index) }
@@ -43,6 +45,9 @@ public struct WordDetailView: View {
         }
         .navigationDestination(item: $viewModel.destination.chunkReader) { chunkReaderVM in
             ChunkReaderView(viewModel: chunkReaderVM)
+        }
+        .navigationDestination(item: $viewModel.destination.chatBot) { chatBotVM in
+            ChatBotView(viewModel: chatBotVM)
         }
     }
 }

@@ -19,6 +19,7 @@ struct WordDetailPresentationModel: Equatable {
     }
 
     let term: String
+    let level: Int
     let pronunciation: String
     let definitionGroups: [DefinitionGroup]
     let examples: [ExampleRow]
