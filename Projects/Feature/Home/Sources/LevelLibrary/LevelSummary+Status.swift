@@ -3,11 +3,11 @@ import DomainInterface
 extension LevelSummary {
     var status: LevelStatus {
         if completedSessions == 0 {
-            return .notStarted
+            .notStarted
         } else if completedSessions >= totalSessions {
-            return .completed
+            .completed
         } else {
-            return .active
+            .active
         }
     }
 
