@@ -37,6 +37,7 @@ struct EmptyDayView: View {
                     .foregroundStyle(DesignSystemAsset.study300.swiftUIColor)
                     .padding(.vertical, 9)
                     .padding(.horizontal, 18)
+                    .frame(minHeight: 44)
                     .overlay {
                         Capsule().strokeBorder(DesignSystemAsset.study300.swiftUIColor, lineWidth: 1)
                     }

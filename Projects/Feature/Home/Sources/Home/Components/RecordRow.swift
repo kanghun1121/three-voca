@@ -6,20 +6,20 @@ struct RecordRow: View {
     let record: DayRecord
     let onTapped: () -> Void
 
-    private var timeLabel: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm"
-        return formatter.string(from: record.time)
-    }
-
     var body: some View {
         Button(action: onTapped) {
             HStack(spacing: 14) {
-                Text(timeLabel)
-                    .homeTypography(.recordRowMeta)
-                    .foregroundStyle(DesignSystemAsset.fgSubtle.swiftUIColor)
-                    .monospacedDigit()
-                    .frame(width: 46, alignment: .leading)
+                Text(
+                    record.time,
+                    format: .dateTime
+                        .hour(.twoDigits(amPM: .omitted))
+                        .minute(.twoDigits)
+                        .locale(Locale(identifier: "ko_KR"))
+                )
+                .homeTypography(.recordRowMeta)
+                .foregroundStyle(DesignSystemAsset.fgSubtle.swiftUIColor)
+                .monospacedDigit()
+                .frame(width: 46, alignment: .leading)
                 Circle()
                     .fill(DesignSystemAsset.study300.swiftUIColor)
                     .frame(width: 7, height: 7)

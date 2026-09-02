@@ -8,9 +8,7 @@ struct SelectedDateContextRow: View {
     let recordCount: Int
 
     private var dateLabel: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "M월 d일"
-        let base = formatter.string(from: date)
+        let base = date.formatted(.dateTime.month().day().locale(Locale(identifier: "ko_KR")))
         return isToday ? "\(base) · 오늘" : base
     }
 
