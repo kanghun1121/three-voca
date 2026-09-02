@@ -907,3 +907,25 @@ chunks가 항상 존재하므로 조건부 노출 로직 자체가 불필요하�
       0개
 - [x] 변경 파일 요약 — 순수 시각 변경(배경 제거)이라 로직 회귀 리스크 없음, 별도
       테스트 불필요(뷰 전용 변경)
+
+### 하위 작업 27: 커밋 + swift-lint 결과 반영
+
+사용자 요청: "커밋을 모두 진행하고 lint 스킬을 돌려라" — 세션 전체 변경분을
+논리 단위 3개(챗봇 UX 개선 / WordDetail 액션바+네비게이션 / 문서)로 나눠 커밋,
+이번 커밋에 포함된 Swift 파일 17개에 swift-lint 스킬 실행. Networking/SSE/SSEClient.swift의
+무관한 공백/주석 변경은 이번 작업들과 관련 없어 커밋에서 제외(작업 트리에 그대로 둠).
+
+- [x] 커밋 1: `[Feature] 챗봇 UX 개선` — ChatBot/* + ErrorIcon 에셋
+- [x] 커밋 2: `[Feature] WordDetail 예문에 끊어읽기·챗봇 액션바 추가` — Vocabulary/* +
+      AlignLeft/MessageSquare 에셋
+- [x] 커밋 3: `[Docs] 진행 체크리스트 기록` — PLAN.md + .harness/plans/jolly-puzzling-taco.md
+- [x] swift-lint 실행 — P1 3건(파라미터 3개 한 줄 1건, 레이아웃 컨테이너 중첩 1건은
+      이번 세션 신규 코드, `ChatBotInputBar.buttonIcon`의 `@ViewBuilder` 1건은 기존
+      코드라 참고만), P2 4건(전부 기존 코드/의도된 예외)
+- [x] 사용자 지시로 P1 중 신규 코드 2건 수정 — `WordDetailExampleRow.swift`의
+      `actionButton` 파라미터 3개를 한 줄에 하나씩으로, 액션바 HStack을 별도
+      `private struct ActionBar: View`로 분리(레이아웃 컨테이너 1개 룰 준수)
+- [x] **빌드 검증** — `FeatureVocabularyExample` / `FiveVoca` 빌드 성공, 신규 경고
+      0개
+- [x] 변경 파일 요약 — 순수 리팩터(구조 분리 + 줄바꿈)라 로직 변경 없음, 기존
+      `WordDetailViewModelTests`가 이 뷰의 콜백 배선을 간접 검증

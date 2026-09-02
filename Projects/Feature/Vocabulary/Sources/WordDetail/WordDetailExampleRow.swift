@@ -20,16 +20,11 @@ struct WordDetailExampleRow: View {
                 .font(DesignSystemFontFamily.Pretendard.regular.swiftUIFont(size: 13))
                 .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
 
-            // 끊어읽기·챗봇 둘 다 모든 예문에 항상 노출한다 — chunks는 모든 예문에
-            // 존재하고, 챗봇에는 어떤 예문이든 물어볼 수 있어야 한다.
-            HStack(spacing: 12) {
-                actionButton(icon: DesignSystemAsset.alignLeft, title: "끊어읽기") {
-                    onChunkReaderTapped(example)
-                }
-                actionButton(icon: DesignSystemAsset.messageSquare, title: "챗봇") {
-                    onChatBotTapped(example)
-                }
-            }
+            ActionBar(
+                example: example,
+                onChunkReaderTapped: onChunkReaderTapped,
+                onChatBotTapped: onChatBotTapped
+            )
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -48,8 +43,31 @@ struct WordDetailExampleRow: View {
             ))
         }
     }
+}
 
-    private func actionButton(icon: DesignSystemImages, title: String, action: @escaping () -> Void) -> some View {
+/// 끊어읽기·챗봇 액션바 — 둘 다 모든 예문에 항상 노출한다. chunks는 모든 예문에
+/// 존재하고, 챗봇에는 어떤 예문이든 물어볼 수 있어야 한다.
+private struct ActionBar: View {
+    let example: WordDetailPresentationModel.ExampleRow
+    let onChunkReaderTapped: (WordDetailPresentationModel.ExampleRow) -> Void
+    let onChatBotTapped: (WordDetailPresentationModel.ExampleRow) -> Void
+
+    var body: some View {
+        HStack(spacing: 12) {
+            actionButton(icon: DesignSystemAsset.alignLeft, title: "끊어읽기") {
+                onChunkReaderTapped(example)
+            }
+            actionButton(icon: DesignSystemAsset.messageSquare, title: "챗봇") {
+                onChatBotTapped(example)
+            }
+        }
+    }
+
+    private func actionButton(
+        icon: DesignSystemImages,
+        title: String,
+        action: @escaping () -> Void
+    ) -> some View {
         Button(action: action) {
             Label {
                 Text(title)
