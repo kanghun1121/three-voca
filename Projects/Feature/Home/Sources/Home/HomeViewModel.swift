@@ -9,7 +9,7 @@ import SwiftUINavigation
 @Observable
 @MainActor
 public final class HomeViewModel {
-    private(set) var state: HomePresentationModel?
+    private(set) var state: VocabularyLibrary?
     private(set) var activities: [DailyActivity] = []
     private(set) var isLoading: Bool = true
     private(set) var errorMessage: String?
@@ -94,7 +94,7 @@ public final class HomeViewModel {
             async let heatmap = getHeatmapDataUseCase.execute()
             let (library, fetched) = try await (overview, heatmap)
             activities = fetched
-            state = library.toHomePresentationModel()
+            state = library
             if expandedLevelIDs.isEmpty, let activeID = state?.levels.first(where: { $0.status == .active })?.id {
                 expandedLevelIDs.insert(activeID)
             }
@@ -111,7 +111,7 @@ public final class HomeViewModel {
         }
     }
 
-    public func sessionTapped(id: Int) {
-        destination = .session(SessionDetailViewModel(sessionID: String(id)))
+    public func sessionTapped(id: String) {
+        destination = .session(SessionDetailViewModel(sessionID: id))
     }
 }

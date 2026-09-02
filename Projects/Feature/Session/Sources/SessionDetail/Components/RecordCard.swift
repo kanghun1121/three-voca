@@ -1,9 +1,10 @@
 import SwiftUI
 
 import DesignSystem
+import DomainInterface
 
 struct RecordCard: View {
-    let record: SessionDetailPresentationModel.Record?
+    let record: Session.Record?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -20,11 +21,11 @@ struct RecordCard: View {
 }
 
 private struct RecordCellsRow: View {
-    let record: SessionDetailPresentationModel.Record?
+    let record: Session.Record?
 
     var body: some View {
         HStack(spacing: 0) {
-            RecordCell(label: "처음 완료", value: record?.firstCompletedDateText ?? "-")
+            RecordCell(label: "처음 완료", value: record?.firstCompletedAt ?? "-")
                 .frame(maxWidth: .infinity, alignment: .leading)
 
             Divider()

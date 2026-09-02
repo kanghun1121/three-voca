@@ -4,7 +4,7 @@ import DesignSystem
 import DomainInterface
 
 struct HomeContentView: View {
-    let state: HomePresentationModel
+    let state: VocabularyLibrary
     let viewModel: HomeViewModel
 
     var body: some View {
@@ -28,5 +28,5 @@ struct HomeContentView: View {
 }
 
 #Preview {
-    HomeContentView(state: VocabularyLibrary.previewFixture.toHomePresentationModel(), viewModel: HomeViewModel())
+    HomeContentView(state: .previewFixture, viewModel: HomeViewModel())
 }

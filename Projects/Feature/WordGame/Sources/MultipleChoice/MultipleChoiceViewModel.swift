@@ -24,19 +24,19 @@ public final class MultipleChoiceViewModel {
     }
 
     private(set) var viewState: ViewState = .active
-    private(set) var currentWord: GameWord?
+    private(set) var currentWord: Session.Word?
     private(set) var choices: [String] = []
     private(set) var wordIndex: Int = 0
     private(set) var totalWords: Int = 0
     private(set) var isReviewRound: Bool = false
     var destination: Destination?
 
-    private let words: [GameWord]
+    private let words: [Session.Word]
     private let onCompleted: () -> Void
     private let onClose: () -> Void
     private let clock: any Clock<Duration>
 
-    private var reviewWords: [GameWord] = []
+    private var reviewWords: [Session.Word] = []
     private var incorrectWordIDs: Set<String> = []
     private(set) var advanceTask: Task<Void, Never>?
     private var audioTask: Task<Void, Never>?
@@ -47,7 +47,7 @@ public final class MultipleChoiceViewModel {
     @ObservationIgnored @Dependency(\.stopAudioUseCase) private var stopAudioUseCase
 
     init(
-        words: [GameWord],
+        words: [Session.Word],
         onCompleted: @escaping () -> Void,
         onClose: @escaping () -> Void,
         clock: any Clock<Duration> = ContinuousClock()
@@ -138,12 +138,12 @@ public final class MultipleChoiceViewModel {
         }
     }
 
-    private func makeChoices(for word: GameWord) -> [String] {
+    private func makeChoices(for word: Session.Word) -> [String] {
         (word.distractors + [word.primaryMeaning]).shuffled()
     }
 
     /// 메인 라운드에서 처음 틀린 단어인지 확인한다.
-    private func shouldAddToReview(_ word: GameWord) -> Bool {
+    private func shouldAddToReview(_ word: Session.Word) -> Bool {
         !isReviewRound && !incorrectWordIDs.contains(word.id)
     }
 

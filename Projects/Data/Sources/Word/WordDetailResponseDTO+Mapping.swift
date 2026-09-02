@@ -19,7 +19,7 @@ private extension WordDetailResponseDTO.DefinitionDTO {
     func toDomain() -> WordDetail.Definition {
         WordDetail.Definition(
             meaning: meaning,
-            partOfSpeech: WordDetail.Definition.PartOfSpeech(rawValue: partOfSpeech) ?? .unknown
+            partOfSpeech: PartOfSpeech(rawValue: partOfSpeech) ?? .unknown
         )
     }
 }

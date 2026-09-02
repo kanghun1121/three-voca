@@ -1,15 +1,16 @@
 import SwiftUI
 
 import DesignSystem
+import DomainInterface
 
 struct ChunkView: View {
-    let chunk: ChunkReaderPresentationModel.Chunk
+    let chunk: Indexed<WordDetail.Example.Chunk>
     let isSelected: Bool
     let onTap: () -> Void
 
     var body: some View {
         Button(action: onTap) {
-            Text(chunk.text)
+            Text(chunk.element.text)
                 .font(DesignSystemFontFamily.Pretendard.regular.swiftUIFont(size: 17))
                 .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
                 .padding(.horizontal, 14)

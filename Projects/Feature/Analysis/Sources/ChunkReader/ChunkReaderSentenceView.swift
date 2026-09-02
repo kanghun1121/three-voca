@@ -1,13 +1,14 @@
 import SwiftUI
 
 import DesignSystem
+import DomainInterface
 
 struct ChunkReaderSentenceView: View {
-    let chunks: [ChunkReaderPresentationModel.Chunk]
+    let chunks: [Indexed<WordDetail.Example.Chunk>]
     let selectedChunkID: Int?
     let onChunkTapped: (Int) -> Void
 
-    private var selectedChunk: ChunkReaderPresentationModel.Chunk? {
+    private var selectedChunk: Indexed<WordDetail.Example.Chunk>? {
         chunks.first { $0.id == selectedChunkID }
     }
 
@@ -22,7 +23,7 @@ struct ChunkReaderSentenceView: View {
                 onChunkTapped: onChunkTapped
             )
 
-            ChunkReaderMeaningLabel(meaning: selectedChunk?.meaning)
+            ChunkReaderMeaningLabel(meaning: selectedChunk?.element.meaning)
                 .frame(minHeight: 26, alignment: .leading)
                 .padding(.top, 16)
         }

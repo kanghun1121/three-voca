@@ -1,9 +1,10 @@
 import SwiftUI
 
 import DesignSystem
+import DomainInterface
 
 struct WordDetailDefinitionsView: View {
-    let groups: [WordDetailPresentationModel.DefinitionGroup]
+    let groups: [WordDetail.DefinitionGroup]
 
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {
@@ -15,7 +16,7 @@ struct WordDetailDefinitionsView: View {
 }
 
 private struct WordDetailDefinitionGroupView: View {
-    let group: WordDetailPresentationModel.DefinitionGroup
+    let group: WordDetail.DefinitionGroup
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {

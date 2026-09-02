@@ -31,7 +31,7 @@ private extension SessionDetailResponseDTO.Word.Definition {
     func toDomain() -> Session.Word.Definition {
         Session.Word.Definition(
             id: id,
-            partOfSpeech: Session.Word.Definition.PartOfSpeech(rawValue: partOfSpeech) ?? .unknown,
+            partOfSpeech: PartOfSpeech(rawValue: partOfSpeech) ?? .unknown,
             meaning: meaning
         )
     }

@@ -2,18 +2,6 @@ import Foundation
 
 public struct WordDetail: Equatable {
     public struct Definition: Equatable {
-        public enum PartOfSpeech: String, Equatable {
-            case noun
-            case verb
-            case adjective
-            case adverb
-            case preposition
-            case conjunction
-            case interjection
-            case pronoun
-            case unknown
-        }
-
         public let meaning: String
         public let partOfSpeech: PartOfSpeech
 

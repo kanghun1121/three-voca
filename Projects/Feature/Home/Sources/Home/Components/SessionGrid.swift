@@ -1,30 +1,33 @@
 import SwiftUI
 
+import DomainInterface
+
 struct SessionGrid: View {
-    let sessions: [SessionRowPresentationModel]
-    let onSessionTapped: (Int) -> Void
+    let sessions: [SessionProgress]
+    let onSessionTapped: (String) -> Void
 
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 7), count: 6)
 
     var body: some View {
+        let statuses = sessions.cellStatuses
         LazyVGrid(columns: columns, spacing: 7) {
-            ForEach(sessions) { session in
+            ForEach(Array(zip(sessions, statuses)), id: \.0.id) { session, status in
                 Button {
                     onSessionTapped(session.id)
                 } label: {
-                    SessionCell(sessionNumber: session.sessionNumber, status: session.status)
+                    SessionCell(sessionNumber: session.sessionNumber, status: status)
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel(makeAccessibilityLabel(for: session))
+                .accessibilityLabel(makeAccessibilityLabel(sessionNumber: session.sessionNumber, status: status))
             }
         }
     }
 
-    private func makeAccessibilityLabel(for session: SessionRowPresentationModel) -> String {
-        switch session.status {
-        case .done: "\(session.sessionNumber)번 세션, 완료"
-        case .current: "\(session.sessionNumber)번 세션, 진행 중"
-        case .todo: "\(session.sessionNumber)번 세션, 잠김"
+    private func makeAccessibilityLabel(sessionNumber: Int, status: SessionCellStatus) -> String {
+        switch status {
+        case .done: "\(sessionNumber)번 세션, 완료"
+        case .current: "\(sessionNumber)번 세션, 진행 중"
+        case .todo: "\(sessionNumber)번 세션, 잠김"
         }
     }
 }

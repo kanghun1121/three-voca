@@ -1,12 +1,13 @@
 import SwiftUI
 
 import DesignSystem
+import DomainInterface
 
 struct WordDetailPageView: View {
     let viewState: WordDetailViewModel.ViewState?
     let onPronunciationTapped: (String) -> Void
-    let onChunkReaderTapped: (WordDetailPresentationModel.ExampleRow) -> Void
-    let onChatBotTapped: (WordDetailPresentationModel, WordDetailPresentationModel.ExampleRow) -> Void
+    let onChunkReaderTapped: (WordDetail.Example) -> Void
+    let onChatBotTapped: (WordDetail, WordDetail.Example) -> Void
 
     var body: some View {
         ScrollView {

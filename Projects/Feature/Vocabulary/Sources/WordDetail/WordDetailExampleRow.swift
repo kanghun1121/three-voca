@@ -1,12 +1,13 @@
 import SwiftUI
 
 import DesignSystem
+import DomainInterface
 
 struct WordDetailExampleRow: View {
     let term: String
-    let example: WordDetailPresentationModel.ExampleRow
-    let onChunkReaderTapped: (WordDetailPresentationModel.ExampleRow) -> Void
-    let onChatBotTapped: (WordDetailPresentationModel.ExampleRow) -> Void
+    let example: WordDetail.Example
+    let onChunkReaderTapped: (WordDetail.Example) -> Void
+    let onChatBotTapped: (WordDetail.Example) -> Void
     // NLTagger 파이프라인은 view 생성/body 평가를 막지 않도록 task()에서 채운다
     @State private var highlightedEnText: Text? = nil
 
@@ -48,9 +49,9 @@ struct WordDetailExampleRow: View {
 /// 끊어읽기·챗봇 액션바 — 둘 다 모든 예문에 항상 노출한다. chunks는 모든 예문에
 /// 존재하고, 챗봇에는 어떤 예문이든 물어볼 수 있어야 한다.
 private struct ActionBar: View {
-    let example: WordDetailPresentationModel.ExampleRow
-    let onChunkReaderTapped: (WordDetailPresentationModel.ExampleRow) -> Void
-    let onChatBotTapped: (WordDetailPresentationModel.ExampleRow) -> Void
+    let example: WordDetail.Example
+    let onChunkReaderTapped: (WordDetail.Example) -> Void
+    let onChatBotTapped: (WordDetail.Example) -> Void
 
     var body: some View {
         HStack(spacing: 12) {
