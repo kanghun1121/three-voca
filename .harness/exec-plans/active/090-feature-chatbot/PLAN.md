@@ -929,3 +929,17 @@ chunks가 항상 존재하므로 조건부 노출 로직 자체가 불필요하�
       0개
 - [x] 변경 파일 요약 — 순수 리팩터(구조 분리 + 줄바꿈)라 로직 변경 없음, 기존
       `WordDetailViewModelTests`가 이 뷰의 콜백 배선을 간접 검증
+
+### 하위 작업 28: swiftui-pro 접근성 라벨 추가 → 사용자 요청으로 되돌림
+
+swiftui-pro 스킬이 `scrollToBottomButton`/`sendButton`의 아이콘 전용 버튼에
+VoiceOver 라벨이 없다고 지적해 `Button(_:systemImage:action:)` +
+`.labelStyle(.iconOnly)`, `.accessibilityLabel(...)`을 추가하고
+`[Fix] 챗봇 아이콘 전용 버튼에 VoiceOver 라벨 추가` 커밋(`47ff6ba`)을 만들었으나,
+사용자가 "VoiceOver 라벨은 제거하자. 커밋 자체를 제거해줘"라고 요청 —
+원격에 push된 적 없는 로컬 전용 커밋이라 `git reset --hard HEAD~1`로 완전히
+제거했다(무관하게 남아있던 `SSEClient.swift`의 미커밋 변경은 `git stash`로 잠시
+보관 후 리셋 후 복원). `ChatBotContentView.swift`/`ChatBotInputBar.swift`는
+그 이전 상태(라벨 없음)로 돌아갔다. 빌드 재검증 완료. **후속 세션 참고**: 이
+아이콘 전용 버튼들에 VoiceOver 라벨을 다시 제안하지 말 것 — 명시적으로 원치
+않는다는 사용자 결정이었다.
