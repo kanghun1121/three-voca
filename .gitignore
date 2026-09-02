@@ -79,6 +79,7 @@ shrimp_data/
 .claude/last-test-status
 .harness/plans/
 .harness/exec-plans/
+.harness/problems/
 
 ### 시크릿 ###
 Projects/Core/Example/Secrets.xcconfig
