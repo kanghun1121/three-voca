@@ -25,11 +25,16 @@ struct ChatBotInputBar: View {
     let onSend: () -> Void
     let onCancel: () -> Void
 
+    /// 포커스는 이 뷰가 소유하지 않는다 — 화면 아무 곳을 탭해도 같은 키보드를 내려야
+    /// 해서, 상위(`ChatBotContentView`)가 소유하고 이 뷰는 바인딩만 받는다.
+    var isFocused: FocusState<Bool>.Binding
+
     init(
         placeholder: String,
         text: Binding<String>,
         state: ChatBotSendButtonState,
         maxLines: Int = 5,
+        isFocused: FocusState<Bool>.Binding,
         onSend: @escaping () -> Void,
         onCancel: @escaping () -> Void
     ) {
@@ -37,6 +42,7 @@ struct ChatBotInputBar: View {
         _text = text
         self.state = state
         self.maxLines = maxLines
+        self.isFocused = isFocused
         self.onSend = onSend
         self.onCancel = onCancel
     }
@@ -51,6 +57,7 @@ struct ChatBotInputBar: View {
                 // 여러 줄로 자라면 버튼 높이를 넘어서 자연스럽게 늘어난다.
                 // 스트리밍 중에도 비활성화하지 않는다 — 다음 메시지를 미리 입력해 둘 수 있다.
                 .frame(minHeight: 30)
+                .focused(isFocused)
 
             sendButton
         }
@@ -64,13 +71,20 @@ struct ChatBotInputBar: View {
     /// 배경(`study300`)과 30×30 크기는 두 상태가 같고 안의 글리프만 달라진다(Figma
     /// node-id=25-50) — 상태별로 뷰를 나누지 않고 아이콘만 분기한다.
     private var sendButton: some View {
-        Button(action: state == .cancel ? onCancel : onSend) {
+        Button(action: state == .cancel ? onCancel : didTapSend) {
             buttonIcon
                 .frame(width: 30, height: 30)
                 .background(DesignSystemAsset.study300.swiftUIColor, in: .circle)
         }
         .buttonStyle(.plain)
         .disabled(state == .send(isEnabled: false))
+    }
+
+    /// 전송 시에만 키보드를 내린다 — 취소는 스트리밍을 멈출 뿐이라, 이어서 다음 질문을
+    /// 입력하려는 사용자의 포커스를 뺏지 않는다.
+    private func didTapSend() {
+        isFocused.wrappedValue = false
+        onSend()
     }
 
     @ViewBuilder
@@ -111,35 +125,37 @@ private struct ChatBotInputBarBackground: ViewModifier {
     }
 }
 
+/// 프리뷰 전용 — `FocusState`는 프로퍼티 래퍼라 뷰 계층 안에서만 선언할 수 있어,
+/// 프리뷰 클로저 대신 이 작은 래퍼 뷰가 대신 소유한다.
+private struct ChatBotInputBarPreview: View {
+    @State var text: String
+    let state: ChatBotSendButtonState
+    @FocusState private var isFocused: Bool
+
+    var body: some View {
+        ChatBotInputBar(
+            placeholder: "address에 대해 물어보세요",
+            text: $text,
+            state: state,
+            isFocused: $isFocused,
+            onSend: {},
+            onCancel: {}
+        )
+        .padding(16)
+    }
+}
+
 #Preview("빈 상태") {
-    ChatBotInputBar(
-        placeholder: "address에 대해 물어보세요",
-        text: .constant(""),
-        state: .send(isEnabled: false),
-        onSend: {},
-        onCancel: {}
-    )
-    .padding(16)
+    ChatBotInputBarPreview(text: "", state: .send(isEnabled: false))
 }
 
 #Preview("입력 확장") {
-    ChatBotInputBar(
-        placeholder: "address에 대해 물어보세요",
-        text: .constant("이 문장에서 address라는 단어가 정확히 어떤 의미로 쓰인 건지 궁금해요."),
-        state: .send(isEnabled: true),
-        onSend: {},
-        onCancel: {}
+    ChatBotInputBarPreview(
+        text: "이 문장에서 address라는 단어가 정확히 어떤 의미로 쓰인 건지 궁금해요.",
+        state: .send(isEnabled: true)
     )
-    .padding(16)
 }
 
 #Preview("스트리밍 중") {
-    ChatBotInputBar(
-        placeholder: "address에 대해 물어보세요",
-        text: .constant(""),
-        state: .cancel,
-        onSend: {},
-        onCancel: {}
-    )
-    .padding(16)
+    ChatBotInputBarPreview(text: "", state: .cancel)
 }

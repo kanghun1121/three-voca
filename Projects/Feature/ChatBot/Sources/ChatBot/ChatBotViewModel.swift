@@ -11,7 +11,6 @@ public final class ChatBotViewModel {
     var input: String = ""
     private(set) var messages: [ChatBotMessage] = []
     private(set) var isStreaming: Bool = false
-    private(set) var errorMessage: String?
 
     @ObservationIgnored @Dependency(\.sendChatMessageUseCase) private var sendChatMessageUseCase
     // 테스트에서 스트림 종료를 결정론적으로 기다리기 위해 노출한다
@@ -19,7 +18,7 @@ public final class ChatBotViewModel {
     @ObservationIgnored private(set) var streamTask: Task<Void, Never>?
 
     /// 단어 하나가 공개된 뒤 다음 단어로 넘어가기 전 대기 시간. 이 값이 클수록 타이핑 효과가 느려진다.
-    private static let wordRevealDelay: Duration = .milliseconds(80)
+    private static let wordRevealDelay: Duration = .milliseconds(50)
 
     public init(context: ChatBotContext) {
         self.context = context
@@ -34,8 +33,11 @@ public final class ChatBotViewModel {
         guard !isStreaming, !message.isEmpty else { return }
 
         input = ""
-        errorMessage = nil
         isStreaming = true
+
+        // 이전 실패 메시지는 새 전송을 시작하는 순간 히스토리에서 사라진다 — 정상
+        // 응답과 달리 대화 기록으로 남기지 않는다.
+        messages.removeAll(where: { $0.isError })
 
         messages.append(ChatBotMessage(role: .user, text: message))
         messages.append(ChatBotMessage(
@@ -64,10 +66,15 @@ public final class ChatBotViewModel {
                 // CancellationError는 취소된 태스크에서만 나오므로 Task.isCancelled 하나로 충분하다.
                 if !Task.isCancelled {
                     print("[ChatBot] 스트리밍 실패:", error)
-                    errorMessage = "응답을 받아오지 못했습니다."
+                    // 이미 받은 부분 응답이 있어도 실패 문구로 대체한다 — 어중간하게
+                    // 잘린 답변보다 "다시 시도가 필요하다"는 게 명확한 편이 낫다.
+                    messages[assistantIndex].isGenerating = false
+                    messages[assistantIndex].text = "답변을 가져오지 못했어요"
+                    messages[assistantIndex].isError = true
                 }
             }
-            // 종료 사유(성공/실패/취소)와 무관하게, 한 글자도 못 받은 자리표시는 남기지 않는다.
+            // 종료 사유(성공/취소)와 무관하게, 한 글자도 못 받은 자리표시는 남기지 않는다.
+            // 실패 시엔 위에서 text를 채워 넣으므로 이 분기를 타지 않는다.
             if messages[assistantIndex].text.isEmpty {
                 messages.remove(at: assistantIndex)
             }

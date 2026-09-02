@@ -10,8 +10,13 @@ struct MarkdownBlockView: View {
     let block: MarkdownBlock
 
     var body: some View {
-        content
-            .padding(.vertical, 15)
+        // 구분선은 화면에 그리지 않는다 — 여백(패딩)도 함께 생략해 빈 줄로 남지 않게 한다.
+        if case .divider = block {
+            EmptyView()
+        } else {
+            content
+                .padding(.vertical, 15)
+        }
     }
 
     @ViewBuilder
@@ -36,7 +41,7 @@ struct MarkdownBlockView: View {
         case let .structure(title, lines):
             MarkdownStructureView(title: title, lines: lines)
         case .divider:
-            MarkdownDividerView()
+            EmptyView()
         }
     }
 }

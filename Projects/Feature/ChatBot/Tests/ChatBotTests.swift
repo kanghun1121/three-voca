@@ -31,7 +31,7 @@ final class ChatBotTests: XCTestCase {
         }
     }
 
-    /// 조건이 참이 될 때까지 짧게 폴링한다. 타이핑 연출(180ms 간격)이 비동기라
+    /// 조건이 참이 될 때까지 짧게 폴링한다. 타이핑 연출(80ms 간격)이 비동기라
     /// 텍스트가 반영되는 시점을 직접 대기해야 하는 1번 케이스에서만 쓴다.
     private func waitUntil(timeout: Duration = .seconds(2), _ condition: () -> Bool) async {
         let deadline = ContinuousClock.now + timeout
@@ -57,7 +57,7 @@ final class ChatBotTests: XCTestCase {
 
         XCTAssertEqual(viewModel.messages.last?.text, "안녕")
         XCTAssertFalse(viewModel.isStreaming)
-        XCTAssertNil(viewModel.errorMessage)
+        XCTAssertEqual(viewModel.messages.last?.isError, false)
 
         // 버튼이 취소 상태로 굳지 않고 다시 전송 가능한 상태로 복구됐는지 함께 확인한다.
         viewModel.input = "다음 질문"
@@ -78,10 +78,10 @@ final class ChatBotTests: XCTestCase {
 
         XCTAssertEqual(viewModel.messages.count, 1)
         XCTAssertEqual(viewModel.messages.first?.role, .user)
-        XCTAssertNil(viewModel.errorMessage)
+        XCTAssertFalse(viewModel.messages.contains(where: { $0.isError }))
     }
 
-    func test_실제_실패는_여전히_에러_문구로_표시한다() async {
+    func test_실패하면_AI_메시지로_표시되고_다음_전송_시_히스토리에서_사라진다() async {
         let viewModel = withDependencies {
             $0.sendChatMessageUseCase.execute = { _ in Self.failingStream() }
         } operation: {
@@ -92,6 +92,21 @@ final class ChatBotTests: XCTestCase {
         viewModel.didTapSend()
         await viewModel.streamTask?.value
 
-        XCTAssertNotNil(viewModel.errorMessage)
+        XCTAssertEqual(viewModel.messages.last?.role, .assistant)
+        XCTAssertEqual(viewModel.messages.last?.text, "답변을 가져오지 못했어요")
+        XCTAssertEqual(viewModel.messages.last?.isError, true)
+
+        // 다음 전송을 시작하는 순간 실패 메시지는 히스토리에서 사라진다.
+        withDependencies {
+            $0.sendChatMessageUseCase.execute = { _ in Self.neverYieldingStream() }
+        } operation: {
+            viewModel.input = "다음 질문"
+            viewModel.didTapSend()
+        }
+
+        XCTAssertFalse(viewModel.messages.contains(where: { $0.isError }))
+
+        viewModel.didTapCancel()
+        await viewModel.streamTask?.value
     }
 }

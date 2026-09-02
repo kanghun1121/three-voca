@@ -15,6 +15,16 @@ struct ChatBotContentView: View {
     // 차지해버려 컨텐츠가 네비게이션 바 아래로 파고드는 문제가 있었다. 레이아웃에 영향을
     // 주지 않고 크기만 관찰하는 onGeometryChange로 측정해 안전 영역을 다시 존중하게 한다.
     @State private var chatAreaHeight: CGFloat = 0
+    /// 화면 아무 곳이나 탭해도 키보드를 내려야 해서, 포커스는 입력바가 아니라 여기서
+    /// 소유하고 `ChatBotInputBar`에는 바인딩만 내려보낸다.
+    @FocusState private var isInputFocused: Bool
+    /// 스크롤이 콘텐츠 최하단에 있는지 — false일 때만 "최하단으로 이동" 버튼을 보여준다.
+    @State private var isScrolledToBottom = true
+
+    private static let bottomAnchorID = "chat-bottom-anchor"
+    /// 이 값보다 콘텐츠 하단에 가까우면 최하단으로 간주해 버튼을 숨긴다 — 스크롤을
+    /// 어느 정도 위로 올렸을 때만 버튼이 뜨도록 화면 하나 높이에 가깝게 잡는다.
+    private static let bottomThreshold: CGFloat = 300
 
     var body: some View {
         chatArea
@@ -43,11 +53,10 @@ struct ChatBotContentView: View {
                         )
                     }
 
-                    if let errorMessage = viewModel.errorMessage {
-                        Text(errorMessage)
-                            .foregroundStyle(DesignSystemAsset.negative.swiftUIColor)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    }
+                    // 최하단 스크롤 앵커 — 실제로 그려지는 콘텐츠는 없다.
+                    Color.clear
+                        .frame(height: 1)
+                        .id(Self.bottomAnchorID)
                 }
                 .padding(16)
             }
@@ -56,15 +65,54 @@ struct ChatBotContentView: View {
             } action: { newHeight in
                 chatAreaHeight = newHeight
             }
+            .onScrollGeometryChange(for: Bool.self) { geometry in
+                geometry.contentOffset.y + geometry.containerSize.height
+                    >= geometry.contentSize.height - Self.bottomThreshold
+            } action: { _, isAtBottom in
+                isScrolledToBottom = isAtBottom
+            }
             .onChange(of: viewModel.messages.count) {
                 guard let lastUserMessageID = viewModel.messages.last(where: { $0.role == .user })?.id else { return }
                 withAnimation(.easeOut(duration: 0.25)) {
                     proxy.scrollTo(lastUserMessageID, anchor: .top)
                 }
             }
+            .overlay(alignment: .bottom) {
+                if !isScrolledToBottom {
+                    scrollToBottomButton(proxy: proxy)
+                        .padding(.bottom, 8)
+                }
+            }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .safeAreaInset(edge: .bottom) { inputBar }
+        // 배경이 투명해 기본 상태로는 빈 공간이 탭을 받지 못한다 — contentShape로
+        // 전체 영역을 탭 가능하게 만든 뒤, 탭하면 키보드를 내린다. 메시지/버튼 등
+        // 실제 컨트롤 위를 탭하면 그 컨트롤이 먼저 탭을 소비해 이 제스처까지 오지 않는다.
+        .contentShape(Rectangle())
+        .onTapGesture { isInputFocused = false }
+        .modifier(ChatBotBottomBar { inputBar })
+    }
+
+    /// 스크롤 최하단 이동 버튼 — 흰 배경 + 옅은 테두리/그림자로, 입력바 iOS18
+    /// 폴백(`ChatBotInputBarBackground`)·어시스턴트 말풍선과 같은 "떠 있는 흰
+    /// 표면" 톤을 재사용한다.
+    private func scrollToBottomButton(proxy: ScrollViewProxy) -> some View {
+        Button {
+            withAnimation(.easeOut(duration: 0.25)) {
+                proxy.scrollTo(Self.bottomAnchorID, anchor: .bottom)
+            }
+        } label: {
+            Image(systemName: "chevron.down")
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
+                .frame(width: 36, height: 36)
+                .background(DesignSystemAsset.background.swiftUIColor, in: .circle)
+                .overlay {
+                    Circle().stroke(DesignSystemAsset.border.swiftUIColor, lineWidth: 1)
+                }
+                .shadow(color: .black.opacity(0.08), radius: 4, x: 0, y: 2)
+        }
+        .buttonStyle(.plain)
     }
 
     private var inputBar: some View {
@@ -72,11 +120,28 @@ struct ChatBotContentView: View {
             placeholder: "\(viewModel.context.term)에 대해 물어보세요",
             text: $viewModel.input,
             state: viewModel.isStreaming ? .cancel : .send(isEnabled: viewModel.canSend),
+            isFocused: $isInputFocused,
             onSend: { viewModel.didTapSend() },
             onCancel: { viewModel.didTapCancel() }
         )
         .padding(.horizontal, 16)
         .padding(.top, 10)
         .padding(.bottom, 14)
+    }
+}
+
+/// 입력바를 하단 안전영역에 붙이는 방식 — iOS 26+에서는 `safeAreaBar`를 써서 채팅
+/// ScrollView 하단에 시스템 scroll edge effect(부드러운 블러 페이드)가 걸리게 한다.
+/// `safeAreaInset`은 레이아웃만 담당하고 엣지 이펙트를 확장하지 않아 효과가 없다.
+/// iOS 18~25에는 대응 API가 없어 기존 `safeAreaInset` 동작 그대로 폴백한다.
+private struct ChatBotBottomBar<Bar: View>: ViewModifier {
+    @ViewBuilder let bar: Bar
+
+    func body(content: Content) -> some View {
+        if #available(iOS 26.0, *) {
+            content.safeAreaBar(edge: .bottom) { bar }
+        } else {
+            content.safeAreaInset(edge: .bottom) { bar }
+        }
     }
 }
