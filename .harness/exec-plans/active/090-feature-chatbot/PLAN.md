@@ -470,3 +470,440 @@ push로 전체 화면을 채워야 한다**고 정정 — A5를 대체.
       `DependencyKey` 적합성 경고로 이 변경과 무관) / `FiveVoca`(경고 0개) 빌드 성공
 - [x] `swift-lint` 스킬로 수정 파일 점검 — 위반 0건
 - [x] 변경 파일 요약 — 실제 탭바가 안 보이는지는 사용자가 직접 확인 필요
+
+### 하위 작업 11: (취소) 취소 후 빈 공간 버그 — 플랜 작성 중 사용자가 방향 전환 요청
+
+사용자가 하위 작업 12(아래) 요청으로 넘어가면서 이 플랜은 실행 없이 폐기됨. `.harness/plans/jolly-puzzling-taco.md`도 사용자 요청으로 비웠음. 별도 기록 없음.
+
+### 하위 작업 12: content_block_delta 단위로 즉시 스트리밍 (합성 타이핑 효과 제거)
+
+기존에는 SSE 델타를 받을 때마다 단어 단위로 재분할해 고정 지연(80ms/단어)으로 타이핑
+효과를 합성했다. Domain/Data/Networking 계층은 이미 `content_block_delta` 프레임 하나당
+텍스트 하나를 그대로 넘겨주고 있음을 코드로 재확인했고(`ClaudeSSEParser.swift`,
+`ChatRepository+Live.swift`), 배칭은 오직 `ChatBotViewModel`의 단어 재분할+지연 루프에서
+발생하고 있었다. 이 루프를 제거하고 델타 도착 즉시 반영하도록 바꿨다.
+
+- [x] `solid-review` 스킬 실행 — 설계 변경 필요 없음, 계획대로 진행
+- [x] `ChatBotViewModel.swift` 수정 — 단어 재분할+`Task.sleep` 이중 루프를 단일
+      `for try await chunk in ...` + 즉시 반영 + `try Task.checkCancellation()`으로 교체,
+      `wordRevealDelay`/`wordChunks(of:)` 삭제
+- [x] `ChatBotTests.swift`의 `waitUntil` doc comment 갱신(180ms 타이핑 연출 언급 제거)
+- [x] `tuist generate --no-open` 성공 확인
+- [x] **빌드 검증** — `FeatureChatBotExample` / `FiveVoca` 빌드 성공, 경고 0개
+- [x] **테스트 실행** — `FeatureChatBotTests` 32건 전체 통과(하위 작업 9 취소 테스트 3건
+      포함, 회귀 없음)
+- [x] `swift-lint` 스킬로 수정 파일 점검 — 위반 0건
+- [x] 변경 파일 요약 — 델타 도착 즉시 반영이 실제로 "더 자연스러운" 애니메이션으로
+      느껴지는지는 사용자가 실제 API 응답으로 직접 확인 필요
+
+### 하위 작업 12 정정: 80ms 의도적 지연 복원
+
+사용자가 "의도적 지연은 80ms으로 그대로 놔둔다"고 정정 — 배칭(단어 재분할) 자체가 아니라
+지연을 없앤 것이 문제였다. `AskUserQuestion`으로 "델타당 80ms" vs "원래대로(단어별 80ms)"
+확인 결과 **원래 방식(단어 재분할 + 단어마다 80ms)으로 완전 복귀**를 선택 — 하위 작업 12에서
+제거했던 `wordRevealDelay`/`wordChunks(of:)`와 이중 for문을 그대로 되살렸다.
+
+- [x] `ChatBotViewModel.swift` — `wordRevealDelay`(80ms)와 `wordChunks(of:)` 복원, 단일
+      `for try await chunk` + `checkCancellation()`을 원래의 이중 for문(단어 재분할 +
+      `Task.sleep`)으로 되돌림
+- [x] `ChatBotTests.swift`의 `waitUntil` doc comment도 "80ms 타이핑 연출" 언급으로 되돌림
+- [x] `tuist generate --no-open` 성공 확인
+- [x] **빌드 검증** — `FeatureChatBotExample`(경고 9건, 기존 Data 레이어 무관 경고) /
+      `FiveVoca`(경고 0개) 빌드 성공
+- [x] **테스트 실행** — `FeatureChatBotTests` 32건 전체 통과(회귀 없음)
+
+### 하위 작업 13: 챗봇 상단 콘텐츠를 네비게이션 인셋에 맞춤
+
+화면 진입/맨 위 스크롤 시 `AnalysisCardView` 상단이 투명 Liquid Glass 네비게이션 바 뒤로
+비쳐 보이는 문제 — `AskUserQuestion`으로 "침범/블러 없이 바 아래에서 시작" 확인.
+`scrollEdgeEffectStyle`(하위 작업 7)로는 콘텐츠 배치 자체를 막을 수 없다는 게 이미
+검증돼 있어, 콘텐츠 쪽 인셋 계산이 아니라 `WordDetailView`/`ChunkReaderView`가 이미 쓰는
+불투명 `toolbarBackground` 패턴을 재사용 — 하위 작업 8의 "네비게이션 배경 커스텀 금지"
+결정에 대한 사용자의 명시적 정정으로 처리(뒤로가기 버튼/탭바 관련 결정은 그대로 유지).
+
+- [x] `solid-review` 스킬 실행 — 설계 변경 필요 없음, 검증된 패턴 재사용
+- [x] `ChatBotView.swift` 수정 — `toolbarBackground(색상, for: .navigationBar)` +
+      `toolbarBackground(.visible, for: .navigationBar)` 2줄 추가, `import DesignSystem` 복원
+- [x] `tuist generate --no-open` 성공 확인
+- [x] **빌드 검증** — `FeatureChatBotExample`(경고 12건, 전부 Networking/Data 레이어의
+      기존 `DependencyKey` 적합성 경고로 무관) / `FiveVoca`(경고 0개) 빌드 성공
+- [x] `swift-lint` 스킬로 수정 파일 점검 — 위반 0건
+- [x] 변경 파일 요약 — AnalysisCard가 실제로 바 아래에서 깔끔하게 시작하는지는 사용자가
+      직접 확인 필요(시뮬레이터 UI 자동화 도구 없음)
+
+### 하위 작업 13 되돌림: 사용자 요청으로 변경 제거
+
+사용자가 방금 변경을 제거해달라고 요청 — `ChatBotView.swift`를 하위 작업 13 이전 상태로
+되돌렸다(`toolbarBackground` 2줄, `import DesignSystem` 제거). 네비게이션 바는 다시
+완전 기본(하위 작업 8 상태)으로 복귀.
+
+- [x] `ChatBotView.swift` 되돌림
+- [x] `tuist generate --no-open` 성공 확인
+- [x] **빌드 검증** — `FeatureChatBotExample` / `FiveVoca` 빌드 성공, 경고 0개
+
+### 하위 작업 14: 스크롤 끝에서도 마지막 유저 메시지가 네비게이션 영역을 침범하지 않게
+
+ChatGPT 참고 스크린샷 + `AskUserQuestion` 확인("네비게이션 바 투명/불투명은 고려 대상
+아님, 스크롤이 끝났을 때 마지막 유저 메시지가 네비게이션 영역에 위치하는 것 자체가
+문제") — 하위 작업 4/5부터 있던 "마지막 assistant 메시지에 `minHeight: chatAreaHeight`
+예약" 메커니즘 자체는 맞는 설계였지만, `chatAreaHeight` 측정값이 상단 안전 영역(iOS 26
+스크롤 엣지 이펙트로 시스템이 자동으로 안 챙겨줌)을 반영하지 않아 정확히 그 부족분만큼
+침범했다. 하단 입력바와 동일한 `.safeAreaInset(edge: .top)` 패턴으로 상단도 명시적으로
+예약해 근본 수정.
+
+- [x] `solid-review` 스킬 실행 — `ChatTopSafeAreaReservation` 별도 ViewModifier는 과설계로
+      판단(하위 작업 7의 `chatTopPadding`과 동일 기준) → 계산 프로퍼티 `topReservedHeight`로
+      단순화한 뒤 구현
+- [x] `ChatBotContentView.swift` 수정 — `ambientTopInset` state + 측정용 `onGeometryChange`
+      추가, `navigationBarHeight`(44pt) 상수 추가, `topReservedHeight` 계산 프로퍼티(iOS
+      26+: 측정값+44, 미만: 0), `chatArea`에 `.safeAreaInset(edge: .top)` 적용, doc comment 갱신
+- [x] `tuist generate --no-open` 성공 확인
+- [x] **빌드 검증** — `FeatureChatBotExample` / `FiveVoca` 빌드 성공, 경고 0개
+- [x] `swift-lint` 스킬로 수정 파일 점검 — 위반 0건
+- [x] 변경 파일 요약 — A1(측정값+44pt 조합이 정확한 예약량인지)은 검증되지 않은 가정,
+      시뮬레이터 UI 자동화 도구 없어 확인 못함 — 사용자가 직접 확인 후 상수 조정 가능
+
+### 하위 작업 14 되돌림: 사용자 요청으로 변경 제거
+
+사용자가 방금 작업을 제거해달라고 요청 — `ChatBotContentView.swift`를 하위 작업 14
+이전 상태로 되돌렸다(`ambientTopInset`/`navigationBarHeight`/`topReservedHeight`,
+상단 `.safeAreaInset` 전부 제거). 상단 안전 영역 예약 없이 하위 작업 8 이전과 동일한
+`chatArea` 상태로 복귀.
+
+- [x] `ChatBotContentView.swift` 되돌림
+- [x] `tuist generate --no-open` 성공 확인
+- [x] **빌드 검증** — `FeatureChatBotExample` / `FiveVoca` 빌드 성공, 경고 0개
+
+### 하위 작업 15: 스크롤/전송 시 키보드 자동 내리기
+
+사용자 요청: "스크롤을 해서 화면을 올리거나, 채팅을 보냈을 때 자동으로 키보드를
+내려가도록 해줘." `AskUserQuestion`으로 스크롤 시 내림 방식 확인 —
+`.interactively`(손가락 따라 내려감) 선택.
+
+원인: (1) 입력바가 `chatArea`의 `.safeAreaInset(edge: .bottom)`에 얹혀 있어 ScrollView
+콘텐츠 밖 → 기본값(`.automatic`)으로는 스크롤해도 키보드가 안 내려감. (2)
+`ChatBotInputBar`의 `TextField`에 포커스 제어 수단이 없어 전송해도 키보드가 안 내려감.
+
+- [x] `solid-review` — 별도 정책 타입/모디파이어 없이 각 시점(스크롤/전송)에서 한 줄씩
+      처리(과설계 방지). 포커스는 `TextField`를 소유한 `ChatBotInputBar`가 책임짐(SRP).
+- [x] `ChatBotInputBar.swift` 수정 — `@FocusState private var isInputFocused` 추가,
+      `TextField`에 `.focused($isInputFocused)`, `sendButton`이 `didTapSend()` 헬퍼
+      호출(포커스 해제 후 `onSend()`) — 취소(`onCancel`)는 그대로 둬 스트리밍 중에도
+      다음 질문을 이어 입력할 수 있게 유지
+- [x] `ChatBotContentView.swift` 수정 — `chatArea`의 `ScrollView`에
+      `.scrollDismissesKeyboard(.interactively)` 추가
+- [x] `tuist generate --no-open` 성공 확인
+- [x] **빌드 검증** — `FeatureChatBotExample` / `FiveVoca` 빌드 성공, 경고 0개
+      (`FiveVoca` 빌드에 경고 9개가 뜨지만 전부 `Data/Sources/*+Live.swift`의 기존
+      `DependencyKey` retroactive-conformance 경고 — 이번 변경과 무관한 사전 존재 경고)
+- [x] 기존 테스트 회귀 확인 — `AllTest` 스킴, `FeatureChatBotTests` 3개 포함 32개 전부 통과
+- [x] `swift-lint` 스킬로 수정 파일 2개 점검 — 위반 0건
+- [x] 변경 파일 요약 — A1(`.interactively`가 safeAreaInset 밖 필드에서도 인터랙티브하게
+      동작하는지)은 코드 검토 기반 가정, 시뮬레이터 UI 자동화 도구 없어 실제 제스처
+      확인 못함 — 사용자가 직접 확인 필요
+
+### 하위 작업 15 되돌림: 스크롤 시 키보드 내림 제거 (사용자 요청)
+
+사용자 요청: "스크롤로 키보드가 내려가는 경우는 제거해라." `ChatBotContentView.swift`의
+`.scrollDismissesKeyboard(.interactively)` 한 줄만 제거 — 전송 시 키보드 내림
+(`ChatBotInputBar.swift`의 `@FocusState`/`didTapSend()`)은 그대로 유지.
+
+- [x] `ChatBotContentView.swift` — `.scrollDismissesKeyboard(.interactively)` 제거
+- [x] `tuist generate --no-open` 성공 확인
+- [x] **빌드 검증** — `FeatureChatBotExample` / `FiveVoca` 빌드 성공, 경고 0개
+
+### 하위 작업 16: 화면 아무 곳이나 탭하면 키보드 내리기
+
+사용자 요청: "화면을 한번 터치했을 때 키보드가 내려가도록 해줘." 스크롤 제스처로
+내리는 방식(하위 작업 15)은 이미 사용자가 제거 요청 — 이번엔 탭 한 번으로 내리는
+방식.
+
+포커스를 `ChatBotInputBar`가 계속 혼자 갖고 있으면 "화면 아무 곳" 탭(즉,
+`ChatBotContentView`의 `chatArea` 배경)에서 그 포커스를 내릴 방법이 없어, 포커스
+소유권을 상위(`ChatBotContentView`)로 옮기고 `ChatBotInputBar`에는
+`FocusState<Bool>.Binding`을 파라미터로 내려보내는 구조로 바꿨다(SRP 재조정 — 이제
+"누가 포커스를 내리는가"가 두 곳(배경 탭, 전송 버튼)이라 포커스는 두 곳을 모두 아는
+공통 상위가 가져야 함).
+
+- [x] `ChatBotInputBar.swift` 수정 — 로컬 `@FocusState` 제거, `isFocused:
+      FocusState<Bool>.Binding` 파라미터로 대체, `didTapSend()`가
+      `isFocused.wrappedValue = false` 사용. 프리뷰 3개는 `FocusState`를 프로퍼티
+      래퍼로만 선언 가능해 `ChatBotInputBarPreview` 래퍼 뷰를 새로 만들어 대응
+- [x] `ChatBotContentView.swift` 수정 — `@FocusState private var isInputFocused: Bool`
+      추가, `chatArea`에 `.contentShape(Rectangle())` + `.onTapGesture { isInputFocused
+      = false }` 추가(배경 탭 시 키보드 내림 — 메시지/버튼 등 컨트롤 위 탭은 그 컨트롤이
+      먼저 소비해 영향 없음), `inputBar`에 `isFocused: $isInputFocused` 전달
+- [x] `tuist generate --no-open` 성공 확인
+- [x] **빌드 검증** — `FeatureChatBotExample` / `FiveVoca` 빌드 성공, 경고 0개
+      (`FiveVoca` 경고 9개는 여전히 `Data/Sources/*+Live.swift`의 기존
+      `DependencyKey` retroactive-conformance 경고 — 이번 변경과 무관)
+- [x] 기존 테스트 회귀 확인 — `AllTest` 스킴, `FeatureChatBotTests` 3개 포함 32개 전부 통과
+- [x] 변경 파일(`ChatBotInputBar.swift`, `ChatBotContentView.swift`) 컨벤션 점검 —
+      네이밍/import/파라미터 줄바꿈/주석 스타일 모두 기존 패턴 준수, 위반 없음
+- [x] 변경 파일 요약 — 시뮬레이터 UI 자동화 도구가 없어 실제 탭 제스처로 확인 못함,
+      코드 검토(contentShape + onTapGesture는 SwiftUI 표준 배경-탭-감지 패턴) 기반
+      가정 — 사용자가 직접 확인 필요
+
+### 하위 작업 17: 챗봇 컨텐츠뷰 구분선 제거
+
+사용자 요청: "챗봇 컨텐츠뷰에 구분선이 있는데 이건 제거해라." 코드 검토로 확인한
+원인 — AI 응답 마크다운에 수평선(`---`)이 포함되면 `MarkdownBlockParser`가
+`.divider` 블록으로 파싱하고, `MarkdownBlockView`가 이를
+`MarkdownDividerView`(1pt 높이 `Rectangle` + 상하 8pt 패딩)로 렌더링해 챗봇 말풍선
+안에 가로선이 그려졌다.
+
+- [x] `MarkdownBlockView.swift` 수정 — `.divider` 블록은 `EmptyView()`를 반환하도록
+      변경. `body`에서도 `.divider`일 때는 블록 공통 상하 15pt 패딩(`content
+      .padding(.vertical, 15)`)까지 건너뛰어, 선뿐 아니라 그 자리의 빈 여백도 남지
+      않게 함
+- [x] `MarkdownDividerView.swift` 삭제 — 참조하는 곳이 `MarkdownBlockView.swift`
+      하나뿐이라 대체 후 남은 죽은 코드
+- [x] 파서(`MarkdownBlockParser`)는 그대로 유지 — `.divider` 블록 자체(모델/파싱)는
+      건드리지 않고 화면 렌더링만 제거. `test_수평선이_파싱된다`는 파서를 검증하는
+      테스트라 영향 없음
+- [x] `tuist generate --no-open` 성공 확인
+- [x] **빌드 검증** — `FeatureChatBotExample` / `FiveVoca` 빌드 성공, 경고 0개
+      (`FiveVoca` 경고 9개는 여전히 `Data/Sources/*+Live.swift`의 기존
+      `DependencyKey` retroactive-conformance 경고 — 이번 변경과 무관)
+- [x] 기존 테스트 회귀 확인 — `AllTest` 스킴, `FeatureChatBotTests` 3개 +
+      `MarkdownBlockParserTests`(`test_수평선이_파싱된다` 포함) 전부 통과, 총 32개
+- [x] 변경 파일 요약 — 실제 AI 응답에 수평선이 포함된 케이스는 API 키 없이 재현하지
+      못해 코드 검토로만 확인. 시뮬레이터 UI 자동화(tap/typeText)가 이 세션에서
+      비활성화돼 있어 실제 채팅 화면에서 시각 확인은 못함 — 사용자가 직접 확인 필요
+
+### 하위 작업 18: 답변 실패 시 에러 카드 + 다시 시도
+
+사용자 요청 + Figma 디자인(node-id=54:9, "bubble" 컴포넌트). 기존엔 스트리밍 실패 시
+빨간 `Text` 한 줄만 뜨고 재시도 수단이 없었다 — Figma대로 아이콘+문구+재시도 버튼
+카드로 교체하고, 실제 재시도 동작을 새로 연결했다. Plan Mode에서 1차 초안을
+"오버엔지니어링 체크" 요청으로 재검토해, `lastFailedMessage` 별도 저장 프로퍼티와
+새 테스트 인프라(호출 카운터)를 걷어내고 기존 `messages` 배열 조회 +
+`withDependencies` 중첩 오버라이드로 대체했다(자세한 내용은
+`.harness/plans/jolly-puzzling-taco.md` §0 참고).
+
+- [x] `solid-review` 관점 재검증(§0/§6, Plan Mode에서 수행)
+- [x] Figma `imgErrorIcon` SVG(node 54:2, 정리된 벡터 에셋) 다운로드 →
+      `Projects/DesignSystem/Resources/Colors.xcassets/ErrorIcon.imageset/` 등록
+      (`preserves-vector-representation: true`, `template-rendering-intent: original`)
+      — 다운로드해보니 빨간 원+흰 느낌표가 아니라 옅은 빨강(12% 오퍼시티) 원 배경 +
+      진한 빨강 느낌표였다. SF Symbol로 대체했다면 시각적으로 틀렸을 것 — 실제
+      에셋을 받기로 한 사용자 선택이 맞았음을 확인.
+- [x] `ChatBotErrorView.swift` 신규 작성 — 아이콘(24×24) + 문구(`fg.opacity(0.75)`)
+      + "↻ 다시 시도" 버튼(Figma 원본이 아이콘+텍스트가 아니라 텍스트 노드 하나라
+      그대로 유니코드 글리프 포함 텍스트로 구현)
+- [x] `ChatBotViewModel.swift` — `didTapSend()`에서 스트리밍 처리를 `private func
+      send(_:)`로 추출, `didTapRetry()` 추가(`messages.last(where: { $0.role ==
+      .user })`로 재시도 대상 조회, 별도 상태 없음), 에러 문구를
+      "답변을 가져오지 못했어요"로 변경
+- [x] `ChatBotContentView.swift` — 에러 렌더링 지점을 `ChatBotErrorView` +
+      `onRetry: { viewModel.didTapRetry() }`로 교체
+- [x] `tuist generate --no-open` — `DesignSystemAsset.errorIcon` 생성 확인
+- [x] **빌드 검증** — `FeatureChatBotExample` / `FiveVoca` 빌드 성공, 경고 0개
+      (`FiveVoca` 경고 9개는 여전히 `Data/Sources/*+Live.swift`의 기존
+      `DependencyKey` retroactive-conformance 경고 — 이번 변경과 무관)
+- [x] `ChatBotTests.swift`에 재시도 테스트 1개 추가 — 재시도 시점에만
+      `withDependencies`로 스텁을 성공 스트림으로 바꿔치기해 "실제로 다시
+      호출됐는지"를 결과 텍스트로 증명. 최초 작성 시 `waitUntil`이 다단어 텍스트의
+      첫 단어 도착만 보고 취소해 실패 — 전체 텍스트 일치로 대기 조건을 고쳐 통과.
+      `AllTest` 스킴, 기존 3개 포함 총 33개 회귀 없이 통과
+- [x] `swift-lint` 관점 점검 — 수정/신규 파일 모두 기존 네이밍/import/주석 컨벤션
+      준수, 위반 없음
+- [x] 변경 파일 요약 — 실제 네트워크 실패를 유도한 시각 확인은 사용자가 직접
+
+### 하위 작업 19: 다시 시도 버튼 + SVG 제거 (사용자 요청)
+
+사용자가 "다시 시도 버튼은 제거해라. SVG도"라고 요청 — 하위 작업 18에서 만든
+`ChatBotErrorView`(아이콘+문구+버튼)를 걷어내고, 에러 표시를 다시 순수 텍스트
+한 줄로 되돌렸다. 버튼이 사라지면 `didTapRetry()`를 호출할 방법이 없으므로 죽은
+코드로 남기지 않고 같이 제거 — `send(_:)` 분리도 호출부가 `didTapSend()` 하나만
+남아 의미가 없어져 원래의 단일 `didTapSend()`로 합쳤다(불필요한 분리 유지 X).
+
+- [x] `ChatBotErrorView.swift` 삭제
+- [x] `Projects/DesignSystem/Resources/Colors.xcassets/ErrorIcon.imageset/` 삭제
+- [x] `ChatBotContentView.swift` — 에러 렌더링을 `ChatBotErrorView` 호출에서 순수
+      `Text(errorMessage)`(`fg.opacity(0.75)`, 14pt medium)로 되돌림
+- [x] `ChatBotViewModel.swift` — `didTapRetry()` 제거, `send(_:)`를 다시
+      `didTapSend()`에 합침(단일 호출부라 분리 유지할 이유 없음), 스테일해진
+      `didTapCancel()` 주석의 "send" 참조를 "didTapSend"로 정정
+- [x] `ChatBotTests.swift` — 재시도 테스트 1개 제거
+- [x] `tuist generate --no-open` — `DesignSystemAsset.errorIcon` 접근자가 더는
+      생성되지 않음을 확인
+- [x] **빌드 검증** — `FeatureChatBotExample` / `FiveVoca` 빌드 성공, 경고 0개
+      (`FiveVoca` 9개는 여전히 기존 무관 `DependencyKey` 경고)
+- [x] 기존 테스트 회귀 확인 — `AllTest` 스킴, `FeatureChatBotTests` 3개(재시도
+      테스트 제거 후) 포함 총 32개 통과
+- [x] lint 관점 점검 — 잔여 파일에 삭제된 타입/메서드 참조 없음, 컨벤션 위반 없음
+
+### 하위 작업 20: 실패 메시지를 AI 챗봇 메시지로 통합 + SVG 아이콘 복원
+
+사용자 요청: "'답변을 가져오지 못했어요'도 하나의 AI 챗봇 메세지로 처리되어야
+한다. 다시 메세지를 보내면 사라지게 된다. 그리고 ! SVG는 살려서 다시 추가해라."
+하위 작업 18/19에서 별도 `errorMessage: String?` 상태 + 독립 렌더링으로 처리하던
+실패 표시를, `messages` 배열 안의 실제 `ChatBotMessage`(role: .assistant)로
+바꿨다 — 스크롤 위치 고정/뷰포트 예약 등 기존 어시스턴트 메시지 처리 로직을 그대로
+공유한다. 다만 정상 응답과 달리 다음 전송 시작과 함께 히스토리에서 제거된다.
+
+- [x] `ChatBotMessage.swift` — `isError: Bool = false` 필드 추가(`isGenerating`과
+      동시에 true가 될 수 없음을 문서화)
+- [x] `Projects/DesignSystem/Resources/Colors.xcassets/ErrorIcon.imageset/` 재생성
+      (하위 작업 19에서 삭제한 것과 동일한 SVG — 옅은 빨강 원 + 진한 빨강 느낌표)
+- [x] `ChatBotAssistantBubbleView.swift` — `isError` 분기 추가(아이콘 24×24 +
+      `fg.opacity(0.75)` 텍스트, 말풍선 배경/그림자 없음), 프리뷰 1개 추가
+- [x] `ChatBotViewModel.swift` — `errorMessage` 프로퍼티 완전히 제거. `didTapSend()`
+      시작 시 `messages.removeAll(where: { $0.isError })`로 이전 실패 메시지를
+      먼저 걷어낸 뒤 새 턴을 시작. 실패 시 빈 assistant 자리표시를 지우는 대신 그
+      자리표시의 `text`/`isError`를 직접 채워 넣어 "하나의 AI 메시지"가 되게 함
+- [x] `ChatBotContentView.swift` — 별도 에러 렌더링 블록 제거(이제 `messages`
+      ForEach 하나로 전부 처리됨)
+- [x] `ChatBotTests.swift` — `errorMessage` 참조 3곳을 `messages.last?.isError`
+      기반 검증으로 교체, "다음 전송 시 사라진다" 요구사항을 검증하는 어서션을
+      기존 실패 테스트에 추가(재작성: `test_실패하면_AI_메시지로_표시되고_다음_전송_시_히스토리에서_사라진다`)
+- [x] `tuist generate --no-open` — `DesignSystemAsset.errorIcon` 재생성 확인
+- [x] **빌드 검증** — `FeatureChatBotExample` / `FiveVoca` 빌드 성공, 경고 0개
+      (`FiveVoca` 9개는 여전히 기존 무관 `DependencyKey` 경고)
+- [x] 기존 테스트 회귀 확인 — `AllTest` 스킴, `FeatureChatBotTests` 3개 포함 총
+      32개 통과
+- [x] lint 관점 점검 — 신규/수정 파일 컨벤션 위반 없음
+
+### 하위 작업 21: 스크롤 최하단 이동 버튼 + 입력바 위 페이드아웃
+
+사용자가 ChatGPT 스크린샷 첨부 + 요청: (1) 스크롤이 최하단이 아닐 때 최하단으로
+이동하는 원형 버튼, (2) 입력 플레이스홀더 아래가 서서히 페이드아웃되는 효과.
+`AskUserQuestion`으로 "입력바를 오버레이+실제 블러로 바꾸는 구조" vs "기존 구조
+유지 + 장식 그라디언트"를 물었으나 사용자가 차이를 몰라도 된다며 "서서히
+페이드아웃되면 된다"고 확인 — 리스크가 작은 후자(장식 그라디언트, 기존
+`.safeAreaInset` 구조 유지)로 결정.
+
+- [x] `ChatBotContentView.swift` — `isScrolledToBottom` 상태 추가,
+      `onScrollGeometryChange(for: Bool.self)`로 스크롤 최하단 여부 추적(iOS 18+
+      API, 버전 분기 불요 — 배포 타겟 18.0 확인됨), LazyVStack 끝에
+      `bottomAnchorID` 앵커 추가, 하단 페이드 `LinearGradient` 오버레이
+      (`allowsHitTesting(false)`로 배경 탭 제스처 방해 안 함), 조건부
+      `scrollToBottomButton(proxy:)` 오버레이(흰 배경 + 테두리 + 그림자, 입력바
+      iOS18 폴백/어시스턴트 말풍선과 같은 톤 재사용) 추가
+- [x] `tuist generate --no-open` 성공 확인
+- [x] **빌드 검증** — `FeatureChatBotExample` / `FiveVoca` 빌드 성공, 경고 0개
+- [x] 기존 테스트 회귀 확인 — `AllTest` 스킴, `FeatureChatBotTests` 3개 포함 총
+      32개 통과(순수 View 변경이라 새 테스트는 계획대로 불필요)
+- [x] lint 관점 점검 — 위반 0건
+- [x] 변경 파일 요약 — 허용 오차 상수(40pt) 2개는 실기기 확인 후 조정 여지를
+      남긴 가정, 시뮬레이터 UI 자동화 도구 없어 실제 제스처/시각 확인은 사용자가
+      직접 필요
+
+### 하위 작업 22: 페이드 그라디언트 제거 + 최하단 버튼 등장 임계값 상향
+
+사용자 요청: "블러처리 작업은 우선 제거해라. 그리고 스크롤 최하단 내려가는
+버튼은 어느정도 스크롤이 위에 있을 때 떠야한다." — 하위 작업 21의 페이드
+그라디언트를 완전히 제거하고, 버튼이 너무 민감하게(40pt만 스크롤해도) 뜨던 것을
+한 화면 높이에 가까운 300pt로 올려 "확실히 위로 스크롤했을 때만" 뜨게 했다.
+
+- [x] `ChatBotContentView.swift` — `bottomFadeHeight` 상수 + 하단 `LinearGradient`
+      오버레이 블록 전체 삭제, `bottomThreshold`를 40 → 300으로 상향(주석도 갱신)
+- [x] `tuist generate --no-open` 성공 확인
+- [x] **빌드 검증** — `FeatureChatBotExample` / `FiveVoca` 빌드 성공, 경고 0개
+      (`FeatureChatBotExample` 9개는 여전히 기존 무관 `DependencyKey` 경고)
+- [x] 기존 테스트 회귀 확인 — `AllTest` 스킴, `FeatureChatBotTests` 3개 포함 총
+      32개 통과
+- [x] 변경 파일 요약 — 300pt가 "어느 정도"에 정확히 맞는지는 사용자가 실기기에서
+      확인 후 조정 가능(상수 하나)
+
+### 하위 작업 23: 입력바 하단 스크롤 엣지 페이드 (iOS 26 네이티브)
+
+사용자 요청: ChatGPT 스크린샷의 "입력 플레이스홀더 아래가 서서히 페이드아웃 +
+약간의 블러" 효과 — "네비게이션 부분 뷰가 블러처리되는 것과 비슷한 효과"라는
+사용자 설명대로, 이게 SwiftUI가 자체 지원하는지 먼저 확인 후 플랜 작성하라는
+지시. 조사 결과 iOS 26의 `ScrollEdgeEffectStyle`/`.safeAreaBar`가 정확히 이
+메커니즘이고 iOS 18~25엔 대응 API가 없음을 확인, 사용자가 "iOS 26 네이티브만
+(권장)"을 선택(iOS 18 폴백용 수동 그라디언트/블러는 만들지 않음).
+
+- [x] `ChatBotContentView.swift` — `private struct ChatBotBottomBar<Bar: View>:
+      ViewModifier` 추가(iOS 26+: `.safeAreaBar(edge: .bottom)`, 미만:
+      기존 `.safeAreaInset(edge: .bottom)` 폴백), `chatArea` 하단 입력바 부착을
+      `.safeAreaInset(edge: .bottom) { inputBar }` → `.modifier(ChatBotBottomBar { inputBar })`로 교체
+- [x] `tuist generate --no-open` 성공 확인
+- [x] **빌드 검증** — `FeatureChatBotExample` / `FiveVoca` 빌드 성공, 신규 경고 0개
+- [x] 시뮬레이터(iOS 26.2) 빌드+실행 확인 — 앱 정상 기동, 스크린샷 캡처
+- [x] 변경 파일 요약 — 이 머신의 시뮬레이터 런타임이 26.0/26.2뿐이라 iOS 18~25
+      폴백 경로는 빌드 성공 외 육안 검증 불가(코드는 기존 `safeAreaInset` 그대로라
+      동작 변화 없음). 페이드가 ChatGPT처럼 충분히 부드러운지는 사용자가 실기기/
+      시뮬레이터에서 직접 확인 필요 — 부족하면 `.scrollEdgeEffectStyle(.soft, for:
+      .bottom)` 한 줄 추가하는 후속 조정 여지를 플랜에 남겨둠(2단계, 미적용)
+
+### 하위 작업 24: WordDetail 예문 액션바 교체 + 챗봇 네비게이션 연결
+
+사용자 요청: Figma node-id=129:5 디자인대로 WordDetail 예문의 "끊어읽기" 버튼을
+"끊어읽기+챗봇" 2버튼 액션바로 교체하고("에셋도 이걸로 변경"), "챗봇" 버튼을
+탭하면 해당 예문을 컨텍스트로 하는 챗봇 화면으로 navigation push. harness-plan →
+solid-review 통과 후 구현.
+
+- [x] `AlignLeft.imageset` / `MessageSquare.imageset` 생성 — Figma 실제 SVG
+      다운로드(`svgAssets`, `stroke="black"`로 치환), `template-rendering-intent:
+      template`로 만들어 `study300` 토큰으로 틴트(ErrorIcon과 달리 단색 스트로크라
+      텍스트와 같은 색 토큰 공유)
+- [x] `WordDetailPresentationModel.swift` — `level: Int` 필드 추가
+- [x] `WordDetail+PresentationModel.swift` — `level: level` 매핑 추가
+- [x] `WordDetailExampleRow.swift` — 액션바(2버튼, 끊어읽기는 chunks 있을 때만/
+      챗봇은 항상) 구현, `onChatBotTapped` 파라미터 추가
+- [x] `WordDetailExamplesView.swift` / `WordDetailContentView.swift` —
+      `onChatBotTapped` 콜백 스레딩
+- [x] `WordDetailPageView.swift` — `.loaded(let state)` 지점에서 `state` 캡처해
+      `onChatBotTapped(state, example)`로 바인딩
+- [x] `WordDetailViewModel.swift` — `import FeatureChatBot`, `Destination.chatBot`
+      케이스, `didTapChatBot(state:example:)`(`levelLabel: "Level \(state.level)"`,
+      가정 A1 — 초급/중급/고급 매핑이 저장소 어디에도 없어 기존
+      `VocabularyListHeaderView` 선례인 "Level N" 형식 재사용)
+- [x] `WordDetailView.swift` — `import FeatureChatBot`, 콜백 배선,
+      `.navigationDestination(item: $viewModel.destination.chatBot)` 추가
+- [x] `Project.swift`(Vocabulary) — `.feature(implements: .chatBot)` 의존성 추가
+- [x] `tuist generate --no-open` 성공 확인(`DesignSystemAsset.alignLeft`/
+      `.messageSquare` 생성 확인)
+- [x] **빌드 검증** — `FeatureVocabularyExample` / `FiveVoca` 빌드 성공, 신규 경고
+      0개
+- [x] **테스트 작성** — `WordDetailViewModelTests.swift`에
+      `test_didTapChatBot_예문컨텍스트로_챗봇destination을_세팅한다` 추가(destination이
+      `.chatBot`, context의 term/sentence/levelLabel 검증), 기존
+      `test_requestIfNeeded_index1_loaded이며_데이터가_올바르다`에 `pm.level`
+      assertion 추가
+- [x] 기존 테스트 회귀 확인 — `AllTest` 스킴 전체 84개 통과(신규 테스트 포함, 회귀
+      없음)
+- [x] 변경 파일 요약 — **육안 검증 미완**: `FeatureVocabularyExample`을
+      시뮬레이터에 실행해 진입 화면(단어 목록)까지는 스크린샷으로 확인했으나, 이
+      세션에 UI 자동화(탭) 도구가 없어 단어 상세 화면까지 실제로 들어가 액션바
+      레이아웃/색/챗봇 push 전환을 육안으로는 확인하지 못함 — 코드 검토로만
+      확인됨. 특히 액션바 배경(`study100.opacity(0.5)`)이 이미 같은 색의 카드
+      배경(`study100.opacity(0.5)`) 위에 겹쳐져 Figma 스펙(#F1F7F4)보다 살짝 더
+      진하게 보일 가능성 있음 — 사용자가 실기기/시뮬레이터에서 직접 확인 후 필요
+      시 opacity 값 조정 필요
+
+### 하위 작업 25: 끊어읽기 버튼 조건부 노출 제거
+
+사용자 실기기 확인 결과 "챗봇 버튼은 잘 보이는데 끊어읽기가 사라졌다"는 리포트가
+있었고, 원인 조사 중 사용자가 "청크는 모두 존재하니까 청크가 있는 경우에만
+끊어읽기를 노출하는것은 제외하고, 모든 경우에서 보여줘라"라고 요청 — 실제 데이터에서
+chunks가 항상 존재하므로 조건부 노출 로직 자체가 불필요하다고 판단, 제거.
+
+- [x] `WordDetailExampleRow.swift` — `if let chunks = example.chunks, !chunks.isEmpty`
+      조건 제거, 끊어읽기 버튼도 챗봇처럼 항상 노출(`didTapChunkReader`의 nil/empty
+      가드는 방어 코드로 유지, 안전망 성격이라 제거하지 않음)
+- [x] **빌드 검증** — `FeatureVocabularyExample` / `FiveVoca` 빌드 성공, 신규 경고
+      0개
+- [x] 기존 테스트 회귀 확인 — `AllTest` 스킴 전체 84개 통과
+- [x] 변경 파일 요약 — 이전 리포트("챗봇만 보이고 끊어읽기가 사라짐")의 근본 원인은
+      명확히 규명되지 않았음(코드 검토상 조건부 로직 자체는 정상이었음, 사용자
+      환경의 빌드 캐시 문제였을 가능성 존재) — 이번 변경으로 조건 자체를 없애
+      원인과 무관하게 문제가 해소됨
+
+### 하위 작업 26: 액션바 배경색 제거
+
+사용자 요청: "끊어읽기, 챗봇의 버튼 배경색은 제거해라." — 두 버튼을 감싸던 필
+(pill) 배경(`study100.opacity(0.5)` 라운드 사각형)을 제거, 버튼 자체는 배경 없이
+아이콘+텍스트만 남긴다. 카드 전체 배경(`study100.opacity(0.5)`, 예문 카드 자체)은
+이번 요청 범위 밖이라 그대로 유지.
+
+- [x] `WordDetailExampleRow.swift` — 액션바 HStack의
+      `.padding(.horizontal, 12).padding(.vertical, 8).background(study100.opacity(0.5), in: .rect(cornerRadius: 12))`
+      제거
+- [x] **빌드 검증** — `FeatureVocabularyExample` / `FiveVoca` 빌드 성공, 신규 경고
+      0개
+- [x] 변경 파일 요약 — 순수 시각 변경(배경 제거)이라 로직 회귀 리스크 없음, 별도
+      테스트 불필요(뷰 전용 변경)
