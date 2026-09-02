@@ -38,7 +38,7 @@ public final class LevelLibraryViewModel {
         }
     }
 
-    func levelTapped(id: String) {
+    func didTapLevel(id: String) {
         if expandedLevelIDs.contains(id) {
             expandedLevelIDs.remove(id)
         } else {
@@ -46,7 +46,7 @@ public final class LevelLibraryViewModel {
         }
     }
 
-    func sessionTapped(id: String) {
+    func didTapSession(id: String) {
         destination = .session(SessionDetailViewModel(sessionID: id))
     }
 }

@@ -11,50 +11,17 @@ enum HomeTypography {
 }
 
 extension HomeTypography.Style {
-    static let monthHeader = Self(
-        font: DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 26),
-        tracking: -0.676
-    )
-    static let weekdayHeader = Self(
-        font: DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 11),
-        tracking: 0.44
-    )
-    static let dateNumber = Self(
-        font: DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 15),
-        tracking: -0.15
-    )
-    static let dateNumberEmphasis = Self(
-        font: DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 15),
-        tracking: -0.15
-    )
-    static let selectedDateContext = Self(
-        font: DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 15),
-        tracking: -0.18
-    )
-    static let sessionCountCaption = Self(
-        font: DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 12.5),
-        tracking: 0
-    )
-    static let ctaTitle = Self(
-        font: DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 18),
-        tracking: -0.288
-    )
-    static let recordRowTitle = Self(
-        font: DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 15),
-        tracking: -0.15
-    )
-    static let recordRowMeta = Self(
-        font: DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 12.5),
-        tracking: 0
-    )
-    static let emptyDayTitle = Self(
-        font: DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 14.5),
-        tracking: -0.145
-    )
-    static let emptyDaySubtext = Self(
-        font: DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 12.5),
-        tracking: 0
-    )
+    static let monthHeader = Self(font: DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 26), tracking: -0.676)
+    static let weekdayHeader = Self(font: DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 11), tracking: 0.44)
+    static let dateNumber = Self(font: DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 15), tracking: -0.15)
+    static let dateNumberEmphasis = Self(font: DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 15), tracking: -0.15)
+    static let selectedDateContext = Self(font: DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 15), tracking: -0.18)
+    static let sessionCountCaption = Self(font: DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 12.5), tracking: 0)
+    static let ctaTitle = Self(font: DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 18), tracking: -0.288)
+    static let recordRowTitle = Self(font: DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 15), tracking: -0.15)
+    static let recordRowMeta = Self(font: DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 12.5), tracking: 0)
+    static let emptyDayTitle = Self(font: DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 14.5), tracking: -0.145)
+    static let emptyDaySubtext = Self(font: DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 12.5), tracking: 0)
 }
 
 extension View {

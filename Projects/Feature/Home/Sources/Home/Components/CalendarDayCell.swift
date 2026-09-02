@@ -7,68 +7,81 @@ struct CalendarDayCell: View {
 
     var body: some View {
         VStack(spacing: 4) {
-            numberCircle
-            dotsRow
+            NumberCircle(kind: kind)
+            DotsRow(kind: kind)
         }
         .frame(maxWidth: .infinity)
         .frame(height: 46)
     }
 
-    @ViewBuilder
-    private var numberCircle: some View {
-        switch kind {
-        case .empty:
-            Color.clear.frame(width: 30, height: 30)
+    private struct NumberCircle: View {
+        let kind: CalendarDayCellKind
 
-        case .future(let day):
-            numberLabel(day, color: DesignSystemAsset.fgSubtle.swiftUIColor, emphasized: false)
+        var body: some View {
+            switch kind {
+            case .empty:
+                Color.clear.frame(width: 30, height: 30)
 
-        case .past(let day, _):
-            numberLabel(day, color: DesignSystemAsset.fgStrong.swiftUIColor, emphasized: false)
+            case .future(let day):
+                NumberLabel(day: day, color: DesignSystemAsset.fgSubtle.swiftUIColor, emphasized: false)
 
-        case .today(let day, _):
-            numberLabel(day, color: DesignSystemAsset.fgStrong.swiftUIColor, emphasized: true)
+            case .past(let day, _):
+                NumberLabel(day: day, color: DesignSystemAsset.fgStrong.swiftUIColor, emphasized: false)
 
-        case .selected(let day, _):
-            Circle()
-                .fill(DesignSystemAsset.study300.swiftUIColor)
-                .frame(width: 30, height: 30)
-                .overlay {
-                    numberLabel(day, color: DesignSystemAsset.white.swiftUIColor, emphasized: true)
-                }
-        }
-    }
+            case .today(let day, _):
+                NumberLabel(day: day, color: DesignSystemAsset.fgStrong.swiftUIColor, emphasized: true)
 
-    private var dotsRow: some View {
-        HStack(spacing: 2.5) {
-            ForEach(0..<dotCount, id: \.self) { _ in
+            case .selected(let day, _):
                 Circle()
-                    .fill(dotColor)
-                    .frame(width: 4, height: 4)
+                    .fill(DesignSystemAsset.study300.swiftUIColor)
+                    .frame(width: 30, height: 30)
+                    .overlay {
+                        NumberLabel(day: day, color: DesignSystemAsset.white.swiftUIColor, emphasized: true)
+                    }
             }
         }
-        .frame(height: 4)
     }
 
-    private var dotCount: Int {
-        switch kind {
-        case .empty, .future: 0
-        case .past(_, let count), .today(_, let count), .selected(_, let count): count
+    private struct DotsRow: View {
+        let kind: CalendarDayCellKind
+
+        private var dotCount: Int {
+            switch kind {
+            case .empty, .future: 0
+            case .past(_, let count), .today(_, let count), .selected(_, let count): count
+            }
+        }
+
+        private var dotColor: Color {
+            switch kind {
+            case .selected: DesignSystemAsset.study300.swiftUIColor
+            default: DesignSystemAsset.study300.swiftUIColor.opacity(0.30)
+            }
+        }
+
+        var body: some View {
+            HStack(spacing: 2.5) {
+                ForEach(0..<dotCount, id: \.self) { _ in
+                    Circle()
+                        .fill(dotColor)
+                        .frame(width: 4, height: 4)
+                }
+            }
+            .frame(height: 4)
         }
     }
 
-    private var dotColor: Color {
-        switch kind {
-        case .selected: DesignSystemAsset.study300.swiftUIColor
-        default: DesignSystemAsset.study300.swiftUIColor.opacity(0.30)
-        }
-    }
+    private struct NumberLabel: View {
+        let day: Int
+        let color: Color
+        let emphasized: Bool
 
-    private func numberLabel(_ day: Int, color: Color, emphasized: Bool) -> some View {
-        Text("\(day)")
-            .homeTypography(emphasized ? .dateNumberEmphasis : .dateNumber)
-            .foregroundStyle(color)
-            .monospacedDigit()
-            .frame(width: 30, height: 30)
+        var body: some View {
+            Text("\(day)")
+                .homeTypography(emphasized ? .dateNumberEmphasis : .dateNumber)
+                .foregroundStyle(color)
+                .monospacedDigit()
+                .frame(width: 30, height: 30)
+        }
     }
 }

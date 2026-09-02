@@ -19,8 +19,8 @@ struct LevelLibraryView: View {
                     HomeLevelList(
                         levels: state.levels,
                         expandedLevelIDs: viewModel.expandedLevelIDs,
-                        onLevelTapped: { viewModel.levelTapped(id: $0) },
-                        onSessionTapped: { viewModel.sessionTapped(id: $0) }
+                        onLevelTapped: { viewModel.didTapLevel(id: $0) },
+                        onSessionTapped: { viewModel.didTapSession(id: $0) }
                     )
                 }
                 .background(DesignSystemAsset.background.swiftUIColor)

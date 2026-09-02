@@ -17,14 +17,22 @@ final class CalendarGridTests: XCTestCase {
     }
 
     func test_이전달_이동시_월_타이틀이_이전달로_표시된다() {
-        let june = cal.date(from: DateComponents(year: 2026, month: 6, day: 1))!
+        let june = cal.date(from: DateComponents(
+            year: 2026,
+            month: 6,
+            day: 1
+        ))!
         let displayed = cal.homeDisplayedMonth(today: june, offset: -1)
 
         XCTAssertEqual(cal.homeMonthTitle(for: displayed), "2026년 5월")
     }
 
     func test_캘린더_그리드는_7칸_단위의_행으로_구성된다() {
-        let june = cal.date(from: DateComponents(year: 2026, month: 6, day: 1))!
+        let june = cal.date(from: DateComponents(
+            year: 2026,
+            month: 6,
+            day: 1
+        ))!
         let rows = cal.homeCalendarRows(
             displayedMonth: june,
             today: june,
@@ -37,10 +45,20 @@ final class CalendarGridTests: XCTestCase {
     }
 
     func test_기록이_최대치를_넘으면_점_개수가_캡을_초과하지_않는다() {
-        let june = cal.date(from: DateComponents(year: 2026, month: 6, day: 15))!
+        let june = cal.date(from: DateComponents(
+            year: 2026,
+            month: 6,
+            day: 15
+        ))!
         let dayStart = cal.startOfDay(for: june)
         let records = (0..<4).map { index in
-            DayRecord(id: "\(index)", sessionID: "\(index)", time: june, title: "세션", wordCount: 10)
+            DayRecord(
+                id: "\(index)",
+                sessionID: "\(index)",
+                time: june,
+                title: "세션",
+                wordCount: 10
+            )
         }
 
         let rows = cal.homeCalendarRows(
@@ -55,8 +73,16 @@ final class CalendarGridTests: XCTestCase {
     }
 
     func test_선택된_날짜만_isSelected가_true다() {
-        let june = cal.date(from: DateComponents(year: 2026, month: 6, day: 1))!
-        let selected = cal.date(from: DateComponents(year: 2026, month: 6, day: 10))!
+        let june = cal.date(from: DateComponents(
+            year: 2026,
+            month: 6,
+            day: 1
+        ))!
+        let selected = cal.date(from: DateComponents(
+            year: 2026,
+            month: 6,
+            day: 10
+        ))!
         let rows = cal.homeCalendarRows(
             displayedMonth: june,
             today: june,

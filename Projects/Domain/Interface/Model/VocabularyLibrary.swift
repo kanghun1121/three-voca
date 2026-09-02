@@ -75,13 +75,17 @@ public extension VocabularyLibrary {
     static let previewFixture: VocabularyLibrary = {
         // "오늘" 기준 상대 날짜로 구성 — 실행 시점과 무관하게 항상 다양한 캘린더 케이스(당일 3건 캡 경계,
         // 다른 날 1건, 오늘은 0건)가 현재 달 화면에서 바로 보이도록 한다.
-        let level1Completed: [SessionProgress] = [
+        let level1Completed = [
             SessionProgress(
                 id: "1",
                 sessionNumber: 1,
                 totalWords: 20,
                 status: .completed,
-                lastStudiedAt: daysAgo(5, hour: 9, minute: 20),
+                lastStudiedAt: daysAgo(
+                    5,
+                    hour: 9,
+                    minute: 20
+                ),
                 accuracy: 0.92,
                 wordsCompleted: 20
             ),
@@ -90,7 +94,11 @@ public extension VocabularyLibrary {
                 sessionNumber: 2,
                 totalWords: 20,
                 status: .completed,
-                lastStudiedAt: daysAgo(5, hour: 14, minute: 5),
+                lastStudiedAt: daysAgo(
+                    5,
+                    hour: 14,
+                    minute: 5
+                ),
                 accuracy: 0.87,
                 wordsCompleted: 20
             ),
@@ -99,7 +107,11 @@ public extension VocabularyLibrary {
                 sessionNumber: 3,
                 totalWords: 20,
                 status: .completed,
-                lastStudiedAt: daysAgo(5, hour: 21, minute: 40),
+                lastStudiedAt: daysAgo(
+                    5,
+                    hour: 21,
+                    minute: 40
+                ),
                 accuracy: 0.58,
                 wordsCompleted: 20
             ),
@@ -108,12 +120,16 @@ public extension VocabularyLibrary {
                 sessionNumber: 4,
                 totalWords: 20,
                 status: .completed,
-                lastStudiedAt: daysAgo(2, hour: 19, minute: 10),
+                lastStudiedAt: daysAgo(
+                    2,
+                    hour: 19,
+                    minute: 10
+                ),
                 accuracy: 0.88,
                 wordsCompleted: 20
             ),
         ]
-        let level1Sessions: [SessionProgress] = level1Completed + (5...42).map { i in
+        let level1Sessions = level1Completed + (5...42).map { i in
             SessionProgress(
                 id: "\(i)",
                 sessionNumber: i,
@@ -233,9 +249,18 @@ public extension VocabularyLibrary {
         ])
     }()
 
-    private static func daysAgo(_ days: Int, hour: Int, minute: Int) -> Date {
+    private static func daysAgo(
+        _ days: Int,
+        hour: Int,
+        minute: Int
+    ) -> Date {
         let calendar = Calendar.current
-        let base = calendar.date(byAdding: .day, value: -days, to: Date()) ?? Date()
-        return calendar.date(bySettingHour: hour, minute: minute, second: 0, of: base) ?? base
+        let base = calendar.date(byAdding: .day, value: -days, to: .now) ?? .now
+        return calendar.date(
+            bySettingHour: hour,
+            minute: minute,
+            second: 0,
+            of: base
+        ) ?? base
     }
 }
