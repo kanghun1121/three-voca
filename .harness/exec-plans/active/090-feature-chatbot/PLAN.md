@@ -943,3 +943,43 @@ VoiceOver 라벨이 없다고 지적해 `Button(_:systemImage:action:)` +
 그 이전 상태(라벨 없음)로 돌아갔다. 빌드 재검증 완료. **후속 세션 참고**: 이
 아이콘 전용 버튼들에 VoiceOver 라벨을 다시 제안하지 말 것 — 명시적으로 원치
 않는다는 사용자 결정이었다.
+
+### 하위 작업 29: PR #99 충돌 해소 (dev 머지)
+
+사용자 요청: "컨플릭 이유 찾아줘" → 원인 설명 후 "음 충돌을 해소해줘." 원인은
+dev 최신 커밋 `f393f1b`([Refactor] Presentation 모델 계층 제거)가
+`WordDetailPresentationModel`/`WordDetail+PresentationModel.swift`를 완전히
+삭제하고 ViewModel/View가 Domain `WordDetail`/`WordDetail.Example`을 직접 쓰도록
+바꿨는데, 이 브랜치는 그 삭제된 타입을 계속 붙잡고 `level` 필드·챗봇 콜백을
+추가해왔던 것.
+
+- [x] `git merge origin/dev --no-edit` 실행(머지 전 무관한 `SSEClient.swift`
+      미커밋 변경은 `git stash`로 보관 후 복원)
+- [x] `WordDetailPresentationModel.swift` / `WordDetail+PresentationModel.swift`
+      — dev의 삭제를 그대로 수용(`git rm`), `level`은 `WordDetail.level`(도메인
+      모델에 이미 존재)로 대체돼 더 이상 필요 없음
+- [x] `WordDetailExampleRow.swift` — 타입을 `WordDetail.Example`로 교체.
+      NLTagger 하이라이트 본문은 자동 병합으로 이 브랜치의
+      `SentenceHighlighter.highlighted(...)` 버전이 그대로 유지됨(dev는 그
+      구간을 건드리지 않아 충돌 없이 우리 쪽이 채택됨) — dev의 인라인 NLTagger
+      코드보다 개선된 버전이라 그대로 둠
+- [x] `WordDetailContentView.swift` / `WordDetailExamplesView.swift` /
+      `WordDetailPageView.swift` — 타입을 `WordDetail`/`WordDetail.Example`로
+      교체하면서 `onChatBotTapped` 스레딩은 유지, `examples`는 dev의
+      `state.sortedExamples`(정렬 extension) 채택
+- [x] `WordDetailViewModel.swift` — 텍스트상 충돌 없이 자동 병합됐지만
+      `didTapChatBot(state:example:)`이 삭제된 타입을 참조해 컴파일이 깨지는
+      상태였음을 직접 발견 → `state: WordDetail, example: WordDetail.Example`로
+      수동 수정(git이 못 잡아내는 시맨틱 충돌)
+- [x] `WordDetailViewModelTests.swift` — dev의 `detail.groupedDefinitions()`
+      기반 assertion 채택 + `detail.level` assertion 유지, 내 신규 테스트
+      (`test_didTapChatBot_...`)는 변수명(`pm`)만 그대로 두고 타입 추론으로
+      자동 호환
+- [x] `tuist generate --no-open` 성공 확인
+- [x] **빌드 검증** — `FiveVoca` 빌드 성공, 신규 경고 0개(전부 기존 무관 경고)
+- [x] 기존 테스트 회귀 확인 — `AllTest` 스킴 전체 116개 통과(dev가 가져온
+      Home/Session/WordGame 리팩터 테스트 포함, 회귀 없음)
+- [x] 변경 파일 요약 — 순수 병합/타입 정합 작업이라 새로운 기능 로직 없음.
+      `DesignSystem/Sources/SentenceHighlighter.swift`(이 브랜치가 앞서 추출한
+      공용 하이라이터)는 `WordDetailExampleRow`가 계속 사용해 죽은 코드가 되지
+      않음
