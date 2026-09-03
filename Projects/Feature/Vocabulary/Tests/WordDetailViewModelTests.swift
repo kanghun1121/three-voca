@@ -2,6 +2,7 @@ import XCTest
 
 import Dependencies
 
+@testable import FeatureChatBot
 @testable import FeatureVocabulary
 
 @MainActor
@@ -20,6 +21,7 @@ final class WordDetailViewModelTests: XCTestCase {
             return
         }
         XCTAssertEqual(detail.term, "dark")
+        XCTAssertEqual(detail.level, 1)
         XCTAssertEqual(detail.pronunciation, "/dɑːrk/")
         XCTAssertEqual(detail.groupedDefinitions().count, 2)
         XCTAssertEqual(detail.examples.count, 2)
@@ -38,6 +40,30 @@ final class WordDetailViewModelTests: XCTestCase {
             XCTFail("viewStates[0]이 .error여야 합니다. 실제: \(String(describing: vm.viewStates[0]))")
             return
         }
+    }
+
+    func test_didTapChatBot_예문컨텍스트로_챗봇destination을_세팅한다() async {
+        let vm = withDependencies {
+            $0.getWordDetailUseCase = .previewValue
+        } operation: {
+            WordDetailViewModel(wordIDs: ["word_766"], initialIndex: 0)
+        }
+
+        await vm.requestIfNeeded(at: 0)
+        guard case .loaded(let pm) = vm.viewStates[0] else {
+            XCTFail("viewStates[0]이 .loaded여야 합니다. 실제: \(String(describing: vm.viewStates[0]))")
+            return
+        }
+
+        vm.didTapChatBot(state: pm, example: pm.examples[0])
+
+        guard case .chatBot(let chatBotVM) = vm.destination else {
+            XCTFail("destination이 .chatBot이어야 합니다. 실제: \(String(describing: vm.destination))")
+            return
+        }
+        XCTAssertEqual(chatBotVM.context.term, "dark")
+        XCTAssertEqual(chatBotVM.context.sentence, pm.examples[0].en)
+        XCTAssertEqual(chatBotVM.context.levelLabel, "Level 1")
     }
 
     func test_requestIfNeeded_index1부터5까지_모두_loaded로_전환된다() async {

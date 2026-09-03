@@ -2,6 +2,7 @@ import Foundation
 
 import DomainInterface
 import FeatureAnalysis
+import FeatureChatBot
 
 import Dependencies
 import SwiftUINavigation
@@ -18,6 +19,7 @@ public final class WordDetailViewModel {
     @CasePathable
     enum Destination {
         case chunkReader(ChunkReaderViewModel)
+        case chatBot(ChatBotViewModel)
     }
 
     private(set) var viewStates: [Int: ViewState] = [:]
@@ -46,6 +48,14 @@ public final class WordDetailViewModel {
     func didTapChunkReader(example: WordDetail.Example) {
         guard let chunks = example.chunks, !chunks.isEmpty else { return }
         destination = .chunkReader(ChunkReaderViewModel(chunks: chunks, words: example.words ?? []))
+    }
+
+    func didTapChatBot(state: WordDetail, example: WordDetail.Example) {
+        destination = .chatBot(ChatBotViewModel(context: .init(
+            term: state.term,
+            sentence: example.en,
+            levelLabel: "Level \(state.level)"
+        )))
     }
 
     func requestIfNeeded(at index: Int) async {
