@@ -142,7 +142,6 @@ public final class ChatBotViewModel {
     }
 
     private func apply(_ history: ChatHistory) {
-        messages.removeAll(where: \.isFromHistory)
         let loadedMessages = history.messages.map { message -> ChatBotMessage in
             let role: ChatBotMessage.Role
             switch message.role {
@@ -155,6 +154,17 @@ public final class ChatBotViewModel {
                 isFromHistory: true
             )
         }
+
+        // load()는 로컬 캐시 → 원격 순으로 이 메서드를 두 번 호출한다. `ChatBotMessage.id`는
+        // 생성마다 새로 발급되는 UUID라, 내용이 같아도 무조건 remove+insert하면 ForEach가
+        // 모든 히스토리 행을 새 아이덴티티로 다시 그린다 — 스크롤 위치가 미세하게 밀리며
+        // 화면이 끊기는 것처럼 보인다. 내용이 실제로 안 바뀌었으면 아무것도 하지 않는다.
+        let currentHistory = messages.filter(\.isFromHistory)
+        let isUnchanged = currentHistory.count == loadedMessages.count
+            && zip(currentHistory, loadedMessages).allSatisfy { $0.role == $1.role && $0.text == $1.text }
+        guard !isUnchanged else { return }
+
+        messages.removeAll(where: \.isFromHistory)
         messages.insert(contentsOf: loadedMessages, at: 0)
     }
 }
