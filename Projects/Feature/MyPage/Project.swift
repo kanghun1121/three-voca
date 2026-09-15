@@ -10,6 +10,7 @@ let project = Project.makeModule(
                 .designSystem,
                 .domainInterface,
                 .swiftUINavigation,
+                .core,
             ]
         )),
         .feature(tests: .myPage, factory: .init(

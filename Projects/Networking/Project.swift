@@ -11,6 +11,7 @@ let project = Project.makeModule(
             dependencies: [
                 .networkingInterface,
                 .dependencies,
+                .core,
             ]
         )),
         .networking(tests: .init(

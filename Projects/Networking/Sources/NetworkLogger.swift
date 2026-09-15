@@ -1,13 +1,15 @@
 import Foundation
-import OSLog
 
-private let logger = Logger(subsystem: "com.kangdev.FiveVoca", category: "Network")
+import Core
+import Dependencies
 
 struct NetworkLogger {
     func logRequest(_ request: URLRequest) {
+        @Dependency(\.loggerClient) var loggerClient
+
         let method = request.httpMethod ?? "UNKNOWN"
         let url = request.url?.absoluteString ?? "nil"
-        logger.debug("[\(method)] \(url)")
+        loggerClient.debug("Network", "[\(method)] \(url)")
 
         guard ProcessInfo.processInfo.environment["ENABLE_NETWORK_LOG"] == "1" else { return }
 
@@ -28,11 +30,13 @@ struct NetworkLogger {
         statusCode: Int,
         data: Data
     ) {
+        @Dependency(\.loggerClient) var loggerClient
+
         let url = response.url?.absoluteString ?? "nil"
         if (200..<300).contains(statusCode) {
-            logger.debug("[\(statusCode)] \(url)")
+            loggerClient.debug("Network", "[\(statusCode)] \(url)")
         } else {
-            logger.error("[\(statusCode)] \(url) — \(String(data: data, encoding: .utf8) ?? "")")
+            loggerClient.error("Network", "[\(statusCode)] \(url) — \(String(data: data, encoding: .utf8) ?? "")")
         }
 
         guard ProcessInfo.processInfo.environment["ENABLE_NETWORK_LOG"] == "1" else { return }
@@ -45,7 +49,9 @@ struct NetworkLogger {
     }
 
     func logError(_ error: Error, context: String) {
-        logger.error("\(context): \(error.localizedDescription)")
+        @Dependency(\.loggerClient) var loggerClient
+
+        loggerClient.error("Network", "\(context): \(error.localizedDescription)")
 
         guard ProcessInfo.processInfo.environment["ENABLE_NETWORK_LOG"] == "1" else { return }
 

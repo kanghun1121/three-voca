@@ -11,6 +11,7 @@ let project = Project.makeModule(
                 .dependencies,
                 .designSystem,
                 .swiftUINavigation,
+                .core,
             ]
         )),
         .feature(tests: .word, factory: .init(

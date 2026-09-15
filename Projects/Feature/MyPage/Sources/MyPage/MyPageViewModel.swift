@@ -1,13 +1,11 @@
 import AuthenticationServices
 import Foundation
-import OSLog
 
+import Core
 import DomainInterface
 
 import Dependencies
 import SwiftUINavigation
-
-private let logger = Logger(subsystem: "com.kangdev.FiveVoca", category: "Auth")
 
 @Observable
 @MainActor
@@ -29,6 +27,7 @@ public final class MyPageViewModel {
     @ObservationIgnored @Dependency(\.authSessionRepository) private var authSessionRepository
     @ObservationIgnored @Dependency(\.checkAuthSessionUseCase) private var checkAuthSessionUseCase
     @ObservationIgnored @Dependency(\.signInWithAppleUseCase) private var signInWithAppleUseCase
+    @ObservationIgnored @Dependency(\.loggerClient) private var loggerClient
 
     var isDeleteConfirmed: Bool { deleteConfirmText == "회원탈퇴" }
     var isShowingDeleteSheet: Bool {
@@ -74,11 +73,11 @@ public final class MyPageViewModel {
                 do {
                     _ = try await signInWithAppleUseCase.execute(identityToken)
                 } catch {
-                    logger.error("signInWithApple 실패: \(error.localizedDescription)")
+                    loggerClient.error("Auth", "signInWithApple 실패: \(error.localizedDescription)")
                 }
             }
         case .failure(let error):
-            logger.error("Apple 로그인 실패: \(error.localizedDescription)")
+            loggerClient.error("Auth", "Apple 로그인 실패: \(error.localizedDescription)")
         }
     }
 
