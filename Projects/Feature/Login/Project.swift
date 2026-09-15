@@ -10,6 +10,7 @@ let project = Project.makeModule(
                 .dependencies,
                 .designSystem,
                 .sdk(name: "AuthenticationServices", type: .framework, status: .required),
+                .core,
             ]
         )),
         .feature(tests: .login, factory: .init(

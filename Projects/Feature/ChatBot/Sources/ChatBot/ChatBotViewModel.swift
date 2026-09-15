@@ -1,12 +1,10 @@
 import AuthenticationServices
 import Foundation
-import OSLog
 
+import Core
 import DomainInterface
 
 import Dependencies
-
-private let logger = Logger(subsystem: "com.kangdev.FiveVoca", category: "Auth")
 
 @Observable
 @MainActor
@@ -21,6 +19,7 @@ public final class ChatBotViewModel {
     @ObservationIgnored @Dependency(\.chatRepository) private var chatRepository
     @ObservationIgnored @Dependency(\.checkAuthSessionUseCase) private var checkAuthSessionUseCase
     @ObservationIgnored @Dependency(\.signInWithAppleUseCase) private var signInWithAppleUseCase
+    @ObservationIgnored @Dependency(\.loggerClient) private var loggerClient
     @ObservationIgnored private(set) var streamTask: Task<Void, Never>?
 
     private static let wordRevealDelay: Duration = .milliseconds(10)
@@ -43,7 +42,7 @@ public final class ChatBotViewModel {
             }
             hasLoadedHistory = true
         } catch {
-            print("[ChatBot] 히스토리 로드 실패:", error)
+            loggerClient.error("ChatBot", "히스토리 로드 실패: \(error.localizedDescription)")
         }
     }
 
@@ -75,7 +74,7 @@ public final class ChatBotViewModel {
                 }
             } catch {
                 if !Task.isCancelled {
-                    print("[ChatBot] 스트리밍 실패:", error)
+                    loggerClient.error("ChatBot", "스트리밍 실패: \(error.localizedDescription)")
                     messages[assistantIndex].isGenerating = false
                     messages[assistantIndex].text = "답변을 가져오지 못했어요"
                     messages[assistantIndex].isError = true
@@ -114,11 +113,11 @@ public final class ChatBotViewModel {
                     _ = try await signInWithAppleUseCase.execute(identityToken)
                     isShowingLoginRequiredPopup = false
                 } catch {
-                    logger.error("signInWithApple 실패: \(error.localizedDescription)")
+                    loggerClient.error("Auth", "signInWithApple 실패: \(error.localizedDescription)")
                 }
             }
         case .failure(let error):
-            logger.error("Apple 로그인 실패: \(error.localizedDescription)")
+            loggerClient.error("Auth", "Apple 로그인 실패: \(error.localizedDescription)")
         }
     }
 

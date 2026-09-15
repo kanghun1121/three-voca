@@ -9,6 +9,7 @@ let project = Project.makeModule(
                 .domainInterface,
                 .dependencies,
                 .designSystem,
+                .core,
             ]
         )),
         .feature(tests: .chatBot, factory: .init(

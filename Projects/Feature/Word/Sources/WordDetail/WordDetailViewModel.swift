@@ -1,5 +1,6 @@
 import Foundation
 
+import Core
 import DomainInterface
 import FeatureChatBot
 import FeatureChunkReader
@@ -31,6 +32,7 @@ public final class WordDetailViewModel {
     @ObservationIgnored @Dependency(\.wordRepository) private var wordRepository
     @ObservationIgnored @Dependency(\.audioRepository) private var audioRepository
     @ObservationIgnored @Dependency(\.audioPlayerRepository) private var audioPlayerRepository
+    @ObservationIgnored @Dependency(\.loggerClient) private var loggerClient
 
     public init(wordIDs: [String], initialIndex: Int) {
         self.wordIDs = wordIDs
@@ -44,7 +46,7 @@ public final class WordDetailViewModel {
             let detail = try await wordRepository.fetchDetail(wordIDs[index])
             viewStates[index] = .loaded(detail)
         } catch {
-            print("[WordDetail] 단어 로드 실패 (index: \(index)):", error)
+            loggerClient.error("Vocabulary", "단어 로드 실패 (index: \(index)): \(error.localizedDescription)")
             viewStates[index] = .error("단어 정보를 불러오지 못했습니다.")
         }
     }
