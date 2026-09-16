@@ -33,7 +33,7 @@ struct CalendarDayCell: View {
 
             case .selected(let day, _):
                 Circle()
-                    .fill(DesignSystemAsset.study300.swiftUIColor)
+                    .fill(DesignSystemAsset.selectedBlue.swiftUIColor)
                     .frame(width: 30, height: 30)
                     .overlay {
                         NumberLabel(day: day, color: DesignSystemAsset.white.swiftUIColor, emphasized: true)
@@ -54,8 +54,16 @@ struct CalendarDayCell: View {
 
         private var dotColor: Color {
             switch kind {
-            case .selected: DesignSystemAsset.study300.swiftUIColor
-            default: DesignSystemAsset.study300.swiftUIColor.opacity(0.30)
+            case .selected:
+                DesignSystemAsset.selectedBlue.swiftUIColor
+            case .empty, .future:
+                .clear
+            case .past(_, let count), .today(_, let count):
+                switch count {
+                case 1: DesignSystemAsset.spectrumBlue.swiftUIColor
+                case 2: DesignSystemAsset.spectrumPurple.swiftUIColor
+                default: DesignSystemAsset.spectrumTeal.swiftUIColor
+                }
             }
         }
 

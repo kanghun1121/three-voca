@@ -27,7 +27,7 @@ struct HomeContentView: View {
 
     private var divider: some View {
         Rectangle()
-            .fill(DesignSystemAsset.line.swiftUIColor)
+            .fill(DesignSystemAsset.borderSubtle.swiftUIColor)
             .frame(height: 1)
             .padding(.horizontal, 24)
             .padding(.top, 34)

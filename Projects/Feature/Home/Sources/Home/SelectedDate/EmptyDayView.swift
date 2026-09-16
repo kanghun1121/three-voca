@@ -34,12 +34,12 @@ struct EmptyDayView: View {
             if !isFuture {
                 Button("오늘 학습으로 이동", action: onGoToToday)
                     .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 13))
-                    .foregroundStyle(DesignSystemAsset.study300.swiftUIColor)
+                    .foregroundStyle(DesignSystemAsset.selectedBlue.swiftUIColor)
                     .padding(.vertical, 9)
                     .padding(.horizontal, 18)
                     .frame(minHeight: 44)
                     .overlay {
-                        Capsule().strokeBorder(DesignSystemAsset.study300.swiftUIColor, lineWidth: 1)
+                        Capsule().strokeBorder(DesignSystemAsset.selectedBlue.swiftUIColor, lineWidth: 1)
                     }
             }
         }

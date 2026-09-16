@@ -21,7 +21,7 @@ struct RecordRow: View {
                 .monospacedDigit()
                 .frame(width: 46, alignment: .leading)
                 Circle()
-                    .fill(DesignSystemAsset.study300.swiftUIColor)
+                    .fill(DesignSystemAsset.recordDotPurple.swiftUIColor)
                     .frame(width: 7, height: 7)
                 VStack(alignment: .leading, spacing: 2) {
                     Text(record.title)
