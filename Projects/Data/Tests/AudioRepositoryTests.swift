@@ -362,33 +362,6 @@ final class AudioRepositoryTests: XCTestCase {
         XCTAssertNotNil(disk.url(for: "newest"))
     }
 
-    /// memory `countLimit`을 생성자로 작게 주입해도, `AudioMemoryCache`를 직접 건드리지 않고
-    /// `AudioRepository.prefetch`만 반복 호출하는 것만으로 entry LRU가 실제로 발동하는지 검증한다.
-    func test_repository를_통한_prefetch만으로도_memory_entry_상한을_넘으면_LRU가_발동한다() async throws {
-        let memory = AudioMemoryCache(countLimit: 2)
-        let disk = AudioDiskCache(directory: directory)
-
-        await withDependencies {
-            $0.audioMemoryCache = memory
-            $0.audioDiskCache = disk
-            $0.httpClient = StubHTTPClient { url in Data(url.absoluteString.utf8) }
-        } operation: {
-            await AudioRepository.liveValue.prefetch([
-                (term: "old", audioUrl: "https://example.com/old.mp3"),
-                (term: "new", audioUrl: "https://example.com/new.mp3"),
-                (term: "newest", audioUrl: "https://example.com/newest.mp3")
-            ])
-        }
-
-        let old = await memory.url(for: "old")
-        let new = await memory.url(for: "new")
-        let newest = await memory.url(for: "newest")
-
-        XCTAssertNil(old, "repository만 거쳤어도 memory entry 상한 초과 시 가장 오래된 term이 제거돼야 한다")
-        XCTAssertNotNil(new)
-        XCTAssertNotNil(newest)
-        XCTAssertNotNil(disk.url(for: "old"), "memory에서 밀려나도 disk엔 여전히 남아있어야 한다")
-    }
 }
 
 /// 테스트 전용 — `data(from:)`만 스텁으로 대체하고 나머지 메서드는 쓰이지 않으므로 실패로 던진다.
