@@ -1,6 +1,7 @@
 import SwiftUI
 
 import DesignSystem
+import DomainInterface
 
 import SwiftUINavigation
 
@@ -18,23 +19,24 @@ public struct LearningLibraryView: View {
                 LearningLibraryLoadingView()
             case .success(let state):
                 ScrollView {
-                    LevelList(
-                        levels: state.levels,
-                        expandedLevelIDs: viewModel.expandedLevelIDs,
-                        onLevelTapped: { viewModel.didTapLevel(id: $0) },
-                        onLessonTapped: { viewModel.didTapLesson(id: $0) }
-                    )
+                    VStack(alignment: .leading, spacing: 0) {
+                        Text("학습 라이브러리")
+                            .stageTypography(.listTitle)
+                            .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
+                            .padding(.horizontal, 24)
+                            .padding(.vertical, 16)
+                        LevelList(levels: state.levels, onLevelTapped: { viewModel.didTapLevel(id: $0) })
+                    }
                 }
                 .background(DesignSystemAsset.background.swiftUIColor)
             case .error(let message):
                 ContentUnavailableView(message, systemImage: "exclamationmark.triangle")
             }
         }
-        .navigationTitle("학습 라이브러리")
         .navigationBarTitleDisplayMode(.inline)
         .task { await viewModel.onAppear() }
-        .navigationDestination(item: $viewModel.destination.lesson) { detailVM in
-            LessonDetailView(viewModel: detailVM)
+        .navigationDestination(item: $viewModel.destination.stageDetail) { detailVM in
+            StageDetailView(viewModel: detailVM)
         }
     }
 }

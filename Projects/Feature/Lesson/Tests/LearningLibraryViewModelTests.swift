@@ -17,7 +17,7 @@ final class LearningLibraryViewModelTests: XCTestCase {
         XCTAssertEqual(vm.uiState, .loading)
     }
 
-    func test_onAppear_성공시_uiState가_success로_채워지고_활성_레벨이_최초_펼쳐진다() async {
+    func test_onAppear_성공시_uiState가_success로_채워진다() async {
         let library = makeLibrary(levels: [
             makeLevel(id: "level_1", completedLessons: 5, totalLessons: 5), // completed
             makeLevel(id: "level_2", completedLessons: 2, totalLessons: 5), // active
@@ -33,24 +33,44 @@ final class LearningLibraryViewModelTests: XCTestCase {
         await vm.observationTask?.value
 
         XCTAssertEqual(vm.uiState, .success(library))
-        XCTAssertEqual(vm.expandedLevelIDs, ["level_2"])
     }
 
-    func test_이미_펼친_레벨이_있으면_활성_레벨_자동_삽입을_하지_않는다() async {
+    func test_didTapLevel_잠기지_않은_단계면_stageDetail_목적지를_설정한다() async {
         let library = makeLibrary(levels: [
-            makeLevel(id: "level_1", completedLessons: 2, totalLessons: 5), // active
+            makeLevel(id: "level_2", completedLessons: 2, totalLessons: 5),
         ])
         let vm = withDependencies {
             $0.learningLibraryRepository.stream = { makeStream([library]) }
         } operation: {
             LearningLibraryViewModel()
         }
-        vm.didTapLevel(id: "level_manual")
-
         await vm.onAppear()
         await vm.observationTask?.value
 
-        XCTAssertEqual(vm.expandedLevelIDs, ["level_manual"])
+        vm.didTapLevel(id: "level_2")
+
+        guard case .stageDetail(let detailVM) = vm.destination else {
+            XCTFail("destination이 .stageDetail이어야 합니다. 실제: \(String(describing: vm.destination))")
+            return
+        }
+        XCTAssertEqual(detailVM.level.id, "level_2")
+    }
+
+    func test_didTapLevel_잠긴_단계면_아무_동작도_하지_않는다() async {
+        let library = makeLibrary(levels: [
+            makeLevel(id: "level_5", completedLessons: 0, totalLessons: 0), // 레슨 0개 = 잠김
+        ])
+        let vm = withDependencies {
+            $0.learningLibraryRepository.stream = { makeStream([library]) }
+        } operation: {
+            LearningLibraryViewModel()
+        }
+        await vm.onAppear()
+        await vm.observationTask?.value
+
+        vm.didTapLevel(id: "level_5")
+
+        XCTAssertNil(vm.destination)
     }
 
     func test_스트림이_값을_안_주면_uiState는_loading에_머무른다() async {
@@ -85,12 +105,12 @@ final class LearningLibraryViewModelTests: XCTestCase {
         XCTAssertEqual(counter.value, 1)
     }
 
-    func test_스트림이_값을_2번_주면_최신_값으로_갱신되고_expandedLevelIDs는_유지된다() async {
+    func test_스트림이_값을_2번_주면_최신_값으로_갱신된다() async {
         let first = makeLibrary(levels: [
-            makeLevel(id: "level_1", completedLessons: 2, totalLessons: 5), // active
+            makeLevel(id: "level_1", completedLessons: 2, totalLessons: 5),
         ])
         let second = makeLibrary(levels: [
-            makeLevel(id: "level_2", completedLessons: 3, totalLessons: 5), // active
+            makeLevel(id: "level_2", completedLessons: 3, totalLessons: 5),
         ])
         let vm = withDependencies {
             $0.learningLibraryRepository.stream = { makeStream([first, second]) }
@@ -102,7 +122,6 @@ final class LearningLibraryViewModelTests: XCTestCase {
         await vm.observationTask?.value
 
         XCTAssertEqual(vm.uiState, .success(second))
-        XCTAssertEqual(vm.expandedLevelIDs, ["level_1"])
     }
 }
 

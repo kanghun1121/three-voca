@@ -16,13 +16,12 @@ public final class LearningLibraryViewModel {
 
     @CasePathable
     public enum Destination {
-        case lesson(LessonDetailViewModel)
+        case stageDetail(StageDetailViewModel)
     }
 
     var destination: Destination?
 
     private(set) var uiState: LearningLibraryUIState = .loading
-    private(set) var expandedLevelIDs: Set<String> = []
     @ObservationIgnored private(set) var observationTask: Task<Void, Never>?
 
     @ObservationIgnored @Dependency(\.learningLibraryRepository) private var learningLibraryRepository
@@ -40,21 +39,13 @@ public final class LearningLibraryViewModel {
     }
 
     func didTapLevel(id: String) {
-        if expandedLevelIDs.contains(id) {
-            expandedLevelIDs.remove(id)
-        } else {
-            expandedLevelIDs.insert(id)
-        }
-    }
-
-    func didTapLesson(id: String) {
-        destination = .lesson(LessonDetailViewModel(lessonID: id))
+        guard case .success(let library) = uiState,
+              let level = library.levels.first(where: { $0.id == id }),
+              !level.isLocked else { return }
+        destination = .stageDetail(StageDetailViewModel(level: level))
     }
 
     private func apply(_ library: LearningLibrary) {
-        if expandedLevelIDs.isEmpty, let activeID = library.levels.first(where: { $0.status == .active })?.id {
-            expandedLevelIDs.insert(activeID)
-        }
         uiState = .success(library)
     }
 
