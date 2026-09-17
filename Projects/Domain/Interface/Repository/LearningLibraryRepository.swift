@@ -22,7 +22,10 @@ extension LearningLibraryRepository: TestDependencyKey {
         refresh: unimplemented("\(Self.self).refresh")
     )
 
-    public static let previewValue = testValue
+    public static let previewValue = LearningLibraryRepository(
+        stream: unimplemented("\(Self.self).stream"),
+        refresh: unimplemented("\(Self.self).refresh")
+    )
 }
 
 public extension DependencyValues {

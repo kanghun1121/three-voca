@@ -23,6 +23,18 @@ extension AuthSessionRemoteDataSource: DependencyKey {
     )
 }
 
+extension AuthSessionRemoteDataSource: TestDependencyKey {
+    static let testValue = AuthSessionRemoteDataSource(
+        refreshToken: unimplemented("\(Self.self).refreshToken"),
+        deleteAccount: unimplemented("\(Self.self).deleteAccount")
+    )
+
+    static let previewValue = AuthSessionRemoteDataSource(
+        refreshToken: unimplemented("\(Self.self).refreshToken"),
+        deleteAccount: unimplemented("\(Self.self).deleteAccount")
+    )
+}
+
 
 extension DependencyValues {
     var authSessionRemoteDataSource: AuthSessionRemoteDataSource {

@@ -65,6 +65,20 @@ extension ChatBotRemoteDataSource: DependencyKey {
     )
 }
 
+extension ChatBotRemoteDataSource: TestDependencyKey {
+    static let testValue = ChatBotRemoteDataSource(
+        streamEvents: unimplemented("\(Self.self).streamEvents", placeholder: AsyncThrowingStream { $0.finish() }),
+        fetchHistory: unimplemented("\(Self.self).fetchHistory"),
+        stop: unimplemented("\(Self.self).stop")
+    )
+
+    static let previewValue = ChatBotRemoteDataSource(
+        streamEvents: unimplemented("\(Self.self).streamEvents", placeholder: AsyncThrowingStream { $0.finish() }),
+        fetchHistory: unimplemented("\(Self.self).fetchHistory"),
+        stop: unimplemented("\(Self.self).stop")
+    )
+}
+
 
 extension DependencyValues {
     var chatBotRemoteDataSource: ChatBotRemoteDataSource {

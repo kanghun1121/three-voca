@@ -41,6 +41,20 @@ extension LearningHistoryLocalDataSource: DependencyKey {
     )
 }
 
+extension LearningHistoryLocalDataSource: TestDependencyKey {
+    static let testValue = LearningHistoryLocalDataSource(
+        allCompletions: unimplemented("\(Self.self).allCompletions"),
+        completion: unimplemented("\(Self.self).completion"),
+        recordCompletion: unimplemented("\(Self.self).recordCompletion")
+    )
+
+    static let previewValue = LearningHistoryLocalDataSource(
+        allCompletions: unimplemented("\(Self.self).allCompletions"),
+        completion: unimplemented("\(Self.self).completion"),
+        recordCompletion: unimplemented("\(Self.self).recordCompletion")
+    )
+}
+
 
 extension DependencyValues {
     var learningHistoryLocalDataSource: LearningHistoryLocalDataSource {

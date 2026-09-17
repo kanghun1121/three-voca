@@ -14,6 +14,18 @@ extension SoundClient: DependencyKey {
     )
 }
 
+extension SoundClient: TestDependencyKey {
+    static let testValue = SoundClient(
+        playCorrect: unimplemented("\(Self.self).playCorrect"),
+        playWrong: unimplemented("\(Self.self).playWrong")
+    )
+
+    static let previewValue = SoundClient(
+        playCorrect: unimplemented("\(Self.self).playCorrect"),
+        playWrong: unimplemented("\(Self.self).playWrong")
+    )
+}
+
 extension DependencyValues {
     var soundClient: SoundClient {
         get { self[SoundClient.self] }
