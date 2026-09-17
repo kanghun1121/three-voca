@@ -22,7 +22,7 @@ struct LessonExampleApp: App {
     var body: some Scene {
         WindowGroup {
             NavigationStack {
-                LessonDetailView(viewModel: LessonDetailViewModel(lessonID: "demo"))
+                LearningLibraryView(viewModel: LearningLibraryViewModel())
             }
         }
     }
