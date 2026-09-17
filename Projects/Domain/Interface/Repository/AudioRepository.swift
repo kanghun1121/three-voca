@@ -26,7 +26,11 @@ extension AudioRepository: TestDependencyKey {
         url: unimplemented("\(Self.self).url", placeholder: nil)
     )
 
-    public static let previewValue = testValue
+    public static let previewValue = AudioRepository(
+        prefetch: unimplemented("\(Self.self).prefetch", placeholder: ()),
+        fetchURL: unimplemented("\(Self.self).fetchURL", placeholder: nil),
+        url: unimplemented("\(Self.self).url", placeholder: nil)
+    )
 }
 
 public extension DependencyValues {

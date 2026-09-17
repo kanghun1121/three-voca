@@ -26,7 +26,11 @@ extension LearningHistoryRepository: TestDependencyKey {
         complete: unimplemented("\(Self.self).complete")
     )
 
-    public static let previewValue = testValue
+    public static let previewValue = LearningHistoryRepository(
+        stream: unimplemented("\(Self.self).stream"),
+        streamAllCompletions: unimplemented("\(Self.self).streamAllCompletions"),
+        complete: unimplemented("\(Self.self).complete")
+    )
 }
 
 public extension DependencyValues {

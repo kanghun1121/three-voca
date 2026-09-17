@@ -16,7 +16,9 @@ extension AuthRepository: TestDependencyKey {
         signInWithApple: unimplemented("\(Self.self).signInWithApple")
     )
 
-    public static let previewValue = testValue
+    public static let previewValue = AuthRepository(
+        signInWithApple: unimplemented("\(Self.self).signInWithApple")
+    )
 }
 
 public extension DependencyValues {

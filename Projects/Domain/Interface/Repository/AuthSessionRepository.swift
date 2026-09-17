@@ -46,7 +46,16 @@ extension AuthSessionRepository: TestDependencyKey {
         stateStream: unimplemented("\(Self.self).stateStream")
     )
 
-    public static let previewValue = testValue
+    public static let previewValue = AuthSessionRepository(
+        getAccessToken: unimplemented("\(Self.self).getAccessToken"),
+        setAccessToken: unimplemented("\(Self.self).setAccessToken"),
+        getRefreshToken: unimplemented("\(Self.self).getRefreshToken"),
+        setRefreshToken: unimplemented("\(Self.self).setRefreshToken"),
+        clear: unimplemented("\(Self.self).clear"),
+        deleteAccount: unimplemented("\(Self.self).deleteAccount"),
+        refreshAccessToken: unimplemented("\(Self.self).refreshAccessToken"),
+        stateStream: unimplemented("\(Self.self).stateStream")
+    )
 }
 
 public extension DependencyValues {

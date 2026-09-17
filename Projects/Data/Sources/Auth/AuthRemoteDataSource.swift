@@ -19,6 +19,16 @@ extension AuthRemoteDataSource: DependencyKey {
     )
 }
 
+extension AuthRemoteDataSource: TestDependencyKey {
+    static let testValue = AuthRemoteDataSource(
+        exchangeAppleToken: unimplemented("\(Self.self).exchangeAppleToken")
+    )
+
+    static let previewValue = AuthRemoteDataSource(
+        exchangeAppleToken: unimplemented("\(Self.self).exchangeAppleToken")
+    )
+}
+
 
 extension DependencyValues {
     var authRemoteDataSource: AuthRemoteDataSource {

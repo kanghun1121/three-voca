@@ -34,7 +34,11 @@ extension ChatRepository: TestDependencyKey {
         stopStreaming: unimplemented("\(Self.self).stopStreaming")
     )
 
-    public static let previewValue = testValue
+    public static let previewValue = ChatRepository(
+        streamMessage: unimplemented("\(Self.self).streamMessage"),
+        fetchHistory: unimplemented("\(Self.self).fetchHistory"),
+        stopStreaming: unimplemented("\(Self.self).stopStreaming")
+    )
 }
 
 public extension DependencyValues {

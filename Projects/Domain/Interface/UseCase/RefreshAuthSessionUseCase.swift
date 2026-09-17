@@ -16,7 +16,9 @@ extension RefreshAuthSessionUseCase: TestDependencyKey {
         execute: unimplemented("\(Self.self).execute")
     )
 
-    public static let previewValue = testValue
+    public static let previewValue = RefreshAuthSessionUseCase(
+        execute: unimplemented("\(Self.self).execute")
+    )
 }
 
 public extension DependencyValues {

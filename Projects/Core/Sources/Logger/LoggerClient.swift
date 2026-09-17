@@ -34,3 +34,15 @@ extension LoggerClient: DependencyKey {
         }
     )
 }
+
+extension LoggerClient: TestDependencyKey {
+    public static let testValue = LoggerClient(
+        debug: unimplemented("\(Self.self).debug"),
+        error: unimplemented("\(Self.self).error")
+    )
+
+    public static let previewValue = LoggerClient(
+        debug: unimplemented("\(Self.self).debug"),
+        error: unimplemented("\(Self.self).error")
+    )
+}

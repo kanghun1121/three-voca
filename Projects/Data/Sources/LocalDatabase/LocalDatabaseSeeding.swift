@@ -37,6 +37,16 @@ extension LocalDatabaseSeeding: DependencyKey {
     })
 }
 
+extension LocalDatabaseSeeding: TestDependencyKey {
+    public static let testValue = LocalDatabaseSeeding(
+        seedIfNeeded: unimplemented("\(Self.self).seedIfNeeded", placeholder: ())
+    )
+
+    public static let previewValue = LocalDatabaseSeeding(
+        seedIfNeeded: unimplemented("\(Self.self).seedIfNeeded", placeholder: ())
+    )
+}
+
 
 public extension DependencyValues {
     var localDatabaseSeeding: LocalDatabaseSeeding {

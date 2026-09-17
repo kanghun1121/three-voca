@@ -29,6 +29,20 @@ extension AuthLocalDataSource: DependencyKey {
     )
 }
 
+extension AuthLocalDataSource: TestDependencyKey {
+    static let testValue = AuthLocalDataSource(
+        loadRefreshToken: unimplemented("\(Self.self).loadRefreshToken"),
+        saveRefreshToken: unimplemented("\(Self.self).saveRefreshToken"),
+        deleteRefreshToken: unimplemented("\(Self.self).deleteRefreshToken")
+    )
+
+    static let previewValue = AuthLocalDataSource(
+        loadRefreshToken: unimplemented("\(Self.self).loadRefreshToken"),
+        saveRefreshToken: unimplemented("\(Self.self).saveRefreshToken"),
+        deleteRefreshToken: unimplemented("\(Self.self).deleteRefreshToken")
+    )
+}
+
 
 extension DependencyValues {
     var authLocalDataSource: AuthLocalDataSource {

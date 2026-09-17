@@ -34,6 +34,20 @@ extension LessonLocalDataSource: DependencyKey {
     )
 }
 
+extension LessonLocalDataSource: TestDependencyKey {
+    static let testValue = LessonLocalDataSource(
+        lesson: unimplemented("\(Self.self).lesson"),
+        lessons: unimplemented("\(Self.self).lessons"),
+        insertLessons: unimplemented("\(Self.self).insertLessons", placeholder: ())
+    )
+
+    static let previewValue = LessonLocalDataSource(
+        lesson: unimplemented("\(Self.self).lesson"),
+        lessons: unimplemented("\(Self.self).lessons"),
+        insertLessons: unimplemented("\(Self.self).insertLessons", placeholder: ())
+    )
+}
+
 
 extension DependencyValues {
     var lessonLocalDataSource: LessonLocalDataSource {

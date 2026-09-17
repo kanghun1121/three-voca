@@ -28,6 +28,16 @@ extension AudioRemoteDataSource: DependencyKey {
     )
 }
 
+extension AudioRemoteDataSource: TestDependencyKey {
+    static let testValue = AudioRemoteDataSource(
+        download: unimplemented("\(Self.self).download")
+    )
+
+    static let previewValue = AudioRemoteDataSource(
+        download: unimplemented("\(Self.self).download")
+    )
+}
+
 
 extension DependencyValues {
     var audioRemoteDataSource: AudioRemoteDataSource {
