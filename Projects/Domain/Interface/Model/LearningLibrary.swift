@@ -145,7 +145,7 @@ public extension LearningLibrary {
             LevelSummary(
                 id: "level_1",
                 level: 1,
-                name: "씨앗",
+                name: "입문",
                 difficulty: "A1",
                 totalLessons: 42,
                 completedLessons: 4,
@@ -154,7 +154,7 @@ public extension LearningLibrary {
             LevelSummary(
                 id: "level_2",
                 level: 2,
-                name: "새싹",
+                name: "기초",
                 difficulty: "A2",
                 totalLessons: 39,
                 completedLessons: 0,
@@ -173,7 +173,7 @@ public extension LearningLibrary {
             LevelSummary(
                 id: "level_3",
                 level: 3,
-                name: "줄기",
+                name: "활용",
                 difficulty: "B1",
                 totalLessons: 99,
                 completedLessons: 0,
@@ -192,7 +192,7 @@ public extension LearningLibrary {
             LevelSummary(
                 id: "level_4",
                 level: 4,
-                name: "가지",
+                name: "확장",
                 difficulty: "B2",
                 totalLessons: 64,
                 completedLessons: 0,
@@ -211,40 +211,20 @@ public extension LearningLibrary {
             LevelSummary(
                 id: "level_5",
                 level: 5,
-                name: "꽃",
+                name: "심화",
                 difficulty: "C1",
-                totalLessons: 50,
+                totalLessons: 0,
                 completedLessons: 0,
-                lessons: (1...50).map { i in
-                    LessonProgress(
-                        id: "\(244 + i)",
-                        lessonNumber: i,
-                        totalWords: i == 50 ? 15 : 20,
-                        status: .notStarted,
-                        lastStudiedAt: nil,
-                        accuracy: nil,
-                        wordsCompleted: 0
-                    )
-                }
+                lessons: []
             ),
             LevelSummary(
                 id: "level_6",
                 level: 6,
-                name: "나무",
+                name: "완성",
                 difficulty: "C2",
-                totalLessons: 30,
+                totalLessons: 0,
                 completedLessons: 0,
-                lessons: (1...30).map { i in
-                    LessonProgress(
-                        id: "\(294 + i)",
-                        lessonNumber: i,
-                        totalWords: i == 30 ? 18 : 20,
-                        status: .notStarted,
-                        lastStudiedAt: nil,
-                        accuracy: nil,
-                        wordsCompleted: 0
-                    )
-                }
+                lessons: []
             ),
         ])
     }()
