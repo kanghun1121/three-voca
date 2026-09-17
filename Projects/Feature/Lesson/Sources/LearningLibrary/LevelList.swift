@@ -5,21 +5,21 @@ import DomainInterface
 
 struct LevelList: View {
     let levels: [LevelSummary]
-    let expandedLevelIDs: Set<String>
     let onLevelTapped: (String) -> Void
-    let onLessonTapped: (String) -> Void
 
     var body: some View {
-        LazyVStack(spacing: 14) {
+        LazyVStack(spacing: 0) {
             ForEach(levels) { level in
-                LevelCard(level: level, isExpanded: expandedLevelIDs.contains(level.id)) {
+                StageRow(level: level) {
                     onLevelTapped(level.id)
-                } onLessonTapped: { id in
-                    onLessonTapped(id)
+                }
+                if level.id != levels.last?.id {
+                    Rectangle()
+                        .fill(DesignSystemAsset.hairline.swiftUIColor)
+                        .frame(height: 1)
                 }
             }
         }
-        .padding(.horizontal, 18)
-        .padding(.bottom, 24)
+        .padding(.horizontal, 24)
     }
 }

@@ -34,6 +34,18 @@ final class LevelSummaryStatusTests: XCTestCase {
 
         XCTAssertEqual(level.progressRatio, 0.3, accuracy: 0.0001)
     }
+
+    func test_totalLessons가_0이면_isLocked는_true다() {
+        let level = makeLevel(completedLessons: 0, totalLessons: 0)
+
+        XCTAssertTrue(level.isLocked)
+    }
+
+    func test_totalLessons가_1이상이면_isLocked는_false다() {
+        let level = makeLevel(completedLessons: 0, totalLessons: 1)
+
+        XCTAssertFalse(level.isLocked)
+    }
 }
 
 private func makeLevel(completedLessons: Int, totalLessons: Int) -> LevelSummary {
