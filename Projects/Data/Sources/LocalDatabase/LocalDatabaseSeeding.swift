@@ -21,7 +21,9 @@ extension LocalDatabaseSeeding: DependencyKey {
     // 마이그레이션이 실패 → 스토어가 지워지고 재생성됐는데도 이 플래그만 true로 남아 재시딩이
     // 스킵되는 회귀가 실제로 발생했다(Lesson이 하나도 안 보임, 2026-09-11). 버전 문자열을
     // 새로 바꿔 모든 기기가 이번 업데이트에서 무조건 한 번 재시딩하도록 강제한다.
-    static let seededFlagKey = "localDatabase.seeded.v3"
+    // #123에서 v3 → v4로 올렸다: levels.json의 name_ko(씨앗~완성 → 입문~완성)를 바꿨는데,
+    // 시딩은 최초 1회만 실행되므로 플래그를 범프하지 않으면 기존 설치 기기에 반영되지 않는다.
+    static let seededFlagKey = "localDatabase.seeded.v4"
 
     public static let liveValue = LocalDatabaseSeeding(seedIfNeeded: {
         guard !UserDefaults.standard.bool(forKey: Self.seededFlagKey) else { return }
