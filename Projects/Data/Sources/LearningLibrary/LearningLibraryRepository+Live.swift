@@ -25,7 +25,7 @@ extension LearningLibraryRepository: DependencyKey {
         func refreshLearningLibrary() async throws {
             var summaries: [LevelSummary] = []
             for entity in try await levelDataSource.allLevels() {
-                let lessons = try await lessonDataSource.lessons(levelID: entity.id)
+                let lessons = try await lessonDataSource.lessons(entity.id)
                 summaries.append(entity.toStaticSummary(lessons: lessons))
             }
 

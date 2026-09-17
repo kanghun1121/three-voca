@@ -24,8 +24,8 @@ extension LearningHistoryRepository: DependencyKey {
             guard let completions = try? await historyDataSource.allCompletions() else { return }
             var records: [LessonCompletionRecord] = []
             for entity in completions {
-                guard let lessonEntity = try? await lessonDataSource.lesson(id: entity.lessonID),
-                      let levelEntity = try? await levelDataSource.level(id: lessonEntity.levelID) else { continue }
+                guard let lessonEntity = try? await lessonDataSource.lesson(entity.lessonID),
+                      let levelEntity = try? await levelDataSource.level(lessonEntity.levelID) else { continue }
                 records.append(LessonCompletionRecord(
                     lessonID: String(entity.lessonID),
                     levelName: levelEntity.nameKo,
@@ -39,7 +39,7 @@ extension LearningHistoryRepository: DependencyKey {
 
         @Sendable
         func pushHistoryUpdate(lessonID: Int) async {
-            guard let entity = try? await historyDataSource.completion(lessonID: lessonID) else { return }
+            guard let entity = try? await historyDataSource.completion(lessonID) else { return }
             await historyStore.set(id: String(lessonID), LearningHistory(
                 firstCompletedAt: firstCompletedAtFormatter.string(from: entity.firstCompletedAt),
                 studyCount: entity.studyCount
@@ -68,7 +68,7 @@ extension LearningHistoryRepository: DependencyKey {
                 }
             },
             complete: { lessonID in
-                try await historyDataSource.recordCompletion(lessonID: lessonID, at: Date())
+                try await historyDataSource.recordCompletion(lessonID, Date())
                 await pushCompletionsUpdate()
                 await pushHistoryUpdate(lessonID: lessonID)
             }

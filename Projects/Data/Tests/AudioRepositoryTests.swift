@@ -31,6 +31,7 @@ final class AudioRepositoryTests: XCTestCase {
         let result = await withDependencies {
             $0.audioMemoryCache = memory
             $0.audioDiskCache = AudioDiskCache(directory: directory)
+            $0.audioRemoteDataSource = .liveValue
         } operation: {
             await AudioRepository.liveValue.url("apple")
         }
@@ -46,6 +47,7 @@ final class AudioRepositoryTests: XCTestCase {
         let result = await withDependencies {
             $0.audioMemoryCache = memory
             $0.audioDiskCache = disk
+            $0.audioRemoteDataSource = .liveValue
         } operation: {
             await AudioRepository.liveValue.url("apple")
         }
@@ -59,6 +61,7 @@ final class AudioRepositoryTests: XCTestCase {
         let result = await withDependencies {
             $0.audioMemoryCache = AudioMemoryCache()
             $0.audioDiskCache = AudioDiskCache(directory: directory)
+            $0.audioRemoteDataSource = .liveValue
         } operation: {
             await AudioRepository.liveValue.url("ghost")
         }
@@ -76,6 +79,7 @@ final class AudioRepositoryTests: XCTestCase {
         let result = await withDependencies {
             $0.audioMemoryCache = memory
             $0.audioDiskCache = AudioDiskCache(directory: directory)
+            $0.audioRemoteDataSource = .liveValue
             $0.httpClient = StubHTTPClient { _ in
                 XCTFail("메모리 hit이면 네트워크를 호출하면 안 된다")
                 throw NetworkError.invalidRequest
@@ -95,6 +99,7 @@ final class AudioRepositoryTests: XCTestCase {
         let result = await withDependencies {
             $0.audioMemoryCache = memory
             $0.audioDiskCache = disk
+            $0.audioRemoteDataSource = .liveValue
             $0.httpClient = StubHTTPClient { _ in
                 XCTFail("디스크 hit이면 네트워크를 호출하면 안 된다")
                 throw NetworkError.invalidRequest
@@ -116,6 +121,7 @@ final class AudioRepositoryTests: XCTestCase {
         let result = await withDependencies {
             $0.audioMemoryCache = memory
             $0.audioDiskCache = disk
+            $0.audioRemoteDataSource = .liveValue
             $0.httpClient = StubHTTPClient { _ in mp3Data }
         } operation: {
             await AudioRepository.liveValue.fetchURL("apple", "https://example.com/apple.mp3")
@@ -135,6 +141,7 @@ final class AudioRepositoryTests: XCTestCase {
         let result = await withDependencies {
             $0.audioMemoryCache = memory
             $0.audioDiskCache = disk
+            $0.audioRemoteDataSource = .liveValue
             $0.httpClient = StubHTTPClient { _ in throw NetworkError.invalidResponse }
         } operation: {
             await AudioRepository.liveValue.fetchURL("apple", "https://example.com/apple.mp3")
@@ -157,6 +164,7 @@ final class AudioRepositoryTests: XCTestCase {
         let result = await withDependencies {
             $0.audioMemoryCache = memory
             $0.audioDiskCache = disk
+            $0.audioRemoteDataSource = .liveValue
             $0.httpClient = StubHTTPClient { _ in newData }
         } operation: {
             await AudioRepository.liveValue.fetchURL("apple", "https://example.com/new-apple.mp3")
@@ -175,6 +183,7 @@ final class AudioRepositoryTests: XCTestCase {
         let result = await withDependencies {
             $0.audioMemoryCache = memory
             $0.audioDiskCache = AudioDiskCache(directory: directory)
+            $0.audioRemoteDataSource = .liveValue
             $0.httpClient = StubHTTPClient { _ in newData }
         } operation: {
             await AudioRepository.liveValue.fetchURL("apple", "https://example.com/new-apple.mp3")
@@ -195,6 +204,7 @@ final class AudioRepositoryTests: XCTestCase {
         await withDependencies {
             $0.audioMemoryCache = memory
             $0.audioDiskCache = disk
+            $0.audioRemoteDataSource = .liveValue
             $0.httpClient = StubHTTPClient { url in Data(url.absoluteString.utf8) }
         } operation: {
             await AudioRepository.liveValue.prefetch(words)
@@ -212,6 +222,7 @@ final class AudioRepositoryTests: XCTestCase {
         let result = await withDependencies {
             $0.audioMemoryCache = AudioMemoryCache()
             $0.audioDiskCache = AudioDiskCache(directory: directory)
+            $0.audioRemoteDataSource = .liveValue
             $0.httpClient = StubHTTPClient { _ in
                 XCTFail("잘못된 URL이면 네트워크를 시도하면 안 된다")
                 throw NetworkError.invalidRequest
@@ -236,6 +247,7 @@ final class AudioRepositoryTests: XCTestCase {
         await withDependencies {
             $0.audioMemoryCache = memory
             $0.audioDiskCache = disk
+            $0.audioRemoteDataSource = .liveValue
             $0.httpClient = StubHTTPClient { _ in networkData }
         } operation: {
             await AudioRepository.liveValue.prefetch([
@@ -263,6 +275,7 @@ final class AudioRepositoryTests: XCTestCase {
         await withDependencies {
             $0.audioMemoryCache = memory
             $0.audioDiskCache = disk
+            $0.audioRemoteDataSource = .liveValue
             $0.httpClient = StubHTTPClient { url in
                 if url.absoluteString.contains("fail") {
                     throw NetworkError.invalidResponse
@@ -298,6 +311,7 @@ final class AudioRepositoryTests: XCTestCase {
         let firstResult = await withDependencies {
             $0.audioMemoryCache = memory
             $0.audioDiskCache = disk
+            $0.audioRemoteDataSource = .liveValue
             $0.httpClient = StubHTTPClient { _ in networkData }
         } operation: {
             await AudioRepository.liveValue.fetchURL("apple", "https://example.com/apple.mp3")
@@ -311,6 +325,7 @@ final class AudioRepositoryTests: XCTestCase {
         let secondResult = await withDependencies {
             $0.audioMemoryCache = freshMemory
             $0.audioDiskCache = disk
+            $0.audioRemoteDataSource = .liveValue
             $0.httpClient = StubHTTPClient { _ in
                 XCTFail("disk hit이면 network를 타면 안 된다")
                 throw NetworkError.invalidRequest
@@ -329,6 +344,7 @@ final class AudioRepositoryTests: XCTestCase {
         let thirdResult = await withDependencies {
             $0.audioMemoryCache = freshMemory
             $0.audioDiskCache = AudioDiskCache(directory: unusedDiskDirectory)
+            $0.audioRemoteDataSource = .liveValue
             $0.httpClient = StubHTTPClient { _ in
                 XCTFail("memory hit이면 network를 타면 안 된다")
                 throw NetworkError.invalidRequest
@@ -349,6 +365,7 @@ final class AudioRepositoryTests: XCTestCase {
         await withDependencies {
             $0.audioMemoryCache = memory
             $0.audioDiskCache = disk
+            $0.audioRemoteDataSource = .liveValue
             $0.httpClient = StubHTTPClient { _ in payload }
         } operation: {
             // 순차적으로 하나씩 prefetch해 mtime 순서를 보장한다(동시 다운로드 시 순서 보장 불가).
@@ -361,7 +378,6 @@ final class AudioRepositoryTests: XCTestCase {
         XCTAssertNotNil(disk.url(for: "new"))
         XCTAssertNotNil(disk.url(for: "newest"))
     }
-
 }
 
 /// 테스트 전용 — `data(from:)`만 스텁으로 대체하고 나머지 메서드는 쓰이지 않으므로 실패로 던진다.

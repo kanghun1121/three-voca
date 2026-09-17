@@ -8,7 +8,7 @@ extension WordRepository: DependencyKey {
     public static let liveValue = WordRepository(
         fetchDetail: { id in
             @Dependency(\.wordLocalDataSource) var wordLocalDataSource
-            return try await wordLocalDataSource.wordDetail(id: numericID(from: id))
+            return try await wordLocalDataSource.wordDetail(numericID(from: id))
         },
         prefetchDetails: { _ in
             // 로컬 DB 조회는 네트워크 왕복이 없어 "미리 당겨오기"가 더 이상 의미가 없다.

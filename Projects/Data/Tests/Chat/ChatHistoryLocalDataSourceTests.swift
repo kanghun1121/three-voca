@@ -7,7 +7,7 @@ final class ChatHistoryLocalDataSourceTests: XCTestCase {
         let db = LocalDatabaseTestContext()
 
         let messages = try await db.run {
-            try await ChatHistoryLocalDataSource().messages(wordID: "word_001")
+            try await ChatHistoryLocalDataSource.liveValue.messages("word_001")
         }
 
         XCTAssertTrue(messages.isEmpty)
@@ -21,10 +21,10 @@ final class ChatHistoryLocalDataSourceTests: XCTestCase {
         ]
 
         try await db.run {
-            try await ChatHistoryLocalDataSource().save(wordID: "word_001", messages: payloads)
+            try await ChatHistoryLocalDataSource.liveValue.save("word_001", payloads)
         }
         let messages = try await db.run {
-            try await ChatHistoryLocalDataSource().messages(wordID: "word_001")
+            try await ChatHistoryLocalDataSource.liveValue.messages("word_001")
         }
 
         XCTAssertEqual(messages.map(\.content), ["질문", "답변"])
@@ -39,12 +39,12 @@ final class ChatHistoryLocalDataSourceTests: XCTestCase {
         ]
 
         try await db.run {
-            let dataSource = ChatHistoryLocalDataSource()
-            try await dataSource.save(wordID: "word_001", messages: firstSave)
-            try await dataSource.save(wordID: "word_001", messages: secondSave)
+            let dataSource = ChatHistoryLocalDataSource.liveValue
+            try await dataSource.save("word_001", firstSave)
+            try await dataSource.save("word_001", secondSave)
         }
         let messages = try await db.run {
-            try await ChatHistoryLocalDataSource().messages(wordID: "word_001")
+            try await ChatHistoryLocalDataSource.liveValue.messages("word_001")
         }
 
         XCTAssertEqual(messages.map(\.content), ["첫 질문", "첫 답변"])
@@ -54,13 +54,13 @@ final class ChatHistoryLocalDataSourceTests: XCTestCase {
         let db = LocalDatabaseTestContext()
 
         try await db.run {
-            let dataSource = ChatHistoryLocalDataSource()
-            try await dataSource.save(wordID: "word_001", messages: [ChatMessagePayload(role: "user", content: "word_001 질문")])
-            try await dataSource.save(wordID: "word_002", messages: [ChatMessagePayload(role: "user", content: "word_002 질문")])
+            let dataSource = ChatHistoryLocalDataSource.liveValue
+            try await dataSource.save("word_001", [ChatMessagePayload(role: "user", content: "word_001 질문")])
+            try await dataSource.save("word_002", [ChatMessagePayload(role: "user", content: "word_002 질문")])
         }
 
-        let word1Messages = try await db.run { try await ChatHistoryLocalDataSource().messages(wordID: "word_001") }
-        let word2Messages = try await db.run { try await ChatHistoryLocalDataSource().messages(wordID: "word_002") }
+        let word1Messages = try await db.run { try await ChatHistoryLocalDataSource.liveValue.messages("word_001") }
+        let word2Messages = try await db.run { try await ChatHistoryLocalDataSource.liveValue.messages("word_002") }
 
         XCTAssertEqual(word1Messages.map(\.content), ["word_001 질문"])
         XCTAssertEqual(word2Messages.map(\.content), ["word_002 질문"])

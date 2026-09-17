@@ -16,18 +16,22 @@ import Dependencies
 /// 캡처해버리면 이후 테스트가 `withDependencies { $0.httpClient = ... }`로 주입한 스텁이
 /// 반영되지 않는다.
 struct AudioRemoteDataSource: Sendable {
-    func download(from remoteURL: URL) async throws -> Data {
-        @Dependency(\.httpClient) var httpClient
-        return try await httpClient.data(from: remoteURL)
-    }
+    var download: @Sendable (_ remoteURL: URL) async throws -> Data
 }
 
 extension AudioRemoteDataSource: DependencyKey {
-    static let liveValue = AudioRemoteDataSource()
+    static let liveValue = AudioRemoteDataSource(
+        download: { remoteURL in
+            @Dependency(\.httpClient) var httpClient
+            return try await httpClient.data(from: remoteURL)
+        }
+    )
 }
 
 extension AudioRemoteDataSource: TestDependencyKey {
-    static let testValue = AudioRemoteDataSource()
+    static let testValue = AudioRemoteDataSource(
+        download: unimplemented("\(Self.self).download")
+    )
 }
 
 extension DependencyValues {
