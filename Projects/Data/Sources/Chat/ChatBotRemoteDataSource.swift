@@ -14,55 +14,63 @@ struct ChatBotRemoteDataSource: Sendable {
     /// 두 번째 이후 전송) `wordID`는 무시하고 안 보낸다. 응답 헤더 `x-conversation-id`는 SSE
     /// 바디가 아니라 첫 응답 시점에만 오므로(`SSEClienting.stream`의 `onResponse` 콜백), 그
     /// 값을 스트림 바디와 분리된 사이드 채널로 상위(`onConversationID`)에 전달한다.
-    func streamEvents(
-        message: String,
-        wordID: String,
-        sseID: String,
-        conversationID: String?,
-        onConversationID: @escaping @Sendable (String) -> Void
-    ) async -> AsyncThrowingStream<ChatProxyStreamEvent, Error> {
-        @Dependency(\.sseClient) var sseClient
-        @Dependency(\.tokenProvider) var tokenProvider
-        let accessToken = await tokenProvider.getAccessToken()
-        let request = ChatProxyRequest(
-            messages: [ChatProxyMessage(role: "user", content: message)],
-            sseID: sseID,
-            wordID: conversationID == nil ? wordID : nil,
-            conversationID: conversationID,
-            accessToken: accessToken
-        )
-        let frames = sseClient.stream(request) { response in
-            if let newConversationID = response.value(forHTTPHeaderField: "x-conversation-id") {
-                onConversationID(newConversationID)
-            }
-        }
-        return ChatProxySSEParser.parse(frames: frames)
-    }
+    var streamEvents: @Sendable (
+        _ message: String,
+        _ wordID: String,
+        _ sseID: String,
+        _ conversationID: String?,
+        _ onConversationID: @escaping @Sendable (String) -> Void
+    ) async -> AsyncThrowingStream<ChatProxyStreamEvent, Error>
 
-    func fetchHistory(wordID: String) async throws -> ChatHistoryResponseDTO {
-        // \.httpClient의 liveValue는 NoopInterceptor라 인증 헤더가 전혀 안 붙는다(HTTPClienting+Live.swift).
-        // TokenRefreshInterceptor(Authorization 헤더 자동 부착 + 401 시 리프레시)를 타려면
-        // authenticatedHTTPClient를 써야 한다 — AuthRemoteDataSource.exchangeAppleToken과 동일 패턴.
-        @Dependency(\.authenticatedHTTPClient) var httpClient
-        return try await httpClient.request(ChatHistoryRequest(wordID: wordID))
-    }
+    var fetchHistory: @Sendable (_ wordID: String) async throws -> ChatHistoryResponseDTO
 
     /// 진행 중인 전송을 서버에 "정지"시킨다 — 로컬에서 스트림 Task를 취소하는 게 아니라, 서버가
     /// 지금까지 생성한 내용을 마저 SSE로 흘려보낸 뒤 스스로 스트림을 닫도록 요청하는 것이다
     /// (서브플랜 10). idempotent라 실패해도 크게 문제되지 않는다 — 호출부(ChatRepository+Live)가
     /// best-effort로 처리한다.
-    func stop(sseID: String) async throws {
-        @Dependency(\.authenticatedHTTPClient) var httpClient
-        try await httpClient.request(ChatStopRequest(sseID: sseID))
-    }
+    var stop: @Sendable (_ sseID: String) async throws -> Void
 }
 
 extension ChatBotRemoteDataSource: DependencyKey {
-    static let liveValue = ChatBotRemoteDataSource()
+    static let liveValue = ChatBotRemoteDataSource(
+        streamEvents: { message, wordID, sseID, conversationID, onConversationID in
+            @Dependency(\.sseClient) var sseClient
+            @Dependency(\.tokenProvider) var tokenProvider
+            let accessToken = await tokenProvider.getAccessToken()
+            let request = ChatProxyRequest(
+                messages: [ChatProxyMessage(role: "user", content: message)],
+                sseID: sseID,
+                wordID: conversationID == nil ? wordID : nil,
+                conversationID: conversationID,
+                accessToken: accessToken
+            )
+            let frames = sseClient.stream(request) { response in
+                if let newConversationID = response.value(forHTTPHeaderField: "x-conversation-id") {
+                    onConversationID(newConversationID)
+                }
+            }
+            return ChatProxySSEParser.parse(frames: frames)
+        },
+        fetchHistory: { wordID in
+            // \.httpClient의 liveValue는 NoopInterceptor라 인증 헤더가 전혀 안 붙는다(HTTPClienting+Live.swift).
+            // TokenRefreshInterceptor(Authorization 헤더 자동 부착 + 401 시 리프레시)를 타려면
+            // authenticatedHTTPClient를 써야 한다 — AuthRemoteDataSource.exchangeAppleToken과 동일 패턴.
+            @Dependency(\.authenticatedHTTPClient) var httpClient
+            return try await httpClient.request(ChatHistoryRequest(wordID: wordID))
+        },
+        stop: { sseID in
+            @Dependency(\.authenticatedHTTPClient) var httpClient
+            try await httpClient.request(ChatStopRequest(sseID: sseID))
+        }
+    )
 }
 
 extension ChatBotRemoteDataSource: TestDependencyKey {
-    static let testValue = ChatBotRemoteDataSource()
+    static let testValue = ChatBotRemoteDataSource(
+        streamEvents: unimplemented("\(Self.self).streamEvents", placeholder: AsyncThrowingStream { $0.finish() }),
+        fetchHistory: unimplemented("\(Self.self).fetchHistory"),
+        stop: unimplemented("\(Self.self).stop")
+    )
 }
 
 extension DependencyValues {

@@ -4,42 +4,49 @@ import SwiftData
 import Dependencies
 
 struct LearningHistoryLocalDataSource: Sendable {
-    @Dependency(\.localDatabaseContext) private var context
-
-    func allCompletions() async throws -> [LearningHistoryEntity] {
-        try await context.fetch(FetchDescriptor<LearningHistoryEntity>())
-    }
-
-    func completion(lessonID: Int) async throws -> LearningHistoryEntity? {
-        try await context.fetch(FetchDescriptor<LearningHistoryEntity>(
-            predicate: #Predicate { $0.lessonID == lessonID }
-        )).first
-    }
-
+    var allCompletions: @Sendable () async throws -> [LearningHistoryEntity]
+    var completion: @Sendable (_ lessonID: Int) async throws -> LearningHistoryEntity?
     /// 이미 완료 기록이 있으면 studyCount 증가 + lastStudiedAt 갱신(firstCompletedAt은 보존),
     /// 없으면 새로 생성한다. fetch→분기→save를 하나의 액터 격리 안에서 수행해 원자성을 보장한다.
-    func recordCompletion(lessonID: Int, at date: Date) async throws {
-        try await context.withContext { modelContext in
-            let existing = try modelContext.fetch(FetchDescriptor<LearningHistoryEntity>(
-                predicate: #Predicate { $0.lessonID == lessonID }
-            )).first
-            if let existing {
-                existing.lastStudiedAt = date
-                existing.studyCount += 1
-            } else {
-                modelContext.insert(LearningHistoryEntity(lessonID: lessonID, firstCompletedAt: date, lastStudiedAt: date, studyCount: 1))
-            }
-            try modelContext.save()
-        }
-    }
+    var recordCompletion: @Sendable (_ lessonID: Int, _ date: Date) async throws -> Void
 }
 
 extension LearningHistoryLocalDataSource: DependencyKey {
-    static let liveValue = LearningHistoryLocalDataSource()
+    static let liveValue = LearningHistoryLocalDataSource(
+        allCompletions: {
+            @Dependency(\.localDatabaseContext) var context
+            return try await context.fetch(FetchDescriptor<LearningHistoryEntity>())
+        },
+        completion: { lessonID in
+            @Dependency(\.localDatabaseContext) var context
+            return try await context.fetch(FetchDescriptor<LearningHistoryEntity>(
+                predicate: #Predicate { $0.lessonID == lessonID }
+            )).first
+        },
+        recordCompletion: { lessonID, date in
+            @Dependency(\.localDatabaseContext) var context
+            try await context.withContext { modelContext in
+                let existing = try modelContext.fetch(FetchDescriptor<LearningHistoryEntity>(
+                    predicate: #Predicate { $0.lessonID == lessonID }
+                )).first
+                if let existing {
+                    existing.lastStudiedAt = date
+                    existing.studyCount += 1
+                } else {
+                    modelContext.insert(LearningHistoryEntity(lessonID: lessonID, firstCompletedAt: date, lastStudiedAt: date, studyCount: 1))
+                }
+                try modelContext.save()
+            }
+        }
+    )
 }
 
 extension LearningHistoryLocalDataSource: TestDependencyKey {
-    static let testValue = LearningHistoryLocalDataSource()
+    static let testValue = LearningHistoryLocalDataSource(
+        allCompletions: unimplemented("\(Self.self).allCompletions"),
+        completion: unimplemented("\(Self.self).completion"),
+        recordCompletion: unimplemented("\(Self.self).recordCompletion")
+    )
 }
 
 extension DependencyValues {

@@ -21,10 +21,19 @@ struct LocalDatabaseTestContext {
         try await context.save()
     }
 
-    /// `localDatabaseContext`를 주입한 채 operation을 실행한다.
+    /// `localDatabaseContext`와 그걸 쓰는 로컬 DataSource들을 `.liveValue`로 주입한 채
+    /// operation을 실행한다. `#122`부터 `testValue`가 전부 `unimplemented`가 되어, 여기서
+    /// 명시적으로 `.liveValue`를 주입하지 않으면(XCTest 기본 동작상 미오버라이드 의존성은
+    /// `testValue`로 해석됨) `LessonRepository.liveValue`처럼 이 DataSource들을 간접
+    /// 사용하는 상위 계층 테스트가 트랩된다.
     func run<T>(_ operation: () async throws -> T) async throws -> T {
         try await withDependencies {
             $0.localDatabaseContext = context
+            $0.wordLocalDataSource = .liveValue
+            $0.levelLocalDataSource = .liveValue
+            $0.lessonLocalDataSource = .liveValue
+            $0.learningHistoryLocalDataSource = .liveValue
+            $0.chatHistoryLocalDataSource = .liveValue
         } operation: {
             try await operation()
         }

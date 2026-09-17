@@ -21,10 +21,10 @@ extension ChatRepository: DependencyKey {
 
                         do {
                             let events = await chatDataSource.streamEvents(
-                                message: message,
-                                wordID: wordID,
-                                sseID: sseID,
-                                conversationID: conversationID
+                                message,
+                                wordID,
+                                sseID,
+                                conversationID
                             ) { newConversationID in
                                 Task { await sessionStore.setConversationID(newConversationID, wordID: wordID) }
                             }
@@ -40,12 +40,12 @@ extension ChatRepository: DependencyKey {
                             await sessionStore.endSend(wordID: wordID)
 
                             if !fullText.isEmpty {
-                                let existing = (try? await localDataSource.messages(wordID: wordID)) ?? []
+                                let existing = (try? await localDataSource.messages(wordID)) ?? []
                                 let newPayloads = [
                                     ChatMessagePayload(role: "user", content: message),
                                     ChatMessagePayload(role: "assistant", content: fullText),
                                 ]
-                                try? await localDataSource.save(wordID: wordID, messages: existing + newPayloads)
+                                try? await localDataSource.save(wordID, existing + newPayloads)
                             }
                         } catch {
                             continuation.finish(throwing: error)
@@ -58,12 +58,12 @@ extension ChatRepository: DependencyKey {
             fetchHistory: { wordID in
                 AsyncThrowingStream { continuation in
                     let task = Task {
-                        if let cachedMessages = try? await localDataSource.messages(wordID: wordID).map { try $0.toDomain() } {
+                        if let cachedMessages = try? await localDataSource.messages(wordID).map({ try $0.toDomain() }) {
                             continuation.yield(ChatHistory(messages: cachedMessages))
                         }
 
-                        if let remoteHistory = try? await chatDataSource.fetchHistory(wordID: wordID).toDomain() {
-                            try? await localDataSource.save(wordID: wordID, messages: remoteHistory.messages.map(\.asPayload))
+                        if let remoteHistory = try? await chatDataSource.fetchHistory(wordID).toDomain() {
+                            try? await localDataSource.save(wordID, remoteHistory.messages.map(\.asPayload))
                             continuation.yield(remoteHistory)
                         }
 
@@ -74,7 +74,7 @@ extension ChatRepository: DependencyKey {
             },
             stopStreaming: { wordID in
                 guard let sseID = await sessionStore.activeSSEID(for: wordID) else { return }
-                try await chatDataSource.stop(sseID: sseID)
+                try await chatDataSource.stop(sseID)
             }
         )
     }()
