@@ -3,36 +3,36 @@ import XCTest
 @testable import FeatureLesson
 import DomainInterface
 
-final class LessonProgressCellStatusTests: XCTestCase {
+final class SessionStatusTests: XCTestCase {
     func test_빈배열이면_빈배열을_반환한다() {
         let lessons: [LessonProgress] = []
 
-        XCTAssertEqual(lessons.cellStatuses, [])
+        XCTAssertEqual(lessons.sessionStatuses, [])
     }
 
-    func test_완료된레슨은_done이고_완료되지않은_첫레슨은_current이며_나머지는_todo다() {
+    func test_완료된세션은_completed이고_완료되지않은_첫세션은_active이며_나머지는_upcoming이다() {
         let lessons = [
             makeLesson(status: .completed),
             makeLesson(status: .notStarted),
             makeLesson(status: .notStarted)
         ]
 
-        XCTAssertEqual(lessons.cellStatuses, [.done, .current, .todo])
+        XCTAssertEqual(lessons.sessionStatuses, [.completed, .active, .upcoming])
     }
 
-    func test_모두_완료된레슨이면_current없이_전부_done이다() {
+    func test_모두_완료된세션이면_active없이_전부_completed다() {
         let lessons = [
             makeLesson(status: .completed),
             makeLesson(status: .completed)
         ]
 
-        XCTAssertEqual(lessons.cellStatuses, [.done, .done])
+        XCTAssertEqual(lessons.sessionStatuses, [.completed, .completed])
     }
 
-    func test_단일_미완료레슨은_current다() {
+    func test_단일_미완료세션은_active다() {
         let lessons = [makeLesson(status: .notStarted)]
 
-        XCTAssertEqual(lessons.cellStatuses, [.current])
+        XCTAssertEqual(lessons.sessionStatuses, [.active])
     }
 }
 
