@@ -22,15 +22,7 @@ extension LearningLibraryRepository: TestDependencyKey {
         refresh: unimplemented("\(Self.self).refresh")
     )
 
-    public static let previewValue = LearningLibraryRepository(
-        stream: {
-            AsyncStream { continuation in
-                continuation.yield(.previewFixture)
-                continuation.finish()
-            }
-        },
-        refresh: {}
-    )
+    public static let previewValue = testValue
 }
 
 public extension DependencyValues {

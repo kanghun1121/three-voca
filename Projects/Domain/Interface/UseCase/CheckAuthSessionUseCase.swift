@@ -16,9 +16,7 @@ extension CheckAuthSessionUseCase: TestDependencyKey {
         execute: unimplemented("\(Self.self).execute")
     )
 
-    public static let previewValue = CheckAuthSessionUseCase(
-        execute: { true }
-    )
+    public static let previewValue = testValue
 }
 
 public extension DependencyValues {

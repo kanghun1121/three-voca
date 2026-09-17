@@ -23,14 +23,6 @@ public struct KeychainClient: Sendable {
     }
 }
 
-extension KeychainClient: TestDependencyKey {
-    public static let testValue = KeychainClient(
-        save: unimplemented("\(Self.self).save"),
-        load: unimplemented("\(Self.self).load"),
-        delete: unimplemented("\(Self.self).delete")
-    )
-}
-
 public extension DependencyValues {
     var keychainClient: KeychainClient {
         get { self[KeychainClient.self] }

@@ -9,7 +9,16 @@ import Dependencies
 final class LearningLibraryViewModelTests: XCTestCase {
     func test_초기값은_loading이다() {
         let vm = withDependencies {
-            $0.learningLibraryRepository = .previewValue
+            // [TestDependencyKey 제거] previewValue도 unimplemented가 되어 인라인
+            $0.learningLibraryRepository = LearningLibraryRepository(
+                stream: {
+                    AsyncStream { continuation in
+                        continuation.yield(.previewFixture)
+                        continuation.finish()
+                    }
+                },
+                refresh: {}
+            )
         } operation: {
             LearningLibraryViewModel()
         }

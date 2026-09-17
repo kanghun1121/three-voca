@@ -46,16 +46,7 @@ extension AuthSessionRepository: TestDependencyKey {
         stateStream: unimplemented("\(Self.self).stateStream")
     )
 
-    public static let previewValue = AuthSessionRepository(
-        getAccessToken: { nil },
-        setAccessToken: { _ in },
-        getRefreshToken: { "" },
-        setRefreshToken: { _ in },
-        clear: {},
-        deleteAccount: {},
-        refreshAccessToken: { false },
-        stateStream: { AsyncStream { $0.finish() } }
-    )
+    public static let previewValue = testValue
 }
 
 public extension DependencyValues {

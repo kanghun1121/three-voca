@@ -21,6 +21,8 @@ extension AudioPlayerRepository: TestDependencyKey {
         play: unimplemented("\(Self.self).play", placeholder: ()),
         stop: unimplemented("\(Self.self).stop")
     )
+
+    public static let previewValue = testValue
 }
 
 public extension DependencyValues {

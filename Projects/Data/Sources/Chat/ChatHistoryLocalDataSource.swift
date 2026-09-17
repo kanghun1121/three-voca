@@ -36,12 +36,6 @@ extension ChatHistoryLocalDataSource: DependencyKey {
     )
 }
 
-extension ChatHistoryLocalDataSource: TestDependencyKey {
-    static let testValue = ChatHistoryLocalDataSource(
-        messages: unimplemented("\(Self.self).messages"),
-        save: unimplemented("\(Self.self).save")
-    )
-}
 
 extension DependencyValues {
     var chatHistoryLocalDataSource: ChatHistoryLocalDataSource {

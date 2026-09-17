@@ -54,14 +54,6 @@ extension WordLocalDataSource: DependencyKey {
     )
 }
 
-extension WordLocalDataSource: TestDependencyKey {
-    static let testValue = WordLocalDataSource(
-        wordDetail: unimplemented("\(Self.self).wordDetail"),
-        lessonWords: unimplemented("\(Self.self).lessonWords"),
-        insertWords: unimplemented("\(Self.self).insertWords", placeholder: ()),
-        insertExamples: unimplemented("\(Self.self).insertExamples", placeholder: ())
-    )
-}
 
 extension DependencyValues {
     var wordLocalDataSource: WordLocalDataSource {

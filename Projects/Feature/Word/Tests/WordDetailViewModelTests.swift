@@ -1,5 +1,6 @@
 import XCTest
 
+import Core
 import DomainInterface
 
 import Dependencies
@@ -32,6 +33,8 @@ final class WordDetailViewModelTests: XCTestCase {
     func test_requestIfNeeded_실패시_viewState가_error로_전환된다() async {
         let vm = withDependencies {
             $0.wordRepository.fetchDetail = { _ in throw MockError.stub }
+            // [TestDependencyKey 제거] LoggerClient가 더 이상 testValue를 제공하지 않아 명시 오버라이딩
+            $0.loggerClient = LoggerClient(debug: { _, _ in }, error: { _, _ in })
         } operation: {
             WordDetailViewModel(wordIDs: ["word_001"], initialIndex: 0)
         }

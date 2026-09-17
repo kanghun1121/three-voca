@@ -17,6 +17,8 @@ extension LessonRepository: TestDependencyKey {
     public static let testValue = LessonRepository(
         fetchDetail: unimplemented("\(Self.self).fetchDetail")
     )
+
+    public static let previewValue = testValue
 }
 
 public extension DependencyValues {

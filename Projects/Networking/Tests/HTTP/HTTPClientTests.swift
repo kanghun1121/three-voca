@@ -8,11 +8,26 @@
 
 import XCTest
 
+import Core
 import NetworkingInterface
+
+import Dependencies
 
 @testable import Networking
 
 final class HTTPClientTests: XCTestCase {
+    // [TestDependencyKey 제거] LoggerClient가 더 이상 testValue를 제공하지 않아 명시
+    // 오버라이딩 — HTTPClient가 매 요청마다 NetworkLogger를 통해 loggerClient를
+    // 로컬에서 새로 읽으므로(구조체 프로퍼티로 캡처하지 않음), 클래스 전체 테스트에
+    // 적용되도록 invokeTest()에서 오버라이딩한다.
+    override func invokeTest() {
+        withDependencies {
+            $0.loggerClient = LoggerClient(debug: { _, _ in }, error: { _, _ in })
+        } operation: {
+            super.invokeTest()
+        }
+    }
+
     override func tearDownWithError() throws {
         MockURLProtocol.requestHandler = nil
     }

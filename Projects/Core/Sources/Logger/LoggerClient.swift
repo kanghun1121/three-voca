@@ -15,13 +15,6 @@ public struct LoggerClient: Sendable {
     }
 }
 
-extension LoggerClient: TestDependencyKey {
-    public static let testValue = LoggerClient(
-        debug: { _, _ in },
-        error: { _, _ in }
-    )
-}
-
 public extension DependencyValues {
     var loggerClient: LoggerClient {
         get { self[LoggerClient.self] }

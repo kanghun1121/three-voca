@@ -16,9 +16,7 @@ extension SignInWithAppleUseCase: TestDependencyKey {
         execute: unimplemented("\(Self.self).execute")
     )
 
-    public static let previewValue = SignInWithAppleUseCase(
-        execute: { _ in .previewFixture }
-    )
+    public static let previewValue = testValue
 }
 
 public extension DependencyValues {

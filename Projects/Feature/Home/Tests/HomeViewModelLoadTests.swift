@@ -9,7 +9,22 @@ import Dependencies
 final class HomeViewModelLoadTests: XCTestCase {
     func test_초기값은_기록이_비어있다() {
         let vm = withDependencies {
-            $0.learningHistoryRepository = .previewValue
+            // [TestDependencyKey 제거] previewValue도 unimplemented가 되어 인라인
+            $0.learningHistoryRepository = LearningHistoryRepository(
+                stream: { _ in
+                    AsyncStream { continuation in
+                        continuation.yield(.preview)
+                        continuation.finish()
+                    }
+                },
+                streamAllCompletions: {
+                    AsyncStream { continuation in
+                        continuation.yield([.previewFixture])
+                        continuation.finish()
+                    }
+                },
+                complete: { _ in }
+            )
         } operation: {
             HomeViewModel()
         }
