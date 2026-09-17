@@ -23,7 +23,10 @@ extension TokenProvider: TestDependencyKey {
         refreshAccessToken: unimplemented("\(Self.self).refreshAccessToken", placeholder: false)
     )
 
-    public static let previewValue = testValue
+    public static let previewValue = TokenProvider(
+        getAccessToken: unimplemented("\(Self.self).getAccessToken", placeholder: nil),
+        refreshAccessToken: unimplemented("\(Self.self).refreshAccessToken", placeholder: false)
+    )
 }
 
 public extension DependencyValues {

@@ -22,7 +22,10 @@ extension WordRepository: TestDependencyKey {
         prefetchDetails: unimplemented("\(Self.self).prefetchDetails", placeholder: ())
     )
 
-    public static let previewValue = testValue
+    public static let previewValue = WordRepository(
+        fetchDetail: unimplemented("\(Self.self).fetchDetail"),
+        prefetchDetails: unimplemented("\(Self.self).prefetchDetails", placeholder: ())
+    )
 }
 
 public extension DependencyValues {

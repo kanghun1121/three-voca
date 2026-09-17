@@ -20,7 +20,9 @@ extension LoadLessonDetailUseCase: TestDependencyKey {
         execute: unimplemented("\(Self.self).execute")
     )
 
-    public static let previewValue = testValue
+    public static let previewValue = LoadLessonDetailUseCase(
+        execute: unimplemented("\(Self.self).execute")
+    )
 }
 
 public extension DependencyValues {

@@ -88,3 +88,17 @@ extension KeychainClient: DependencyKey {
         }
     )
 }
+
+extension KeychainClient: TestDependencyKey {
+    public static let testValue = KeychainClient(
+        save: unimplemented("\(Self.self).save"),
+        load: unimplemented("\(Self.self).load"),
+        delete: unimplemented("\(Self.self).delete")
+    )
+
+    public static let previewValue = KeychainClient(
+        save: unimplemented("\(Self.self).save"),
+        load: unimplemented("\(Self.self).load"),
+        delete: unimplemented("\(Self.self).delete")
+    )
+}

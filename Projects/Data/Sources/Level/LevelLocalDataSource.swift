@@ -35,6 +35,20 @@ extension LevelLocalDataSource: DependencyKey {
     )
 }
 
+extension LevelLocalDataSource: TestDependencyKey {
+    static let testValue = LevelLocalDataSource(
+        level: unimplemented("\(Self.self).level"),
+        allLevels: unimplemented("\(Self.self).allLevels"),
+        insertLevels: unimplemented("\(Self.self).insertLevels", placeholder: ())
+    )
+
+    static let previewValue = LevelLocalDataSource(
+        level: unimplemented("\(Self.self).level"),
+        allLevels: unimplemented("\(Self.self).allLevels"),
+        insertLevels: unimplemented("\(Self.self).insertLevels", placeholder: ())
+    )
+}
+
 
 extension DependencyValues {
     var levelLocalDataSource: LevelLocalDataSource {
