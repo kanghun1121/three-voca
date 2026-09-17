@@ -71,7 +71,22 @@ final class HomeViewModelSelectedDateTests: XCTestCase {
 
     func test_selectedDayRecords_기록이_없는_날짜를_선택하면_빈_배열을_반환한다() async {
         let vm = withDependencies {
-            $0.learningHistoryRepository = .previewValue
+            // [TestDependencyKey 제거] previewValue도 unimplemented가 되어 인라인
+            $0.learningHistoryRepository = LearningHistoryRepository(
+                stream: { _ in
+                    AsyncStream { continuation in
+                        continuation.yield(.preview)
+                        continuation.finish()
+                    }
+                },
+                streamAllCompletions: {
+                    AsyncStream { continuation in
+                        continuation.yield([.previewFixture])
+                        continuation.finish()
+                    }
+                },
+                complete: { _ in }
+            )
         } operation: {
             HomeViewModel(today: today)
         }

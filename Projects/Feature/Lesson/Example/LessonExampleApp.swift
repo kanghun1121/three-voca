@@ -15,7 +15,16 @@ struct LessonExampleApp: App {
                     continuation.finish()
                 }
             }
-            $0.learningLibraryRepository = .previewValue
+            // [TestDependencyKey 제거] previewValue도 unimplemented가 되어 인라인
+            $0.learningLibraryRepository = LearningLibraryRepository(
+                stream: {
+                    AsyncStream { continuation in
+                        continuation.yield(.previewFixture)
+                        continuation.finish()
+                    }
+                },
+                refresh: {}
+            )
         }
     }
 

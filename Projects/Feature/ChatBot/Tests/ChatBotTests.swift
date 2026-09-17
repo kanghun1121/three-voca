@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 
+import Core
 import DomainInterface
 
 import Dependencies
@@ -127,6 +128,8 @@ final class ChatBotTests: XCTestCase {
         let viewModel = withDependencies {
             $0.chatRepository.streamMessage = { _, _ in Self.failingStream() }
             $0.chatRepository.stopStreaming = { _ in secondBox.finish() }
+            // [TestDependencyKey 제거] LoggerClient가 더 이상 testValue를 제공하지 않아 명시 오버라이딩
+            $0.loggerClient = LoggerClient(debug: { _, _ in }, error: { _, _ in })
         } operation: {
             ChatBotViewModel(context: .init(
                 wordID: "word_001",

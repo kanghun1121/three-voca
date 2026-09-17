@@ -51,7 +51,8 @@ final class WordGameViewModelTests: XCTestCase {
             $0.lessonRepository.fetchDetail = { _ in lesson }
             $0.audioRepository.prefetch = { _ in }
             $0.completeLessonUseCase.execute = { id in await recorder.record(id) }
-            $0.soundClient = .previewValue
+            // [TestDependencyKey 제거] 기존 SoundClient.previewValue 인라인
+            $0.soundClient = SoundClient(playCorrect: {}, playWrong: {})
         } operation: {
             let vm = WordGameViewModel(
                 lessonID: "5",
