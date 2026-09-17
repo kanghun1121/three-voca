@@ -23,9 +23,7 @@ extension CompleteLessonUseCase: TestDependencyKey {
         execute: unimplemented("\(Self.self).execute")
     )
 
-    public static let previewValue = CompleteLessonUseCase(
-        execute: { _ in }
-    )
+    public static let previewValue = testValue
 }
 
 public extension DependencyValues {

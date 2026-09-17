@@ -11,7 +11,8 @@ struct WordGameExampleApp: App {
         prepareDependencies {
             $0.lessonRepository.fetchDetail = { id in .previewWith3Words(id: id) }
             $0.audioRepository.prefetch = { _ in }
-            $0.completeLessonUseCase = .previewValue
+            // [TestDependencyKey 제거] previewValue도 unimplemented가 되어 인라인
+            $0.completeLessonUseCase = CompleteLessonUseCase(execute: { _ in })
         }
     }
 

@@ -14,6 +14,8 @@ public enum SSEClientKey: TestDependencyKey {
         "\(Self.self).testValue",
         placeholder: NoopSSEClient()
     )
+
+    public static let previewValue: any SSEClienting = testValue
 }
 
 private struct NoopSSEClient: SSEClienting {
