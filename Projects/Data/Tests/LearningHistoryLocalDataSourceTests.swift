@@ -8,11 +8,11 @@ final class LearningHistoryLocalDataSourceTests: XCTestCase {
         let date = Date()
 
         try await db.run {
-            try await LearningHistoryLocalDataSource().recordCompletion(lessonID: 1, at: date)
+            try await LearningHistoryLocalDataSource.liveValue.recordCompletion(1, date)
         }
 
         let completions = try await db.run {
-            try await LearningHistoryLocalDataSource().allCompletions()
+            try await LearningHistoryLocalDataSource.liveValue.allCompletions()
         }
 
         XCTAssertEqual(completions.count, 1)
@@ -28,13 +28,13 @@ final class LearningHistoryLocalDataSourceTests: XCTestCase {
         let secondDate = Date(timeIntervalSince1970: 1000)
 
         try await db.run {
-            let dataSource = LearningHistoryLocalDataSource()
-            try await dataSource.recordCompletion(lessonID: 1, at: firstDate)
-            try await dataSource.recordCompletion(lessonID: 1, at: secondDate)
+            let dataSource = LearningHistoryLocalDataSource.liveValue
+            try await dataSource.recordCompletion(1, firstDate)
+            try await dataSource.recordCompletion(1, secondDate)
         }
 
         let completions = try await db.run {
-            try await LearningHistoryLocalDataSource().allCompletions()
+            try await LearningHistoryLocalDataSource.liveValue.allCompletions()
         }
 
         XCTAssertEqual(completions.count, 1)
@@ -47,7 +47,7 @@ final class LearningHistoryLocalDataSourceTests: XCTestCase {
         let db = LocalDatabaseTestContext()
 
         let completions = try await db.run {
-            try await LearningHistoryLocalDataSource().allCompletions()
+            try await LearningHistoryLocalDataSource.liveValue.allCompletions()
         }
 
         XCTAssertTrue(completions.isEmpty)

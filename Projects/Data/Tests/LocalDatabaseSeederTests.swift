@@ -10,9 +10,9 @@ final class LocalDatabaseSeederTests: XCTestCase {
         let db = LocalDatabaseTestContext()
         try await db.run {
             try await LocalDatabaseSeeder.seed(
-                word: WordLocalDataSource(),
-                lesson: LessonLocalDataSource(),
-                level: LevelLocalDataSource(),
+                word: WordLocalDataSource.liveValue,
+                lesson: LessonLocalDataSource.liveValue,
+                level: LevelLocalDataSource.liveValue,
                 context: db.context
             )
         }
@@ -95,9 +95,9 @@ final class LocalDatabaseSeederTests: XCTestCase {
         let db = try await seed()
         try await db.run {
             try await LocalDatabaseSeeder.seed(
-                word: WordLocalDataSource(),
-                lesson: LessonLocalDataSource(),
-                level: LevelLocalDataSource(),
+                word: WordLocalDataSource.liveValue,
+                lesson: LessonLocalDataSource.liveValue,
+                level: LevelLocalDataSource.liveValue,
                 context: db.context
             )
         }

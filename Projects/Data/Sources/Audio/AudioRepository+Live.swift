@@ -21,7 +21,7 @@ extension AudioRepository: DependencyKey {
                             return
                         }
                         guard let remoteURL = URL(string: audioUrlString) else { return }
-                        guard let data = try? await remoteDataSource.download(from: remoteURL) else { return }
+                        guard let data = try? await remoteDataSource.download(remoteURL) else { return }
                         guard let fileURL = try? diskCache.store(data, for: term, remoteURLString: audioUrlString) else { return }
                         await memoryCache.markReady(term, url: fileURL, remoteURLString: audioUrlString)
                     }
@@ -39,7 +39,7 @@ extension AudioRepository: DependencyKey {
                 return diskURL
             }
             guard let remoteURL = URL(string: audioUrlString) else { return nil }
-            guard let data = try? await remoteDataSource.download(from: remoteURL) else { return nil }
+            guard let data = try? await remoteDataSource.download(remoteURL) else { return nil }
             guard let fileURL = try? diskCache.store(data, for: term, remoteURLString: audioUrlString) else { return nil }
             await memoryCache.markReady(term, url: fileURL, remoteURLString: audioUrlString)
             return fileURL

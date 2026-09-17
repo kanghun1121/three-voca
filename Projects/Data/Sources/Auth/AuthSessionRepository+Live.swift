@@ -56,7 +56,7 @@ extension AuthSessionRepository: DependencyKey {
                 }
                 @Dependency(\.authSessionRemoteDataSource) var remoteDataSource
                 @Dependency(\.authLocalDataSource) var localDataSource
-                try await remoteDataSource.deleteAccount(accessToken: token)
+                try await remoteDataSource.deleteAccount(token)
                 await store.clear()
                 continuation.yield(.unauthenticated)
                 try localDataSource.deleteRefreshToken()
