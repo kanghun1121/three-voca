@@ -1,15 +1,15 @@
 import Foundation
 
+import Core
+
 import Dependencies
+import DependenciesMacros
 
 /// 앱 시작 시 로컬 DB 시딩을 트리거하는 유일한 진입점. `AppViewModel`이 직접 호출하므로
 /// public이다. 최초 1회만 실제로 시딩하고, 이미 시딩됐으면 즉시 반환한다(<1ms).
+@DependencyClient
 public struct LocalDatabaseSeeding: Sendable {
     public var seedIfNeeded: @Sendable () async throws -> Void
-
-    public init(seedIfNeeded: @escaping @Sendable () async throws -> Void) {
-        self.seedIfNeeded = seedIfNeeded
-    }
 }
 
 extension LocalDatabaseSeeding: DependencyKey {
@@ -37,11 +37,8 @@ extension LocalDatabaseSeeding: DependencyKey {
     })
 }
 
-extension LocalDatabaseSeeding: TestDependencyKey {
-    public static let testValue = LocalDatabaseSeeding(
-        seedIfNeeded: unimplemented("\(Self.self).seedIfNeeded", placeholder: ())
-    )
-}
+extension LocalDatabaseSeeding: UnimplementedTestDependencyKey {}
+
 
 public extension DependencyValues {
     var localDatabaseSeeding: LocalDatabaseSeeding {

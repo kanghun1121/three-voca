@@ -14,6 +14,11 @@ public enum HTTPClientKey: TestDependencyKey {
         "\(Self.self).testValue",
         placeholder: NoopHTTPClient()
     )
+
+    public static let previewValue: any HTTPClienting = unimplemented(
+        "\(Self.self).previewValue",
+        placeholder: NoopHTTPClient()
+    )
 }
 
 private struct NoopHTTPClient: HTTPClienting {

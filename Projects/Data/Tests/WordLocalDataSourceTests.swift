@@ -8,7 +8,7 @@ final class WordLocalDataSourceTests: XCTestCase {
 
         do {
             try await db.run {
-                _ = try await WordLocalDataSource().wordDetail(id: 999_999)
+                _ = try await WordLocalDataSource.liveValue.wordDetail(999_999)
             }
             XCTFail("에러를 던졌어야 한다")
         } catch LocalDatabaseError.wordNotFound(999_999) {
@@ -37,7 +37,7 @@ final class WordLocalDataSourceTests: XCTestCase {
         )
 
         let detail = try await db.run {
-            try await WordLocalDataSource().wordDetail(id: 1)
+            try await WordLocalDataSource.liveValue.wordDetail(1)
         }
 
         XCTAssertEqual(detail.definitions.map(\.meaning), ["첫번째", "두번째", "세번째"])
@@ -59,7 +59,7 @@ final class WordLocalDataSourceTests: XCTestCase {
         )
 
         let result = try await db.run {
-            try await WordLocalDataSource().lessonWords(ids: [10, 20])
+            try await WordLocalDataSource.liveValue.lessonWords([10, 20])
         }
 
         XCTAssertEqual(result[10]?.term, "b")
@@ -72,7 +72,7 @@ final class WordLocalDataSourceTests: XCTestCase {
         let db = LocalDatabaseTestContext()
 
         let result = try await db.run {
-            try await WordLocalDataSource().lessonWords(ids: [])
+            try await WordLocalDataSource.liveValue.lessonWords([])
         }
 
         XCTAssertTrue(result.isEmpty)

@@ -26,7 +26,8 @@ final class WordListViewModelTests: XCTestCase {
 
     func test_load_성공시_viewState가_loaded이며_Mock데이터가_올바르다() async {
         let vm = withDependencies {
-            $0.loadLessonWordsUseCase = .previewValue
+            // [TestDependencyKey 제거] previewValue도 unimplemented가 되어 인라인
+            $0.loadLessonWordsUseCase = LoadLessonWordsUseCase(execute: { id in .preview(id: id) })
             $0.learningHistoryRepository.stream = { _ in makeHistoryStream([]) }
         } operation: {
             WordListViewModel(lessonID: "t")
@@ -46,7 +47,8 @@ final class WordListViewModelTests: XCTestCase {
 
     func test_load_이력_스트림이_값을_방출하면_learningHistory가_채워진다() async {
         let vm = withDependencies {
-            $0.loadLessonWordsUseCase = .previewValue
+            // [TestDependencyKey 제거] previewValue도 unimplemented가 되어 인라인
+            $0.loadLessonWordsUseCase = LoadLessonWordsUseCase(execute: { id in .preview(id: id) })
             $0.learningHistoryRepository.stream = { _ in makeHistoryStream([.preview]) }
         } operation: {
             WordListViewModel(lessonID: "t")
@@ -60,7 +62,8 @@ final class WordListViewModelTests: XCTestCase {
 
     func test_load_이력_스트림이_값을_안_주면_learningHistory는_nil로_남는다() async {
         let vm = withDependencies {
-            $0.loadLessonWordsUseCase = .previewValue
+            // [TestDependencyKey 제거] previewValue도 unimplemented가 되어 인라인
+            $0.loadLessonWordsUseCase = LoadLessonWordsUseCase(execute: { id in .preview(id: id) })
             $0.learningHistoryRepository.stream = { _ in makeHistoryStream([]) }
         } operation: {
             WordListViewModel(lessonID: "t")
@@ -75,7 +78,8 @@ final class WordListViewModelTests: XCTestCase {
     func test_load_2회_호출해도_이력_구독은_1번만_실행된다() async {
         let historyCounter = CallCounter()
         let vm = withDependencies {
-            $0.loadLessonWordsUseCase = .previewValue
+            // [TestDependencyKey 제거] previewValue도 unimplemented가 되어 인라인
+            $0.loadLessonWordsUseCase = LoadLessonWordsUseCase(execute: { id in .preview(id: id) })
             $0.learningHistoryRepository.stream = { _ in
                 historyCounter.increment()
                 return makeHistoryStream([])
@@ -94,7 +98,8 @@ final class WordListViewModelTests: XCTestCase {
 
     func test_didTapWord_잘못된ID_호출시_destination이_nil이다() async {
         let vm = withDependencies {
-            $0.loadLessonWordsUseCase = .previewValue
+            // [TestDependencyKey 제거] previewValue도 unimplemented가 되어 인라인
+            $0.loadLessonWordsUseCase = LoadLessonWordsUseCase(execute: { id in .preview(id: id) })
             $0.learningHistoryRepository.stream = { _ in makeHistoryStream([]) }
         } operation: {
             WordListViewModel(lessonID: "t")
@@ -108,7 +113,8 @@ final class WordListViewModelTests: XCTestCase {
 
     func test_didTapWord_정상ID_호출시_destination이_wordDetail로_설정된다() async {
         let vm = withDependencies {
-            $0.loadLessonWordsUseCase = .previewValue
+            // [TestDependencyKey 제거] previewValue도 unimplemented가 되어 인라인
+            $0.loadLessonWordsUseCase = LoadLessonWordsUseCase(execute: { id in .preview(id: id) })
             $0.learningHistoryRepository.stream = { _ in makeHistoryStream([]) }
         } operation: {
             WordListViewModel(lessonID: "t")

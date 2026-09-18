@@ -1,21 +1,17 @@
 import Foundation
 
+import Core
+
 import Dependencies
+import DependenciesMacros
 
 /// 인증/회원가입 API를 추상화한 포트. 실제 구현은 Data 모듈에서 제공한다.
+@DependencyClient
 public struct AuthRepository: Sendable {
     public var signInWithApple: @Sendable (_ identityToken: String) async throws -> AuthToken
-
-    public init(signInWithApple: @escaping @Sendable (_ identityToken: String) async throws -> AuthToken) {
-        self.signInWithApple = signInWithApple
-    }
 }
 
-extension AuthRepository: TestDependencyKey {
-    public static let testValue = AuthRepository(
-        signInWithApple: unimplemented("\(Self.self).signInWithApple")
-    )
-}
+extension AuthRepository: UnimplementedTestDependencyKey {}
 
 public extension DependencyValues {
     var authRepository: AuthRepository {

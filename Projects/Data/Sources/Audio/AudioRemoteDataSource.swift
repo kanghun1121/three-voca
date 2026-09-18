@@ -1,8 +1,10 @@
 import Foundation
 
+import Core
 import NetworkingInterface
 
 import Dependencies
+import DependenciesMacros
 
 /// 서버에 있는 mp3 원본을 바이트로 받아오는 계층. URLSession을 직접 쓰지 않고 `httpClient`
 /// 의존성에 위임한다. mp3 URL은 서버가 내려준 완성형 절대 URL(쿼리스트링에 서명 토큰이
@@ -15,20 +17,22 @@ import Dependencies
 /// `liveValue`는 프로세스 전체에서 딱 한 번만 평가되는 `static let`이라, 만약 생성 시점에
 /// 캡처해버리면 이후 테스트가 `withDependencies { $0.httpClient = ... }`로 주입한 스텁이
 /// 반영되지 않는다.
+@DependencyClient
 struct AudioRemoteDataSource: Sendable {
-    func download(from remoteURL: URL) async throws -> Data {
-        @Dependency(\.httpClient) var httpClient
-        return try await httpClient.data(from: remoteURL)
-    }
+    var download: @Sendable (_ remoteURL: URL) async throws -> Data
 }
 
 extension AudioRemoteDataSource: DependencyKey {
-    static let liveValue = AudioRemoteDataSource()
+    static let liveValue = AudioRemoteDataSource(
+        download: { remoteURL in
+            @Dependency(\.httpClient) var httpClient
+            return try await httpClient.data(from: remoteURL)
+        }
+    )
 }
 
-extension AudioRemoteDataSource: TestDependencyKey {
-    static let testValue = AudioRemoteDataSource()
-}
+extension AudioRemoteDataSource: UnimplementedTestDependencyKey {}
+
 
 extension DependencyValues {
     var audioRemoteDataSource: AudioRemoteDataSource {

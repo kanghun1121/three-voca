@@ -25,7 +25,8 @@ final class MultipleChoiceViewModelTests: XCTestCase {
         )
         let word = lessonWord
         let vm = withDependencies {
-            $0.soundClient = .previewValue
+            // [TestDependencyKey 제거] 기존 SoundClient.previewValue 인라인
+            $0.soundClient = SoundClient(playCorrect: {}, playWrong: {})
             $0.audioRepository.url = { _ in nil }
             $0.audioRepository.fetchURL = { _, _ in nil }
             $0.audioPlayerRepository.play = { _ in }
@@ -75,7 +76,8 @@ final class MultipleChoiceViewModelTests: XCTestCase {
             return lessonWord
         }
         let vm = withDependencies {
-            $0.soundClient = .previewValue
+            // [TestDependencyKey 제거] 기존 SoundClient.previewValue 인라인
+            $0.soundClient = SoundClient(playCorrect: {}, playWrong: {})
             $0.audioRepository.url = { _ in nil }
             $0.audioRepository.fetchURL = { _, _ in nil }
             $0.audioPlayerRepository.play = { _ in }
@@ -139,7 +141,8 @@ final class MultipleChoiceViewModelTests: XCTestCase {
             return lessonWord
         }
         let vm = withDependencies {
-            $0.soundClient = .previewValue
+            // [TestDependencyKey 제거] 기존 SoundClient.previewValue 인라인
+            $0.soundClient = SoundClient(playCorrect: {}, playWrong: {})
             $0.audioRepository.url = { _ in nil }
             $0.audioRepository.fetchURL = { _, _ in nil }
             $0.audioPlayerRepository.play = { _ in }
@@ -180,7 +183,8 @@ final class MultipleChoiceViewModelTests: XCTestCase {
         )
         let word = lessonWord
         let vm = withDependencies {
-            $0.soundClient = .previewValue
+            // [TestDependencyKey 제거] 기존 SoundClient.previewValue 인라인
+            $0.soundClient = SoundClient(playCorrect: {}, playWrong: {})
             $0.audioRepository.url = { _ in nil }
             $0.audioRepository.fetchURL = { _, _ in nil }
             $0.audioPlayerRepository.play = { _ in }
@@ -215,7 +219,8 @@ final class MultipleChoiceViewModelTests: XCTestCase {
         )
         let word = lessonWord
         let vm = withDependencies {
-            $0.soundClient = .previewValue
+            // [TestDependencyKey 제거] 기존 SoundClient.previewValue 인라인
+            $0.soundClient = SoundClient(playCorrect: {}, playWrong: {})
             $0.audioRepository.url = { _ in nil }
             $0.audioRepository.fetchURL = { _, _ in nil }
             $0.audioPlayerRepository.play = { _ in }
@@ -254,7 +259,8 @@ final class MultipleChoiceViewModelTests: XCTestCase {
         let word = lessonWord
         var isClosed = false
         let vm = withDependencies {
-            $0.soundClient = .previewValue
+            // [TestDependencyKey 제거] 기존 SoundClient.previewValue 인라인
+            $0.soundClient = SoundClient(playCorrect: {}, playWrong: {})
             $0.audioRepository.url = { _ in nil }
             $0.audioRepository.fetchURL = { _, _ in nil }
             $0.audioPlayerRepository.play = { _ in }
@@ -290,7 +296,8 @@ final class MultipleChoiceViewModelTests: XCTestCase {
         let word = lessonWord
         var isCompleted = false
         let vm = withDependencies {
-            $0.soundClient = .previewValue
+            // [TestDependencyKey 제거] 기존 SoundClient.previewValue 인라인
+            $0.soundClient = SoundClient(playCorrect: {}, playWrong: {})
             $0.audioRepository.url = { _ in nil }
             $0.audioRepository.fetchURL = { _, _ in nil }
             $0.audioPlayerRepository.play = { _ in }
