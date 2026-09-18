@@ -1,8 +1,12 @@
 import Foundation
 import SwiftData
 
-import Dependencies
+import Core
 
+import Dependencies
+import DependenciesMacros
+
+@DependencyClient
 struct LearningHistoryLocalDataSource: Sendable {
     var allCompletions: @Sendable () async throws -> [LearningHistoryEntity]
     var completion: @Sendable (_ lessonID: Int) async throws -> LearningHistoryEntity?
@@ -41,19 +45,7 @@ extension LearningHistoryLocalDataSource: DependencyKey {
     )
 }
 
-extension LearningHistoryLocalDataSource: TestDependencyKey {
-    static let testValue = LearningHistoryLocalDataSource(
-        allCompletions: unimplemented("\(Self.self).allCompletions"),
-        completion: unimplemented("\(Self.self).completion"),
-        recordCompletion: unimplemented("\(Self.self).recordCompletion")
-    )
-
-    static let previewValue = LearningHistoryLocalDataSource(
-        allCompletions: unimplemented("\(Self.self).allCompletions"),
-        completion: unimplemented("\(Self.self).completion"),
-        recordCompletion: unimplemented("\(Self.self).recordCompletion")
-    )
-}
+extension LearningHistoryLocalDataSource: UnimplementedTestDependencyKey {}
 
 
 extension DependencyValues {

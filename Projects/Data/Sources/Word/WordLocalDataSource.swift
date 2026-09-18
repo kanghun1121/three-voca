@@ -1,12 +1,15 @@
 import Foundation
 import SwiftData
 
+import Core
 import DomainInterface
 
 import Dependencies
+import DependenciesMacros
 
 /// `WordEntity`(뜻 포함)+`WordExampleEntity`(전부 단어에 종속된 데이터)를 전담한다.
 /// 단어 조회 API는 삭제되었으므로 Remote 대응 타입은 없다.
+@DependencyClient
 struct WordLocalDataSource: Sendable {
     var wordDetail: @Sendable (_ id: Int) async throws -> WordDetail
     /// Lesson 조립용 배치 조회 — 반환되는 딕셔너리엔 순서 정보가 없으므로, 호출부(Lesson
@@ -54,21 +57,7 @@ extension WordLocalDataSource: DependencyKey {
     )
 }
 
-extension WordLocalDataSource: TestDependencyKey {
-    static let testValue = WordLocalDataSource(
-        wordDetail: unimplemented("\(Self.self).wordDetail"),
-        lessonWords: unimplemented("\(Self.self).lessonWords"),
-        insertWords: unimplemented("\(Self.self).insertWords", placeholder: ()),
-        insertExamples: unimplemented("\(Self.self).insertExamples", placeholder: ())
-    )
-
-    static let previewValue = WordLocalDataSource(
-        wordDetail: unimplemented("\(Self.self).wordDetail"),
-        lessonWords: unimplemented("\(Self.self).lessonWords"),
-        insertWords: unimplemented("\(Self.self).insertWords", placeholder: ()),
-        insertExamples: unimplemented("\(Self.self).insertExamples", placeholder: ())
-    )
-}
+extension WordLocalDataSource: UnimplementedTestDependencyKey {}
 
 
 extension DependencyValues {

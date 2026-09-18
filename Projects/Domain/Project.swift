@@ -5,7 +5,7 @@ let project = Project.makeModule(
     name: "Domain",
     targets: [
         .domain(interface: .init(
-            dependencies: [.dependencies]
+            dependencies: [.dependencies, .core, .dependenciesMacros]
         )),
         .domain(implements: .init(
             dependencies: [

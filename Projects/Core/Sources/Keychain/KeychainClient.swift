@@ -2,25 +2,17 @@ import Foundation
 import Security
 
 import Dependencies
+import DependenciesMacros
 
 public enum KeychainKey: String {
     case refreshToken = "com.fivevoca.refreshToken"
 }
 
+@DependencyClient
 public struct KeychainClient: Sendable {
     public var save: @Sendable (KeychainKey, String) throws -> Void
     public var load: @Sendable (KeychainKey) throws -> String
     public var delete: @Sendable (KeychainKey) throws -> Void
-
-    public init(
-        save: @escaping @Sendable (KeychainKey, String) throws -> Void,
-        load: @escaping @Sendable (KeychainKey) throws -> String,
-        delete: @escaping @Sendable (KeychainKey) throws -> Void
-    ) {
-        self.save = save
-        self.load = load
-        self.delete = delete
-    }
 }
 
 public extension DependencyValues {
@@ -89,16 +81,4 @@ extension KeychainClient: DependencyKey {
     )
 }
 
-extension KeychainClient: TestDependencyKey {
-    public static let testValue = KeychainClient(
-        save: unimplemented("\(Self.self).save"),
-        load: unimplemented("\(Self.self).load"),
-        delete: unimplemented("\(Self.self).delete")
-    )
-
-    public static let previewValue = KeychainClient(
-        save: unimplemented("\(Self.self).save"),
-        load: unimplemented("\(Self.self).load"),
-        delete: unimplemented("\(Self.self).delete")
-    )
-}
+extension KeychainClient: UnimplementedTestDependencyKey {}

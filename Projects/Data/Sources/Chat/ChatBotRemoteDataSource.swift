@@ -1,14 +1,17 @@
 import Foundation
 
+import Core
 import NetworkingInterface
 
 import Dependencies
+import DependenciesMacros
 
 /// Supabase Edge Function 챗봇 프록시에 대한 원격 통신을 담당하는 계층 — 메시지 전송(SSE 스트림)과
 /// 대화 히스토리 조회(GET)를 함께 묶는다. 프록시가 Claude Messages API 이벤트를 가공 없이 그대로
 /// 전달하므로 스트림 이벤트 스키마 해석은 여전히 Claude 스키마 기준이다. 이 구조체 자체는 순수
 /// 원격 호출만 담당하고 로컬 저장은 모른다 — 로컬 캐싱(`ChatHistoryLocalDataSource`)은
 /// `ChatRepository+Live`가 이 데이터소스와 조합해서 처리한다(서브플랜 9).
+@DependencyClient
 struct ChatBotRemoteDataSource: Sendable {
     /// `wordID`/`conversationID`는 상호 배타적이다 — `conversationID`가 있으면(같은 화면 방문의
     /// 두 번째 이후 전송) `wordID`는 무시하고 안 보낸다. 응답 헤더 `x-conversation-id`는 SSE
@@ -20,7 +23,9 @@ struct ChatBotRemoteDataSource: Sendable {
         _ sseID: String,
         _ conversationID: String?,
         _ onConversationID: @escaping @Sendable (String) -> Void
-    ) async -> AsyncThrowingStream<ChatProxyStreamEvent, Error>
+    ) async -> AsyncThrowingStream<ChatProxyStreamEvent, Error> = { _, _, _, _, _ in
+        AsyncThrowingStream { $0.finish() }
+    }
 
     var fetchHistory: @Sendable (_ wordID: String) async throws -> ChatHistoryResponseDTO
 
@@ -65,19 +70,7 @@ extension ChatBotRemoteDataSource: DependencyKey {
     )
 }
 
-extension ChatBotRemoteDataSource: TestDependencyKey {
-    static let testValue = ChatBotRemoteDataSource(
-        streamEvents: unimplemented("\(Self.self).streamEvents", placeholder: AsyncThrowingStream { $0.finish() }),
-        fetchHistory: unimplemented("\(Self.self).fetchHistory"),
-        stop: unimplemented("\(Self.self).stop")
-    )
-
-    static let previewValue = ChatBotRemoteDataSource(
-        streamEvents: unimplemented("\(Self.self).streamEvents", placeholder: AsyncThrowingStream { $0.finish() }),
-        fetchHistory: unimplemented("\(Self.self).fetchHistory"),
-        stop: unimplemented("\(Self.self).stop")
-    )
-}
+extension ChatBotRemoteDataSource: UnimplementedTestDependencyKey {}
 
 
 extension DependencyValues {
