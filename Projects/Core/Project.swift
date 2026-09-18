@@ -4,7 +4,7 @@ import DependencyPlugin
 let project = Project.makeModule(
     name: "Core",
     targets: [
-        .core(factory: .init(dependencies: [.dependencies])),
+        .core(factory: .init(dependencies: [.dependencies, .dependenciesMacros])),
         .core(tests: .init(dependencies: [.core])),
     ]
 )

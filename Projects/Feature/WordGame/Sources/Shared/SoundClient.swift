@@ -1,7 +1,11 @@
 import AVFoundation
 
-import Dependencies
+import Core
 
+import Dependencies
+import DependenciesMacros
+
+@DependencyClient
 struct SoundClient {
     var playCorrect: @Sendable () -> Void
     var playWrong: @Sendable () -> Void
@@ -14,17 +18,7 @@ extension SoundClient: DependencyKey {
     )
 }
 
-extension SoundClient: TestDependencyKey {
-    static let testValue = SoundClient(
-        playCorrect: unimplemented("\(Self.self).playCorrect"),
-        playWrong: unimplemented("\(Self.self).playWrong")
-    )
-
-    static let previewValue = SoundClient(
-        playCorrect: unimplemented("\(Self.self).playCorrect"),
-        playWrong: unimplemented("\(Self.self).playWrong")
-    )
-}
+extension SoundClient: UnimplementedTestDependencyKey {}
 
 extension DependencyValues {
     var soundClient: SoundClient {
