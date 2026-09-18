@@ -8,7 +8,7 @@ struct ChunkChipsRow: View {
     let onChunkTapped: (Int) -> Void
 
     var body: some View {
-        FlowLayout(horizontalSpacing: 4, verticalSpacing: 5) {
+        FlowLayout(horizontalSpacing: 9, verticalSpacing: 9) {
             ForEach(chunks) { chunk in
                 ChunkView(
                     chunk: chunk,
