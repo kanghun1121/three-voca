@@ -9,11 +9,8 @@ struct ChunkReaderWordListView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Divider()
-                .background(DesignSystemAsset.borderSubtle.swiftUIColor)
-                .padding(.bottom, 15)
-
-            ChunkReaderBadge(icon: "text.book.closed.fill", label: "단어 뜻")
-                .padding(.bottom, 8)
+                .background(DesignSystemAsset.line.swiftUIColor)
+                .padding(.bottom, 14)
 
             ChunkReaderWordRows(wordAnnotations: wordAnnotations)
         }

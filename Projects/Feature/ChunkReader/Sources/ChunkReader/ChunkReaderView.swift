@@ -12,7 +12,7 @@ public struct ChunkReaderView: View {
 
     public var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
+            VStack(alignment: .leading, spacing: 22) {
                 ChunkReaderSentenceView(
                     chunks: viewModel.chunks,
                     selectedChunkID: viewModel.selectedChunkID,
