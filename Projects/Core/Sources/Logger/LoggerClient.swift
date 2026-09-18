@@ -1,18 +1,12 @@
 import OSLog
 
 import Dependencies
+import DependenciesMacros
 
+@DependencyClient
 public struct LoggerClient: Sendable {
     public var debug: @Sendable (_ category: String, _ message: String) -> Void
     public var error: @Sendable (_ category: String, _ message: String) -> Void
-
-    public init(
-        debug: @escaping @Sendable (_ category: String, _ message: String) -> Void,
-        error: @escaping @Sendable (_ category: String, _ message: String) -> Void
-    ) {
-        self.debug = debug
-        self.error = error
-    }
 }
 
 public extension DependencyValues {
@@ -35,14 +29,4 @@ extension LoggerClient: DependencyKey {
     )
 }
 
-extension LoggerClient: TestDependencyKey {
-    public static let testValue = LoggerClient(
-        debug: unimplemented("\(Self.self).debug"),
-        error: unimplemented("\(Self.self).error")
-    )
-
-    public static let previewValue = LoggerClient(
-        debug: unimplemented("\(Self.self).debug"),
-        error: unimplemented("\(Self.self).error")
-    )
-}
+extension LoggerClient: UnimplementedTestDependencyKey {}

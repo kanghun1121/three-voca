@@ -1,10 +1,13 @@
 import Foundation
 
+import Core
 import NetworkingInterface
 
 import Dependencies
+import DependenciesMacros
 
 /// 로그인된 세션의 갱신/삭제만 담당(로그인 자체는 `AuthRemoteDataSource`).
+@DependencyClient
 struct AuthSessionRemoteDataSource: Sendable {
     var refreshToken: @Sendable (_ refreshToken: String) async throws -> AuthTokenResponseDTO
     var deleteAccount: @Sendable (_ accessToken: String) async throws -> Void
@@ -23,17 +26,7 @@ extension AuthSessionRemoteDataSource: DependencyKey {
     )
 }
 
-extension AuthSessionRemoteDataSource: TestDependencyKey {
-    static let testValue = AuthSessionRemoteDataSource(
-        refreshToken: unimplemented("\(Self.self).refreshToken"),
-        deleteAccount: unimplemented("\(Self.self).deleteAccount")
-    )
-
-    static let previewValue = AuthSessionRemoteDataSource(
-        refreshToken: unimplemented("\(Self.self).refreshToken"),
-        deleteAccount: unimplemented("\(Self.self).deleteAccount")
-    )
-}
+extension AuthSessionRemoteDataSource: UnimplementedTestDependencyKey {}
 
 
 extension DependencyValues {

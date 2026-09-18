@@ -11,6 +11,7 @@ let project = Project.makeModule(
                 .core,
                 .networkingInterface,
                 .dependencies,
+                .dependenciesMacros,
             ]
         )),
         .data(tests: .init(

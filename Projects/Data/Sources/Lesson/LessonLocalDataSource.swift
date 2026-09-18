@@ -1,10 +1,14 @@
 import Foundation
 import SwiftData
 
+import Core
+
 import Dependencies
+import DependenciesMacros
 
 /// `LessonEntity`(정렬된 단어 id 목록 포함)만 소유한다. 단어 상세는 전혀 모른다 — 레슨에 속한
 /// 단어를 실제로 조립하는 건 `WordLocalDataSource`를 함께 쓰는 `LessonRepository+Live`의 몫이다.
+@DependencyClient
 struct LessonLocalDataSource: Sendable {
     var lesson: @Sendable (_ id: Int) async throws -> LessonEntity?
     /// lessonNumber 오름차순 — LearningLibrary 레벨 안에서 레슨이 노출되는 순서다.
@@ -34,19 +38,7 @@ extension LessonLocalDataSource: DependencyKey {
     )
 }
 
-extension LessonLocalDataSource: TestDependencyKey {
-    static let testValue = LessonLocalDataSource(
-        lesson: unimplemented("\(Self.self).lesson"),
-        lessons: unimplemented("\(Self.self).lessons"),
-        insertLessons: unimplemented("\(Self.self).insertLessons", placeholder: ())
-    )
-
-    static let previewValue = LessonLocalDataSource(
-        lesson: unimplemented("\(Self.self).lesson"),
-        lessons: unimplemented("\(Self.self).lessons"),
-        insertLessons: unimplemented("\(Self.self).insertLessons", placeholder: ())
-    )
-}
+extension LessonLocalDataSource: UnimplementedTestDependencyKey {}
 
 
 extension DependencyValues {

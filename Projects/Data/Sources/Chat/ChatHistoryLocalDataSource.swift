@@ -1,8 +1,12 @@
 import Foundation
 import SwiftData
 
-import Dependencies
+import Core
 
+import Dependencies
+import DependenciesMacros
+
+@DependencyClient
 struct ChatHistoryLocalDataSource: Sendable {
     var messages: @Sendable (_ wordID: String) async throws -> [ChatMessagePayload]
     /// 해당 wordID의 행이 있으면 메시지 배열을 통째로 교체하고, 없으면 새로 만든다. fetch→분기→save를
@@ -36,17 +40,7 @@ extension ChatHistoryLocalDataSource: DependencyKey {
     )
 }
 
-extension ChatHistoryLocalDataSource: TestDependencyKey {
-    static let testValue = ChatHistoryLocalDataSource(
-        messages: unimplemented("\(Self.self).messages"),
-        save: unimplemented("\(Self.self).save")
-    )
-
-    static let previewValue = ChatHistoryLocalDataSource(
-        messages: unimplemented("\(Self.self).messages"),
-        save: unimplemented("\(Self.self).save")
-    )
-}
+extension ChatHistoryLocalDataSource: UnimplementedTestDependencyKey {}
 
 
 extension DependencyValues {
