@@ -80,6 +80,15 @@ struct ChatArea: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .safeAreaInset(edge: .bottom) {
             ChatBotInputBarSection(viewModel: viewModel, isInputFocused: isInputFocused)
+                .background {
+                    // 입력바 뒤로 스크롤되는 콘텐츠를 아래로 갈수록 진하게 흐린다.
+                    // 입력바 위쪽(-24)까지 번지게 하고, 하단 안전영역까지 채운다.
+                    Rectangle()
+                        .fill(.ultraThinMaterial)
+                        .mask(LinearGradient(colors: [.clear, .black], startPoint: .top, endPoint: .bottom))
+                        .padding(.top, -24)
+                        .ignoresSafeArea(edges: .bottom)
+                }
         }
     }
 
