@@ -12,6 +12,12 @@ struct ChatArea: View {
     private static let bottomAnchorID = "chat-bottom-anchor"
     private static let bottomThreshold: CGFloat = 300
 
+    /// 스크롤 뷰 크기 변화와 함께, 변화 직전에 최하단 근처였는지를 비교하기 위한 스냅샷.
+    private struct ScrollViewport: Equatable {
+        var height: CGFloat
+        var isNearBottom: Bool
+    }
+
     var body: some View {
         ScrollViewReader { proxy in
             ScrollView {
@@ -60,6 +66,18 @@ struct ChatArea: View {
                     >= geometry.contentSize.height - Self.bottomThreshold
             } action: { _, isAtBottom in
                 isScrolledToBottom = isAtBottom
+            }
+            .onScrollGeometryChange(for: ScrollViewport.self) { geometry in
+                ScrollViewport(
+                    height: geometry.containerSize.height,
+                    isNearBottom: geometry.contentOffset.y + geometry.containerSize.height
+                        >= geometry.contentSize.height - Self.bottomThreshold
+                )
+            } action: { old, new in
+                // 키보드로 스크롤 뷰가 줄어들 때, 직전까지 최하단 근처였다면 최하단을 유지해
+                // 하단 콘텐츠가 키보드에 가려지지 않고 함께 올라오게 한다.
+                guard new.height < old.height, old.isNearBottom else { return }
+                proxy.scrollTo(Self.bottomAnchorID, anchor: .bottom)
             }
             .onChange(of: viewModel.messages.count) {
                 scrollToLastUserMessageIfStreaming(proxy: proxy)
