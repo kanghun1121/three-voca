@@ -79,16 +79,22 @@ struct ChatArea: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .safeAreaInset(edge: .bottom) {
-            ChatBotInputBarSection(viewModel: viewModel, isInputFocused: isInputFocused)
-                .background {
-                    // 입력바 뒤로 스크롤되는 콘텐츠를 아래로 갈수록 진하게 흐린다.
-                    // 입력바 위쪽(-24)까지 번지게 하고, 하단 안전영역까지 채운다.
-                    Rectangle()
-                        .fill(.ultraThinMaterial)
-                        .mask(LinearGradient(colors: [.clear, .black], startPoint: .top, endPoint: .bottom))
-                        .padding(.top, -24)
-                        .ignoresSafeArea(edges: .bottom)
-                }
+            VStack(spacing: 0) {
+                ChatBotInputBarSection(viewModel: viewModel, isInputFocused: isInputFocused)
+
+                // 입력바 아래(하단 여백 + 안전영역/키보드 뒤)에만 블러를 둔다.
+                // 입력바 쪽은 투명하게 시작해 아래로 갈수록 진해지므로 경계선이 보이지 않는다.
+                // 앱 컬러가 라이트 전용이라 다크 모드에서 머티리얼만 어두워지지 않게 고정한다.
+                Color.clear
+                    .frame(height: 14)
+                    .background {
+                        Rectangle()
+                            .fill(.ultraThinMaterial)
+                            .mask(LinearGradient(colors: [.clear, .black], startPoint: .top, endPoint: .bottom))
+                            .ignoresSafeArea(edges: .bottom)
+                    }
+                    .environment(\.colorScheme, .light)
+            }
         }
     }
 
