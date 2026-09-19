@@ -3,7 +3,7 @@ import SwiftUI
 import DesignSystem
 
 /// AI 응답 말풍선 — 좌측 정렬. 자리표시 상태(`isGenerating`)일 땐 스피너 + 대기 문구만
-/// 보여주고, 텍스트가 도착하면 그림자가 있는 흰 말풍선으로 전환한다. 스트리밍이
+/// 보여주고, 텍스트가 도착하면 흰 말풍선으로 전환한다. 스트리밍이
 /// 실패하면(`isError`) 대신 아이콘 + 안내 문구를 보여준다(Figma node-id=54:9).
 struct ChatBotAssistantBubbleView: View {
     let message: ChatBotMessage
@@ -39,7 +39,6 @@ struct ChatBotAssistantBubbleView: View {
                     bottomTrailingRadius: 16,
                     topTrailingRadius: 16
                 ))
-                .shadow(color: .black.opacity(0.04), radius: 1, x: 0, y: 1)
         }
     }
 }
