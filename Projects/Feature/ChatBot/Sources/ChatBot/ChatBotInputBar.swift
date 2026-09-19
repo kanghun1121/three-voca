@@ -63,8 +63,8 @@ struct ChatBotInputBar: View {
         }
         .padding(.leading, 16)
         .padding(.trailing, 6)
-        .padding(.vertical, 7)
-        .frame(minHeight: 44)
+        .padding(.vertical, 8)
+        .frame(minHeight: 46)
         .modifier(ChatBotInputBarBackground())
     }
 
