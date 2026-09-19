@@ -42,19 +42,13 @@ struct ChatArea: View {
                 // 대화가 짧아 콘텐츠가 뷰포트보다 낮아도, 스크롤 영역 전체(빈 공간 포함)에서
                 // 탭이 되도록 최소 뷰포트 높이만큼은 확보한다.
                 .frame(minHeight: chatAreaHeight, alignment: .top)
-                .background(
-                    // `.scrollDismissesKeyboard(.interactively)`가 켜지면 ScrollView 내부의
-                    // UIKit 제스처 인식기가 그 안의 모든 터치를 먼저 가져가 버려, SwiftUI
-                    // 레벨의 `.onTapGesture`/`.simultaneousGesture`(바깥 컨테이너에 붙여도)는
-                    // 인식되지 않는다 — SwiftUI 제스처 시스템과 ScrollView 내부의 네이티브
-                    // 인식기는 서로 다른 경계라 "동시 인식"이 적용되지 않는다. 제스처 인식기
-                    // 델리게이트로 "항상 동시 인식 허용"을 명시하는 최소 UIKit 브리지로 해결한다.
-                    KeyboardDismissTapCatcher { isInputFocused.wrappedValue = false }
-                )
+                // 빈 영역도 탭 대상에 포함
+                .contentShape(Rectangle())
+                .onTapGesture { isInputFocused.wrappedValue = false }
             }
             // 카카오톡/ChatGPT처럼, 메시지 목록을 아래로 드래그한 만큼 키보드도 따라 내려가고
-            // dismiss 임계값을 못 넘기면 다시 스프링백한다. 입력바(`ChatBotBottomBar`)의
-            // TextField에까지 전달되지 않도록 ScrollView 자신에게만 붙인다.
+            // dismiss 임계값을 못 넘기면 다시 스프링백한다. 하단 입력바의 TextField에까지
+            // 전달되지 않도록 ScrollView 자신에게만 붙인다.
             .scrollDismissesKeyboard(.interactively)
             .onGeometryChange(for: CGFloat.self) { geometryProxy in
                 geometryProxy.size.height
@@ -84,9 +78,9 @@ struct ChatArea: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .modifier(ChatBotBottomBar {
+        .safeAreaInset(edge: .bottom) {
             ChatBotInputBarSection(viewModel: viewModel, isInputFocused: isInputFocused)
-        })
+        }
     }
 
     private func scrollToLastUserMessageIfStreaming(proxy: ScrollViewProxy) {
