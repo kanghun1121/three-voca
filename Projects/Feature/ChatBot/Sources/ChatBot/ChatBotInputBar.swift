@@ -75,6 +75,10 @@ struct ChatBotInputBar: View {
             buttonIcon
                 .frame(width: 30, height: 30)
                 .background(DesignSystemAsset.study300.swiftUIColor, in: .circle)
+                // 시각 크기(30pt)와 레이아웃은 그대로 두고, 터치 영역만 44pt로 넓힌다.
+                .frame(width: 44, height: 44)
+                .contentShape(.rect)
+                .padding(-7)
         }
         .buttonStyle(.plain)
         // 아이콘 전용 버튼이라 VoiceOver가 읽을 텍스트가 따로 필요하다 — 커스텀 라벨 뷰라
@@ -113,10 +117,8 @@ struct ChatBotInputBar: View {
 private struct ChatBotInputBarBackground: ViewModifier {
     func body(content: Content) -> some View {
         if #available(iOS 26.0, *) {
-            content.glassEffect(
-                .regular.tint(DesignSystemAsset.bgSubtle.swiftUIColor),
-                in: .rect(cornerRadius: 22)
-            )
+            let glass = Glass.regular.tint(DesignSystemAsset.bgSubtle.swiftUIColor)
+            content.glassEffect(glass, in: .rect(cornerRadius: 22))
         } else {
             content
                 .background(DesignSystemAsset.bgSubtle.swiftUIColor, in: .rect(cornerRadius: 22))
