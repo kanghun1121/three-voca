@@ -7,7 +7,7 @@ final class LessonLocalDataSourceTests: XCTestCase {
         let db = LocalDatabaseTestContext()
 
         let result = try await db.run {
-            try await LessonLocalDataSource().lesson(id: 999_999)
+            try await LessonLocalDataSource.liveValue.lesson(999_999)
         }
 
         XCTAssertNil(result)
@@ -22,7 +22,7 @@ final class LessonLocalDataSourceTests: XCTestCase {
         )
 
         let lessons = try await db.run {
-            try await LessonLocalDataSource().lessons(levelID: 1)
+            try await LessonLocalDataSource.liveValue.lessons(1)
         }
 
         XCTAssertEqual(lessons.map(\.lessonNumber), [1, 2])

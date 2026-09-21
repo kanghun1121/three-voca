@@ -11,7 +11,7 @@ final class LevelLocalDataSourceTests: XCTestCase {
         )
 
         let levels = try await db.run {
-            try await LevelLocalDataSource().allLevels()
+            try await LevelLocalDataSource.liveValue.allLevels()
         }
 
         XCTAssertEqual(levels.map(\.nameKo), ["씨앗", "새싹"])
@@ -21,7 +21,7 @@ final class LevelLocalDataSourceTests: XCTestCase {
         let db = LocalDatabaseTestContext()
 
         let result = try await db.run {
-            try await LevelLocalDataSource().level(id: 999)
+            try await LevelLocalDataSource.liveValue.level(999)
         }
 
         XCTAssertNil(result)

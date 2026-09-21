@@ -1,40 +1,46 @@
 import Foundation
 import SwiftData
 
+import Core
+
 import Dependencies
+import DependenciesMacros
 
 /// `LevelEntity`만 소유한다. Lesson(레슨 상세의 cefrLabel 조회)과 LearningLibrary(레벨
 /// 목록 스켈레톤) 양쪽에서 재사용되어 별도 도메인으로 독립시켰다.
+@DependencyClient
 struct LevelLocalDataSource: Sendable {
-    @Dependency(\.localDatabaseContext) private var context
-
-    func level(id: Int) async throws -> LevelEntity? {
-        try await context.fetch(FetchDescriptor<LevelEntity>(
-            predicate: #Predicate { $0.id == id }
-        )).first
-    }
-
+    var level: @Sendable (_ id: Int) async throws -> LevelEntity?
     /// sortOrder 오름차순 — LearningLibrary 화면에 노출되는 레벨 순서다.
-    func allLevels() async throws -> [LevelEntity] {
-        try await context.fetch(FetchDescriptor<LevelEntity>(
-            sortBy: [SortDescriptor(\.sortOrder)]
-        ))
-    }
-
-    func insertLevels(_ levels: [LevelEntity]) async {
-        for level in levels {
-            await context.insert(level)
-        }
-    }
+    var allLevels: @Sendable () async throws -> [LevelEntity]
+    var insertLevels: @Sendable (_ levels: [LevelEntity]) async -> Void
 }
 
 extension LevelLocalDataSource: DependencyKey {
-    static let liveValue = LevelLocalDataSource()
+    static let liveValue = LevelLocalDataSource(
+        level: { id in
+            @Dependency(\.localDatabaseContext) var context
+            return try await context.fetch(FetchDescriptor<LevelEntity>(
+                predicate: #Predicate { $0.id == id }
+            )).first
+        },
+        allLevels: {
+            @Dependency(\.localDatabaseContext) var context
+            return try await context.fetch(FetchDescriptor<LevelEntity>(
+                sortBy: [SortDescriptor(\.sortOrder)]
+            ))
+        },
+        insertLevels: { levels in
+            @Dependency(\.localDatabaseContext) var context
+            for level in levels {
+                await context.insert(level)
+            }
+        }
+    )
 }
 
-extension LevelLocalDataSource: TestDependencyKey {
-    static let testValue = LevelLocalDataSource()
-}
+extension LevelLocalDataSource: UnimplementedTestDependencyKey {}
+
 
 extension DependencyValues {
     var levelLocalDataSource: LevelLocalDataSource {

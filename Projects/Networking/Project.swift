@@ -5,7 +5,7 @@ let project = Project.makeModule(
     name: "Networking",
     targets: [
         .networking(interface: .init(
-            dependencies: [.dependencies]
+            dependencies: [.dependencies, .core, .dependenciesMacros]
         )),
         .networking(implements: .init(
             dependencies: [
