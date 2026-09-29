@@ -1,7 +1,7 @@
 # 아키텍처
 
 코드 배치·책임·의존 방향을 정의한다.
-빌드와 검증은 [development.md](development.md), 작성 규칙은 [swift-style.md](swift-style.md)를 따른다.
+빌드와 검증은 [development.md](development.md), 작성·검토 규칙은 [lint.md](lint.md), SwiftUI 규칙은 [swift-style.md](swift-style.md)를 따른다.
 
 ## 레이어 구조와 의존 방향
 

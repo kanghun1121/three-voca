@@ -68,7 +68,7 @@ description: 현재 브랜치 변경 사항에서 버그·동시성 문제·레�
 * **문제**: 무엇이 잘못됐는가
 * **근거**: 왜 실제 문제인가 (이미 처리되지 않음, 테스트 없음 등)
 * **수정 제안**: 구체적인 방향
-* **참고**: `docs/architecture.md`/`docs/swift-style.md` 해당 섹션, 또는 Apple 문서
+* **참고**: `docs/architecture.md`/`docs/lint.md`/`docs/swift-style.md` 해당 섹션, 또는 Apple 문서
 
 의미 있는 문제가 없으면 없다고 말한다 — 없는 이슈를 지어내지 않는다.
 
