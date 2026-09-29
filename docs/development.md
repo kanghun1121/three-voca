@@ -1,7 +1,7 @@
 # 개발 공통 기준
 
 모든 변경에서 수정할 원본과 검증 범위를 판단하는 기준이다.
-코드 책임은 [architecture.md](architecture.md), 작성 규칙은 [swift-style.md](swift-style.md)를 따른다.
+코드 책임은 [architecture.md](architecture.md), 작성·검토 규칙은 [lint.md](lint.md), SwiftUI 규칙은 [swift-style.md](swift-style.md)를 따른다.
 
 ## 수정할 원본
 
