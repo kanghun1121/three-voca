@@ -1,5 +1,4 @@
 {
-  "plansDirectory": ".harness/plans",
   "permissions": {
     "deny": [
       "Read(**/Secrets.xcconfig)",
