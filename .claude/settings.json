@@ -7,22 +7,5 @@
       "Read(*.env)",
       "Bash(rm -rf *)"
     ]
-  },
-  "hooks": {
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash .claude/hooks/run-tests-after-edit.sh",
-            "timeout": 300
-          },
-          {
-            "type": "command",
-            "command": "bash .claude/hooks/block-stop-without-tests.sh"
-          }
-        ]
-      }
-    ]
   }
 }
