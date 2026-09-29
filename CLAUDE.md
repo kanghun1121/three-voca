@@ -1,82 +1,27 @@
-# CLAUDE.md
+# 저장소 작업 원칙
 
-Scope
+거의 모든 작업에 해당하는 원칙만 여기에 둡니다. 영역별 절차는 Skill 이, 경로별 규칙은 `.claude/rules/` 가 필요할 때 제공합니다.
 
-Only work inside this repository.
+## 탐색
+- 요청에 나온 문구, 컴포넌트 이름, 에러 코드, 테스트 이름처럼 구체적인 단서부터 검색합니다.
+- 프롬프트 직후에 `[router]` 안내가 붙습니다. 그것은 **시작 범위**입니다. 증거가 다른 곳을 가리키면 따라가되, 넓히는 이유를 한 줄 적습니다.
 
-Do not access:
+## 범위 확대 기준
+지금 읽은 코드로 증상이 설명되고 가까운 테스트가 통과하면 더 읽지 않습니다. 다음 중 하나면 한 단계씩 넓힙니다.
+- 값의 출처가 다른 파일에 있다 (설정, 환경 변수, 공용 상수)
+- 호출자가 조건이나 옵션을 만든다
+- 공용 타입·문구·토큰이라 다른 사용처가 영향을 받는다
+- 테스트가 새로운 경계(통합, 환경)를 드러낸다
 
-parent directories
-home directory
-downloads folder
-desktop folder
-SSH keys
-browser data
-personal files
+## 변경
+- 요청한 동작만 바꿉니다. 관련 없는 코드는 건드리지 않습니다.
+- 공용 값(문구, 토큰, 타입)을 바꾸기 전에 사용처를 검색합니다. 다른 곳이 쓰면 사용하는 쪽을 바꿉니다.
+- 테스트 파일은 수정하지 않습니다. 테스트가 틀렸다고 판단되면 보고합니다.
 
-Starting From an Issue
+## 검증
+- 테스트는 정확히 `scripts/test [파일]` 형태로 실행합니다 (`./`, `bash` 접두어 없이). 실패 요약만 출력되고 전체 로그는 `.claude/raw/` 에 남습니다.
+- 가장 좁은 관련 테스트가 통과한 뒤 전체를 돌립니다. PASS 전에는 완료로 보고하지 않습니다.
+- 바뀐 것 없이 같은 실패 명령을 반복하지 않습니다.
 
-When the user hands you a GitHub issue (a number like `#87` or a link), do this immediately,
-in order, before anything else:
-
-1. Check the issue (`gh issue view <number>`) to get its title and body.
-2. Run the `setup-worktree` skill to create the branch/worktree for it (task-id per the
-   Branches rule below) and prepare the Xcode environment.
-3. Inside that new worktree, create the problem definition file
-   (`.harness/problems/<issue-number-3-digit>-<domain-title>.md`) from the issue content.
-4. Only then proceed with Required Workflow below (`harness-plan` first).
-
-Do not write the problem definition file before the worktree exists — it belongs inside
-the worktree that will hold the rest of the task's work, not in the main checkout.
-
-If there is no existing issue yet, use the `create-issue` skill instead — it creates the
-GitHub issue first, then runs the same setup-worktree flow, leaving the problem definition
-file as an empty skeleton for the user to write (do not draft its content yourself).
-
-Required Workflow
-
-For every Code Craft task:
-
-Use the harness-plan skill first.
-Define the expected output before implementation.
-Define input data models.
-Define constraints and edge cases.
-Identify change points.
-Split responsibilities.
-Write a checklist into the plan's PLAN.md, broken down by responsibility, and check items
-off as they're completed.
-Use the solid-review skill before implementation.
-Implement the approved plan.
-Write or update tests, but only for responsibilities the plan marks as needing them
-(harness-plan step 7 decides this per responsibility, not by default).
-Always run build verification, regardless of test decisions.
-Run tests for the responsibilities that need them.
-Summarize changed files and verification results.
-Rules
-Do not implement before creating a plan.
-Do not create a plan without a checklist in its PLAN.md.
-Do not invent production data.
-Do not modify files outside this repository.
-Do not skip build verification — it applies to every task, with no exceptions.
-Do not skip tests for a responsibility the plan marks as needing them.
-If tests fail, explain the failing requirement before modifying code again.
-Separate test-verified claims from code-inspection-only assumptions in every summary.
-When a test fails, only inspect and modify the files related to the failing responsibility.
-A session can end or restart mid-task; PLAN.md's checklist, not conversation memory, is
-what records how far a task got, so keep it current.
-
-Branches
-
-When starting a new task, use the `setup-worktree` skill (it creates the branch, worktree,
-PLAN.md, and log directory, then prepares the Xcode environment). The `task-id` (which
-becomes the branch and worktree name) must follow:
-
-`<issue-number-3-digit>-<type>-<kebab-case-description>`
-
-- `<issue-number-3-digit>` is the GitHub issue number, zero-padded to 3 digits (`#87` → `087`).
-- `<type>` is lowercase: feature, fix, refactor, chore, docs.
-- Example: issue `#87`, a feature about vocabulary search filter → `087-feature-vocabulary-search-filter`
-
-Commit message and PR conventions (format, type tags, no-emoji rule) live in
-`.claude/commands/git/commit.md` and `.claude/commands/git/pr.md` — follow those files
-directly instead of duplicating the rules here.
+## 보고
+세 줄 이내. 테스트로 확인한 것과 코드만 보고 추정한 것을 나눕니다.
