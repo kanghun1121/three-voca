@@ -1,5 +1,7 @@
 import Foundation
 
+import Core
+
 import Dependencies
 
 /// term(단어)별로 "완성된 mp3 파일이 준비됐다"는 사실을 메모리에 인덱싱하는 계층.
@@ -74,6 +76,20 @@ actor AudioMemoryCache {
 
 extension AudioMemoryCache: DependencyKey {
     static let liveValue = AudioMemoryCache()
+}
+
+extension AudioMemoryCache: UnimplementedTestDependencyKey {
+    init() {
+        self.init(countLimit: 500)
+    }
+
+    static var testValue: Self {
+        unimplemented("AudioMemoryCache.testValue", placeholder: Self())
+    }
+
+    static var previewValue: Self {
+        unimplemented("AudioMemoryCache.previewValue", placeholder: Self())
+    }
 }
 
 extension DependencyValues {

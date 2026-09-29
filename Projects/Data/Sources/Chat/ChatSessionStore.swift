@@ -1,5 +1,7 @@
 import Foundation
 
+import Core
+
 import Dependencies
 
 actor ChatSessionStore {
@@ -35,6 +37,16 @@ actor ChatSessionStore {
 
 extension ChatSessionStore: DependencyKey {
     static let liveValue = ChatSessionStore()
+}
+
+extension ChatSessionStore: UnimplementedTestDependencyKey {
+    static var testValue: Self {
+        unimplemented("ChatSessionStore.testValue", placeholder: Self())
+    }
+
+    static var previewValue: Self {
+        unimplemented("ChatSessionStore.previewValue", placeholder: Self())
+    }
 }
 
 extension DependencyValues {
