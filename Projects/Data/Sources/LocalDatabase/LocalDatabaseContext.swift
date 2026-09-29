@@ -1,6 +1,8 @@
 import Foundation
 import SwiftData
 
+import Core
+
 import Dependencies
 
 enum LocalDatabaseError: Error, Equatable {
@@ -39,6 +41,20 @@ actor LocalDatabaseContext {
 
 extension LocalDatabaseContext: DependencyKey {
     static let liveValue = LocalDatabaseContext(modelContainer: LocalDatabaseSchema.makeContainer())
+}
+
+extension LocalDatabaseContext: UnimplementedTestDependencyKey {
+    init() {
+        self.init(modelContainer: LocalDatabaseSchema.makeInMemoryContainer())
+    }
+
+    static var testValue: Self {
+        unimplemented("LocalDatabaseContext.testValue", placeholder: Self())
+    }
+
+    static var previewValue: Self {
+        unimplemented("LocalDatabaseContext.previewValue", placeholder: Self())
+    }
 }
 
 extension DependencyValues {

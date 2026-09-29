@@ -1,5 +1,6 @@
 import Foundation
 
+import Core
 import DomainInterface
 
 import Dependencies
@@ -32,6 +33,16 @@ actor LearningHistoryStore {
 
 extension LearningHistoryStore: DependencyKey {
     static let liveValue = LearningHistoryStore()
+}
+
+extension LearningHistoryStore: UnimplementedTestDependencyKey {
+    static var testValue: Self {
+        unimplemented("LearningHistoryStore.testValue", placeholder: Self())
+    }
+
+    static var previewValue: Self {
+        unimplemented("LearningHistoryStore.previewValue", placeholder: Self())
+    }
 }
 
 extension DependencyValues {

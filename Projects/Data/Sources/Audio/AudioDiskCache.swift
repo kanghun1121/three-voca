@@ -1,5 +1,7 @@
 import Foundation
 
+import Core
+
 import Dependencies
 
 /// mp3를 Caches 디렉터리에 보관하는 계층. 저장 위치, 파일명 규칙, 존재 여부 판단, staleness
@@ -143,6 +145,24 @@ struct AudioDiskCache: Sendable {
 
 extension AudioDiskCache: DependencyKey {
     static let liveValue = AudioDiskCache()
+}
+
+extension AudioDiskCache: UnimplementedTestDependencyKey {
+    init() {
+        self.init(
+            directory: FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
+                .appending(path: "AudioCache", directoryHint: .isDirectory),
+            sizeLimitBytes: 50_000_000
+        )
+    }
+
+    static var testValue: Self {
+        unimplemented("AudioDiskCache.testValue", placeholder: Self(directory: URL.temporaryDirectory.appending(path: UUID().uuidString)))
+    }
+
+    static var previewValue: Self {
+        unimplemented("AudioDiskCache.previewValue", placeholder: Self(directory: URL.temporaryDirectory.appending(path: UUID().uuidString)))
+    }
 }
 
 extension DependencyValues {
