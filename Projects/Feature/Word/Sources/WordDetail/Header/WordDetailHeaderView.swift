@@ -38,25 +38,21 @@ private struct PronunciationRow: View {
 private struct AudioButton: View {
     let action: () -> Void
 
-    @ScaledMetric private var iconSize: Double = 14
+    @ScaledMetric private var iconSize: Double = 16
 
     var body: some View {
-        Button(
-            "발음 듣기",
-            systemImage: "speaker.wave.2",
-            action: action
-        )
-            .labelStyle(.iconOnly)
-            .font(.system(size: iconSize))
-            .foregroundStyle(DesignSystemAsset.study300.swiftUIColor)
-            .frame(width: 32, height: 32)
-            .background(DesignSystemAsset.background.swiftUIColor)
-            .clipShape(Circle())
-            .overlay { Circle().stroke(DesignSystemAsset.border.swiftUIColor, lineWidth: 1) }
-            .frame(minWidth: 44, minHeight: 44)
-            .contentShape(.rect)
-            .buttonStyle(.plain)
+        Button(action: action) {
+            Image(systemName: "speaker.wave.2")
+                .font(.system(size: iconSize))
+                .foregroundStyle(DesignSystemAsset.study300.swiftUIColor)
+                .frame(width: 34, height: 34)
+                .background(DesignSystemAsset.background.swiftUIColor)
+                .clipShape(Circle())
+                .overlay { Circle().stroke(DesignSystemAsset.border.swiftUIColor, lineWidth: 1) }
+                .frame(minWidth: 44, minHeight: 44)
+                .contentShape(.rect)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("발음 듣기")
     }
 }
-
-
