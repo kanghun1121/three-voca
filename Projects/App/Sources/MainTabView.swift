@@ -1,6 +1,5 @@
 import SwiftUI
 
-import DesignSystem
 import FeatureHome
 import FeatureMyPage
 
@@ -22,6 +21,5 @@ struct MainTabView: View {
                 MyPageView(viewModel: MyPageViewModel())
             }
         }
-        .tint(DesignSystemAsset.growDeep.swiftUIColor)
     }
 }
