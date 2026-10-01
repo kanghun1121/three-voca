@@ -1,49 +1,41 @@
 import SwiftUI
+import UIKit
 
 import DesignSystem
 
+/// 홈의 "학습하러 가기" CTA. 그라데이션 캡슐 + 우측 플레이 원 (핸드오프 시안 B).
 struct StudyCTACard: View {
     let onTapped: () -> Void
 
     var body: some View {
-        Button(action: onTapped) {
+        Button {
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+            onTapped()
+        } label: {
             Content()
-                .padding(22)
+                .padding(.leading, 28)
+                .padding(.trailing, 8)
                 .frame(maxWidth: .infinity)
+                .frame(height: 64)
                 .background(Background())
         }
-        .buttonStyle(.plain)
-        .clipShape(.rect(cornerRadius: 20))
+        .buttonStyle(PressScaleButtonStyle())
+        .accessibilityLabel("학습하러 가기")
     }
 
     private struct Background: View {
         var body: some View {
-            ZStack {
-                LinearGradient(
-                    colors: [
-                        DesignSystemAsset.ctaGradientStart.swiftUIColor,
-                        DesignSystemAsset.ctaGradientMid.swiftUIColor,
-                        DesignSystemAsset.ctaGradientEnd.swiftUIColor,
-                    ],
-                    startPoint: UnitPoint(x: 0.2, y: 0),
-                    endPoint: UnitPoint(x: 0.8, y: 1)
-                )
-                Circle()
-                    .fill(DesignSystemAsset.ctaGlowTopLeft.swiftUIColor.opacity(0.55))
-                    .frame(width: 130, height: 130)
-                    .blur(radius: 30)
-                    .offset(x: -100, y: -30)
-                Circle()
-                    .fill(DesignSystemAsset.ctaGlowBottomRight.swiftUIColor.opacity(0.65))
-                    .frame(width: 130, height: 130)
-                    .blur(radius: 28)
-                    .offset(x: 100, y: 30)
-                Circle()
-                    .fill(DesignSystemAsset.ctaGlowTopCenter.swiftUIColor.opacity(0.30))
-                    .frame(width: 100, height: 100)
-                    .blur(radius: 22)
-                    .offset(x: 0, y: -35)
-            }
+            LinearGradient(
+                stops: [
+                    .init(color: DesignSystemAsset.ctaGradientStart.swiftUIColor, location: 0),
+                    .init(color: DesignSystemAsset.ctaGradientMid.swiftUIColor, location: 0.6),
+                    .init(color: DesignSystemAsset.ctaGradientEnd.swiftUIColor, location: 1),
+                ],
+                startPoint: UnitPoint(x: 0, y: 0.41),
+                endPoint: UnitPoint(x: 1, y: 0.59)
+            )
+            .clipShape(.capsule)
+            .shadow(color: DesignSystemAsset.ctaGradientMid.swiftUIColor.opacity(0.225), radius: 7, y: 7)
         }
     }
 
@@ -53,7 +45,6 @@ struct StudyCTACard: View {
                 Text("학습하러 가기")
                     .homeTypography(.ctaTitle)
                     .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
-                    .shadow(color: DesignSystemAsset.shadowSubtle.swiftUIColor.opacity(0.25), radius: 8, x: 0, y: 1)
                 Spacer()
                 PlayButton()
             }
@@ -62,18 +53,21 @@ struct StudyCTACard: View {
 
     private struct PlayButton: View {
         var body: some View {
-            ZStack {
-                Circle()
-                    .fill(DesignSystemAsset.white.swiftUIColor.opacity(0.16))
-                    .background(.ultraThinMaterial, in: Circle())
-                    .overlay {
-                        Circle().strokeBorder(DesignSystemAsset.white.swiftUIColor.opacity(0.3), lineWidth: 1)
-                    }
-                Image(systemName: "play.fill")
-                    .font(.system(size: 15, weight: .semibold))
-                    .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
-            }
-            .frame(width: 42, height: 42)
+            Image(systemName: "play.fill")
+                .font(.system(size: 17, weight: .semibold))
+                .foregroundStyle(DesignSystemAsset.ctaIcon.swiftUIColor)
+                .offset(x: 1)
+                .frame(width: 48, height: 48)
+                .background(DesignSystemAsset.white.swiftUIColor, in: .circle)
+                .accessibilityHidden(true)
+        }
+    }
+
+    private struct PressScaleButtonStyle: ButtonStyle {
+        func makeBody(configuration: Configuration) -> some View {
+            configuration.label
+                .scaleEffect(configuration.isPressed ? 0.98 : 1)
+                .animation(.easeOut(duration: 0.12), value: configuration.isPressed)
         }
     }
 }
