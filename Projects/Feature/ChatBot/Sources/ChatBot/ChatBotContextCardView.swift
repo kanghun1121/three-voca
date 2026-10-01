@@ -18,7 +18,7 @@ struct ChatBotContextCardView: View {
                     .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 12))
                     .tracking(0.36)
             }
-            .foregroundStyle(DesignSystemAsset.study300.swiftUIColor)
+            .foregroundStyle(DesignSystemAsset.selectedBlue.swiftUIColor)
 
             (highlightedSentence ?? Text(context.sentence))
                 .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 15))
@@ -27,18 +27,20 @@ struct ChatBotContextCardView: View {
         .padding(.horizontal, 15)
         .padding(.vertical, 13)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(DesignSystemAsset.study100.swiftUIColor.opacity(0.33))
+        .background(DesignSystemAsset.background.swiftUIColor)
         .clipShape(.rect(cornerRadius: 16))
         .overlay {
             RoundedRectangle(cornerRadius: 16)
-                .stroke(DesignSystemAsset.study100.swiftUIColor, lineWidth: 1)
+                .stroke(DesignSystemAsset.border.swiftUIColor, lineWidth: 1)
         }
         .task(id: "\(context.term)|\(context.sentence)") {
             highlightedSentence = Text(SentenceHighlighter.highlighted(
                 sentence: context.sentence,
                 keyword: context.term,
                 font: DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 15),
-                highlightFont: DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 15)
+                highlightFont: DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 15),
+                highlightTextColor: DesignSystemAsset.selectedBlue.swiftUIColor,
+                highlightBackgroundColor: DesignSystemAsset.selectedBlue100.swiftUIColor
             ))
         }
     }

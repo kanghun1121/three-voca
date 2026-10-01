@@ -23,7 +23,7 @@ struct ChatBotAssistantBubbleView: View {
         } else if message.isGenerating {
             HStack(spacing: 8) {
                 ProgressView()
-                    .tint(DesignSystemAsset.study300.swiftUIColor)
+                    .tint(DesignSystemAsset.selectedBlue.swiftUIColor)
                 Text("AI가 답변을 생성하고 있어요..")
                     .font(DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 14))
                     .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)

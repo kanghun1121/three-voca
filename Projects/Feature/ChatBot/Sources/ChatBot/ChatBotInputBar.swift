@@ -68,13 +68,13 @@ struct ChatBotInputBar: View {
         .modifier(ChatBotInputBarBackground())
     }
 
-    /// 배경(`study300`)과 30×30 크기는 두 상태가 같고 안의 글리프만 달라진다(Figma
+    /// 배경(`selectedBlue`)과 30×30 크기는 두 상태가 같고 안의 글리프만 달라진다(Figma
     /// node-id=25-50) — 상태별로 뷰를 나누지 않고 아이콘만 분기한다.
     private var sendButton: some View {
         Button(action: state == .stop ? onStop : didTapSend) {
             buttonIcon
                 .frame(width: 30, height: 30)
-                .background(DesignSystemAsset.study300.swiftUIColor, in: .circle)
+                .background(DesignSystemAsset.selectedBlue.swiftUIColor, in: .circle)
                 // 시각 크기(30pt)와 레이아웃은 그대로 두고, 터치 영역만 44pt로 넓힌다.
                 .frame(width: 44, height: 44)
                 .contentShape(.rect)

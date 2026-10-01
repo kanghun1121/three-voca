@@ -10,7 +10,7 @@ struct MarkdownExampleQuoteView: View {
     var body: some View {
         HStack(alignment: .top, spacing: 10) {
             Rectangle()
-                .fill(DesignSystemAsset.study300.swiftUIColor)
+                .fill(DesignSystemAsset.selectedBlue.swiftUIColor)
                 .frame(width: 3)
             VStack(alignment: .leading, spacing: 4) {
                 Text(MarkdownInlineStyler.styled(english, baseSize: 15))

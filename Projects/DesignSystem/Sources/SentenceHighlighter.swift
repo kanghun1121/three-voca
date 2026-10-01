@@ -12,12 +12,16 @@ public enum SentenceHighlighter {
     ///   - keyword: 찾을 단어 또는 구(공백 포함 시 구 매칭으로 처리).
     ///   - font: 하이라이트되지 않는 부분에 적용할 폰트.
     ///   - highlightFont: 하이라이트되는 부분에 적용할 폰트(보통 bold 계열).
+    ///   - highlightTextColor: 하이라이트되는 부분의 글자색.
+    ///   - highlightBackgroundColor: 하이라이트되는 부분의 배경색.
     /// - Returns: keyword를 찾지 못하면 스타일 없이 원문 그대로인 `AttributedString`.
     public static func highlighted(
         sentence: String,
         keyword: String,
         font: SwiftUI.Font,
-        highlightFont: SwiftUI.Font
+        highlightFont: SwiftUI.Font,
+        highlightTextColor: Color = DesignSystemAsset.study300.swiftUIColor,
+        highlightBackgroundColor: Color = DesignSystemAsset.highlightBg.swiftUIColor
     ) -> AttributedString {
         let matchRanges = keyword.contains(" ")
             ? findPhraseRanges(in: sentence, phrase: keyword)
@@ -35,8 +39,8 @@ public enum SentenceHighlighter {
             let endOffset = sentence.distance(from: sentence.startIndex, to: strRange.upperBound)
             let attrStart = attributed.index(attributed.startIndex, offsetByCharacters: startOffset)
             let attrEnd = attributed.index(attributed.startIndex, offsetByCharacters: endOffset)
-            attributed[attrStart..<attrEnd].swiftUI.foregroundColor = DesignSystemAsset.study300.swiftUIColor
-            attributed[attrStart..<attrEnd].swiftUI.backgroundColor = DesignSystemAsset.highlightBg.swiftUIColor
+            attributed[attrStart..<attrEnd].swiftUI.foregroundColor = highlightTextColor
+            attributed[attrStart..<attrEnd].swiftUI.backgroundColor = highlightBackgroundColor
             attributed[attrStart..<attrEnd].swiftUI.font = highlightFont
         }
 

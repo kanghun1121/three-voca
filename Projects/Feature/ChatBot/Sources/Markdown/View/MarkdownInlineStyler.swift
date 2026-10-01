@@ -23,8 +23,8 @@ enum MarkdownInlineStyler {
             }
             if run.inlinePresentationIntent?.contains(.code) == true {
                 font = .system(size: baseSize, design: .monospaced)
-                color = DesignSystemAsset.study300.swiftUIColor
-                result[range].backgroundColor = DesignSystemAsset.study100.swiftUIColor
+                color = DesignSystemAsset.selectedBlue.swiftUIColor
+                result[range].backgroundColor = DesignSystemAsset.selectedBlue100.swiftUIColor
             }
             if run.markdownHighlight == true {
                 result[range].backgroundColor = DesignSystemAsset.highlightBg.swiftUIColor

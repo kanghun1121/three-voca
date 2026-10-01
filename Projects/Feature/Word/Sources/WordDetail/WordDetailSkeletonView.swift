@@ -78,7 +78,7 @@ private struct SkeletonDefinitionGroupView: View {
                 .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 12))
                 .padding(.horizontal, 10)
                 .padding(.vertical, 3)
-                .background(DesignSystemAsset.study100.swiftUIColor)
+                .background(DesignSystemAsset.selectedBlue100.swiftUIColor)
                 .clipShape(.rect(cornerRadius: 6))
             SkeletonMeaningList()
         }
@@ -152,7 +152,11 @@ private struct SkeletonExampleRow: View {
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(DesignSystemAsset.study100.swiftUIColor.opacity(0.5))
+        .background(DesignSystemAsset.background.swiftUIColor)
         .clipShape(.rect(cornerRadius: 14))
+        .overlay {
+            RoundedRectangle(cornerRadius: 14)
+                .stroke(DesignSystemAsset.border.swiftUIColor, lineWidth: 1)
+        }
     }
 }

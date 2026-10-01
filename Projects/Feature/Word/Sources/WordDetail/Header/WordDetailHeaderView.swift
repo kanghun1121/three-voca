@@ -44,7 +44,7 @@ private struct AudioButton: View {
         Button(action: action) {
             Image(systemName: "speaker.wave.2")
                 .font(.system(size: iconSize))
-                .foregroundStyle(DesignSystemAsset.study300.swiftUIColor)
+                .foregroundStyle(DesignSystemAsset.selectedBlue.swiftUIColor)
                 .frame(width: 34, height: 34)
                 .background(DesignSystemAsset.background.swiftUIColor)
                 .clipShape(Circle())

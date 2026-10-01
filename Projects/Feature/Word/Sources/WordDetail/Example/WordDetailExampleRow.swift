@@ -29,18 +29,20 @@ struct WordDetailExampleRow: View {
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(DesignSystemAsset.study100.swiftUIColor.opacity(0.5))
+        .background(DesignSystemAsset.background.swiftUIColor)
         .clipShape(.rect(cornerRadius: 14))
         .overlay {
             RoundedRectangle(cornerRadius: 14)
-                .stroke(DesignSystemAsset.study100.swiftUIColor, lineWidth: 1)
+                .stroke(DesignSystemAsset.border.swiftUIColor, lineWidth: 1)
         }
         .task(id: "\(term)|\(example.en)") {
             highlightedEnText = Text(SentenceHighlighter.highlighted(
                 sentence: example.en,
                 keyword: term,
                 font: DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 16),
-                highlightFont: DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 16)
+                highlightFont: DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 16),
+                highlightTextColor: DesignSystemAsset.selectedBlue.swiftUIColor,
+                highlightBackgroundColor: DesignSystemAsset.selectedBlue100.swiftUIColor
             ))
         }
     }
@@ -79,7 +81,7 @@ private struct ActionBar: View {
                     .resizable()
                     .frame(width: 14, height: 14)
             }
-            .foregroundStyle(DesignSystemAsset.study300.swiftUIColor)
+            .foregroundStyle(DesignSystemAsset.selectedBlue.swiftUIColor)
         }
         .padding(.horizontal, 8)
         .padding(.vertical, 6)
