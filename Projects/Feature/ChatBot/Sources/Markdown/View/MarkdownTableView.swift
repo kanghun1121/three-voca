@@ -38,7 +38,7 @@ struct MarkdownTableView: View {
                     .frame(maxWidth: columnWidth(at: columnIndex), alignment: .leading)
             }
         }
-        .background(isHeader ? DesignSystemAsset.study100.swiftUIColor : Color.clear)
+        .background(isHeader ? DesignSystemAsset.selectedBlue100.swiftUIColor : Color.clear)
     }
 
     private func columnWidth(at index: Int) -> CGFloat? {

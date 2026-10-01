@@ -38,7 +38,7 @@ struct MarkdownCalloutView: View {
 
     private var accentColor: Color {
         switch kind {
-        case .key: DesignSystemAsset.study300.swiftUIColor
+        case .key: DesignSystemAsset.selectedBlue.swiftUIColor
         case .caution: DesignSystemAsset.cautionary.swiftUIColor
         case .tip: DesignSystemAsset.fgSubtle.swiftUIColor
         }
@@ -46,7 +46,7 @@ struct MarkdownCalloutView: View {
 
     private var backgroundColor: Color {
         switch kind {
-        case .key: DesignSystemAsset.study100.swiftUIColor.opacity(0.5)
+        case .key: DesignSystemAsset.selectedBlue100.swiftUIColor
         case .caution: DesignSystemAsset.cautionary100.swiftUIColor
         case .tip: DesignSystemAsset.bgSubtle.swiftUIColor
         }

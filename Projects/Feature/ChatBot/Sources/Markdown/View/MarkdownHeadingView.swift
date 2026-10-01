@@ -11,7 +11,7 @@ struct MarkdownHeadingView: View {
         HStack(alignment: .firstTextBaseline, spacing: 6) {
             if level == 2 {
                 Circle()
-                    .fill(DesignSystemAsset.study300.swiftUIColor)
+                    .fill(DesignSystemAsset.spectrumBlue.swiftUIColor)
                     .frame(width: 6, height: 6)
                     .offset(y: -2)
             }

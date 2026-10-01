@@ -12,7 +12,7 @@ struct ChatBotUserBubbleView: View {
             .foregroundStyle(.white)
             .padding(.horizontal, 14)
             .padding(.vertical, 11)
-            .background(DesignSystemAsset.study300.swiftUIColor)
+            .background(DesignSystemAsset.selectedBlue.swiftUIColor)
             .clipShape(.rect(
                 topLeadingRadius: 16,
                 bottomLeadingRadius: 16,

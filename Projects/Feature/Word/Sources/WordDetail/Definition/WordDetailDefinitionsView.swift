@@ -42,7 +42,7 @@ private struct MeaningRow: View {
     var body: some View {
         HStack(alignment: .top, spacing: 10) {
             Circle()
-                .fill(DesignSystemAsset.study300.swiftUIColor)
+                .fill(DesignSystemAsset.spectrumBlue.swiftUIColor)
                 .frame(width: 4, height: 4)
                 .padding(.top, 11)
             Text(meaning)
@@ -60,10 +60,10 @@ private struct PartOfSpeechChip: View {
     var body: some View {
         Text(label)
             .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 12))
-            .foregroundStyle(DesignSystemAsset.study300.swiftUIColor)
+            .foregroundStyle(DesignSystemAsset.selectedBlue.swiftUIColor)
             .padding(.horizontal, 10)
             .padding(.vertical, 3)
-            .background(DesignSystemAsset.study100.swiftUIColor)
+            .background(DesignSystemAsset.selectedBlue100.swiftUIColor)
             .clipShape(.rect(cornerRadius: 6))
     }
 }
