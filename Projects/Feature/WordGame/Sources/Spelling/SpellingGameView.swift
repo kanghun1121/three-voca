@@ -20,21 +20,15 @@ public struct SpellingGameView: View {
             if let word = viewModel.currentWord {
                 SpellingActivePhaseView(
                     word: word,
-                    slots: viewModel.slots,
+                    inputText: $viewModel.inputText,
+                    isFocused: $isKeyboardFocused,
                     viewState: viewModel.viewState,
+                    canSubmit: viewModel.canSubmit,
+                    onSubmit: viewModel.submitButtonTapped,
                     onDismiss: viewModel.closeButtonTapped,
                     onSkip: viewModel.skipButtonTapped
                 )
             }
-
-            // 시스템 키보드 진입점 — 화면에 보이지 않음
-            TextField("", text: $viewModel.inputText)
-                .frame(width: 1, height: 1)
-                .opacity(0.001)
-                .focused($isKeyboardFocused)
-                .autocorrectionDisabled()
-                .textInputAutocapitalization(.never)
-                .keyboardType(.asciiCapable)
         }
         .onAppear {
             viewModel.load()
@@ -61,8 +55,11 @@ public struct SpellingGameView: View {
 
 private struct SpellingActivePhaseView: View {
     let word: Lesson.Word
-    let slots: [SpellingViewModel.SlotState]
+    @Binding var inputText: String
+    var isFocused: FocusState<Bool>.Binding
     let viewState: SpellingViewModel.ViewState
+    let canSubmit: Bool
+    let onSubmit: () -> Void
     let onDismiss: () -> Void
     let onSkip: () -> Void
 
@@ -72,8 +69,11 @@ private struct SpellingActivePhaseView: View {
 
             SpellingView(
                 word: word,
-                slots: slots,
+                inputText: $inputText,
+                isFocused: isFocused,
                 viewState: viewState,
+                canSubmit: canSubmit,
+                onSubmit: onSubmit,
                 onSkip: onSkip
             )
         }

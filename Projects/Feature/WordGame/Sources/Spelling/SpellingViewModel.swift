@@ -15,13 +15,6 @@ public final class SpellingViewModel {
         case revealing
     }
 
-    enum SlotState: Equatable {
-        case hint(Character)
-        case filled(Character)
-        case cursor
-        case empty
-    }
-
     enum AlertAction {
         case confirmDiscard
     }
@@ -46,11 +39,6 @@ public final class SpellingViewModel {
     private(set) var advanceTask: Task<Void, Never>?
     var inputText: String = "" {
         didSet { handleInputChange() }
-    }
-
-    var slots: [SlotState] {
-        guard let word = currentWord else { return [] }
-        return word.term.enumerated().map { index, char in makeSlot(at: index, char: char) }
     }
 
     @ObservationIgnored @Dependency(\.soundClient) private var soundClient
@@ -108,25 +96,37 @@ public final class SpellingViewModel {
         }
     }
 
-    /// 입력값을 영문자·최대 길이·소문자로 정규화하고, 복습 라운드 힌트 글자를 보호한다.
-    /// 정규화 후 단어 길이와 일치하면 validateAnswer()를 호출한다.
+    /// 입력값을 영문자·띄어쓰기(맨 앞·연속 제외)·최대 길이·소문자로 정규화하고, 복습 라운드 힌트 글자를 보호한다.
+    /// 정답 확인은 입력으로 자동 실행하지 않고 submitButtonTapped()에서만 한다.
     private func handleInputChange() {
         guard viewState == .active else { return }
         let limit = currentWord?.term.count ?? 0
-        var filtered = String(inputText.filter { $0.isLetter }.prefix(limit).lowercased())
+        var filtered = ""
+        for character in inputText.lowercased() {
+            if character.isLetter {
+                filtered.append(character)
+            } else if character == " ", let last = filtered.last, last != " " {
+                filtered.append(character)
+            }
+        }
+        filtered = String(filtered.prefix(limit))
 
-        // 복습 라운드: 첫 글자 힌트가 삭제되지 않도록 고정
-        if reviewTracker.isReviewRound, let firstChar = currentWord?.term.first {
+        // 복습 라운드: 첫 글자 힌트는 입력이 있을 때만 앞에 고정한다. 전체 지우기로 비우는 것은 허용한다.
+        if reviewTracker.isReviewRound, !filtered.isEmpty, let firstChar = currentWord?.term.first {
             let hint = String(firstChar).lowercased()
             if !filtered.hasPrefix(hint) { filtered = hint }
         }
 
-        guard inputText == filtered else {
-            inputText = filtered
-            return
-        }
+        if inputText != filtered { inputText = filtered }
+    }
 
-        if inputText.count == limit { validateAnswer() }
+    var canSubmit: Bool {
+        viewState == .active && !inputText.trimmingCharacters(in: .whitespaces).isEmpty
+    }
+
+    func submitButtonTapped() {
+        guard canSubmit else { return }
+        validateAnswer()
     }
 
     /// 현재 inputText와 정답을 비교해 정답/오답 상태로 전환하고, 다음 단어로 자동 진행한다.
@@ -176,7 +176,7 @@ public final class SpellingViewModel {
     }
 
     private func isCorrectAnswer(for word: Lesson.Word) -> Bool {
-        inputText == word.term.lowercased()
+        inputText.trimmingCharacters(in: .whitespaces) == word.term.lowercased()
     }
 
     /// 복습 라운드면 첫 글자를 힌트로 채우고, 아니면 빈 문자열로 초기화한다.
@@ -196,24 +196,5 @@ public final class SpellingViewModel {
         } else {
             onCompleted()
         }
-    }
-
-    /// 인덱스와 현재 inputText를 기반으로 슬롯 상태를 결정한다.
-    /// 복습 라운드의 첫 번째 슬롯은 항상 힌트로 반환한다.
-    private func makeSlot(at index: Int, char: Character) -> SlotState {
-        guard !reviewTracker.isReviewRound || index != 0 else {
-            return .hint(char.lowercased().first ?? char)
-        }
-
-        guard index >= inputText.count else {
-            let inputChar = inputText[inputText.index(inputText.startIndex, offsetBy: index)]
-            return .filled(inputChar)
-        }
-
-        guard index > inputText.count else {
-            return .cursor
-        }
-
-        return .empty
     }
 }

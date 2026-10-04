@@ -36,7 +36,6 @@ final class SpellingViewModelTests: XCTestCase {
 
         XCTAssertTrue(vm.isReviewRound)
         XCTAssertEqual(vm.inputText, "c")
-        XCTAssertEqual(vm.slots.first, .hint("c"))
     }
 
     func test_5개중_3개_오답_2개_정답이면_복습라운드에_오답3개가_순서대로_들어간다() async {
@@ -67,14 +66,19 @@ final class SpellingViewModelTests: XCTestCase {
         vm.load()
 
         vm.inputText = "zzz" // cat 오답
+        vm.submitButtonTapped()
         _ = await vm.advanceTask?.value
         vm.inputText = "dog" // dog 정답
+        vm.submitButtonTapped()
         _ = await vm.advanceTask?.value
         vm.inputText = "zzz" // sun 오답
+        vm.submitButtonTapped()
         _ = await vm.advanceTask?.value
         vm.inputText = "zzz" // cup 오답
+        vm.submitButtonTapped()
         _ = await vm.advanceTask?.value
         vm.inputText = "run" // run 정답
+        vm.submitButtonTapped()
         _ = await vm.advanceTask?.value
 
         XCTAssertTrue(vm.isReviewRound)
@@ -82,10 +86,12 @@ final class SpellingViewModelTests: XCTestCase {
         XCTAssertEqual(vm.currentWord?.term, "cat")
 
         vm.inputText = "cat"
+        vm.submitButtonTapped()
         _ = await vm.advanceTask?.value
         XCTAssertEqual(vm.currentWord?.term, "sun")
 
         vm.inputText = "sun"
+        vm.submitButtonTapped()
         _ = await vm.advanceTask?.value
         XCTAssertEqual(vm.currentWord?.term, "cup")
     }
@@ -148,6 +154,7 @@ final class SpellingViewModelTests: XCTestCase {
 
         vm.load()
         vm.inputText = "CAT"
+        vm.submitButtonTapped()
 
         XCTAssertEqual(vm.viewState, .correct)
     }
@@ -181,95 +188,6 @@ final class SpellingViewModelTests: XCTestCase {
         }
     }
 
-    func test_리뷰라운드일때_SlotState가_hint_cursor_empty이다() async {
-        let lessonWord = Lesson.Word(
-            id: "w1",
-            term: "cat",
-            pronunciation: "",
-            definitions: [],
-            distractors: [],
-            audioUrl: ""
-        )
-        let word = lessonWord
-        let vm = withDependencies {
-            // [TestDependencyKey 제거] 기존 SoundClient.previewValue 인라인
-            $0.soundClient = SoundClient(playCorrect: {}, playWrong: {})
-        } operation: {
-            SpellingViewModel(
-                words: [word],
-                onCompleted: {},
-                onClose: {},
-                clock: ImmediateClock()
-            )
-        }
-
-        vm.load()
-        vm.skipButtonTapped()
-        _ = await vm.advanceTask?.value
-
-        XCTAssertEqual(vm.slots, [.hint("c"), .cursor, .empty])
-    }
-
-    func test_일반라운드일때_SlotState가_cursor_empty_empty이다() {
-        let lessonWord = Lesson.Word(
-            id: "w1",
-            term: "cat",
-            pronunciation: "",
-            definitions: [],
-            distractors: [],
-            audioUrl: ""
-        )
-        let word = lessonWord
-        let vm = withDependencies {
-            // [TestDependencyKey 제거] 기존 SoundClient.previewValue 인라인
-            $0.soundClient = SoundClient(playCorrect: {}, playWrong: {})
-        } operation: {
-            SpellingViewModel(
-                words: [word],
-                onCompleted: {},
-                onClose: {}
-            )
-        }
-
-        vm.load()
-
-        XCTAssertEqual(vm.slots, [.cursor, .empty, .empty])
-    }
-
-    func test_5글자중_4글자입력시_복습라운드에서_hint_filled_filled_filled_cursor이다() async {
-        let lessonWord = Lesson.Word(
-            id: "w1",
-            term: "apple",
-            pronunciation: "",
-            definitions: [],
-            distractors: [],
-            audioUrl: ""
-        )
-        let word = lessonWord
-        let vm = withDependencies {
-            // [TestDependencyKey 제거] 기존 SoundClient.previewValue 인라인
-            $0.soundClient = SoundClient(playCorrect: {}, playWrong: {})
-        } operation: {
-            SpellingViewModel(
-                words: [word],
-                onCompleted: {},
-                onClose: {},
-                clock: ImmediateClock()
-            )
-        }
-
-        vm.load()
-        vm.skipButtonTapped()
-        _ = await vm.advanceTask?.value
-
-        vm.inputText = "appl"
-
-        XCTAssertEqual(
-            vm.slots,
-            [.hint("a"), .filled("p"), .filled("p"), .filled("l"), .cursor]
-        )
-    }
-
     func test_게임이_종료되면_onCompleted가_호출된다() async {
         let lessonWord = Lesson.Word(
             id: "w1",
@@ -295,8 +213,98 @@ final class SpellingViewModelTests: XCTestCase {
 
         vm.load()
         vm.inputText = "cat"
+        vm.submitButtonTapped()
         _ = await vm.advanceTask?.value
 
         XCTAssertTrue(isCompleted)
+    }
+
+    // MARK: - 제출 / 띄어쓰기 / 전체 지우기
+
+    func test_정답을_입력해도_제출하기_전에는_판정하지_않는다() {
+        let vm = makeViewModel(terms: ["cat"])
+
+        vm.load()
+        vm.inputText = "cat"
+
+        XCTAssertEqual(vm.viewState, .active)
+    }
+
+    func test_입력이_비어있으면_제출할_수_없다() {
+        let vm = makeViewModel(terms: ["cat"])
+
+        vm.load()
+        XCTAssertFalse(vm.canSubmit)
+
+        vm.submitButtonTapped()
+        XCTAssertEqual(vm.viewState, .active)
+
+        vm.inputText = "c"
+        XCTAssertTrue(vm.canSubmit)
+    }
+
+    func test_띄어쓰기를_맞춰_입력하고_제출하면_정답이다() {
+        let vm = makeViewModel(terms: ["ice cream"])
+
+        vm.load()
+        vm.inputText = "ice cream"
+        vm.submitButtonTapped()
+
+        XCTAssertEqual(vm.viewState, .correct)
+    }
+
+    func test_띄어쓰기를_빼고_제출하면_오답이다() {
+        let vm = makeViewModel(terms: ["ice cream"])
+
+        vm.load()
+        vm.inputText = "icecream"
+        vm.submitButtonTapped()
+
+        XCTAssertEqual(vm.viewState, .revealing)
+    }
+
+    func test_맨앞_공백과_연속_공백은_입력되지_않는다() {
+        let vm = makeViewModel(terms: ["ice cream"])
+
+        vm.load()
+        vm.inputText = " ice  cream"
+
+        XCTAssertEqual(vm.inputText, "ice cream")
+    }
+
+    func test_복습라운드에서도_전체_지우기로_입력을_모두_비울_수_있다() async {
+        let vm = makeViewModel(terms: ["cat"])
+
+        vm.load()
+        vm.skipButtonTapped()
+        _ = await vm.advanceTask?.value
+        XCTAssertEqual(vm.inputText, "c")
+
+        vm.inputText = ""
+
+        XCTAssertEqual(vm.inputText, "")
+    }
+
+    private func makeViewModel(terms: [String]) -> SpellingViewModel {
+        let words = terms.enumerated().map { index, term in
+            Lesson.Word(
+                id: "w\(index)",
+                term: term,
+                pronunciation: "",
+                definitions: [],
+                distractors: [],
+                audioUrl: ""
+            )
+        }
+        return withDependencies {
+            $0.soundClient = SoundClient(playCorrect: {}, playWrong: {})
+        } operation: {
+            SpellingViewModel(
+                words: words,
+                onCompleted: {},
+                onClose: {},
+                clock: ImmediateClock()
+            )
+        }
     }
 }
