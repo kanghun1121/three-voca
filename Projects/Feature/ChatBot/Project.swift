@@ -32,18 +32,9 @@ let project = Project.makeModule(
             dependencies: [
                 .feature(implements: .chatBot),
                 .domainInterface,
-                .domain,
-                .data,
-                .networking,
                 .dependencies,
                 .designSystem,
-            ],
-            settings: .settings(
-                configurations: [
-                    .debug(name: "Debug", xcconfig: "../../App/Secrets.xcconfig"),
-                    .release(name: "Release", xcconfig: "../../App/Secrets.xcconfig")
-                ]
-            )
+            ]
         )),
     ],
     schemes: [
