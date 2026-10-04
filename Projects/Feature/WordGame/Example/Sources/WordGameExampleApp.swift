@@ -1,7 +1,7 @@
 import SwiftUI
 
-import FeatureWordGame
 import DomainInterface
+import FeatureWordGame
 
 import Dependencies
 
@@ -9,7 +9,7 @@ import Dependencies
 struct WordGameExampleApp: App {
     init() {
         prepareDependencies {
-            $0.lessonRepository.fetchDetail = { id in .previewWith3Words(id: id) }
+            $0.lessonRepository = .happyPath
             $0.audioRepository.prefetch = { _ in }
             // [TestDependencyKey 제거] previewValue도 unimplemented가 되어 인라인
             $0.completeLessonUseCase = CompleteLessonUseCase(execute: { _ in })
@@ -18,67 +18,39 @@ struct WordGameExampleApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ExampleRootView()
+            WordGameCaseListView()
         }
     }
 }
 
-private extension Lesson {
-    static func previewWith3Words(id: String) -> Lesson {
-        Lesson(
-            id: id,
-            level: 1,
-            lessonNumber: 1,
-            cefrLevel: "A1",
-            words: [
-                Lesson.Word(
-                    id: "w1",
-                    term: "apple",
-                    pronunciation: "/ˈæp.əl/",
-                    definitions: [.init(id: "d1", partOfSpeech: .noun, meaning: "사과")],
-                    distractors: ["바나나", "포도", "딸기"],
-                    audioUrl: ""
-                ),
-                Lesson.Word(
-                    id: "w2",
-                    term: "brave",
-                    pronunciation: "/breɪv/",
-                    definitions: [.init(id: "d2", partOfSpeech: .adjective, meaning: "용감한")],
-                    distractors: ["겁쟁이", "느린", "조용한"],
-                    audioUrl: ""
-                ),
-                Lesson.Word(
-                    id: "w3",
-                    term: "create",
-                    pronunciation: "/kriˈeɪt/",
-                    definitions: [.init(id: "d3", partOfSpeech: .verb, meaning: "만들다, 창조하다")],
-                    distractors: ["파괴하다", "멈추다", "잊다"],
-                    audioUrl: ""
-                ),
-            ]
-        )
+/// 워드게임을 시작할 단계 시나리오. 단어는 모두 `LessonRepository.happyPath`의 경계 단어 4개를 쓴다.
+private enum WordGameCase: String, CaseIterable, Identifiable {
+    case recognition = "Recognition 부터"
+    case multipleChoice = "MultipleChoice 부터"
+    case spelling = "Spelling 부터"
+
+    var id: Self { self }
+
+    @MainActor
+    func makeViewModel() -> WordGameViewModel {
+        switch self {
+        case .recognition: WordGameViewModel(lessonID: "demo", startingFrom: .recognition)
+        case .multipleChoice: WordGameViewModel(lessonID: "demo", startingFrom: .multipleChoice)
+        case .spelling: WordGameViewModel(lessonID: "demo", startingFrom: .spelling)
+        }
     }
 }
 
-struct ExampleRootView: View {
-    @State private var destination: WordGameViewModel?
-
+/// 시나리오를 고르는 진입 화면. 항목을 누르면 해당 단계부터 워드게임이 열린다.
+private struct WordGameCaseListView: View {
     var body: some View {
         NavigationStack {
-            VStack(spacing: 20) {
-                Button("Recognition 부터") {
-                    destination = WordGameViewModel(lessonID: "demo", startingFrom: .recognition)
-                }
-                Button("MultipleChoice 부터") {
-                    destination = WordGameViewModel(lessonID: "demo", startingFrom: .multipleChoice)
-                }
-                Button("Spelling 부터") {
-                    destination = WordGameViewModel(lessonID: "demo", startingFrom: .spelling)
+            List(WordGameCase.allCases) { gameCase in
+                NavigationLink(gameCase.rawValue) {
+                    WordGameView(viewModel: gameCase.makeViewModel())
                 }
             }
-            .navigationDestination(item: $destination) { vm in
-                WordGameView(viewModel: vm)
-            }
+            .navigationTitle("워드게임 시나리오")
         }
     }
 }
