@@ -42,7 +42,6 @@ private struct RecognitionCenterContent: View {
     let countdown: Int
     let ringProgress: Double
     let isRevealing: Bool
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         VStack(spacing: 0) {
@@ -55,30 +54,45 @@ private struct RecognitionCenterContent: View {
             RecognitionWordBlock(word: word)
                 .transition(.opacity)
                 .id(word.id)
-
-            Text(word.primaryMeaning)
-                .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 18))
-                .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 32)
-                .padding(.vertical, 14)
-                .background(DesignSystemAsset.white.swiftUIColor.opacity(0.12))
-                .clipShape(.rect(cornerRadius: 16))
-                .overlay {
-                    RoundedRectangle(cornerRadius: 16)
-                        .stroke(DesignSystemAsset.white.swiftUIColor.opacity(0.28), lineWidth: 1)
-                }
-                .padding(.top, 24)
-                .opacity(isRevealing ? 1 : 0)
-                .scaleEffect(isRevealing || reduceMotion ? 1 : 0.95)
+        }
+        .frame(maxWidth: .infinity)
+        // 뜻은 레이아웃 높이에 포함하지 않고 단어 블록 아래에 띄운다 — 뜻이 몇 줄이든 위쪽(타이머)이 움직이지 않는다.
+        .overlay(alignment: .bottom) {
+            RecognitionMeaningLabel(text: word.primaryMeaning, isRevealing: isRevealing)
                 .transition(.opacity)
                 .id(word.id)
+                .alignmentGuide(.bottom) { $0[.top] - 24 }
         }
     }
 }
 
 // MARK: - 공통 컴포넌트
 
+private struct RecognitionMeaningLabel: View {
+    let text: String
+    let isRevealing: Bool
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    var body: some View {
+        Text(text)
+            .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 18))
+            .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
+            .multilineTextAlignment(.center)
+            .padding(.horizontal, 32)
+            .padding(.vertical, 14)
+            .background(DesignSystemAsset.white.swiftUIColor.opacity(0.12))
+            .clipShape(.rect(cornerRadius: 16))
+            .overlay {
+                RoundedRectangle(cornerRadius: 16)
+                    .stroke(DesignSystemAsset.white.swiftUIColor.opacity(0.28), lineWidth: 1)
+            }
+            .opacity(isRevealing ? 1 : 0)
+            .scaleEffect(isRevealing || reduceMotion ? 1 : 0.95)
+    }
+}
+
+/// 단어와 발음. 길어서 줄바꿈이 생길 단어는 한 줄에 맞게 글자 크기를 줄이고(화면 너비 기준),
+/// 블록 높이는 항상 같게 고정해 위의 타이머 위치가 단어에 따라 달라지지 않게 한다.
 private struct RecognitionWordBlock: View {
     let word: Lesson.Word
 
@@ -88,12 +102,18 @@ private struct RecognitionWordBlock: View {
                 .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 52))
                 .tracking(-0.03 * 52)
                 .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
+                .lineLimit(1)
+                .minimumScaleFactor(0.3)
 
             Text(word.pronunciation)
                 .font(.system(.body, design: .monospaced))
                 .foregroundStyle(DesignSystemAsset.white.swiftUIColor.opacity(0.65))
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
                 .padding(.top, 12)
         }
+        .padding(.horizontal, 24)
+        .frame(height: 100, alignment: .top)
     }
 }
 
