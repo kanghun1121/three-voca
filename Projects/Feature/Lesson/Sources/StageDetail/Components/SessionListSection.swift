@@ -8,10 +8,9 @@ struct SessionListSection: View {
     let onSessionTapped: (String) -> Void
 
     var body: some View {
-        let rows = Array(zip(lessons, lessons.sessionStatuses))
         LazyVStack(spacing: 0) {
-            ForEach(rows, id: \.0.id) { lesson, status in
-                SessionRow(lesson: lesson, status: status, level: level) {
+            ForEach(lessons) { lesson in
+                SessionRow(lesson: lesson, level: level) {
                     onSessionTapped(lesson.id)
                 }
             }
