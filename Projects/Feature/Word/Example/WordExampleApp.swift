@@ -1,5 +1,6 @@
 import SwiftUI
 
+import DomainInterface
 import FeatureWord
 
 import Dependencies
@@ -12,6 +13,12 @@ struct WordExampleApp: App {
             $0.loadLessonWordsUseCase = LoadLessonWordsUseCase(execute: { id in .preview(id: id) })
             $0.wordRepository.fetchDetail = { _ in .previewFixture }
             $0.audioRepository.url = { _ in nil }
+            $0.learningHistoryRepository.stream = { _ in
+                AsyncStream { continuation in
+                    continuation.yield(.preview)
+                    continuation.finish()
+                }
+            }
         }
     }
 
