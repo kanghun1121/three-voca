@@ -5,8 +5,11 @@ import DomainInterface
 
 struct SpellingView: View {
     let word: Lesson.Word
-    let slots: [SpellingViewModel.SlotState]
+    @Binding var inputText: String
+    var isFocused: FocusState<Bool>.Binding
     let viewState: SpellingViewModel.ViewState
+    let canSubmit: Bool
+    let onSubmit: () -> Void
     let onSkip: () -> Void
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -28,10 +31,19 @@ struct SpellingView: View {
                     .padding(.top, 8)
                     .padding(.bottom, 36)
 
-                SpellingSlotRow(slots: slots, viewState: viewState, reduceMotion: reduceMotion)
+                SpellingInputField(
+                    text: $inputText,
+                    isFocused: isFocused,
+                    viewState: viewState,
+                    reduceMotion: reduceMotion,
+                    onSubmit: onSubmit
+                )
 
-                // 건너뛰기 버튼 (입력 중에만 표시)
+                // 제출·건너뛰기 버튼 (입력 중에만 표시)
                 if viewState == .active {
+                    SpellingSubmitButton(isEnabled: canSubmit, action: onSubmit)
+                        .padding(.top, 16)
+
                     Button("건너뛰기", action: onSkip)
                         .font(DesignSystemFontFamily.Pretendard.regular.swiftUIFont(size: 14))
                         .foregroundStyle(DesignSystemAsset.white.swiftUIColor.opacity(0.40))
@@ -64,92 +76,85 @@ struct SpellingView: View {
     }
 }
 
-// MARK: - 슬롯 행
+// MARK: - 입력 필드
 
-struct SpellingSlotRow: View {
-    let slots: [SpellingViewModel.SlotState]
+/// 시스템 TextField로 입력을 직접 받는 필드. 깜빡이는 커서는 시스템 캐럿(tint)을 쓴다.
+private struct SpellingInputField: View {
+    @Binding var text: String
+    var isFocused: FocusState<Bool>.Binding
     let viewState: SpellingViewModel.ViewState
     let reduceMotion: Bool
+    let onSubmit: () -> Void
 
     var body: some View {
-        HStack(spacing: 7) {
-            ForEach(Array(slots.enumerated()), id: \.offset) { index, slot in
-                SpellingSlotCell(slot: slot, viewState: viewState)
-            }
-        }
-        .modifier(ShakeModifier(trigger: viewState == .incorrect || viewState == .revealing, reduceMotion: reduceMotion))
-    }
-}
+        HStack(spacing: 8) {
+            TextField("", text: $text)
+                .font(.system(size: 22, weight: .bold, design: .monospaced))
+                .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
+                .tint(DesignSystemAsset.white.swiftUIColor)
+                .focused(isFocused)
+                .autocorrectionDisabled()
+                .textInputAutocapitalization(.never)
+                .keyboardType(.asciiCapable)
+                .submitLabel(.done)
+                .onSubmit(onSubmit)
+                .disabled(viewState != .active)
 
-// MARK: - 슬롯 셀
-
-private struct SpellingSlotCell: View {
-    let slot: SpellingViewModel.SlotState
-    let viewState: SpellingViewModel.ViewState
-
-    var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 8)
-                .fill(fillColor)
-                .overlay {
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(borderColor, lineWidth: 2)
+            if viewState == .active && !text.isEmpty {
+                Button("전체 지우기", systemImage: "xmark.circle.fill") {
+                    text = ""
                 }
-
-            if case .filled(let char) = slot {
-                Text(String(char).lowercased())
-                    .font(.system(size: 22, weight: .bold, design: .monospaced))
-                    .tracking(-0.01 * 22)
-                    .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
-            } else if case .hint(let char) = slot {
-                Text(String(char).lowercased())
-                    .font(.system(size: 22, weight: .bold, design: .monospaced))
-                    .tracking(-0.01 * 22)
-                    .foregroundStyle(DesignSystemAsset.white.swiftUIColor.opacity(0.90))
+                .labelStyle(.iconOnly)
+                .font(.system(size: 20))
+                .foregroundStyle(DesignSystemAsset.white.swiftUIColor.opacity(0.55))
             }
         }
-        .frame(width: 30, height: 42)
-        .scaleEffect(scaleValue)
-        .animation(.spring(duration: 0.12), value: slot)
+            .frame(maxWidth: .infinity, minHeight: 56, alignment: .leading)
+            .padding(.horizontal, 20)
+            .background(fillColor, in: .rect(cornerRadius: 14))
+            .overlay {
+                RoundedRectangle(cornerRadius: 14)
+                    .stroke(borderColor, lineWidth: 2)
+            }
+            .modifier(ShakeModifier(trigger: viewState == .incorrect || viewState == .revealing, reduceMotion: reduceMotion))
     }
 
     private var fillColor: Color {
-        if case .hint = slot {
-            return DesignSystemAsset.white.swiftUIColor.opacity(0.22)
-        }
         switch viewState {
         case .correct:
-            return DesignSystemAsset.positive.swiftUIColor.opacity(0.20)
+            DesignSystemAsset.positive.swiftUIColor.opacity(0.20)
         case .incorrect, .revealing:
-            return DesignSystemAsset.negative.swiftUIColor.opacity(0.20)
-        default:
-            if case .filled = slot {
-                return DesignSystemAsset.white.swiftUIColor.opacity(0.16)
-            }
-            return Color.clear
+            DesignSystemAsset.negative.swiftUIColor.opacity(0.20)
+        case .active:
+            DesignSystemAsset.white.swiftUIColor.opacity(0.16)
         }
     }
 
     private var borderColor: Color {
-        if case .hint = slot {
-            return DesignSystemAsset.white.swiftUIColor.opacity(0.50)
-        }
         switch viewState {
         case .correct:
-            return DesignSystemAsset.positive.swiftUIColor.opacity(0.55)
+            DesignSystemAsset.positive.swiftUIColor.opacity(0.55)
         case .incorrect, .revealing:
-            return DesignSystemAsset.negative.swiftUIColor.opacity(0.55)
-        default:
-            if case .cursor = slot {
-                return DesignSystemAsset.white.swiftUIColor
-            }
-            return DesignSystemAsset.white.swiftUIColor.opacity(0.18)
+            DesignSystemAsset.negative.swiftUIColor.opacity(0.55)
+        case .active:
+            DesignSystemAsset.white.swiftUIColor.opacity(0.28)
         }
     }
+}
 
-    private var scaleValue: Double {
-        if case .filled = slot { return 1.0 }
-        return 1.0
+// MARK: - 제출 버튼
+
+private struct SpellingSubmitButton: View {
+    let isEnabled: Bool
+    let action: () -> Void
+
+    var body: some View {
+        Button("제출", action: action)
+            .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 16))
+            .foregroundStyle(DesignSystemAsset.white.swiftUIColor.opacity(isEnabled ? 1 : 0.40))
+            .frame(maxWidth: .infinity, minHeight: 52)
+            .background(DesignSystemAsset.white.swiftUIColor.opacity(isEnabled ? 0.28 : 0.10), in: .rect(cornerRadius: 14))
+            .disabled(!isEnabled)
     }
 }
 
