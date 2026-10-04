@@ -44,6 +44,7 @@ let project = Project.makeModule(
             resources: ["Example/Resources/**"],
             dependencies: [
                 .feature(implements: .home),
+                .domainInterface,
                 .dependencies,
                 .designSystem,
             ]
