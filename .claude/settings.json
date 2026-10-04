@@ -7,5 +7,18 @@
       "Read(*.env)",
       "Bash(rm -rf *)"
     ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "mcp__figma__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -B \"$CLAUDE_PROJECT_DIR/.claude/hooks/figma-file-guard.py\""
+          }
+        ]
+      }
+    ]
   }
 }
