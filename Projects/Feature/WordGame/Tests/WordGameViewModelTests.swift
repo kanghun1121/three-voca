@@ -68,6 +68,7 @@ final class WordGameViewModelTests: XCTestCase {
 
             spellingVM.load()
             spellingVM.inputText = "cat"
+            spellingVM.submitButtonTapped()
             _ = await spellingVM.advanceTask?.value
 
             guard case .gameComplete(_, let onDismiss) = vm.activeStage else {
