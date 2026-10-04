@@ -20,7 +20,7 @@ struct WordListHeaderView: View {
                 .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
                 .padding(.top, 4)
             if let learningHistory {
-                Text("\(learningHistory.studyCount)회 학습 · 처음 완료 \(learningHistory.firstCompletedAt)")
+                Text("\(learningHistory.studyCount)회 학습")
                     .font(DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 13))
                     .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
                     .padding(.top, 8)
