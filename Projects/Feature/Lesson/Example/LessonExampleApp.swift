@@ -1,5 +1,6 @@
 import SwiftUI
 
+import DomainInterface
 import FeatureLesson
 
 import Dependencies
@@ -15,16 +16,7 @@ struct LessonExampleApp: App {
                     continuation.finish()
                 }
             }
-            // [TestDependencyKey 제거] previewValue도 unimplemented가 되어 인라인
-            $0.learningLibraryRepository = LearningLibraryRepository(
-                stream: {
-                    AsyncStream { continuation in
-                        continuation.yield(.previewFixture)
-                        continuation.finish()
-                    }
-                },
-                refresh: {}
-            )
+            $0.learningLibraryRepository = .happyPath
         }
     }
 
