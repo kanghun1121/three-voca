@@ -18,28 +18,5 @@ let project = Project.makeModule(
                 .feature(implements: .login),
             ]
         )),
-        .feature(example: .login, factory: .init(
-            infoPlist: .extendingDefault(with: [
-                "CFBundleShortVersionString": "1.0",
-                "CFBundleVersion": "1",
-                "UILaunchStoryboardName": "LaunchScreen",
-                "UIApplicationSceneManifest": [
-                    "UIApplicationSupportsMultipleScenes": false,
-                    "UISceneConfigurations": [:]
-                ]
-            ]),
-            resources: ["Example/Resources/**"],
-            dependencies: [
-                .feature(implements: .login),
-                .designSystem,
-            ]
-        )),
-    ],
-    schemes: [
-        .scheme(
-            name: "FeatureLoginExample",
-            buildAction: .buildAction(targets: [.target("FeatureLoginExample")]),
-            runAction: .runAction(executable: .target("FeatureLoginExample"))
-        )
     ]
 )
