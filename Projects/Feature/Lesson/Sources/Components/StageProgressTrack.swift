@@ -9,15 +9,16 @@ struct StageProgressTrack: View {
     let height: CGFloat
 
     var body: some View {
-        ZStack(alignment: .leading) {
-            Capsule()
-                .fill(DesignSystemAsset.progressTrack.swiftUIColor)
-            Capsule()
-                .fill(fillColor)
-                .containerRelativeFrame(.horizontal) { width, _ in
-                    width * max(0, min(1, ratio))
+        Capsule()
+            .fill(DesignSystemAsset.progressTrack.swiftUIColor)
+            .overlay(alignment: .leading) {
+                // 채움 폭은 화면이 아니라 트랙 자신의 폭 기준이어야 한다.
+                GeometryReader { proxy in
+                    Capsule()
+                        .fill(fillColor)
+                        .frame(width: proxy.size.width * max(0, min(1, ratio)))
                 }
-        }
-        .frame(height: height)
+            }
+            .frame(height: height)
     }
 }
