@@ -39,7 +39,7 @@ struct LoginRequiredPopupView: View {
             .padding(.bottom, 28)
         }
         .frame(maxWidth: .infinity)
-        .background(DesignSystemColor.Base.white)
+        .background(DesignSystemColor.Background.base)
         .clipShape(.rect(cornerRadius: 20))
         .shadow(color: DesignSystemColor.Foreground.strong.opacity(0.1), radius: 16, x: 0, y: -4)
     }

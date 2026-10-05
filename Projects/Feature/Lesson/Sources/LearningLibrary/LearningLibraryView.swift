@@ -28,7 +28,7 @@ public struct LearningLibraryView: View {
                         LevelList(levels: state.levels, onLevelTapped: { viewModel.didTapLevel(id: $0) })
                     }
                 }
-                .background(DesignSystemColor.Base.white)
+                .background(DesignSystemColor.Background.base)
             case .error(let message):
                 ContentUnavailableView(message, systemImage: "exclamationmark.triangle")
             }

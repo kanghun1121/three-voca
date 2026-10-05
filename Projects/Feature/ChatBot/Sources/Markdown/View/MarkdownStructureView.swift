@@ -38,7 +38,7 @@ struct MarkdownStructureView: View {
               let open = line.range(of: "[", range: searchStart..<line.endIndex),
               let close = line.range(of: "]", range: open.upperBound..<line.endIndex) {
             if let attrRange = Range(open.lowerBound..<close.upperBound, in: result) {
-                result[attrRange].foregroundColor = DesignSystemColor.Accent.selectedBlue
+                result[attrRange].foregroundColor = DesignSystemColor.Accent.selectedBlueText
             }
             searchStart = close.upperBound
         }

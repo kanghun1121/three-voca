@@ -18,7 +18,7 @@ struct LearningLibraryLoadingView: View {
                 .foregroundStyle(DesignSystemColor.Foreground.subtle)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(DesignSystemColor.Base.white)
+        .background(DesignSystemColor.Background.base)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("학습 라이브러리를 불러오는 중")
         .accessibilityAddTraits(.updatesFrequently)

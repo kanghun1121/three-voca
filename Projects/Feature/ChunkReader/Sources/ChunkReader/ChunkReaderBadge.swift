@@ -14,7 +14,7 @@ struct ChunkReaderBadge: View {
             Image(systemName: icon)
                 .typography(DesignSystemTypography.Pretendard.regular12)
         }
-        .foregroundStyle(DesignSystemColor.Accent.selectedBlue)
+        .foregroundStyle(DesignSystemColor.Accent.selectedBlueText)
         .padding(.init(top: 5, leading: 9, bottom: 5, trailing: 9))
         .overlay {
             Capsule()

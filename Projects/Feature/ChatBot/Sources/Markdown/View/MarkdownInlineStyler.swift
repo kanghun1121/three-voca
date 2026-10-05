@@ -20,7 +20,7 @@ enum MarkdownInlineStyler {
             }
             if run.inlinePresentationIntent?.contains(.code) == true {
                 typography = DesignSystemTypography.Markdown.code.scaled(to: baseSize)
-                color = DesignSystemColor.Accent.selectedBlue
+                color = DesignSystemColor.Accent.selectedBlueText
                 result[range].backgroundColor = DesignSystemColor.Accent.selectedBlue100
             }
             if run.markdownHighlight == true {

@@ -26,9 +26,9 @@ public struct ChunkReaderView: View {
             .padding(.bottom, 28)
         }
         .scrollIndicators(.hidden)
-        .background(DesignSystemColor.Base.white)
+        .background(DesignSystemColor.Background.base)
         .navigationBarBackButtonHidden(true)
-        .toolbarBackground(DesignSystemColor.Base.white, for: .navigationBar)
+        .toolbarBackground(DesignSystemColor.Background.base, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {

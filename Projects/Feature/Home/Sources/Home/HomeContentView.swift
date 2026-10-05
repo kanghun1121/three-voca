@@ -21,7 +21,7 @@ struct HomeContentView: View {
             }
             .padding(.bottom, 40)
         }
-        .background(DesignSystemColor.Base.white)
+        .background(DesignSystemColor.Background.base)
         .toolbar(.hidden, for: .navigationBar)
     }
 

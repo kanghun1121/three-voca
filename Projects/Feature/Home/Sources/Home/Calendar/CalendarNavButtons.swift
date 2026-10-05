@@ -13,7 +13,7 @@ struct CalendarNavButtons: View {
             if !isAtCurrentMonth {
                 Button("오늘로", action: onToday)
                     .typography(DesignSystemTypography.Pretendard.semiBold12)
-                    .foregroundStyle(DesignSystemColor.Accent.selectedBlue)
+                    .foregroundStyle(DesignSystemColor.Accent.selectedBlueText)
                     .padding(.horizontal, 10)
                     .padding(.vertical, 5)
                     .background(DesignSystemColor.Accent.selectedBlue.opacity(0.1))

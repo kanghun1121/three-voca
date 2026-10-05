@@ -10,7 +10,7 @@ struct HeroContentView: View {
             LinearGradient(
                 stops: [
                     .init(color: DesignSystemColor.Game.base.opacity(0.08), location: 0),
-                    .init(color: DesignSystemColor.Base.white, location: 1)
+                    .init(color: DesignSystemColor.Background.base, location: 1)
                 ],
                 startPoint: UnitPoint(x: 0.28, y: 0),
                 endPoint: UnitPoint(x: 0.72, y: 1)

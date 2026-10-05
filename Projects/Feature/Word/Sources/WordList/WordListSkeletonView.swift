@@ -22,7 +22,7 @@ struct WordListSkeletonView: View {
             .redacted(reason: .placeholder)
         }
         .scrollIndicators(.hidden)
-        .background(DesignSystemColor.Base.white)
+        .background(DesignSystemColor.Background.base)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("단어 목록 불러오는 중")
     }
@@ -71,7 +71,7 @@ private struct SkeletonWordRow: View {
                 .typography(DesignSystemTypography.Pretendard.regular16)
         }
         .padding(16)
-        .background(DesignSystemColor.Base.white)
+        .background(DesignSystemColor.Background.base)
         .clipShape(.rect(cornerRadius: 14))
         .overlay {
             RoundedRectangle(cornerRadius: 14)

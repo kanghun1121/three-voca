@@ -23,7 +23,7 @@ struct ChatBotAssistantBubbleView: View {
         } else if message.isGenerating {
             HStack(spacing: 8) {
                 ProgressView()
-                    .tint(DesignSystemColor.Accent.selectedBlue)
+                    .tint(DesignSystemColor.Accent.selectedBlueText)
                 Text("AI가 답변을 생성하고 있어요..")
                     .typography(DesignSystemTypography.Pretendard.medium14)
                     .foregroundStyle(DesignSystemColor.Foreground.muted)
@@ -32,7 +32,7 @@ struct ChatBotAssistantBubbleView: View {
         } else {
             MarkdownView(markdown: message.text, fadesTail: isActivelyStreaming)
                 .padding(.vertical, 11)
-                .background(DesignSystemColor.Base.white)
+                .background(DesignSystemColor.Background.base)
                 .clipShape(.rect(
                     topLeadingRadius: 4,
                     bottomLeadingRadius: 16,

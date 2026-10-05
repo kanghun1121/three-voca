@@ -19,7 +19,7 @@ struct DeleteAccountConfirmSheet: View {
 
             Text("회원 탈퇴 시 학습한 데이터가 모두 지워집니다.")
                 .typography(DesignSystemTypography.Pretendard.semiBold15)
-                .foregroundStyle(DesignSystemColor.Status.negative)
+                .foregroundStyle(DesignSystemColor.Status.negativeText)
                 .padding(.horizontal, 26)
                 .padding(.bottom, 20)
 
@@ -51,7 +51,7 @@ struct DeleteAccountConfirmSheet: View {
             .padding(.bottom, 36)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(DesignSystemColor.Base.white)
+        .background(DesignSystemColor.Background.base)
         .clipShape(.rect(cornerRadius: 20))
         .shadow(color: DesignSystemColor.Foreground.strong.opacity(0.1), radius: 16, x: 0, y: -4)
     }

@@ -22,7 +22,7 @@ struct FloatingWordCardView: View {
         .padding(.horizontal, 16)
         .padding(.vertical, 14)
         .frame(width: 220)
-        .background(DesignSystemColor.Base.white)
+        .background(DesignSystemColor.Background.base)
         .clipShape(RoundedRectangle(cornerRadius: 14))
         .shadow(
             color: cardBaseColor.opacity(0.12),

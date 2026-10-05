@@ -23,7 +23,7 @@ struct MyPageActionsView: View {
             Button(action: onDeleteAccountTapped) {
                 Text("회원 탈퇴")
                     .typography(DesignSystemTypography.Pretendard.semiBold14)
-                    .foregroundStyle(DesignSystemColor.Status.negative)
+                    .foregroundStyle(DesignSystemColor.Status.negativeText)
             }
             .buttonStyle(.plain)
         }

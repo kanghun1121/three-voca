@@ -15,7 +15,7 @@ struct MarkdownCatalogView: View {
             }
             .padding(16)
         }
-        .background(DesignSystemColor.Base.white)
+        .background(DesignSystemColor.Background.base)
     }
 
     private var entries: [MarkdownCatalogEntry] {

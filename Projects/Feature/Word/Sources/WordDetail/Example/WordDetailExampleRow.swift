@@ -29,7 +29,7 @@ struct WordDetailExampleRow: View {
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(DesignSystemColor.Base.white)
+        .background(DesignSystemColor.Background.base)
         .clipShape(.rect(cornerRadius: 14))
         .overlay {
             RoundedRectangle(cornerRadius: 14)
@@ -41,7 +41,7 @@ struct WordDetailExampleRow: View {
                 keyword: term,
                 font: DesignSystemTypography.Pretendard.semiBold16.font,
                 highlightFont: DesignSystemTypography.Pretendard.bold16.font,
-                highlightTextColor: DesignSystemColor.Accent.selectedBlue,
+                highlightTextColor: DesignSystemColor.Accent.selectedBlueText,
                 highlightBackgroundColor: DesignSystemColor.Accent.selectedBlue100
             ))
         }
@@ -81,7 +81,7 @@ private struct ActionBar: View {
                     .resizable()
                     .frame(width: 14, height: 14)
             }
-            .foregroundStyle(DesignSystemColor.Accent.selectedBlue)
+            .foregroundStyle(DesignSystemColor.Accent.selectedBlueText)
         }
         .padding(.horizontal, 8)
         .padding(.vertical, 6)

@@ -21,7 +21,5 @@ struct ChatBotBottomBlur: View {
                     // 머티리얼이 하단 안전영역(키보드 뒤 포함)까지 이어지게 한다.
                     .ignoresSafeArea(edges: .bottom)
             }
-            // 앱 컬러가 라이트 전용이라 다크 모드에서 머티리얼만 어두워지지 않게 고정한다.
-            .environment(\.colorScheme, .light)
     }
 }

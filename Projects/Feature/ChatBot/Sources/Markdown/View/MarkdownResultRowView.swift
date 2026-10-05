@@ -28,7 +28,7 @@ struct MarkdownResultRowView: View {
     private var iconColor: Color {
         item.kind == .correct
             ? DesignSystemColor.Status.positive
-            : DesignSystemColor.Status.negative
+            : DesignSystemColor.Status.negativeText
     }
 
     private var backgroundColor: Color {
