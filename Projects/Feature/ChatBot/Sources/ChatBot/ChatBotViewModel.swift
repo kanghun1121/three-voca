@@ -3,6 +3,7 @@ import Foundation
 
 import Core
 import DomainInterface
+import FeatureChatBotInterface
 
 import Dependencies
 

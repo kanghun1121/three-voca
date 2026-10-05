@@ -1,12 +1,14 @@
 import SwiftUI
 
 import DesignSystem
-import FeatureLesson
+import FeatureLessonInterface
 
+import Dependencies
 import SwiftUINavigation
 
 public struct HomeView: View {
     @State private var viewModel: HomeViewModel
+    @Dependency(\.lessonScreenFactory) private var lessonScreenFactory
 
     public init(viewModel: HomeViewModel) {
         _viewModel = State(initialValue: viewModel)
@@ -16,11 +18,11 @@ public struct HomeView: View {
         NavigationStack {
             HomeContentView(viewModel: viewModel)
                 .task { await viewModel.onAppear() }
-                .navigationDestination(item: $viewModel.destination.lesson) { detailVM in
-                    LessonDetailView(viewModel: detailVM)
+                .navigationDestination(item: $viewModel.destination.lesson) { lessonID in
+                    lessonScreenFactory.makeLessonDetailScreen(lessonID: lessonID.wrappedValue)
                 }
-                .navigationDestination(item: $viewModel.destination.learningLibrary) { libraryVM in
-                    LearningLibraryView(viewModel: libraryVM)
+                .navigationDestination(isPresented: Binding($viewModel.destination.learningLibrary)) {
+                    lessonScreenFactory.makeLearningLibraryScreen()
                 }
         }
         .tint(DesignSystemAsset.fgStrong.swiftUIColor)

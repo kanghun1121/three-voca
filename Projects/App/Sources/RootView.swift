@@ -4,6 +4,16 @@ import Core
 import Data
 import Domain
 import DomainInterface
+import FeatureChatBot
+import FeatureChatBotInterface
+import FeatureChunkReader
+import FeatureChunkReaderInterface
+import FeatureLesson
+import FeatureLessonInterface
+import FeatureWord
+import FeatureWordGame
+import FeatureWordGameInterface
+import FeatureWordInterface
 import Networking
 import NetworkingInterface
 
@@ -34,6 +44,12 @@ struct RootView: View {
         $0.httpClient = HTTPClientKey.liveValue
         $0.authenticatedHTTPClient = AuthenticatedHTTPClientKey.liveValue
         $0.sseClient = SSEClientKey.liveValue
+        // Feature 간 화면 연결은 Interface 프로토콜로만 이뤄진다. 구현체는 이곳에서만 조립한다.
+        $0.lessonScreenFactory = LiveLessonScreenFactory()
+        $0.wordListScreenFactory = LiveWordListScreenFactory()
+        $0.wordGameScreenFactory = LiveWordGameScreenFactory()
+        $0.chunkReaderScreenFactory = LiveChunkReaderScreenFactory()
+        $0.chatBotScreenFactory = LiveChatBotScreenFactory()
     } operation: {
         AppViewModel()
     }

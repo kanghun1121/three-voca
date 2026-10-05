@@ -4,10 +4,16 @@ import DependencyPlugin
 let project = Project.makeModule(
     name: ModulePath.Feature.name + ModulePath.Feature.lesson.rawValue,
     targets: [
+        .feature(interface: .lesson, factory: .init(
+            dependencies: [
+                .dependencies,
+            ]
+        )),
         .feature(implements: .lesson, factory: .init(
             dependencies: [
-                .feature(implements: .word),
-                .feature(implements: .wordGame),
+                .feature(interface: .lesson),
+                .feature(interface: .word),
+                .feature(interface: .wordGame),
                 .domainInterface,
                 .dependencies,
                 .designSystem,
