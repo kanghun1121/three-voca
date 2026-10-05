@@ -11,7 +11,7 @@ struct ChunkReaderWordRows: View {
             ForEach(wordAnnotations) { wordAnnotation in
                 if wordAnnotation.id > 0 {
                     Divider()
-                        .background(DesignSystemAsset.borderSubtle.swiftUIColor)
+                        .background(DesignSystemColor.Border.subtle)
                 }
                 WordRowView(wordAnnotation: wordAnnotation)
             }

@@ -9,14 +9,14 @@ struct RecordCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("학습 기록")
-                .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 14))
-                .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
+                .typography(DesignSystemTypography.Pretendard.bold14)
+                .foregroundStyle(DesignSystemColor.Foreground.muted)
 
             RecordCell(label: "학습 횟수", value: record.map { "\($0.studyCount)회" } ?? "-")
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
-        .background(DesignSystemAsset.bgMuted.swiftUIColor)
+        .background(DesignSystemColor.Background.muted)
         .clipShape(.rect(cornerRadius: 12))
     }
 }
@@ -28,11 +28,11 @@ private struct RecordCell: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(label)
-                .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 12))
-                .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
+                .typography(DesignSystemTypography.Pretendard.semiBold12)
+                .foregroundStyle(DesignSystemColor.Foreground.muted)
             Text(value)
-                .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 16))
-                .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
+                .typography(DesignSystemTypography.Pretendard.bold16)
+                .foregroundStyle(DesignSystemColor.Foreground.strong)
         }
     }
 }

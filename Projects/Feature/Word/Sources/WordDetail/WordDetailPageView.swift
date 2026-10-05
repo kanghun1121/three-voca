@@ -21,7 +21,7 @@ struct WordDetailPageView: View {
                 )
             case .error(let message):
                 Text(message)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DesignSystemColor.Foreground.muted)
                     .frame(maxWidth: .infinity)
                     .containerRelativeFrame(.vertical)
             case .loading, nil:
@@ -31,6 +31,6 @@ struct WordDetailPageView: View {
             }
         }
         .scrollIndicators(.hidden)
-        .background(DesignSystemAsset.background.swiftUIColor)
+        .background(DesignSystemColor.Base.white)
     }
 }

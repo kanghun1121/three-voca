@@ -1,5 +1,7 @@
 import SwiftUI
 
+import DesignSystem
+
 import DomainInterface
 import FeatureWord
 import FeatureWordGame
@@ -34,7 +36,7 @@ public struct LessonDetailView: View {
                 )
             case .error(let message):
                 Text(message)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DesignSystemColor.Foreground.muted)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }

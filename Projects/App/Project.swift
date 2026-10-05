@@ -16,18 +16,7 @@ let project = Project.makeModule(
                 "SUPABASE_ANON_KEY": "$(SUPABASE_ANON_KEY)",
                 "MW_DICTIONARY_API_KEY": "$(MW_DICTIONARY_API_KEY)",
                 "ITSAppUsesNonExemptEncryption": false,
-                "PRIVACY_POLICY_URL": "https://maize-erica-237.notion.site/387a1c6f6ce080ba927ef413ffe4cfd4",
-                "UIAppFonts": [
-                    "Pretendard-Thin.otf",
-                    "Pretendard-ExtraLight.otf",
-                    "Pretendard-Light.otf",
-                    "Pretendard-Regular.otf",
-                    "Pretendard-Medium.otf",
-                    "Pretendard-SemiBold.otf",
-                    "Pretendard-Bold.otf",
-                    "Pretendard-ExtraBold.otf",
-                    "Pretendard-Black.otf"
-                ]
+                "PRIVACY_POLICY_URL": "https://maize-erica-237.notion.site/387a1c6f6ce080ba927ef413ffe4cfd4"
             ]),
             sources: ["Sources/**"],
             resources: ["Resources/**"],

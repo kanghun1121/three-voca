@@ -15,8 +15,8 @@ struct SessionRow: View {
                 SessionTitleLabel(lesson: lesson)
                 Spacer()
                 Image(systemName: "chevron.right")
-                    .font(.system(size: 13, weight: .semibold))
-                    .foregroundStyle(DesignSystemAsset.textCaption.swiftUIColor)
+                    .typography(DesignSystemTypography.Pretendard.semiBold13)
+                    .foregroundStyle(DesignSystemColor.Text.caption)
                     .accessibilityHidden(true)
             }
             .padding(.vertical, 16)

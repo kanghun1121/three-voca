@@ -12,17 +12,16 @@ struct WordListHeaderView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("\(wordCount)개 단어")
-                .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 28))
-                .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
-                .kerning(-0.025 * 28)
+                .typography(DesignSystemTypography.Pretendard.extraBold28)
+                .foregroundStyle(DesignSystemColor.Foreground.strong)
             Text("Level \(level) · Lesson \(lessonNumber)")
-                .font(DesignSystemFontFamily.Pretendard.regular.swiftUIFont(size: 14))
-                .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
+                .typography(DesignSystemTypography.Pretendard.regular14)
+                .foregroundStyle(DesignSystemColor.Foreground.muted)
                 .padding(.top, 4)
             if let learningHistory {
                 Text("\(learningHistory.studyCount)회 학습")
-                    .font(DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 13))
-                    .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
+                    .typography(DesignSystemTypography.Pretendard.medium13)
+                    .foregroundStyle(DesignSystemColor.Foreground.muted)
                     .padding(.top, 8)
             }
         }

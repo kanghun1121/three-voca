@@ -28,9 +28,9 @@ public struct WordDetailView: View {
             }
         }
         .tabViewStyle(.page(indexDisplayMode: .never))
-        .background(DesignSystemAsset.background.swiftUIColor)
+        .background(DesignSystemColor.Base.white)
         .navigationBarBackButtonHidden(true)
-        .toolbarBackground(DesignSystemAsset.background.swiftUIColor, for: .navigationBar)
+        .toolbarBackground(DesignSystemColor.Base.white, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
@@ -39,8 +39,8 @@ public struct WordDetailView: View {
                     systemImage: "chevron.left",
                     action: dismiss.callAsFunction
                 )
-                    .fontWeight(.semibold)
-                    .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
+                    .typography(DesignSystemTypography.Content.bodySemiBold)
+                    .foregroundStyle(DesignSystemColor.Foreground.strong)
             }
         }
         .navigationDestination(item: $viewModel.destination.chunkReader) { chunkReaderVM in

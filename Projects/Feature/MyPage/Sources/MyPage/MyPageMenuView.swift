@@ -9,7 +9,7 @@ struct MyPageMenuView: View {
         VStack(spacing: 0) {
             MenuRow(title: "문의사항")
             Rectangle()
-                .fill(DesignSystemAsset.border.swiftUIColor)
+                .fill(DesignSystemColor.Border.default)
                 .frame(height: 1)
             MenuRow(title: "개인정보 처리방침", action: onPrivacyTapped)
         }
@@ -25,9 +25,8 @@ private struct MenuRow: View {
         Button(action: action ?? {}) {
             HStack {
                 Text(title)
-                    .font(DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 16))
-                    .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
-                    .kerning(16 * -0.01)
+                    .typography(DesignSystemTypography.Pretendard.medium16)
+                    .foregroundStyle(DesignSystemColor.Foreground.strong)
 
                 Spacer()
 
@@ -47,7 +46,7 @@ private struct ChevronIcon: View {
             .resizable()
             .scaledToFit()
             .frame(width: 9, height: 12)
-            .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
-            .fontWeight(.medium)
+            .foregroundStyle(DesignSystemColor.Foreground.strong)
+            .typography(DesignSystemTypography.Content.bodyMedium)
     }
 }

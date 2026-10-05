@@ -21,13 +21,13 @@ struct HomeContentView: View {
             }
             .padding(.bottom, 40)
         }
-        .background(DesignSystemAsset.background.swiftUIColor)
+        .background(DesignSystemColor.Base.white)
         .toolbar(.hidden, for: .navigationBar)
     }
 
     private var divider: some View {
         Rectangle()
-            .fill(DesignSystemAsset.borderSubtle.swiftUIColor)
+            .fill(DesignSystemColor.Border.subtle)
             .frame(height: 1)
             .padding(.horizontal, 24)
             .padding(.top, 34)

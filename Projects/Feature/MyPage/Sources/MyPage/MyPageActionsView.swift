@@ -10,20 +10,20 @@ struct MyPageActionsView: View {
         HStack(spacing: 0) {
             Button(action: onLogoutTapped) {
                 Text("로그아웃")
-                    .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 14))
-                    .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
+                    .typography(DesignSystemTypography.Pretendard.semiBold14)
+                    .foregroundStyle(DesignSystemColor.Foreground.strong)
             }
             .buttonStyle(.plain)
 
             Rectangle()
-                .fill(DesignSystemAsset.border.swiftUIColor)
+                .fill(DesignSystemColor.Border.default)
                 .frame(width: 1, height: 12)
                 .padding(.horizontal, 18)
 
             Button(action: onDeleteAccountTapped) {
                 Text("회원 탈퇴")
-                    .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 14))
-                    .foregroundStyle(DesignSystemAsset.negative.swiftUIColor)
+                    .typography(DesignSystemTypography.Pretendard.semiBold14)
+                    .foregroundStyle(DesignSystemColor.Status.negative)
             }
             .buttonStyle(.plain)
         }

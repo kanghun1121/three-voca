@@ -10,26 +10,26 @@ struct ActionButtonsSection: View {
         VStack(spacing: 10) {
             Button(action: onGameTapped) {
                 Label("학습 게임 시작", systemImage: "play.fill")
-                    .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 17))
-                    .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
+                    .typography(DesignSystemTypography.Pretendard.bold17)
+                    .foregroundStyle(DesignSystemColor.Base.white)
                     .frame(maxWidth: .infinity)
                     .frame(height: 56)
-                    .background(DesignSystemAsset.game.swiftUIColor)
+                    .background(DesignSystemColor.Game.base)
                     .clipShape(.rect(cornerRadius: 14))
             }
             .buttonStyle(.plain)
 
             Button(action: onWordListTapped) {
                 Label("단어 보기", systemImage: "book")
-                    .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 17))
-                    .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
+                    .typography(DesignSystemTypography.Pretendard.semiBold17)
+                    .foregroundStyle(DesignSystemColor.Foreground.strong)
                     .frame(maxWidth: .infinity)
                     .frame(height: 56)
-                    .background(DesignSystemAsset.white.swiftUIColor)
+                    .background(DesignSystemColor.Base.white)
                     .clipShape(.rect(cornerRadius: 14))
                     .overlay {
                         RoundedRectangle(cornerRadius: 14)
-                            .stroke(DesignSystemAsset.border.swiftUIColor, lineWidth: 1)
+                            .stroke(DesignSystemColor.Border.default, lineWidth: 1)
                     }
             }
             .buttonStyle(.plain)

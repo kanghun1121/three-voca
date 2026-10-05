@@ -10,8 +10,8 @@ struct HomeTopBar: View {
             Spacer()
             Button("학습 라이브러리", systemImage: "list.bullet", action: onTapped)
                 .labelStyle(.iconOnly)
-                .font(.system(size: 18, weight: .semibold))
-                .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
+                .typography(DesignSystemTypography.Pretendard.semiBold18)
+                .foregroundStyle(DesignSystemColor.Foreground.muted)
                 .frame(minWidth: 44, minHeight: 44)
         }
         .padding(.top, 6)

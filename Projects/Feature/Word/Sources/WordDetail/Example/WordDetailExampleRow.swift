@@ -14,12 +14,12 @@ struct WordDetailExampleRow: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             (highlightedEnText ?? Text(example.en))
-                .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 16))
-                .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
+                .typography(DesignSystemTypography.Pretendard.semiBold16)
+                .foregroundStyle(DesignSystemColor.Foreground.strong)
 
             Text(example.ko)
-                .font(DesignSystemFontFamily.Pretendard.regular.swiftUIFont(size: 13))
-                .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
+                .typography(DesignSystemTypography.Pretendard.regular13)
+                .foregroundStyle(DesignSystemColor.Foreground.muted)
 
             ActionBar(
                 example: example,
@@ -29,20 +29,20 @@ struct WordDetailExampleRow: View {
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(DesignSystemAsset.background.swiftUIColor)
+        .background(DesignSystemColor.Base.white)
         .clipShape(.rect(cornerRadius: 14))
         .overlay {
             RoundedRectangle(cornerRadius: 14)
-                .stroke(DesignSystemAsset.border.swiftUIColor, lineWidth: 1)
+                .stroke(DesignSystemColor.Border.default, lineWidth: 1)
         }
         .task(id: "\(term)|\(example.en)") {
             highlightedEnText = Text(SentenceHighlighter.highlighted(
                 sentence: example.en,
                 keyword: term,
-                font: DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 16),
-                highlightFont: DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 16),
-                highlightTextColor: DesignSystemAsset.selectedBlue.swiftUIColor,
-                highlightBackgroundColor: DesignSystemAsset.selectedBlue100.swiftUIColor
+                font: DesignSystemTypography.Pretendard.semiBold16.font,
+                highlightFont: DesignSystemTypography.Pretendard.bold16.font,
+                highlightTextColor: DesignSystemColor.Accent.selectedBlue,
+                highlightBackgroundColor: DesignSystemColor.Accent.selectedBlue100
             ))
         }
     }
@@ -74,14 +74,14 @@ private struct ActionBar: View {
         Button(action: action) {
             Label {
                 Text(title)
-                    .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 13))
+                    .typography(DesignSystemTypography.Pretendard.semiBold13)
             } icon: {
                 icon.swiftUIImage
                     .renderingMode(.template)
                     .resizable()
                     .frame(width: 14, height: 14)
             }
-            .foregroundStyle(DesignSystemAsset.selectedBlue.swiftUIColor)
+            .foregroundStyle(DesignSystemColor.Accent.selectedBlue)
         }
         .padding(.horizontal, 8)
         .padding(.vertical, 6)

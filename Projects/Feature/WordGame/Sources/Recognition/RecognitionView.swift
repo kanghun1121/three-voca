@@ -75,16 +75,16 @@ private struct RecognitionMeaningLabel: View {
 
     var body: some View {
         Text(text)
-            .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 18))
-            .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
+            .typography(DesignSystemTypography.Pretendard.semiBold18)
+            .foregroundStyle(DesignSystemColor.Base.white)
             .multilineTextAlignment(.center)
             .padding(.horizontal, 32)
             .padding(.vertical, 14)
-            .background(DesignSystemAsset.white.swiftUIColor.opacity(0.12))
+            .background(DesignSystemColor.Base.white.opacity(0.12))
             .clipShape(.rect(cornerRadius: 16))
             .overlay {
                 RoundedRectangle(cornerRadius: 16)
-                    .stroke(DesignSystemAsset.white.swiftUIColor.opacity(0.28), lineWidth: 1)
+                    .stroke(DesignSystemColor.Base.white.opacity(0.28), lineWidth: 1)
             }
             .opacity(isRevealing ? 1 : 0)
             .scaleEffect(isRevealing || reduceMotion ? 1 : 0.95)
@@ -99,15 +99,14 @@ private struct RecognitionWordBlock: View {
     var body: some View {
         VStack(spacing: 0) {
             Text(word.term)
-                .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 52))
-                .tracking(-0.03 * 52)
-                .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
+                .typography(DesignSystemTypography.Pretendard.extraBold52)
+                .foregroundStyle(DesignSystemColor.Base.white)
                 .lineLimit(1)
                 .minimumScaleFactor(0.3)
 
             Text(word.pronunciation)
-                .font(.system(.body, design: .monospaced))
-                .foregroundStyle(DesignSystemAsset.white.swiftUIColor.opacity(0.65))
+                .typography(DesignSystemTypography.Mono.body)
+                .foregroundStyle(DesignSystemColor.Base.white.opacity(0.65))
                 .lineLimit(1)
                 .minimumScaleFactor(0.5)
                 .padding(.top, 12)
@@ -127,8 +126,8 @@ private struct RecognitionFooter: View {
     var body: some View {
         VStack(spacing: 16) {
             Text("3초 안에 뜻이 떠올랐나요?")
-                .font(DesignSystemFontFamily.Pretendard.regular.swiftUIFont(size: 14))
-                .foregroundStyle(DesignSystemAsset.white.swiftUIColor.opacity(0.70))
+                .typography(DesignSystemTypography.Pretendard.regular14)
+                .foregroundStyle(DesignSystemColor.Base.white.opacity(0.70))
 
             RecognitionJudgmentButtons(
                 isRevealing: isRevealing,
@@ -151,26 +150,26 @@ private struct RecognitionJudgmentButtons: View {
         HStack(spacing: 12) {
             Button(action: onForgot) {
                 Text("기억 안 나요")
-                    .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 16))
-                    .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
+                    .typography(DesignSystemTypography.Pretendard.bold16)
+                    .foregroundStyle(DesignSystemColor.Base.white)
                     .frame(maxWidth: .infinity)
                     .frame(height: 60)
-                    .background(DesignSystemAsset.white.swiftUIColor.opacity(0.08))
+                    .background(DesignSystemColor.Base.white.opacity(0.08))
                     .clipShape(.rect(cornerRadius: 18))
                     .overlay {
                         RoundedRectangle(cornerRadius: 18)
-                            .stroke(DesignSystemAsset.white.swiftUIColor.opacity(0.28), lineWidth: 1)
+                            .stroke(DesignSystemColor.Base.white.opacity(0.28), lineWidth: 1)
                     }
             }
             .disabled(isRevealing)
 
             Button(action: onRemembered) {
                 Text("떠올랐어요")
-                    .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 16))
-                    .foregroundStyle(DesignSystemAsset.game.swiftUIColor)
+                    .typography(DesignSystemTypography.Pretendard.bold16)
+                    .foregroundStyle(DesignSystemColor.Game.base)
                     .frame(maxWidth: .infinity)
                     .frame(height: 60)
-                    .background(DesignSystemAsset.white.swiftUIColor)
+                    .background(DesignSystemColor.Base.white)
                     .clipShape(.rect(cornerRadius: 18))
             }
             .disabled(isRevealing)

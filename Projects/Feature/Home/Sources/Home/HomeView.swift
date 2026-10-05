@@ -23,7 +23,7 @@ public struct HomeView: View {
                     LearningLibraryView(viewModel: libraryVM)
                 }
         }
-        .tint(DesignSystemAsset.fgStrong.swiftUIColor)
+        .tint(DesignSystemColor.Foreground.strong)
         .toolbar(viewModel.destination != nil ? .hidden : .visible, for: .tabBar)
     }
 }

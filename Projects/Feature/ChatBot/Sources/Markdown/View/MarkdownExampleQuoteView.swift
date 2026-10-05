@@ -10,16 +10,16 @@ struct MarkdownExampleQuoteView: View {
     var body: some View {
         HStack(alignment: .top, spacing: 10) {
             Rectangle()
-                .fill(DesignSystemAsset.selectedBlue.swiftUIColor)
+                .fill(DesignSystemColor.Accent.selectedBlue)
                 .frame(width: 3)
             VStack(alignment: .leading, spacing: 4) {
                 Text(MarkdownInlineStyler.styled(english, baseSize: 15))
-                    .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 15))
-                    .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
+                    .typography(DesignSystemTypography.Pretendard.bold15)
+                    .foregroundStyle(DesignSystemColor.Foreground.strong)
                 if let korean {
                     Text(MarkdownInlineStyler.styled(korean, baseSize: 13.5))
-                        .font(DesignSystemFontFamily.Pretendard.regular.swiftUIFont(size: 13.5))
-                        .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
+                        .typography(DesignSystemTypography.Pretendard.regular13_5)
+                        .foregroundStyle(DesignSystemColor.Foreground.muted)
                 }
             }
         }

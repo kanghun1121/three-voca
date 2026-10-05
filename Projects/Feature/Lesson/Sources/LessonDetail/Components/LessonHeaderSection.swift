@@ -10,11 +10,11 @@ struct LessonHeaderSection: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text("LEVEL \(level) · LESSON \(lessonNumber)")
-                .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 14))
-                .foregroundStyle(DesignSystemAsset.primary.swiftUIColor)
+                .typography(DesignSystemTypography.Pretendard.bold14)
+                .foregroundStyle(DesignSystemColor.Accent.primary)
             Text("\(wordCount)개 단어")
-                .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 33))
-                .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
+                .typography(DesignSystemTypography.Pretendard.extraBold33)
+                .foregroundStyle(DesignSystemColor.Foreground.strong)
         }
     }
 }

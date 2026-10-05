@@ -1,5 +1,7 @@
 import SwiftUI
 
+import DesignSystem
+
 struct ChatArea: View {
     @Bindable var viewModel: ChatBotViewModel
     var isInputFocused: FocusState<Bool>.Binding
@@ -26,7 +28,7 @@ struct ChatArea: View {
                             .frame(minHeight: reservesFullHeight ? chatAreaHeight : nil, alignment: .top)
                     }
 
-                    Color.clear
+                    DesignSystemColor.clear
                         .frame(height: 1)
                         .id(Self.bottomAnchorID)
                 }

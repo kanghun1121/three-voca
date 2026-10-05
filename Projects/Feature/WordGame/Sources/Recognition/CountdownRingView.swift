@@ -12,16 +12,16 @@ struct CountdownRingView: View {
     var body: some View {
         ZStack {
             Circle()
-                .stroke(DesignSystemAsset.white.swiftUIColor.opacity(0.18), lineWidth: strokeWidth)
+                .stroke(DesignSystemColor.Base.white.opacity(0.18), lineWidth: strokeWidth)
 
             Circle()
                 .trim(from: 0, to: progress)
-                .stroke(DesignSystemAsset.white.swiftUIColor, style: StrokeStyle(lineWidth: strokeWidth, lineCap: .round))
+                .stroke(DesignSystemColor.Base.white, style: StrokeStyle(lineWidth: strokeWidth, lineCap: .round))
                 .rotationEffect(.degrees(-90))
 
             Text("\(countdown)")
-                .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 23))
-                .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
+                .typography(DesignSystemTypography.Pretendard.extraBold23)
+                .foregroundStyle(DesignSystemColor.Base.white)
         }
         .frame(width: size, height: size)
     }

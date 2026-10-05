@@ -22,15 +22,15 @@ struct WordListRow: View {
                 )
                 Spacer()
                 Image(systemName: "chevron.right")
-                    .font(.system(size: 16))
-                    .foregroundStyle(DesignSystemAsset.fgSubtle.swiftUIColor)
+                    .typography(DesignSystemTypography.Pretendard.regular16)
+                    .foregroundStyle(DesignSystemColor.Foreground.subtle)
             }
             .padding(16)
-            .background(DesignSystemAsset.background.swiftUIColor)
+            .background(DesignSystemColor.Base.white)
             .clipShape(.rect(cornerRadius: 14))
             .overlay {
                 RoundedRectangle(cornerRadius: 14)
-                    .stroke(DesignSystemAsset.border.swiftUIColor, lineWidth: 1)
+                    .stroke(DesignSystemColor.Border.default, lineWidth: 1)
             }
         }
         .buttonStyle(.plain)
@@ -52,8 +52,8 @@ private struct WordTextStack: View {
                 isBlurred: blurMode == .word && !isRevealed
             )
             BlurrableText(text: word.primaryMeaning, isBlurred: blurMode == .meaning && !isRevealed)
-                .font(DesignSystemFontFamily.Pretendard.regular.swiftUIFont(size: 13))
-                .foregroundStyle(DesignSystemAsset.fg.swiftUIColor)
+                .typography(DesignSystemTypography.Pretendard.regular13)
+                .foregroundStyle(DesignSystemColor.Foreground.default)
         }
     }
 }
@@ -66,12 +66,11 @@ private struct WordNameRow: View {
     var body: some View {
         HStack(alignment: .lastTextBaseline, spacing: 8) {
             BlurrableText(text: term, isBlurred: isBlurred)
-                .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 18))
-                .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
-                .kerning(-0.012 * 18)
+                .typography(DesignSystemTypography.Pretendard.bold18)
+                .foregroundStyle(DesignSystemColor.Foreground.strong)
             BlurrableText(text: pronunciation, isBlurred: isBlurred)
-                .font(.system(size: 12, design: .monospaced))
-                .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
+                .typography(DesignSystemTypography.Mono.regular12)
+                .foregroundStyle(DesignSystemColor.Foreground.muted)
         }
     }
 }

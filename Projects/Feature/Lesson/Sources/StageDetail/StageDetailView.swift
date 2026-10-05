@@ -24,7 +24,7 @@ public struct StageDetailView: View {
             }
             .padding(.bottom, 32)
         }
-        .background(DesignSystemAsset.background.swiftUIColor)
+        .background(DesignSystemColor.Base.white)
         .navigationBarTitleDisplayMode(.inline)
         .task { await viewModel.onAppear() }
         .navigationDestination(item: $viewModel.destination.lessonDetail) { detailVM in

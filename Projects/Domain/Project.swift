@@ -35,6 +35,7 @@ let project = Project.makeModule(
                 .domain,
                 .domainInterface,
                 .data,
+                .designSystem,
                 .dependencies,
             ],
             settings: .settings(

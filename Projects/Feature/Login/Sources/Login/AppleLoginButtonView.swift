@@ -1,6 +1,8 @@
 import AuthenticationServices
 import SwiftUI
 
+import DesignSystem
+
 struct AppleLoginButtonView: View {
     let viewModel: LoginViewModel
 

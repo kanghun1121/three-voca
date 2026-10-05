@@ -16,23 +16,23 @@ struct ChatBotAssistantBubbleView: View {
                     .resizable()
                     .frame(width: 24, height: 24)
                 Text(message.text)
-                    .font(DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 14))
-                    .foregroundStyle(DesignSystemAsset.fg.swiftUIColor.opacity(0.75))
+                    .typography(DesignSystemTypography.Pretendard.medium14)
+                    .foregroundStyle(DesignSystemColor.Foreground.default.opacity(0.75))
             }
             .padding(.vertical, 11)
         } else if message.isGenerating {
             HStack(spacing: 8) {
                 ProgressView()
-                    .tint(DesignSystemAsset.selectedBlue.swiftUIColor)
+                    .tint(DesignSystemColor.Accent.selectedBlue)
                 Text("AI가 답변을 생성하고 있어요..")
-                    .font(DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 14))
-                    .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
+                    .typography(DesignSystemTypography.Pretendard.medium14)
+                    .foregroundStyle(DesignSystemColor.Foreground.muted)
             }
             .padding(.vertical, 11)
         } else {
             MarkdownView(markdown: message.text, fadesTail: isActivelyStreaming)
                 .padding(.vertical, 11)
-                .background(DesignSystemAsset.background.swiftUIColor)
+                .background(DesignSystemColor.Base.white)
                 .clipShape(.rect(
                     topLeadingRadius: 4,
                     bottomLeadingRadius: 16,

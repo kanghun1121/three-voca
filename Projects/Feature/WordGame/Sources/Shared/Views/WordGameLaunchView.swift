@@ -40,20 +40,18 @@ private struct LaunchBrandView: View {
     var body: some View {
         VStack(spacing: 14) {
             Text("3초 단어")
-                .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 46))
-                .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
-                .kerning(-0.035 * 46)
+                .typography(DesignSystemTypography.Pretendard.extraBold46)
+                .foregroundStyle(DesignSystemColor.Base.white)
                 .shadow(
-                    color: DesignSystemAsset.gameDeep.swiftUIColor.opacity(0.6),
+                    color: DesignSystemColor.Game.deep.opacity(0.6),
                     radius: 20,
                     x: 0,
                     y: 4
                 )
 
             Text("단어 속으로 들어갈 시간")
-                .font(DesignSystemFontFamily.Pretendard.regular.swiftUIFont(size: 15))
-                .foregroundStyle(DesignSystemAsset.white.swiftUIColor.opacity(0.62))
-                .kerning(0.01 * 15)
+                .typography(DesignSystemTypography.Pretendard.regular15)
+                .foregroundStyle(DesignSystemColor.Base.white.opacity(0.62))
         }
         .offset(y: offset)
         .opacity(opacity)
@@ -67,8 +65,8 @@ private struct LaunchTapHintView: View {
         VStack {
             Spacer()
             Text("탭하여 시작")
-                .font(DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 15))
-                .foregroundStyle(DesignSystemAsset.white.swiftUIColor.opacity(0.38))
+                .typography(DesignSystemTypography.Pretendard.medium15)
+                .foregroundStyle(DesignSystemColor.Base.white.opacity(0.38))
                 .padding(.bottom, 30)
         }
     }

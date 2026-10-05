@@ -22,7 +22,7 @@ struct WordListSkeletonView: View {
             .redacted(reason: .placeholder)
         }
         .scrollIndicators(.hidden)
-        .background(DesignSystemAsset.background.swiftUIColor)
+        .background(DesignSystemColor.Base.white)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("단어 목록 불러오는 중")
     }
@@ -34,10 +34,9 @@ private struct SkeletonHeaderView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("15개 단어")
-                .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 28))
-                .kerning(-0.025 * 28)
+                .typography(DesignSystemTypography.Pretendard.extraBold28)
             Text("Level 1 · Lesson 2")
-                .font(DesignSystemFontFamily.Pretendard.regular.swiftUIFont(size: 14))
+                .typography(DesignSystemTypography.Pretendard.regular14)
                 .padding(.top, 4)
         }
     }
@@ -69,14 +68,14 @@ private struct SkeletonWordRow: View {
             SkeletonWordTextStack(en: en, ko: ko)
             Spacer()
             Image(systemName: "chevron.right")
-                .font(.system(size: 16))
+                .typography(DesignSystemTypography.Pretendard.regular16)
         }
         .padding(16)
-        .background(DesignSystemAsset.background.swiftUIColor)
+        .background(DesignSystemColor.Base.white)
         .clipShape(.rect(cornerRadius: 14))
         .overlay {
             RoundedRectangle(cornerRadius: 14)
-                .stroke(DesignSystemAsset.border.swiftUIColor, lineWidth: 1)
+                .stroke(DesignSystemColor.Border.default, lineWidth: 1)
         }
     }
 }
@@ -89,7 +88,7 @@ private struct SkeletonWordTextStack: View {
         VStack(alignment: .leading, spacing: 2) {
             SkeletonWordNameRow(en: en)
             Text(ko)
-                .font(DesignSystemFontFamily.Pretendard.regular.swiftUIFont(size: 13))
+                .typography(DesignSystemTypography.Pretendard.regular13)
         }
     }
 }
@@ -100,10 +99,9 @@ private struct SkeletonWordNameRow: View {
     var body: some View {
         HStack(alignment: .lastTextBaseline, spacing: 8) {
             Text(en)
-                .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 18))
-                .kerning(-0.012 * 18)
+                .typography(DesignSystemTypography.Pretendard.bold18)
             Text("/ˈpɹɒm.ɪs/")
-                .font(.system(size: 12, design: .monospaced))
+                .typography(DesignSystemTypography.Mono.regular12)
         }
     }
 }

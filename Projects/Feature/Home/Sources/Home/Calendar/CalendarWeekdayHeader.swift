@@ -9,8 +9,8 @@ struct CalendarWeekdayHeader: View {
         HStack(spacing: 4) {
             ForEach(labels, id: \.self) { label in
                 Text(label)
-                    .homeTypography(.weekdayHeader)
-                    .foregroundStyle(DesignSystemAsset.fgSubtle.swiftUIColor)
+                    .typography(DesignSystemTypography.Home.weekdayHeader)
+                    .foregroundStyle(DesignSystemColor.Foreground.subtle)
                     .frame(maxWidth: .infinity)
             }
         }

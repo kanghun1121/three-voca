@@ -10,6 +10,6 @@ struct MarkdownShowcaseView: View {
             MarkdownView(markdown: MarkdownSample.fullResponse)
                 .padding(16)
         }
-        .background(DesignSystemAsset.background.swiftUIColor)
+        .background(DesignSystemColor.Base.white)
     }
 }

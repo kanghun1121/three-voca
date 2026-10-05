@@ -15,7 +15,7 @@ struct LevelList: View {
                 }
                 if level.id != levels.last?.id {
                     Rectangle()
-                        .fill(DesignSystemAsset.hairline.swiftUIColor)
+                        .fill(DesignSystemColor.Border.subtle)
                         .frame(height: 1)
                 }
             }
