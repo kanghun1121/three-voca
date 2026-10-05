@@ -34,7 +34,7 @@ struct EmptyDayView: View {
             if !isFuture {
                 Button("오늘 학습으로 이동", action: onGoToToday)
                     .typography(DesignSystemTypography.Pretendard.semiBold13)
-                    .foregroundStyle(DesignSystemColor.Accent.selectedBlue)
+                    .foregroundStyle(DesignSystemColor.Accent.selectedBlueText)
                     .padding(.vertical, 9)
                     .padding(.horizontal, 18)
                     .frame(minHeight: 44)

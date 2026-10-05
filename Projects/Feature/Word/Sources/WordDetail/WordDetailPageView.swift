@@ -31,6 +31,6 @@ struct WordDetailPageView: View {
             }
         }
         .scrollIndicators(.hidden)
-        .background(DesignSystemColor.Base.white)
+        .background(DesignSystemColor.Background.base)
     }
 }

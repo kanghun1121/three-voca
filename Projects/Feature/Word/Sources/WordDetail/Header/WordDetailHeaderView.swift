@@ -43,9 +43,9 @@ private struct AudioButton: View {
         Button(action: action) {
             Image(systemName: "speaker.wave.2")
                 .typography(DesignSystemTypography.Pretendard.regular16.scaled(to: CGFloat(iconSize)))
-                .foregroundStyle(DesignSystemColor.Accent.selectedBlue)
+                .foregroundStyle(DesignSystemColor.Accent.selectedBlueText)
                 .frame(width: 34, height: 34)
-                .background(DesignSystemColor.Base.white)
+                .background(DesignSystemColor.Background.elevated)
                 .clipShape(Circle())
                 .overlay { Circle().stroke(DesignSystemColor.Border.default, lineWidth: 1) }
                 .frame(minWidth: 44, minHeight: 44)

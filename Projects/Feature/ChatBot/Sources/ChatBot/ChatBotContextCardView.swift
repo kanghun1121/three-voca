@@ -18,7 +18,7 @@ struct ChatBotContextCardView: View {
                 Text("문법 분석 · \(context.levelLabel)")
                     .typography(DesignSystemTypography.Pretendard.extraBold12)
             }
-            .foregroundStyle(DesignSystemColor.Accent.selectedBlue)
+            .foregroundStyle(DesignSystemColor.Accent.selectedBlueText)
 
             (highlightedSentence ?? Text(context.sentence))
                 .typography(DesignSystemTypography.Pretendard.semiBold15)
@@ -27,7 +27,7 @@ struct ChatBotContextCardView: View {
         .padding(.horizontal, 15)
         .padding(.vertical, 13)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(DesignSystemColor.Base.white)
+        .background(DesignSystemColor.Background.base)
         .clipShape(.rect(cornerRadius: 16))
         .overlay {
             RoundedRectangle(cornerRadius: 16)
@@ -39,7 +39,7 @@ struct ChatBotContextCardView: View {
                 keyword: context.term,
                 font: DesignSystemTypography.Pretendard.semiBold15.font,
                 highlightFont: DesignSystemTypography.Pretendard.bold15.font,
-                highlightTextColor: DesignSystemColor.Accent.selectedBlue,
+                highlightTextColor: DesignSystemColor.Accent.selectedBlueText,
                 highlightBackgroundColor: DesignSystemColor.Accent.selectedBlue100
             ))
         }

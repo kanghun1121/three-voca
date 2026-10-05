@@ -36,7 +36,7 @@ struct WordListContentView: View {
             .padding(.bottom, 24)
         }
         .scrollIndicators(.hidden)
-        .background(DesignSystemColor.Base.white)
+        .background(DesignSystemColor.Background.base)
         .onChange(of: blurMode) { revealedIDs = [] }
     }
 }

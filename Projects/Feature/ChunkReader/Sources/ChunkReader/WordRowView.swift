@@ -20,7 +20,7 @@ struct WordRowView: View {
 
             Text(wordAnnotation.element.pos.koreanPartOfSpeechLabel)
                 .typography(DesignSystemTypography.Pretendard.bold11_5)
-                .foregroundStyle(DesignSystemColor.Accent.selectedBlue)
+                .foregroundStyle(DesignSystemColor.Accent.selectedBlueText)
                 .padding(.horizontal, 11)
                 .padding(.vertical, 5)
                 .background(DesignSystemColor.Accent.selectedBlue100)

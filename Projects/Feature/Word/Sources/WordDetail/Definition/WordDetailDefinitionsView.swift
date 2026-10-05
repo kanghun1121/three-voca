@@ -58,7 +58,7 @@ private struct PartOfSpeechChip: View {
     var body: some View {
         Text(label)
             .typography(DesignSystemTypography.Pretendard.extraBold12)
-            .foregroundStyle(DesignSystemColor.Accent.selectedBlue)
+            .foregroundStyle(DesignSystemColor.Accent.selectedBlueText)
             .padding(.horizontal, 10)
             .padding(.vertical, 3)
             .background(DesignSystemColor.Accent.selectedBlue100)

@@ -38,8 +38,8 @@ struct MarkdownCalloutView: View {
 
     private var accentColor: Color {
         switch kind {
-        case .key: DesignSystemColor.Accent.selectedBlue
-        case .caution: DesignSystemColor.Status.negative
+        case .key: DesignSystemColor.Accent.selectedBlueText
+        case .caution: DesignSystemColor.Status.negativeText
         case .tip: DesignSystemColor.Foreground.subtle
         }
     }

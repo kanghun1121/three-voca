@@ -25,7 +25,7 @@ struct WordCardTagPillView: View {
         case .time:
             Text("3s")
                 .typography(DesignSystemTypography.Pretendard.extraBold10.scaled(to: CGFloat(pillTextSize)))
-                .foregroundStyle(DesignSystemColor.Status.negative)
+                .foregroundStyle(DesignSystemColor.Status.negativeText)
                 .padding(.horizontal, 7)
                 .padding(.vertical, 2)
                 .background(DesignSystemColor.Status.negative.opacity(0.12))

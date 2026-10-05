@@ -26,7 +26,7 @@ struct WordListRow: View {
                     .foregroundStyle(DesignSystemColor.Foreground.subtle)
             }
             .padding(16)
-            .background(DesignSystemColor.Base.white)
+            .background(DesignSystemColor.Background.base)
             .clipShape(.rect(cornerRadius: 14))
             .overlay {
                 RoundedRectangle(cornerRadius: 14)

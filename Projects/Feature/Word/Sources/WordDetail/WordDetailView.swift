@@ -39,8 +39,8 @@ public struct WordDetailView: View {
                 }
         )
         .navigationBarBackButtonHidden(true)
-        .background(DesignSystemColor.Base.white)
-        .toolbarBackground(DesignSystemColor.Base.white, for: .navigationBar)
+        .background(DesignSystemColor.Background.base)
+        .toolbarBackground(DesignSystemColor.Background.base, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {

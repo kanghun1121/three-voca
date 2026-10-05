@@ -27,6 +27,6 @@ struct MyPageScrollContent: View {
             .frame(maxWidth: .infinity)
             .containerRelativeFrame(.vertical, alignment: .top)
         }
-        .background(DesignSystemColor.Base.white)
+        .background(DesignSystemColor.Background.base)
     }
 }

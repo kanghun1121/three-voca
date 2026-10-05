@@ -12,7 +12,7 @@ struct ScrollToBottomButton: View {
                 .typography(DesignSystemTypography.Pretendard.semiBold14)
                 .foregroundStyle(DesignSystemColor.Foreground.muted)
                 .frame(width: 36, height: 36)
-                .background(DesignSystemColor.Base.white, in: .circle)
+                .background(DesignSystemColor.Background.elevated, in: .circle)
                 .overlay {
                     Circle().stroke(DesignSystemColor.Border.default, lineWidth: 1)
                 }

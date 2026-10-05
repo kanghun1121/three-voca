@@ -25,6 +25,6 @@ struct LessonDetailContentView: View {
             .padding(.vertical)
         }
         .scrollIndicators(.hidden)
-        .background(DesignSystemColor.Base.white)
+        .background(DesignSystemColor.Background.base)
     }
 }

@@ -25,7 +25,7 @@ struct ActionButtonsSection: View {
                     .foregroundStyle(DesignSystemColor.Foreground.strong)
                     .frame(maxWidth: .infinity)
                     .frame(height: 56)
-                    .background(DesignSystemColor.Base.white)
+                    .background(DesignSystemColor.Background.base)
                     .clipShape(.rect(cornerRadius: 14))
                     .overlay {
                         RoundedRectangle(cornerRadius: 14)

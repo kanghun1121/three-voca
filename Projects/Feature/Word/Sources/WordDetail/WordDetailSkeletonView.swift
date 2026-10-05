@@ -12,7 +12,7 @@ struct WordDetailSkeletonView: View {
             WordDetailSkeletonContentView()
         }
         .scrollIndicators(.hidden)
-        .background(DesignSystemColor.Base.white)
+        .background(DesignSystemColor.Background.base)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("단어 정보 불러오는 중")
     }
@@ -149,7 +149,7 @@ private struct SkeletonExampleRow: View {
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(DesignSystemColor.Base.white)
+        .background(DesignSystemColor.Background.base)
         .clipShape(.rect(cornerRadius: 14))
         .overlay {
             RoundedRectangle(cornerRadius: 14)

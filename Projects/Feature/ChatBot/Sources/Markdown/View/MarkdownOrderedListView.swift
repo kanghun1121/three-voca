@@ -13,7 +13,7 @@ struct MarkdownOrderedListView: View {
                 HStack(alignment: .top, spacing: 8) {
                     Text("\(index + 1).")
                         .typography(DesignSystemTypography.Pretendard.semiBold15)
-                        .foregroundStyle(DesignSystemColor.Accent.selectedBlue)
+                        .foregroundStyle(DesignSystemColor.Accent.selectedBlueText)
                     Text(MarkdownInlineStyler.styled(item.text, baseSize: Self.fontSize))
                         .typography(DesignSystemTypography.Pretendard.regular15)
                         .foregroundStyle(DesignSystemColor.Foreground.default)
