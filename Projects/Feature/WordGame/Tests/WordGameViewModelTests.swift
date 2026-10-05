@@ -43,15 +43,14 @@ final class WordGameViewModelTests: XCTestCase {
             cefrLevel: "A1",
             words: [word]
         )
+        
         let recorder = CompleteLessonRecorder()
 
-        // SpellingViewModel은 load() 내부에서 뒤늦게 생성되므로, soundClient 오버라이드가
-        // 전파되도록 상호작용 전체를 async withDependencies 스코프 안에서 수행한다.
         await withDependencies {
+            $0.continuousClock = ImmediateClock()
             $0.lessonRepository.fetchDetail = { _ in lesson }
             $0.audioRepository.prefetch = { _ in }
             $0.completeLessonUseCase.execute = { id in await recorder.record(id) }
-            // [TestDependencyKey 제거] 기존 SoundClient.previewValue 인라인
             $0.soundClient = SoundClient(playCorrect: {}, playWrong: {})
         } operation: {
             let vm = WordGameViewModel(

@@ -25,11 +25,18 @@ final class ChatBotTests: XCTestCase {
         }
     }
 
-    private func waitUntil(timeout: Duration = .seconds(2), _ condition: () -> Bool) async {
-        let deadline = ContinuousClock.now + timeout
-        while !condition(), ContinuousClock.now < deadline {
-            try? await Task.sleep(for: .milliseconds(20))
+    // 시간이 아니라 협력 스케줄링 순서로 기다린다 — yield할 때마다 MainActor의 스트림 Task가 한 번씩 진행된다.
+    private func waitUntil(_ condition: () -> Bool) async {
+        var attempts = 0
+        while !condition(), attempts < 1_000 {
+            await Task.yield()
+            attempts += 1
         }
+    }
+
+    // stopStreaming은 untracked Task에서 호출되므로, 호출 신호를 받을 때까지 기다린다.
+    private func waitForStopCall(_ spy: StopSpy) async {
+        for await _ in spy.calls { break }
     }
 
     func test_정지를_눌러도_로컬_Task는_취소되지_않고_서버_정지_요청만_보낸다() async {
@@ -37,6 +44,8 @@ final class ChatBotTests: XCTestCase {
         let stopSpy = StopSpy()
 
         let viewModel = withDependencies {
+            $0.continuousClock = ImmediateClock()
+            $0.uuid = .incrementing
             $0.chatRepository.streamMessage = { _, _ in box.openStream(yielding: "안녕") }
             $0.chatRepository.stopStreaming = { _ in stopSpy.record() }
         } operation: {
@@ -53,7 +62,7 @@ final class ChatBotTests: XCTestCase {
         await waitUntil { !(viewModel.messages.last?.text.isEmpty ?? true) }
 
         viewModel.didTapStop()
-        await waitUntil { stopSpy.callCount == 1 }
+        await waitForStopCall(stopSpy)
 
         XCTAssertTrue(viewModel.isStreaming)
 
@@ -72,6 +81,8 @@ final class ChatBotTests: XCTestCase {
         let box = StreamBox()
 
         let viewModel = withDependencies {
+            $0.continuousClock = ImmediateClock()
+            $0.uuid = .incrementing
             $0.chatRepository.streamMessage = { _, _ in box.openStream() }
             $0.chatRepository.stopStreaming = { _ in box.finish() }
         } operation: {
@@ -99,6 +110,8 @@ final class ChatBotTests: XCTestCase {
         let stopSpy = StopSpy()
 
         let viewModel = withDependencies {
+            $0.continuousClock = ImmediateClock()
+            $0.uuid = .incrementing
             $0.chatRepository.streamMessage = { _, _ in box.openStream(yielding: "안녕") }
             $0.chatRepository.stopStreaming = { _ in stopSpy.record() }
         } operation: {
@@ -117,7 +130,7 @@ final class ChatBotTests: XCTestCase {
         viewModel.onDisappear()
         await viewModel.streamTask?.value
 
-        await waitUntil { stopSpy.callCount == 1 }
+        await waitForStopCall(stopSpy)
         XCTAssertEqual(stopSpy.callCount, 1)
         XCTAssertFalse(viewModel.isStreaming)
     }
@@ -126,6 +139,8 @@ final class ChatBotTests: XCTestCase {
         let secondBox = StreamBox()
 
         let viewModel = withDependencies {
+            $0.continuousClock = ImmediateClock()
+            $0.uuid = .incrementing
             $0.chatRepository.streamMessage = { _, _ in Self.failingStream() }
             $0.chatRepository.stopStreaming = { _ in secondBox.finish() }
             // [TestDependencyKey 제거] LoggerClient가 더 이상 testValue를 제공하지 않아 명시 오버라이딩
@@ -162,6 +177,8 @@ final class ChatBotTests: XCTestCase {
 
     func test_미인증_상태면_onAppear_후_로그인_필요_팝업이_노출된다() async {
         let viewModel = withDependencies {
+            $0.continuousClock = ImmediateClock()
+            $0.uuid = .incrementing
             $0.checkAuthSessionUseCase.execute = { false }
         } operation: {
             ChatBotViewModel(context: .init(
@@ -179,6 +196,8 @@ final class ChatBotTests: XCTestCase {
 
     func test_인증_상태면_onAppear_후_로그인_필요_팝업이_노출되지_않는다() async {
         let viewModel = withDependencies {
+            $0.continuousClock = ImmediateClock()
+            $0.uuid = .incrementing
             $0.checkAuthSessionUseCase.execute = { true }
             $0.chatRepository.fetchHistory = { _ in Self.historyStream(ChatHistory(messages: [])) }
         } operation: {
@@ -197,6 +216,8 @@ final class ChatBotTests: XCTestCase {
 
     func test_나중에_탭하면_로그인_필요_팝업이_닫힌다() async {
         let viewModel = withDependencies {
+            $0.continuousClock = ImmediateClock()
+            $0.uuid = .incrementing
             $0.checkAuthSessionUseCase.execute = { false }
         } operation: {
             ChatBotViewModel(context: .init(
@@ -223,6 +244,8 @@ final class ChatBotTests: XCTestCase {
         ])
 
         let viewModel = withDependencies {
+            $0.continuousClock = ImmediateClock()
+            $0.uuid = .incrementing
             $0.checkAuthSessionUseCase.execute = { true }
             $0.chatRepository.fetchHistory = { _ in Self.historyStream(history) }
         } operation: {
@@ -243,6 +266,8 @@ final class ChatBotTests: XCTestCase {
 
     func test_비인증_상태면_히스토리를_불러오지_않는다() async {
         let viewModel = withDependencies {
+            $0.continuousClock = ImmediateClock()
+            $0.uuid = .incrementing
             $0.checkAuthSessionUseCase.execute = { false }
         } operation: {
             ChatBotViewModel(context: .init(
@@ -263,6 +288,8 @@ final class ChatBotTests: XCTestCase {
         let counter = CallCounter()
 
         let viewModel = withDependencies {
+            $0.continuousClock = ImmediateClock()
+            $0.uuid = .incrementing
             $0.checkAuthSessionUseCase.execute = { true }
             $0.chatRepository.fetchHistory = { _ in
                 counter.increment()
@@ -291,6 +318,8 @@ final class ChatBotTests: XCTestCase {
         ])
 
         let viewModel = withDependencies {
+            $0.continuousClock = ImmediateClock()
+            $0.uuid = .incrementing
             $0.checkAuthSessionUseCase.execute = { true }
             $0.chatRepository.fetchHistory = { _ in Self.historyStream(localHistory, remoteHistory) }
         } operation: {
@@ -333,5 +362,15 @@ private final class StreamBox: @unchecked Sendable {
 
 private final class StopSpy: @unchecked Sendable {
     private(set) var callCount = 0
-    func record() { callCount += 1 }
+    let calls: AsyncStream<Void>
+    private let continuation: AsyncStream<Void>.Continuation
+
+    init() {
+        (calls, continuation) = AsyncStream.makeStream()
+    }
+
+    func record() {
+        callCount += 1
+        continuation.yield()
+    }
 }

@@ -34,12 +34,13 @@ public final class RecognitionViewModel {
     private let words: [Lesson.Word]
     private let onCompleted: () -> Void
     private let onClose: () -> Void
-    private var countdownTask: Task<Void, Never>?
+    private(set) var countdownTask: Task<Void, Never>?
     private var revealTask: Task<Void, Never>?
     private var audioTask: Task<Void, Never>?
     private let totalCountdown: Double = 3.0
     private var remainingSeconds: Double = 3.0
 
+    @ObservationIgnored @Dependency(\.continuousClock) private var clock
     @ObservationIgnored @Dependency(\.audioRepository) private var audioRepository
     @ObservationIgnored @Dependency(\.audioPlayerRepository) private var audioPlayerRepository
 
@@ -137,18 +138,26 @@ public final class RecognitionViewModel {
 
         countdownTask = Task { [weak self] in
             guard let self else { return }
-            let startDate = Date.now
-
-            while !Task.isCancelled {
-                try? await Task.sleep(for: .milliseconds(10))
-
-                let left = remaining - Date.now.timeIntervalSince(startDate)
-                updateProgress(timeLeft: max(0, left))
-                if left <= 0 { break }
-            }
+            await runCountdown(remaining: remaining)
 
             guard !Task.isCancelled else { return }
             revealAndAdvance()
+        }
+    }
+
+    // clock.timer는 마감 시각 기준으로 틱을 만들어 sleep 오차가 누적되지 않으므로, 틱 수로 경과를 센다.
+    // TestClock으로 시간을 직접 흘려보낼 수 있다.
+    private func runCountdown(remaining: Double) async {
+        let interval = Duration.milliseconds(10)
+        var elapsedSeconds = 0.0
+
+        for await _ in clock.timer(interval: interval) {
+            guard !Task.isCancelled else { return }
+            elapsedSeconds += 0.01
+
+            let left = remaining - elapsedSeconds
+            updateProgress(timeLeft: max(0, left))
+            if left <= 0 { break }
         }
     }
 
@@ -162,9 +171,9 @@ public final class RecognitionViewModel {
         viewState = .revealing
         revealTask?.cancel()
         revealTask = Task { [weak self] in
-            try? await Task.sleep(for: .seconds(1))
-            guard !Task.isCancelled else { return }
             guard let self else { return }
+            try? await clock.sleep(for: .seconds(1))
+            guard !Task.isCancelled else { return }
             showWord(at: wordIndex + 1)
         }
     }

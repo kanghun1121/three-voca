@@ -9,6 +9,7 @@ import Dependencies
 final class HomeViewModelLoadTests: XCTestCase {
     func test_초기값은_기록이_비어있다() {
         let vm = withDependencies {
+            $0.date = .constant(.now)
             // [TestDependencyKey 제거] previewValue도 unimplemented가 되어 인라인
             $0.learningHistoryRepository = LearningHistoryRepository(
                 stream: { _ in
@@ -34,6 +35,7 @@ final class HomeViewModelLoadTests: XCTestCase {
 
     func test_onAppear_성공시_해당_날짜의_기록이_채워진다() async {
         let vm = withDependencies {
+            $0.date = .constant(.now)
             $0.learningHistoryRepository.streamAllCompletions = { makeStream([[.previewFixture]]) }
         } operation: {
             HomeViewModel()
@@ -49,6 +51,7 @@ final class HomeViewModelLoadTests: XCTestCase {
         // 완료 기록이 없어도 캘린더 화면 자체는 항상 보여야 한다 — "기록 없음"은
         // 화면 전체 전환이 아니라 선택된 날짜의 상태로만 표현된다.
         let vm = withDependencies {
+            $0.date = .constant(.now)
             $0.learningHistoryRepository.streamAllCompletions = { makeStream([[]]) }
         } operation: {
             HomeViewModel()
@@ -62,6 +65,7 @@ final class HomeViewModelLoadTests: XCTestCase {
 
     func test_onAppear_스트림이_값을_안_주면_기록도_비어있는_채로_유지된다() async {
         let vm = withDependencies {
+            $0.date = .constant(.now)
             $0.learningHistoryRepository.streamAllCompletions = { makeStream([]) }
         } operation: {
             HomeViewModel()
@@ -77,6 +81,7 @@ final class HomeViewModelLoadTests: XCTestCase {
         let first = [makeRecord(lessonID: "1")]
         let second = [makeRecord(lessonID: "2")]
         let vm = withDependencies {
+            $0.date = .constant(.now)
             $0.learningHistoryRepository.streamAllCompletions = { makeStream([first, second]) }
         } operation: {
             HomeViewModel()
@@ -91,6 +96,7 @@ final class HomeViewModelLoadTests: XCTestCase {
     func test_onAppear_2회_호출해도_구독_스트림은_1번만_생성된다() async {
         let counter = CallCounter()
         let vm = withDependencies {
+            $0.date = .constant(.now)
             $0.learningHistoryRepository.streamAllCompletions = {
                 counter.increment()
                 return makeStream([[.previewFixture]])

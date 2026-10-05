@@ -18,6 +18,8 @@ extension LearningHistoryRepository: DependencyKey {
         @Dependency(\.levelLocalDataSource) var levelDataSource
         @Dependency(\.learningHistoryStore) var historyStore
         @Dependency(\.learningHistoryFeedStore) var feedStore
+        @Dependency(\.uuid) var uuid
+        @Dependency(\.date) var date
 
         @Sendable
         func pushCompletionsUpdate() async {
@@ -50,7 +52,7 @@ extension LearningHistoryRepository: DependencyKey {
             stream: { lessonID in
                 AsyncStream { continuation in
                     Task {
-                        let subscriberID = UUID()
+                        let subscriberID = uuid()
                         await historyStore.register(id: lessonID, subscriberID: subscriberID, continuation: continuation)
 
                         guard let intID = Int(lessonID) else { return }
@@ -61,14 +63,14 @@ extension LearningHistoryRepository: DependencyKey {
             streamAllCompletions: {
                 AsyncStream { continuation in
                     Task {
-                        let id = UUID()
+                        let id = uuid()
                         await feedStore.register(id: id, continuation: continuation)
                         await pushCompletionsUpdate()
                     }
                 }
             },
             complete: { lessonID in
-                try await historyDataSource.recordCompletion(lessonID, Date())
+                try await historyDataSource.recordCompletion(lessonID, date.now)
                 await pushCompletionsUpdate()
                 await pushHistoryUpdate(lessonID: lessonID)
             }

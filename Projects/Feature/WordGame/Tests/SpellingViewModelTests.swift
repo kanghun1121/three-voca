@@ -19,14 +19,14 @@ final class SpellingViewModelTests: XCTestCase {
         )
         let word = lessonWord
         let vm = withDependencies {
+            $0.continuousClock = ImmediateClock()
             // [TestDependencyKey 제거] 기존 SoundClient.previewValue 인라인
             $0.soundClient = SoundClient(playCorrect: {}, playWrong: {})
         } operation: {
             SpellingViewModel(
                 words: [word],
                 onCompleted: {},
-                onClose: {},
-                clock: ImmediateClock()
+                onClose: {}
             )
         }
 
@@ -52,14 +52,14 @@ final class SpellingViewModelTests: XCTestCase {
             return lessonWord
         }
         let vm = withDependencies {
+            $0.continuousClock = ImmediateClock()
             // [TestDependencyKey 제거] 기존 SoundClient.previewValue 인라인
             $0.soundClient = SoundClient(playCorrect: {}, playWrong: {})
         } operation: {
             SpellingViewModel(
                 words: words,
                 onCompleted: {},
-                onClose: {},
-                clock: ImmediateClock()
+                onClose: {}
             )
         }
 
@@ -110,14 +110,14 @@ final class SpellingViewModelTests: XCTestCase {
             return lessonWord
         }
         let vm = withDependencies {
+            $0.continuousClock = ImmediateClock()
             // [TestDependencyKey 제거] 기존 SoundClient.previewValue 인라인
             $0.soundClient = SoundClient(playCorrect: {}, playWrong: {})
         } operation: {
             SpellingViewModel(
                 words: words,
                 onCompleted: {},
-                onClose: {},
-                clock: ImmediateClock()
+                onClose: {}
             )
         }
 
@@ -142,6 +142,7 @@ final class SpellingViewModelTests: XCTestCase {
         )
         let word = lessonWord
         let vm = withDependencies {
+            $0.continuousClock = ImmediateClock()
             // [TestDependencyKey 제거] 기존 SoundClient.previewValue 인라인
             $0.soundClient = SoundClient(playCorrect: {}, playWrong: {})
         } operation: {
@@ -170,6 +171,7 @@ final class SpellingViewModelTests: XCTestCase {
         )
         let word = lessonWord
         let vm = withDependencies {
+            $0.continuousClock = ImmediateClock()
             // [TestDependencyKey 제거] 기존 SoundClient.previewValue 인라인
             $0.soundClient = SoundClient(playCorrect: {}, playWrong: {})
         } operation: {
@@ -200,14 +202,13 @@ final class SpellingViewModelTests: XCTestCase {
         let word = lessonWord
         var isCompleted = false
         let vm = withDependencies {
-            // [TestDependencyKey 제거] 기존 SoundClient.previewValue 인라인
+            $0.continuousClock = ImmediateClock()
             $0.soundClient = SoundClient(playCorrect: {}, playWrong: {})
         } operation: {
             SpellingViewModel(
                 words: [word],
                 onCompleted: { isCompleted = true },
-                onClose: {},
-                clock: ImmediateClock()
+                onClose: {}
             )
         }
 
@@ -297,13 +298,13 @@ final class SpellingViewModelTests: XCTestCase {
             )
         }
         return withDependencies {
+            $0.continuousClock = ImmediateClock()
             $0.soundClient = SoundClient(playCorrect: {}, playWrong: {})
         } operation: {
             SpellingViewModel(
                 words: words,
                 onCompleted: {},
-                onClose: {},
-                clock: ImmediateClock()
+                onClose: {}
             )
         }
     }

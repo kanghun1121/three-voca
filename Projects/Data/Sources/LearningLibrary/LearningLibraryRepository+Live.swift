@@ -14,6 +14,7 @@ extension LearningLibraryRepository: DependencyKey {
         @Dependency(\.levelLocalDataSource) var levelDataSource
         @Dependency(\.lessonLocalDataSource) var lessonDataSource
         @Dependency(\.learningHistoryLocalDataSource) var historyDataSource
+        @Dependency(\.uuid) var uuid
 
         // 정적 구조(레벨 이름/난이도/레슨 번호/레슨당 단어 수)를 로컬 시드에서 조립한 뒤,
         // 완료 이력(`LearningHistoryEntity`, 완료된 레슨만 한 행)을 lessonID(Int, 로컬 DB
@@ -65,7 +66,7 @@ extension LearningLibraryRepository: DependencyKey {
             stream: {
                 AsyncStream { continuation in
                     Task {
-                        let id = UUID()
+                        let id = uuid()
                         await store.register(id: id, continuation: continuation)
                         try? await refreshLearningLibrary()
                     }

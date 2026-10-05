@@ -29,10 +29,9 @@ public final class HomeViewModel {
     
     @ObservationIgnored @Dependency(\.learningHistoryRepository) private var learningHistoryRepository
 
-    public init(
-        destination: Destination? = nil,
-        today: Date = Calendar.current.startOfDay(for: .now)
-    ) {
+    public init(destination: Destination? = nil) {
+        @Dependency(\.date.now) var now
+        let today = Calendar.current.startOfDay(for: now)
         self.destination = destination
         self.today = today
         self.selectedDate = today

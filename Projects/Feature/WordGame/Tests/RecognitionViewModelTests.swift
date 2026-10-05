@@ -19,6 +19,7 @@ final class RecognitionViewModelTests: XCTestCase {
         )
         let word = lessonWord
         let vm = withDependencies {
+            $0.continuousClock = ImmediateClock()
             $0.audioRepository.url = { _ in nil }
             $0.audioRepository.fetchURL = { _, _ in nil }
             $0.audioPlayerRepository.play = { _ in }
@@ -32,8 +33,6 @@ final class RecognitionViewModelTests: XCTestCase {
         }
 
         vm.start()
-        try? await Task.sleep(for: .milliseconds(200))
-
         vm.closeButtonTapped()
 
         guard case .alert = vm.destination else {
@@ -41,10 +40,9 @@ final class RecognitionViewModelTests: XCTestCase {
             return
         }
 
-        // countdownTask가 취소됐다면, 대기 후에도 ringProgress가 더 이상 감소하지 않는다.
-        let progressAfterClose = vm.ringProgress
-        try? await Task.sleep(for: .milliseconds(300))
+        await vm.countdownTask?.value
 
-        XCTAssertEqual(vm.ringProgress, progressAfterClose, accuracy: 0.01)
+        XCTAssertEqual(vm.ringProgress, 1.0, accuracy: 0.01)
+        XCTAssertEqual(vm.viewState, .active)
     }
 }
