@@ -14,7 +14,7 @@ final class ChatStopRequestTests: XCTestCase {
 
         let request = try sut.makeURLRequest()
 
-        XCTAssertEqual(request.url, URL(string: "https://ebvfeuopuzlpddzvcini.supabase.co/functions/v1/chat-stop")!)
+        XCTAssertEqual(request.url, SupabaseConfig.baseURL.appendingPathComponent("functions/v1/chat-stop"))
     }
 
     func test_method는_POST다() throws {

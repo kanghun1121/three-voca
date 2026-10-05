@@ -18,6 +18,10 @@ struct RootView: View {
         $0.checkAuthSessionUseCase = .liveValue
         $0.refreshAuthSessionUseCase = .liveValue
         $0.signInWithAppleUseCase = .liveValue
+        #if DEV_ENVIRONMENT
+        $0.signInWithDevTestAccountUseCase = .liveValue
+        $0.devTestAccountRepository = .liveValue
+        #endif
         $0.completeLessonUseCase = .liveValue
         $0.authSessionRepository = .liveValue
         $0.authRepository = .liveValue

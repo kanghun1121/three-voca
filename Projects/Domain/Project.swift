@@ -29,6 +29,7 @@ let project = Project.makeModule(
                     "UIApplicationSupportsMultipleScenes": false,
                     "UISceneConfigurations": [:]
                 ],
+                "SUPABASE_URL": "$(SUPABASE_PROD_URL)",
                 "SUPABASE_ANON_KEY": "$(SUPABASE_ANON_KEY)"
             ]),
             dependencies: [

@@ -24,7 +24,7 @@ final class ChatProxyRequestTests: XCTestCase {
     func test_baseURL은_Supabase_함수_URL이다() {
         let sut = makeSUT()
 
-        XCTAssertEqual(sut.baseURL, URL(string: "https://ebvfeuopuzlpddzvcini.supabase.co")!)
+        XCTAssertEqual(sut.baseURL, SupabaseConfig.baseURL)
     }
 
     func test_makeURLRequest가_만든_최종_URL은_chat_함수_경로다() throws {
@@ -32,7 +32,7 @@ final class ChatProxyRequestTests: XCTestCase {
 
         let request = try sut.makeURLRequest()
 
-        XCTAssertEqual(request.url, URL(string: "https://ebvfeuopuzlpddzvcini.supabase.co/functions/v1/chat")!)
+        XCTAssertEqual(request.url, SupabaseConfig.baseURL.appendingPathComponent("functions/v1/chat"))
     }
 
     func test_x_api_key와_anthropic_version_헤더가_없다() throws {
