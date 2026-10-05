@@ -32,9 +32,12 @@ let project = Project.makeModule(
             resources: ["Example/Resources/**"],
             dependencies: [
                 .feature(implements: .chunkReader),
+                .data,
                 .domainInterface,
                 .dependencies,
                 .designSystem,
+                .networking,
+                .networkingInterface,
             ]
         )),
     ],

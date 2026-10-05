@@ -1,10 +1,24 @@
+import Foundation
 import SwiftUI
 
+import Data
 import DomainInterface
 import FeatureChunkReader
+import Networking
+import NetworkingInterface
+
+import Dependencies
 
 @main
 struct ChunkReaderExampleApp: App {
+    init() {
+        prepareDependencies {
+            $0.audioRepository = .liveValue
+            $0.audioPlayerRepository = .liveValue
+            $0.httpClient = HTTPClientKey.liveValue
+        }
+    }
+
     var body: some Scene {
         WindowGroup {
             NavigationStack {
