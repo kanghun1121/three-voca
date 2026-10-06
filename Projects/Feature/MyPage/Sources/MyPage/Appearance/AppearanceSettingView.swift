@@ -8,7 +8,7 @@ struct AppearanceSettingView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            Text("화면 모드")
+            Text("다크 모드")
                 .typography(DesignSystemTypography.Pretendard.extraBold26)
                 .foregroundStyle(DesignSystemColor.Foreground.strong)
                 .frame(maxWidth: .infinity, alignment: .leading)

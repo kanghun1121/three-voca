@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// 앱 화면 모드 설정. 값은 `@AppStorage(AppearanceMode.storageKey)`로 저장한다.
+/// 앱 다크 모드 설정. 값은 `@AppStorage(AppearanceMode.storageKey)`로 저장한다.
 public enum AppearanceMode: String, CaseIterable, Identifiable {
     case system
     case light
