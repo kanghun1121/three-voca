@@ -4,9 +4,14 @@ import DesignSystem
 
 struct MyPageMenuView: View {
     let viewModel: MyPageViewModel
+    let appearanceTitle: String
 
     var body: some View {
         VStack(spacing: 0) {
+            MenuRow(title: "화면 모드", value: appearanceTitle, action: viewModel.appearanceTapped)
+            Rectangle()
+                .fill(DesignSystemColor.Border.default)
+                .frame(height: 1)
             MenuRow(title: "문의사항")
             Rectangle()
                 .fill(DesignSystemColor.Border.default)
@@ -31,6 +36,7 @@ struct MyPageMenuView: View {
 
 private struct MenuRow: View {
     let title: String
+    var value: String? = nil
     var action: (() -> Void)? = nil
 
     var body: some View {
@@ -41,6 +47,12 @@ private struct MenuRow: View {
                     .foregroundStyle(DesignSystemColor.Foreground.strong)
 
                 Spacer()
+
+                if let value {
+                    Text(value)
+                        .typography(DesignSystemTypography.Pretendard.medium14)
+                        .foregroundStyle(DesignSystemColor.Text.secondary)
+                }
 
                 ChevronIcon()
                     .accessibilityHidden(true)

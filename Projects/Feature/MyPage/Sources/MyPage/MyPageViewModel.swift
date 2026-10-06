@@ -17,6 +17,7 @@ public final class MyPageViewModel {
     @CasePathable
     enum Destination {
         case alert(AlertState<AlertAction>)
+        case appearance
         case deleteAccountSheet
         case privacyWebView
     }
@@ -55,6 +56,10 @@ public final class MyPageViewModel {
     var isDeleteConfirmed: Bool { deleteConfirmText == "회원탈퇴" }
     var isShowingDeleteSheet: Bool {
         if case .deleteAccountSheet = destination { true } else { false }
+    }
+
+    var isShowingAppearance: Bool {
+        if case .appearance = destination { true } else { false }
     }
 
     var isShowingPrivacyWebView: Bool {
@@ -102,6 +107,10 @@ public final class MyPageViewModel {
         case .failure(let error):
             loggerClient.error("Auth", "Apple 로그인 실패: \(error.localizedDescription)")
         }
+    }
+
+    func appearanceTapped() {
+        destination = .appearance
     }
 
     func privacyTapped() {
