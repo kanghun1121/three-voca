@@ -4,6 +4,7 @@ import DesignSystem
 
 struct MyPageScrollContent: View {
     let viewModel: MyPageViewModel
+    @AppStorage(AppearanceMode.storageKey) private var appearanceMode: AppearanceMode = .system
 
     var body: some View {
         ScrollView {
@@ -16,7 +17,7 @@ struct MyPageScrollContent: View {
                     onAppleCompletion: viewModel.appleLoginCompleted
                 )
 
-                MyPageMenuView(viewModel: viewModel)
+                MyPageMenuView(viewModel: viewModel, appearanceTitle: appearanceMode.title)
 
                 Spacer(minLength: 40)
 
