@@ -8,7 +8,7 @@ struct MyPageMenuView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            MenuRow(title: "화면 모드", value: appearanceTitle, action: viewModel.appearanceTapped)
+            MenuRow(title: "다크 모드", value: appearanceTitle, action: viewModel.appearanceTapped)
             Rectangle()
                 .fill(DesignSystemColor.Border.default)
                 .frame(height: 1)
