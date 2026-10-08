@@ -26,6 +26,7 @@ public final class MyPageViewModel {
     var deleteConfirmText = ""
     var isAuthenticated = false
     @ObservationIgnored @Dependency(\.authSessionRepository) private var authSessionRepository
+    @ObservationIgnored private(set) var observationTask: Task<Void, Never>?
     @ObservationIgnored @Dependency(\.checkAuthSessionUseCase) private var checkAuthSessionUseCase
     @ObservationIgnored @Dependency(\.signInWithAppleUseCase) private var signInWithAppleUseCase
     @ObservationIgnored @Dependency(\.loggerClient) private var loggerClient
@@ -79,7 +80,7 @@ public final class MyPageViewModel {
     }
 
     func onAppear() {
-        Task { [weak self] in
+        observationTask = Task { [weak self] in
             guard let self else { return }
             for await state in authSessionRepository.stateStream() {
                 isAuthenticated = (state == .authenticated)

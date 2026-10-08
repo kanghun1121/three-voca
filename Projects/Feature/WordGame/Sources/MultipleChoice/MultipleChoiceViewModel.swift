@@ -36,8 +36,8 @@ public final class MultipleChoiceViewModel {
     private let words: [Lesson.Word]
     private let onCompleted: () -> Void
     private let onClose: () -> Void
-    private let clock: any Clock<Duration>
 
+    @ObservationIgnored @Dependency(\.continuousClock) private var clock
     @ObservationIgnored @Dependency(\.soundClient) private var soundClient
     @ObservationIgnored @Dependency(\.audioRepository) private var audioRepository
     @ObservationIgnored @Dependency(\.audioPlayerRepository) private var audioPlayerRepository
@@ -52,14 +52,12 @@ public final class MultipleChoiceViewModel {
     init(
         words: [Lesson.Word],
         onCompleted: @escaping () -> Void,
-        onClose: @escaping () -> Void,
-        clock: any Clock<Duration> = ContinuousClock()
+        onClose: @escaping () -> Void
     ) {
         self.words = words
         self.totalWords = words.count
         self.onCompleted = onCompleted
         self.onClose = onClose
-        self.clock = clock
     }
 
     func load() {

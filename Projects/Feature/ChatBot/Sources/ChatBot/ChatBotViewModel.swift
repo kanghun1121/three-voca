@@ -21,6 +21,8 @@ public final class ChatBotViewModel {
     @ObservationIgnored @Dependency(\.checkAuthSessionUseCase) private var checkAuthSessionUseCase
     @ObservationIgnored @Dependency(\.signInWithAppleUseCase) private var signInWithAppleUseCase
     @ObservationIgnored @Dependency(\.loggerClient) private var loggerClient
+    @ObservationIgnored @Dependency(\.continuousClock) private var clock
+    @ObservationIgnored @Dependency(\.uuid) private var uuid
     @ObservationIgnored private(set) var streamTask: Task<Void, Never>?
 
     private static let wordRevealDelay: Duration = .milliseconds(10)
@@ -56,8 +58,9 @@ public final class ChatBotViewModel {
 
         messages.removeAll(where: { $0.isError })
 
-        messages.append(ChatBotMessage(role: .user, text: message))
+        messages.append(ChatBotMessage(id: uuid(), role: .user, text: message))
         messages.append(ChatBotMessage(
+            id: uuid(),
             role: .assistant,
             text: "",
             isGenerating: true
@@ -70,7 +73,7 @@ public final class ChatBotViewModel {
                     for word in Self.wordChunks(of: chunk) {
                         messages[assistantIndex].isGenerating = false
                         messages[assistantIndex].text += word
-                        try await Task.sleep(for: Self.wordRevealDelay)
+                        try await clock.sleep(for: Self.wordRevealDelay)
                     }
                 }
             } catch {
@@ -150,6 +153,7 @@ public final class ChatBotViewModel {
             case .assistant: role = .assistant
             }
             return ChatBotMessage(
+                id: uuid(),
                 role: role,
                 text: message.content,
                 isFromHistory: true

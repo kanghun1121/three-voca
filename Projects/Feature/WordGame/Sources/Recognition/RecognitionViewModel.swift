@@ -34,12 +34,13 @@ public final class RecognitionViewModel {
     private let words: [Lesson.Word]
     private let onCompleted: () -> Void
     private let onClose: () -> Void
-    private var countdownTask: Task<Void, Never>?
+    private(set) var countdownTask: Task<Void, Never>?
     private var revealTask: Task<Void, Never>?
     private var audioTask: Task<Void, Never>?
     private let totalCountdown: Double = 3.0
     private var remainingSeconds: Double = 3.0
 
+    @ObservationIgnored @Dependency(\.continuousClock) private var clock
     @ObservationIgnored @Dependency(\.audioRepository) private var audioRepository
     @ObservationIgnored @Dependency(\.audioPlayerRepository) private var audioPlayerRepository
 
@@ -137,18 +138,28 @@ public final class RecognitionViewModel {
 
         countdownTask = Task { [weak self] in
             guard let self else { return }
-            let startDate = Date.now
-
-            while !Task.isCancelled {
-                try? await Task.sleep(for: .milliseconds(10))
-
-                let left = remaining - Date.now.timeIntervalSince(startDate)
-                updateProgress(timeLeft: max(0, left))
-                if left <= 0 { break }
-            }
+            await runCountdown(remaining: remaining)
 
             guard !Task.isCancelled else { return }
             revealAndAdvance()
+        }
+    }
+
+    // sleep이 늦게 깨어나도 그만큼이 경과로 잡히도록, 틱 수가 아니라 clock이 잰 실제 sleep 시간을 더한다.
+    // TestClock으로 시간을 직접 흘려보낼 수 있다.
+    private func runCountdown(remaining: Double) async {
+        var elapsed = Duration.zero
+
+        while !Task.isCancelled {
+            elapsed += await clock.measure {
+                try? await clock.sleep(for: .milliseconds(10))
+            }
+
+            let seconds = Double(elapsed.components.seconds)
+                + Double(elapsed.components.attoseconds) / 1e18
+            let left = remaining - seconds
+            updateProgress(timeLeft: max(0, left))
+            if left <= 0 { break }
         }
     }
 
@@ -162,9 +173,9 @@ public final class RecognitionViewModel {
         viewState = .revealing
         revealTask?.cancel()
         revealTask = Task { [weak self] in
-            try? await Task.sleep(for: .seconds(1))
-            guard !Task.isCancelled else { return }
             guard let self else { return }
+            try? await clock.sleep(for: .seconds(1))
+            guard !Task.isCancelled else { return }
             showWord(at: wordIndex + 1)
         }
     }

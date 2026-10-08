@@ -33,7 +33,6 @@ public final class SpellingViewModel {
     private let words: [Lesson.Word]
     private let onCompleted: () -> Void
     private let onClose: () -> Void
-    private let clock: any Clock<Duration>
     private var reviewTracker = ReviewRoundTracker()
     var isReviewRound: Bool { reviewTracker.isReviewRound }
     private(set) var advanceTask: Task<Void, Never>?
@@ -41,19 +40,18 @@ public final class SpellingViewModel {
         didSet { handleInputChange() }
     }
 
+    @ObservationIgnored @Dependency(\.continuousClock) private var clock
     @ObservationIgnored @Dependency(\.soundClient) private var soundClient
 
     init(
         words: [Lesson.Word],
         onCompleted: @escaping () -> Void,
-        onClose: @escaping () -> Void,
-        clock: any Clock<Duration> = ContinuousClock()
+        onClose: @escaping () -> Void
     ) {
         self.words = words
         self.totalWords = words.count
         self.onCompleted = onCompleted
         self.onClose = onClose
-        self.clock = clock
     }
 
     func load() {

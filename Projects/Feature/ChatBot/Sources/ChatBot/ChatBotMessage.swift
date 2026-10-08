@@ -7,7 +7,7 @@ struct ChatBotMessage: Identifiable, Equatable {
         case assistant
     }
 
-    let id = UUID()
+    let id: UUID
     let role: Role
     var text: String
     /// AI 응답 자리표시 상태 — 첫 청크가 도착하기 전까지 true. 이 동안은 텍스트 대신
@@ -22,4 +22,20 @@ struct ChatBotMessage: Identifiable, Equatable {
     /// 응답 자리 예약"(뷰포트 높이만큼의 minHeight) 같은 라이브 전송 전용 연출을
     /// 히스토리 메시지에는 적용하지 않도록 한다.
     var isFromHistory: Bool = false
+
+    init(
+        id: UUID = UUID(),
+        role: Role,
+        text: String,
+        isGenerating: Bool = false,
+        isError: Bool = false,
+        isFromHistory: Bool = false
+    ) {
+        self.id = id
+        self.role = role
+        self.text = text
+        self.isGenerating = isGenerating
+        self.isError = isError
+        self.isFromHistory = isFromHistory
+    }
 }

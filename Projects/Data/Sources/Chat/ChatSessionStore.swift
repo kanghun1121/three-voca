@@ -12,8 +12,10 @@ actor ChatSessionStore {
 
     private var sessions: [String: Session] = [:]
 
+    @Dependency(\.uuid) private var uuid
+
     func beginSend(wordID: String) -> String {
-        let sseID = UUID().uuidString
+        let sseID = uuid().uuidString
         sessions[wordID, default: Session()].activeSSEID = sseID
         return sseID
     }

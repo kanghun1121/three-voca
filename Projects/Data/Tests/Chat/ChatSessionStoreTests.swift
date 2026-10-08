@@ -1,10 +1,12 @@
 import XCTest
 
+import Dependencies
+
 @testable import Data
 
 final class ChatSessionStoreTests: XCTestCase {
     func test_beginSend는_비어있지_않은_sseID를_발급하고_activeSSEID로_조회된다() async {
-        let store = ChatSessionStore()
+        let store = withDependencies { $0.uuid = .incrementing } operation: { ChatSessionStore() }
 
         let sseID = await store.beginSend(wordID: "word_001")
 
@@ -14,7 +16,7 @@ final class ChatSessionStoreTests: XCTestCase {
     }
 
     func test_endSend_이후에는_activeSSEID가_nil이다() async {
-        let store = ChatSessionStore()
+        let store = withDependencies { $0.uuid = .incrementing } operation: { ChatSessionStore() }
         _ = await store.beginSend(wordID: "word_001")
 
         await store.endSend(wordID: "word_001")
@@ -24,7 +26,7 @@ final class ChatSessionStoreTests: XCTestCase {
     }
 
     func test_진행중인_전송이_없으면_activeSSEID는_nil이다() async {
-        let store = ChatSessionStore()
+        let store = withDependencies { $0.uuid = .incrementing } operation: { ChatSessionStore() }
 
         let activeSSEID = await store.activeSSEID(for: "word_001")
 
@@ -32,7 +34,7 @@ final class ChatSessionStoreTests: XCTestCase {
     }
 
     func test_conversationID는_처음엔_nil이고_setConversationID_이후_그대로_조회된다() async {
-        let store = ChatSessionStore()
+        let store = withDependencies { $0.uuid = .incrementing } operation: { ChatSessionStore() }
 
         let before = await store.conversationID(for: "word_001")
         XCTAssertNil(before)
@@ -44,7 +46,7 @@ final class ChatSessionStoreTests: XCTestCase {
     }
 
     func test_다른_wordID의_세션_상태는_서로_섞이지_않는다() async {
-        let store = ChatSessionStore()
+        let store = withDependencies { $0.uuid = .incrementing } operation: { ChatSessionStore() }
 
         let sseID1 = await store.beginSend(wordID: "word_001")
         await store.setConversationID("conv-001", wordID: "word_001")

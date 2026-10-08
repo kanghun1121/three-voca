@@ -8,13 +8,6 @@ import Dependencies
 
 @MainActor
 final class MyPageViewModelTests: XCTestCase {
-    private func waitUntil(timeout: Duration = .seconds(2), _ condition: () -> Bool) async {
-        let deadline = ContinuousClock.now + timeout
-        while !condition(), ContinuousClock.now < deadline {
-            try? await Task.sleep(for: .milliseconds(20))
-        }
-    }
-
     func test_초기_미인증_상태면_isAuthenticated는_false다() {
         let viewModel = withDependencies {
             $0.checkAuthSessionUseCase.execute = { false }
@@ -46,8 +39,8 @@ final class MyPageViewModelTests: XCTestCase {
 
         viewModel.onAppear()
         continuation.yield(.authenticated)
-
-        await waitUntil { viewModel.isAuthenticated }
+        continuation.finish()
+        await viewModel.observationTask?.value
 
         XCTAssertTrue(viewModel.isAuthenticated)
     }
@@ -63,8 +56,8 @@ final class MyPageViewModelTests: XCTestCase {
 
         viewModel.onAppear()
         continuation.yield(.unauthenticated)
-
-        await waitUntil { !viewModel.isAuthenticated }
+        continuation.finish()
+        await viewModel.observationTask?.value
 
         XCTAssertFalse(viewModel.isAuthenticated)
     }
