@@ -1,5 +1,7 @@
 import Foundation
 
+import NetworkingInterface
+
 enum LocalDatabaseSeederError: Error {
     case missingSeedResource(String)
 }
@@ -58,7 +60,7 @@ enum LocalDatabaseSeeder {
                 word: $0.word,
                 levelID: $0.levelID,
                 pronunciation: $0.pronunciation,
-                audioUrl: $0.audioUrl,
+                audioUrl: URL(string: $0.audioUrl, relativeTo: SupabaseConfig.baseURL)!.absoluteURL.absoluteString,
                 distractors: distractorsByWordID[$0.id] ?? [],
                 meanings: meaningsByWordID[$0.id] ?? []
             )

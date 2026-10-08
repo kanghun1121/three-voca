@@ -15,6 +15,9 @@ let project = Project.makeModule(
             ]
         )),
         .data(tests: .init(
+            infoPlist: .extendingDefault(with: [
+                "SUPABASE_URL": "https://supabase.invalid"
+            ]),
             dependencies: [
                 .data,
                 .domainInterface,

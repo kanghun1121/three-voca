@@ -1,4 +1,4 @@
-name: Upload to TestFlight
+name: Upload to TestFlight (Prod)
 
 on:
   workflow_dispatch:
@@ -24,10 +24,15 @@ jobs:
         run: gem install xcpretty --no-document
 
       - name: Secrets.xcconfig 생성
+        env:
+          SUPABASE_PROD_URL: ${{ secrets.SUPABASE_PROD_URL }}
         run: |
+          # xcconfig에서 //가 주석으로 처리되지 않도록 https:/$()/ 형식으로 변환
+          XCCONFIG_URL=$(printf '%s' "$SUPABASE_PROD_URL" | sed 's#://#:/$()/#')
           cat > Projects/App/Secrets.xcconfig << EOF
           SUPABASE_ANON_KEY = ${{ secrets.SUPABASE_ANON_KEY }}
           MW_DICTIONARY_API_KEY = ${{ secrets.MW_DICTIONARY_API_KEY }}
+          SUPABASE_PROD_URL = ${XCCONFIG_URL}
           EOF
 
       - name: tuist install & generate
@@ -83,7 +88,7 @@ jobs:
           set -o pipefail
           xcodebuild archive \
             -workspace FiveVoca.xcworkspace \
-            -scheme FiveVoca-Release \
+            -scheme threevoca-prod \
             -configuration Release \
             -destination generic/platform=iOS \
             -archivePath $RUNNER_TEMP/FiveVoca.xcarchive \
@@ -93,6 +98,13 @@ jobs:
             MARKETING_VERSION=${{ env.MARKETING_VERSION }} \
             CURRENT_PROJECT_VERSION=${{ env.BUILD_NUMBER }} \
             2>&1 | tee $RUNNER_TEMP/xcodebuild-archive.log | xcpretty
+
+      - name: 아카이브 Info.plist의 SUPABASE_URL 검증
+        run: |
+          APP_PLIST=$(ls -d $RUNNER_TEMP/FiveVoca.xcarchive/Products/Applications/*.app | head -1)/Info.plist
+          URL=$(/usr/libexec/PlistBuddy -c "Print :SUPABASE_URL" "$APP_PLIST")
+          echo "SUPABASE_URL host: $(echo "$URL" | sed -E 's#https://([^/]+).*#\1#')"
+          [[ "$URL" =~ ^https://[^/]+ ]] || { echo "SUPABASE_URL이 유효한 HTTPS URL이 아님"; exit 1; }
 
       - name: archive 로그 업로드 (실패 시)
         if: failure()

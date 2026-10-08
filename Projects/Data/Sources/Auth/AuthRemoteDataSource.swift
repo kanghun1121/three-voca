@@ -31,3 +31,17 @@ extension DependencyValues {
         set { self[AuthRemoteDataSource.self] = newValue }
     }
 }
+
+#if DEV_ENVIRONMENT
+extension AuthRemoteDataSource {
+    func signInWithDevTestAccount() async throws -> AuthTokenResponseDTO {
+        guard let email = Bundle.main.object(forInfoDictionaryKey: "DEV_TEST_EMAIL") as? String,
+              let password = Bundle.main.object(forInfoDictionaryKey: "DEV_TEST_PASSWORD") as? String,
+              !email.isEmpty, !password.isEmpty else {
+            throw NetworkError.invalidRequest
+        }
+        @Dependency(\.authenticatedHTTPClient) var client
+        return try await client.request(DevTestAccountRequest(email: email, password: password))
+    }
+}
+#endif

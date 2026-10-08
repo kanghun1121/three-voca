@@ -3,7 +3,7 @@ import SwiftUI
 import DesignSystem
 
 struct MyPageMenuView: View {
-    let onPrivacyTapped: () -> Void
+    let viewModel: MyPageViewModel
 
     var body: some View {
         VStack(spacing: 0) {
@@ -11,7 +11,19 @@ struct MyPageMenuView: View {
             Rectangle()
                 .fill(DesignSystemColor.Border.default)
                 .frame(height: 1)
-            MenuRow(title: "개인정보 처리방침", action: onPrivacyTapped)
+            MenuRow(title: "개인정보 처리방침", action: viewModel.privacyTapped)
+            #if DEV_ENVIRONMENT
+            if !viewModel.isAuthenticated {
+                Rectangle()
+                    .fill(DesignSystemAsset.border.swiftUIColor)
+                    .frame(height: 1)
+                MenuRow(
+                    title: viewModel.isSigningInWithTestAccount ? "로그인 중…" : "테스트 계정 로그인",
+                    action: viewModel.testAccountLoginTapped
+                )
+                .disabled(viewModel.isSigningInWithTestAccount)
+            }
+            #endif
         }
         .padding(.horizontal, 26)
     }

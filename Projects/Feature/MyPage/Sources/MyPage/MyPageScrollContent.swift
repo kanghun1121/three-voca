@@ -16,9 +16,7 @@ struct MyPageScrollContent: View {
                     onAppleCompletion: viewModel.appleLoginCompleted
                 )
 
-                MyPageMenuView(
-                    onPrivacyTapped: viewModel.privacyTapped
-                )
+                MyPageMenuView(viewModel: viewModel)
 
                 Spacer(minLength: 40)
 
