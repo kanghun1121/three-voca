@@ -2,6 +2,7 @@ import SwiftUI
 
 import DomainInterface
 import FeatureChatBot
+import FeatureChatBotInterface
 
 import Dependencies
 

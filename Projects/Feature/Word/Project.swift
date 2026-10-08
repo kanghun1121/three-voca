@@ -4,10 +4,17 @@ import DependencyPlugin
 let project = Project.makeModule(
     name: ModulePath.Feature.name + ModulePath.Feature.word.rawValue,
     targets: [
+        .feature(interface: .word, factory: .init(
+            dependencies: [
+                .dependencies,
+            ]
+        )),
         .feature(implements: .word, factory: .init(
             dependencies: [
-                .feature(implements: .chunkReader),
-                .feature(implements: .chatBot),
+                .feature(interface: .word),
+                .feature(interface: .chunkReader),
+                .feature(interface: .chatBot),
+                .domainInterface,
                 .dependencies,
                 .designSystem,
                 .swiftUINavigation,

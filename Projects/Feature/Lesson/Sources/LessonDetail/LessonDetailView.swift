@@ -1,13 +1,16 @@
 import SwiftUI
 
 import DomainInterface
-import FeatureWord
-import FeatureWordGame
+import FeatureWordGameInterface
+import FeatureWordInterface
 
+import Dependencies
 import SwiftUINavigation
 
 public struct LessonDetailView: View {
     @Bindable private var viewModel: LessonDetailViewModel
+    @Dependency(\.wordListScreenFactory) private var wordListScreenFactory
+    @Dependency(\.wordGameScreenFactory) private var wordGameScreenFactory
 
     public init(viewModel: LessonDetailViewModel) {
         _viewModel = Bindable(viewModel)
@@ -40,11 +43,11 @@ public struct LessonDetailView: View {
         }
         .task { await viewModel.onAppear() }
         .navigationBarTitleDisplayMode(.inline)
-        .navigationDestination(item: $viewModel.destination.wordList) { wordListVM in
-            WordListView(viewModel: wordListVM)
+        .navigationDestination(item: $viewModel.destination.wordList) { lessonID in
+            wordListScreenFactory.makeScreen(lessonID: lessonID.wrappedValue)
         }
-        .navigationDestination(item: $viewModel.destination.wordGame) { wordGameVM in
-            WordGameView(viewModel: wordGameVM)
+        .navigationDestination(item: $viewModel.destination.wordGame) { lessonID in
+            wordGameScreenFactory.makeScreen(lessonID: lessonID.wrappedValue)
         }
     }
 }

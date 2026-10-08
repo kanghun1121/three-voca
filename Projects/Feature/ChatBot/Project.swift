@@ -4,8 +4,14 @@ import DependencyPlugin
 let project = Project.makeModule(
     name: ModulePath.Feature.name + ModulePath.Feature.chatBot.rawValue,
     targets: [
+        .feature(interface: .chatBot, factory: .init(
+            dependencies: [
+                .dependencies,
+            ]
+        )),
         .feature(implements: .chatBot, factory: .init(
             dependencies: [
+                .feature(interface: .chatBot),
                 .domainInterface,
                 .dependencies,
                 .designSystem,
@@ -31,6 +37,7 @@ let project = Project.makeModule(
             resources: ["Example/Resources/**"],
             dependencies: [
                 .feature(implements: .chatBot),
+                .feature(interface: .chatBot),
                 .domainInterface,
                 .dependencies,
                 .designSystem,

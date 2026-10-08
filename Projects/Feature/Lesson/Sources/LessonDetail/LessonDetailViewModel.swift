@@ -1,8 +1,6 @@
 import Foundation
 
 import DomainInterface
-import FeatureWord
-import FeatureWordGame
 
 import Dependencies
 import SwiftUINavigation
@@ -18,8 +16,8 @@ public final class LessonDetailViewModel {
 
     @CasePathable
     public enum Destination {
-        case wordList(WordListViewModel)
-        case wordGame(WordGameViewModel)
+        case wordList(lessonID: String)
+        case wordGame(lessonID: String)
     }
 
     var destination: Destination?
@@ -54,11 +52,11 @@ public final class LessonDetailViewModel {
     }
 
     public func didTapWordList() {
-        destination = .wordList(WordListViewModel(lessonID: lessonID))
+        destination = .wordList(lessonID: lessonID)
     }
 
     public func didTapGame() {
-        destination = .wordGame(WordGameViewModel(lessonID: lessonID))
+        destination = .wordGame(lessonID: lessonID)
     }
 
     deinit {

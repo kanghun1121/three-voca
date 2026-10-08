@@ -4,8 +4,15 @@ import DependencyPlugin
 let project = Project.makeModule(
     name: ModulePath.Feature.name + ModulePath.Feature.chunkReader.rawValue,
     targets: [
+        .feature(interface: .chunkReader, factory: .init(
+            dependencies: [
+                .domainInterface,
+                .dependencies,
+            ]
+        )),
         .feature(implements: .chunkReader, factory: .init(
             dependencies: [
+                .feature(interface: .chunkReader),
                 .domainInterface,
                 .dependencies,
                 .designSystem,
