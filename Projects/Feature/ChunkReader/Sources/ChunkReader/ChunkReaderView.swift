@@ -37,5 +37,9 @@ public struct ChunkReaderView: View {
                     .foregroundStyle(DesignSystemColor.Foreground.strong)
             }
         }
+        .alert("오디오를 재생할 수 없습니다", isPresented: $viewModel.isAudioErrorPresented) {
+            Button("확인", role: .cancel) {}
+        }
+        .onDisappear(perform: viewModel.stopAudio)
     }
 }

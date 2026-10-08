@@ -6,7 +6,7 @@ let project = Project.makeModule(
     targets: [
         .feature(implements: .home, factory: .init(
             dependencies: [
-                .feature(implements: .lesson),
+                .feature(interface: .lesson),
                 .domainInterface,
                 .dependencies,
                 .designSystem,

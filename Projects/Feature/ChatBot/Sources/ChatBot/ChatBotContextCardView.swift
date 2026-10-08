@@ -1,6 +1,7 @@
 import SwiftUI
 
 import DesignSystem
+import FeatureChatBotInterface
 
 /// 문법 분석 대상 예문을 요약해 보여주는 카드. `문법 분석 · <레벨>` 칩 아래 대상 단어가
 /// 노란 배경으로 하이라이트된 문장을 렌더한다.
