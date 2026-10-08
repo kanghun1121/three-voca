@@ -41,10 +41,13 @@ final class RecognitionViewModelTests: XCTestCase {
             return
         }
 
-        // countdownTask가 취소됐다면, 대기 후에도 ringProgress가 더 이상 감소하지 않는다.
+        // 취소 직후 루프가 마지막으로 한 번 갱신하므로, 그 갱신이 끝난 뒤의 값을 기준으로 삼는다.
+        try? await Task.sleep(for: .milliseconds(100))
         let progressAfterClose = vm.ringProgress
+
+        // countdownTask가 취소됐다면, 대기 후에도 ringProgress가 변하지 않는다.
         try? await Task.sleep(for: .milliseconds(300))
 
-        XCTAssertEqual(vm.ringProgress, progressAfterClose, accuracy: 0.01)
+        XCTAssertEqual(vm.ringProgress, progressAfterClose)
     }
 }
