@@ -19,14 +19,12 @@ struct SpellingView: View {
 
             VStack(spacing: 0) {
                 Text("이 뜻의 영어 단어는?")
-                    .font(DesignSystemFontFamily.Pretendard.regular.swiftUIFont(size: 14))
-                    .tracking(0.04 * 14)
-                    .foregroundStyle(DesignSystemAsset.white.swiftUIColor.opacity(0.55))
+                    .typography(DesignSystemTypography.Pretendard.regular14)
+                    .foregroundStyle(DesignSystemColor.Base.white.opacity(0.55))
 
                 Text(word.primaryMeaning)
-                    .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 26))
-                    .tracking(-0.012 * 26)
-                    .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
+                    .typography(DesignSystemTypography.Pretendard.bold26)
+                    .foregroundStyle(DesignSystemColor.Base.white)
                     .multilineTextAlignment(.center)
                     .padding(.top, 8)
                     .padding(.bottom, 36)
@@ -45,24 +43,24 @@ struct SpellingView: View {
                         .padding(.top, 16)
 
                     Button("건너뛰기", action: onSkip)
-                        .font(DesignSystemFontFamily.Pretendard.regular.swiftUIFont(size: 14))
-                        .foregroundStyle(DesignSystemAsset.white.swiftUIColor.opacity(0.40))
+                        .typography(DesignSystemTypography.Pretendard.regular14)
+                        .foregroundStyle(DesignSystemColor.Base.white.opacity(0.40))
                         .padding(.top, 20)
                 }
 
                 // 오답 시 정답 카드
                 if viewState == .revealing {
                     Text(word.term)
-                        .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 18))
-                        .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
+                        .typography(DesignSystemTypography.Pretendard.semiBold18)
+                        .foregroundStyle(DesignSystemColor.Base.white)
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, 32)
                         .padding(.vertical, 14)
-                        .background(DesignSystemAsset.white.swiftUIColor.opacity(0.12))
+                        .background(DesignSystemColor.Base.white.opacity(0.12))
                         .clipShape(.rect(cornerRadius: 16))
                         .overlay {
                             RoundedRectangle(cornerRadius: 16)
-                                .stroke(DesignSystemAsset.white.swiftUIColor.opacity(0.28), lineWidth: 1)
+                                .stroke(DesignSystemColor.Base.white.opacity(0.28), lineWidth: 1)
                         }
                         .padding(.top, 24)
                         .transition(.opacity.combined(with: .move(edge: .bottom)))
@@ -89,9 +87,9 @@ private struct SpellingInputField: View {
     var body: some View {
         HStack(spacing: 8) {
             TextField("", text: $text)
-                .font(.system(size: 22, weight: .bold, design: .monospaced))
-                .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
-                .tint(DesignSystemAsset.white.swiftUIColor)
+                .typography(DesignSystemTypography.Mono.bold22)
+                .foregroundStyle(DesignSystemColor.Base.white)
+                .tint(DesignSystemColor.Base.white)
                 .focused(isFocused)
                 .autocorrectionDisabled()
                 .textInputAutocapitalization(.never)
@@ -105,8 +103,8 @@ private struct SpellingInputField: View {
                     text = ""
                 }
                 .labelStyle(.iconOnly)
-                .font(.system(size: 20))
-                .foregroundStyle(DesignSystemAsset.white.swiftUIColor.opacity(0.55))
+                .typography(DesignSystemTypography.Pretendard.regular20)
+                .foregroundStyle(DesignSystemColor.Base.white.opacity(0.55))
             }
         }
             .frame(maxWidth: .infinity, minHeight: 56, alignment: .leading)
@@ -122,22 +120,22 @@ private struct SpellingInputField: View {
     private var fillColor: Color {
         switch viewState {
         case .correct:
-            DesignSystemAsset.positive.swiftUIColor.opacity(0.20)
+            DesignSystemColor.Status.positive.opacity(0.20)
         case .incorrect, .revealing:
-            DesignSystemAsset.negative.swiftUIColor.opacity(0.20)
+            DesignSystemColor.Status.negative.opacity(0.20)
         case .active:
-            DesignSystemAsset.white.swiftUIColor.opacity(0.16)
+            DesignSystemColor.Base.white.opacity(0.16)
         }
     }
 
     private var borderColor: Color {
         switch viewState {
         case .correct:
-            DesignSystemAsset.positive.swiftUIColor.opacity(0.55)
+            DesignSystemColor.Status.positive.opacity(0.55)
         case .incorrect, .revealing:
-            DesignSystemAsset.negative.swiftUIColor.opacity(0.55)
+            DesignSystemColor.Status.negative.opacity(0.55)
         case .active:
-            DesignSystemAsset.white.swiftUIColor.opacity(0.28)
+            DesignSystemColor.Base.white.opacity(0.28)
         }
     }
 }
@@ -150,10 +148,10 @@ private struct SpellingSubmitButton: View {
 
     var body: some View {
         Button("제출", action: action)
-            .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 16))
-            .foregroundStyle(DesignSystemAsset.white.swiftUIColor.opacity(isEnabled ? 1 : 0.40))
+            .typography(DesignSystemTypography.Pretendard.bold16)
+            .foregroundStyle(DesignSystemColor.Base.white.opacity(isEnabled ? 1 : 0.40))
             .frame(maxWidth: .infinity, minHeight: 52)
-            .background(DesignSystemAsset.white.swiftUIColor.opacity(isEnabled ? 0.28 : 0.10), in: .rect(cornerRadius: 14))
+            .background(DesignSystemColor.Base.white.opacity(isEnabled ? 0.28 : 0.10), in: .rect(cornerRadius: 14))
             .disabled(!isEnabled)
     }
 }

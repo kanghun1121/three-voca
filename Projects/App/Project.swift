@@ -13,29 +13,34 @@ let project = Project.makeModule(
                     "UIApplicationSupportsMultipleScenes": false,
                     "UISceneConfigurations": [:]
                 ],
+                "DEV_TEST_EMAIL": "$(DEV_TEST_EMAIL)",
+                "DEV_TEST_PASSWORD": "$(DEV_TEST_PASSWORD)",
+                "SUPABASE_URL": "$(SUPABASE_URL)",
                 "SUPABASE_ANON_KEY": "$(SUPABASE_ANON_KEY)",
                 "MW_DICTIONARY_API_KEY": "$(MW_DICTIONARY_API_KEY)",
                 "ITSAppUsesNonExemptEncryption": false,
-                "PRIVACY_POLICY_URL": "https://maize-erica-237.notion.site/387a1c6f6ce080ba927ef413ffe4cfd4",
-                "UIAppFonts": [
-                    "Pretendard-Thin.otf",
-                    "Pretendard-ExtraLight.otf",
-                    "Pretendard-Light.otf",
-                    "Pretendard-Regular.otf",
-                    "Pretendard-Medium.otf",
-                    "Pretendard-SemiBold.otf",
-                    "Pretendard-Bold.otf",
-                    "Pretendard-ExtraBold.otf",
-                    "Pretendard-Black.otf"
-                ]
+                "PRIVACY_POLICY_URL": "https://maize-erica-237.notion.site/387a1c6f6ce080ba927ef413ffe4cfd4"
             ]),
             sources: ["Sources/**"],
             resources: ["Resources/**"],
             entitlements: .file(path: "FiveVoca.entitlements"),
             dependencies: [.feature, .domain, .data, .networking, .core, .designSystem],
             settings: .settings(
+                base: [
+                    "SUPABASE_URL": "$(SUPABASE_PROD_URL)",
+                    "ASSETCATALOG_COMPILER_APPICON_NAME": "AppIcon",
+                    "DEV_TEST_EMAIL": "",
+                    "DEV_TEST_PASSWORD": ""
+                ],
                 configurations: [
                     .debug(name: "Debug", xcconfig: "Secrets.xcconfig"),
+                    .debug(name: "Dev", settings: [
+                        "DEV_TEST_EMAIL": "$(DEV_ACCOUNT_EMAIL)",
+                        "DEV_TEST_PASSWORD": "$(DEV_ACCOUNT_PASSWORD)",
+                        "SUPABASE_URL": "$(SUPABASE_DEV_URL)",
+                        "SUPABASE_ANON_KEY": "$(SUPABASE_DEV_ANON_KEY)",
+                        "ASSETCATALOG_COMPILER_APPICON_NAME": "AppIconDev"
+                    ], xcconfig: "Secrets.xcconfig"),
                     .release(name: "Release", settings: [
                         "CODE_SIGN_STYLE": "Manual",
                         "CODE_SIGN_IDENTITY": "Apple Distribution",
@@ -46,21 +51,21 @@ let project = Project.makeModule(
     ],
     schemes: [
         .scheme(
-            name: env.appName,
+            name: "threevoca-dev",
             buildAction: .buildAction(targets: [.target(env.appName)]),
-            runAction: .runAction(
-                configuration: .debug,
-                arguments: .arguments(
-                    environmentVariables: [
-                        "ENABLE_NETWORK_LOG": .environmentVariable(value: "1", isEnabled: true)
-                    ]
-                )
-            )
+            runAction: .runAction(configuration: "Dev"),
+            archiveAction: .archiveAction(configuration: "Dev"),
+            profileAction: .profileAction(configuration: "Dev"),
+            analyzeAction: .analyzeAction(configuration: "Dev")
         ),
         .scheme(
-            name: "\(env.appName)-Release",
+            name: "threevoca-prod",
             buildAction: .buildAction(targets: [.target(env.appName)]),
-            runAction: .runAction(configuration: .release)
+            runAction: .runAction(configuration: .release),
+            archiveAction: .archiveAction(configuration: .release),
+            profileAction: .profileAction(configuration: .release),
+            analyzeAction: .analyzeAction(configuration: .release)
         )
-    ]
+    ],
+    options: .options(automaticSchemesOptions: .disabled)
 )

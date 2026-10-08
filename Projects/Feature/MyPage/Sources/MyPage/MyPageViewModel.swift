@@ -17,6 +17,7 @@ public final class MyPageViewModel {
     @CasePathable
     enum Destination {
         case alert(AlertState<AlertAction>)
+        case appearance
         case deleteAccountSheet
         case privacyWebView
     }
@@ -30,9 +31,36 @@ public final class MyPageViewModel {
     @ObservationIgnored @Dependency(\.signInWithAppleUseCase) private var signInWithAppleUseCase
     @ObservationIgnored @Dependency(\.loggerClient) private var loggerClient
 
+    #if DEV_ENVIRONMENT
+    var isSigningInWithTestAccount = false
+    @ObservationIgnored @Dependency(\.signInWithDevTestAccountUseCase) private var signInWithDevTestAccountUseCase
+
+    func testAccountLoginTapped() {
+        guard !isSigningInWithTestAccount else { return }
+        isSigningInWithTestAccount = true
+        Task { [weak self] in
+            guard let self else { return }
+            defer { isSigningInWithTestAccount = false }
+            do {
+                try await signInWithDevTestAccountUseCase.execute()
+                isAuthenticated = true
+            } catch {
+                destination = .alert(AlertState(
+                    title: TextState("테스트 계정 로그인에 실패했습니다. 다시 시도해 주세요."),
+                    buttons: [.cancel(TextState("확인"))]
+                ))
+            }
+        }
+    }
+    #endif
+
     var isDeleteConfirmed: Bool { deleteConfirmText == "회원탈퇴" }
     var isShowingDeleteSheet: Bool {
         if case .deleteAccountSheet = destination { true } else { false }
+    }
+
+    var isShowingAppearance: Bool {
+        if case .appearance = destination { true } else { false }
     }
 
     var isShowingPrivacyWebView: Bool {
@@ -80,6 +108,10 @@ public final class MyPageViewModel {
         case .failure(let error):
             loggerClient.error("Auth", "Apple 로그인 실패: \(error.localizedDescription)")
         }
+    }
+
+    func appearanceTapped() {
+        destination = .appearance
     }
 
     func privacyTapped() {

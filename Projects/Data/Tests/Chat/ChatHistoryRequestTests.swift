@@ -22,7 +22,7 @@ final class ChatHistoryRequestTests: XCTestCase {
 
         XCTAssertEqual(
             request.url,
-            URL(string: "https://ebvfeuopuzlpddzvcini.supabase.co/functions/v1/chat?word_id=word_766")!
+            URL(string: "functions/v1/chat?word_id=word_766", relativeTo: SupabaseConfig.baseURL)!.absoluteURL
         )
     }
 

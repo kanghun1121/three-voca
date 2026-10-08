@@ -16,7 +16,7 @@ public struct LoginView: View {
             LoginContentView(viewModel: viewModel)
         }
         .ignoresSafeArea(edges: .top)
-        .background(DesignSystemAsset.white.swiftUIColor)
+        .background(DesignSystemColor.Background.base)
         .sheet(isPresented: $viewModel.isTermsPresented) {
             Text("이용약관")
         }

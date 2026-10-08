@@ -13,9 +13,8 @@ struct ChoiceButton: View {
     var body: some View {
         Button(action: onTap) {
             Text(text)
-                .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 18))
-                .tracking(-0.01 * 18)
-                .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
+                .typography(DesignSystemTypography.Pretendard.bold18)
+                .foregroundStyle(DesignSystemColor.Base.white)
                 .frame(
                     maxWidth: .infinity,
                     minHeight: 64,
@@ -33,12 +32,12 @@ struct ChoiceButton: View {
             if differentiateWithoutColor {
                 if state == .correct {
                     Image(systemName: "checkmark.circle.fill")
-                        .foregroundStyle(DesignSystemAsset.positive.swiftUIColor)
+                        .foregroundStyle(DesignSystemColor.Status.positive)
                         .accessibilityHidden(true)
                         .padding(.trailing, 16)
                 } else if state == .incorrect {
                     Image(systemName: "xmark.circle.fill")
-                        .foregroundStyle(DesignSystemAsset.cautionary.swiftUIColor)
+                        .foregroundStyle(DesignSystemColor.Status.negative)
                         .accessibilityHidden(true)
                         .padding(.trailing, 16)
                 }
@@ -51,17 +50,17 @@ struct ChoiceButton: View {
 
     private var backgroundColor: Color {
         switch state {
-        case .idle:      DesignSystemAsset.white.swiftUIColor.opacity(0.05)
-        case .correct:   DesignSystemAsset.positive.swiftUIColor.opacity(0.15)
-        case .incorrect: DesignSystemAsset.cautionary.swiftUIColor.opacity(0.15)
+        case .idle:      DesignSystemColor.Base.white.opacity(0.05)
+        case .correct:   DesignSystemColor.Status.positive.opacity(0.15)
+        case .incorrect: DesignSystemColor.Status.negative.opacity(0.15)
         }
     }
 
     private var borderColor: Color {
         switch state {
-        case .idle:      DesignSystemAsset.white.swiftUIColor.opacity(0.22)
-        case .correct:   DesignSystemAsset.positive.swiftUIColor
-        case .incorrect: DesignSystemAsset.cautionary.swiftUIColor
+        case .idle:      DesignSystemColor.Base.white.opacity(0.22)
+        case .correct:   DesignSystemColor.Status.positive
+        case .incorrect: DesignSystemColor.Status.negative
         }
     }
 

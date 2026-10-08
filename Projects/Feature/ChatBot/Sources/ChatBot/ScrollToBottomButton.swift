@@ -9,15 +9,15 @@ struct ScrollToBottomButton: View {
     var body: some View {
         Button(action: action) {
             Image(systemName: "chevron.down")
-                .font(.system(size: 14, weight: .semibold))
-                .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
+                .typography(DesignSystemTypography.Pretendard.semiBold14)
+                .foregroundStyle(DesignSystemColor.Foreground.muted)
                 .frame(width: 36, height: 36)
-                .background(DesignSystemAsset.background.swiftUIColor, in: .circle)
+                .background(DesignSystemColor.Background.elevated, in: .circle)
                 .overlay {
-                    Circle().stroke(DesignSystemAsset.border.swiftUIColor, lineWidth: 1)
+                    Circle().stroke(DesignSystemColor.Border.default, lineWidth: 1)
                 }
                 .shadow(
-                    color: .black.opacity(0.08),
+                    color: DesignSystemColor.Foreground.strong.opacity(0.08),
                     radius: 4,
                     x: 0,
                     y: 2

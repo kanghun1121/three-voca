@@ -12,8 +12,8 @@ struct CalendarHeaderRow: View {
     var body: some View {
         HStack(spacing: 8) {
             Text(title)
-                .homeTypography(.monthHeader)
-                .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
+                .typography(DesignSystemTypography.Home.monthHeader)
+                .foregroundStyle(DesignSystemColor.Foreground.strong)
             Spacer()
             CalendarNavButtons(
                 isAtCurrentMonth: isAtCurrentMonth,

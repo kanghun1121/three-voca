@@ -11,19 +11,19 @@ struct MarkdownStructureView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(title)
-                .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 11))
-                .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
+                .typography(DesignSystemTypography.Pretendard.semiBold11)
+                .foregroundStyle(DesignSystemColor.Foreground.muted)
             ForEach(Array(lines.enumerated()), id: \.offset) { _, line in
                 Text(styledLine(line))
-                    .font(.system(size: 12.5, design: .monospaced))
+                    .typography(DesignSystemTypography.Mono.regular12_5)
             }
         }
         .padding(12)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(DesignSystemAsset.bgMuted.swiftUIColor)
+        .background(DesignSystemColor.Background.muted)
         .overlay(
             RoundedRectangle(cornerRadius: 8, style: .continuous)
-                .stroke(DesignSystemAsset.borderSubtle.swiftUIColor, lineWidth: 1)
+                .stroke(DesignSystemColor.Border.subtle, lineWidth: 1)
         )
         .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
     }
@@ -31,14 +31,14 @@ struct MarkdownStructureView: View {
     /// `[S]`, `[V]`, `[목적어 O]`처럼 대괄호로 감싼 역할 라벨만 틸로 칠하고 나머지는 기본색을 쓴다.
     private func styledLine(_ line: String) -> AttributedString {
         var result = AttributedString(line)
-        result.foregroundColor = DesignSystemAsset.fg.swiftUIColor
+        result.foregroundColor = DesignSystemColor.Foreground.default
 
         var searchStart = line.startIndex
         while searchStart < line.endIndex,
               let open = line.range(of: "[", range: searchStart..<line.endIndex),
               let close = line.range(of: "]", range: open.upperBound..<line.endIndex) {
             if let attrRange = Range(open.lowerBound..<close.upperBound, in: result) {
-                result[attrRange].foregroundColor = DesignSystemAsset.selectedBlue.swiftUIColor
+                result[attrRange].foregroundColor = DesignSystemColor.Accent.selectedBlueText
             }
             searchStart = close.upperBound
         }

@@ -5,18 +5,18 @@ import DesignSystem
 struct MarkdownOrderedListView: View {
     let items: [MarkdownListItem]
 
-    private static let fontSize: CGFloat = 15
+    private static let fontSize: CGFloat = DesignSystemTypography.Pretendard.regular15.size
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             ForEach(Array(items.enumerated()), id: \.offset) { index, item in
                 HStack(alignment: .top, spacing: 8) {
                     Text("\(index + 1).")
-                        .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: Self.fontSize))
-                        .foregroundStyle(DesignSystemAsset.selectedBlue.swiftUIColor)
+                        .typography(DesignSystemTypography.Pretendard.semiBold15)
+                        .foregroundStyle(DesignSystemColor.Accent.selectedBlueText)
                     Text(MarkdownInlineStyler.styled(item.text, baseSize: Self.fontSize))
-                        .font(DesignSystemFontFamily.Pretendard.regular.swiftUIFont(size: Self.fontSize))
-                        .foregroundStyle(DesignSystemAsset.fg.swiftUIColor)
+                        .typography(DesignSystemTypography.Pretendard.regular15)
+                        .foregroundStyle(DesignSystemColor.Foreground.default)
                 }
             }
         }

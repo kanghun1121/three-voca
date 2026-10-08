@@ -11,26 +11,23 @@ enum MarkdownInlineStyler {
         for run in text.runs {
             let range = run.range
 
-            var font = DesignSystemFontFamily.Pretendard.regular.swiftUIFont(size: baseSize)
-            var color = DesignSystemAsset.fg.swiftUIColor
+            var typography = DesignSystemTypography.Pretendard.regular15.scaled(to: baseSize)
+            var color = DesignSystemColor.Foreground.default
 
             if run.inlinePresentationIntent?.contains(.stronglyEmphasized) == true {
-                font = DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: baseSize)
-                color = DesignSystemAsset.fgStrong.swiftUIColor
-            }
-            if run.inlinePresentationIntent?.contains(.emphasized) == true {
-                font = font.italic()
+                typography = DesignSystemTypography.Pretendard.bold15.scaled(to: baseSize)
+                color = DesignSystemColor.Foreground.strong
             }
             if run.inlinePresentationIntent?.contains(.code) == true {
-                font = .system(size: baseSize, design: .monospaced)
-                color = DesignSystemAsset.selectedBlue.swiftUIColor
-                result[range].backgroundColor = DesignSystemAsset.selectedBlue100.swiftUIColor
+                typography = DesignSystemTypography.Markdown.code.scaled(to: baseSize)
+                color = DesignSystemColor.Accent.selectedBlueText
+                result[range].backgroundColor = DesignSystemColor.Accent.selectedBlue100
             }
             if run.markdownHighlight == true {
-                result[range].backgroundColor = DesignSystemAsset.highlightBg.swiftUIColor
+                result[range].backgroundColor = DesignSystemColor.Accent.selectedBlue100
             }
             if run.link != nil {
-                color = DesignSystemAsset.primary.swiftUIColor
+                color = DesignSystemColor.Accent.primary
                 result[range].underlineStyle = .single
             }
             if let tailOpacity = run.markdownTailOpacity {
@@ -42,7 +39,9 @@ enum MarkdownInlineStyler {
                 }
             }
 
-            result[range].font = font
+            let isItalic = run.inlinePresentationIntent?.contains(.emphasized) == true
+                && run.inlinePresentationIntent?.contains(.code) != true
+            result[range].font = isItalic ? typography.italicFont : typography.font
             result[range].foregroundColor = color
         }
         return result

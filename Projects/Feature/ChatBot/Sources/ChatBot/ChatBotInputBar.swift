@@ -50,8 +50,8 @@ struct ChatBotInputBar: View {
     var body: some View {
         HStack(alignment: .bottom, spacing: 4) {
             TextField(placeholder, text: $text, axis: .vertical)
-                .font(DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 14.5))
-                .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
+                .typography(DesignSystemTypography.Pretendard.medium14_5)
+                .foregroundStyle(DesignSystemColor.Foreground.strong)
                 .lineLimit(1...maxLines)
                 // 한 줄일 때는 30pt(전송 버튼 높이) 박스 안에서 세로 중앙 정렬되고,
                 // 여러 줄로 자라면 버튼 높이를 넘어서 자연스럽게 늘어난다.
@@ -74,7 +74,7 @@ struct ChatBotInputBar: View {
         Button(action: state == .stop ? onStop : didTapSend) {
             buttonIcon
                 .frame(width: 30, height: 30)
-                .background(DesignSystemAsset.selectedBlue.swiftUIColor, in: .circle)
+                .background(DesignSystemColor.Accent.selectedBlue, in: .circle)
                 // 시각 크기(30pt)와 레이아웃은 그대로 두고, 터치 영역만 44pt로 넓힌다.
                 .frame(width: 44, height: 44)
                 .contentShape(.rect)
@@ -99,11 +99,11 @@ struct ChatBotInputBar: View {
         switch state {
         case .send:
             Image(systemName: "arrow.up")
-                .font(.system(size: 14, weight: .semibold))
-                .foregroundStyle(.white)
+                .typography(DesignSystemTypography.Pretendard.semiBold14)
+                .foregroundStyle(DesignSystemColor.Base.white)
         case .stop:
             RoundedRectangle(cornerRadius: 3)
-                .fill(.white)
+                .fill(DesignSystemColor.Base.white)
                 .frame(width: 10, height: 10)
         }
     }
@@ -117,14 +117,14 @@ struct ChatBotInputBar: View {
 private struct ChatBotInputBarBackground: ViewModifier {
     func body(content: Content) -> some View {
         if #available(iOS 26.0, *) {
-            let glass = Glass.regular.tint(DesignSystemAsset.bgSubtle.swiftUIColor)
+            let glass = Glass.regular.tint(DesignSystemColor.Background.muted)
             content.glassEffect(glass, in: .rect(cornerRadius: 22))
         } else {
             content
-                .background(DesignSystemAsset.bgSubtle.swiftUIColor, in: .rect(cornerRadius: 22))
+                .background(DesignSystemColor.Background.muted, in: .rect(cornerRadius: 22))
                 .overlay {
                     RoundedRectangle(cornerRadius: 22)
-                        .stroke(DesignSystemAsset.border.swiftUIColor, lineWidth: 1)
+                        .stroke(DesignSystemColor.Border.default, lineWidth: 1)
                 }
         }
     }

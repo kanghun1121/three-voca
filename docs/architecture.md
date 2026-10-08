@@ -12,7 +12,7 @@ Apple 프레임워크·외부 패키지는 제외하며, Tests/Example의 의존
 | 레이어/타겟 | 책임 | 참조 가능한 레이어 |
 |---|---|---|
 | App | 앱 진입점·의존성 조립 | Feature, Domain, Data, Networking, Core, DesignSystem |
-| Feature | 화면·상태·사용자 이벤트 | DomainInterface, DesignSystem, 화면 연결에 필요한 Feature, Core(로깅) |
+| Feature | 화면·상태·사용자 이벤트 | DomainInterface, DesignSystem, 화면 연결에 필요한 다른 Feature의 Interface, Core(로깅) |
 | DomainInterface | 도메인 모델·Repository/UseCase 계약 | 없음 |
 | Domain | UseCase 구현·도메인 오케스트레이션 | DomainInterface |
 | Data | Repository 구현·외부 데이터 접근·저장 | DomainInterface, Core, NetworkingInterface |
@@ -25,7 +25,7 @@ Apple 프레임워크·외부 패키지는 제외하며, Tests/Example의 의존
 - Data는 Networking 구현체를 참조하지 않고 NetworkingInterface의 포트로 호출한다.
 - Domain/DomainInterface는 Data, Core, Networking, NetworkingInterface를 참조하지 않는다.
 - Feature의 Core 참조는 로깅 용도로 제한한다. Keychain 등 데이터 접근은 DomainInterface 계약을 통한다.
-- Feature 간 참조는 화면 연결을 위한 방향으로 제한한다. 공용 데이터 접근은 DomainInterface를 통한다.
+- Feature 간 참조는 화면 연결을 위한 방향으로 제한하고, 상대 Feature의 `Feature<Name>Interface` 타겟만 참조한다. 구현 타겟(`Feature<Name>`)은 App만 참조한다. 공용 데이터 접근은 DomainInterface를 통한다.
 - 표에 없는 의존이 발견되면 선언과 사용처를 확인한다. 기존 코드의 존재만으로 새 허용 규칙을 만들지 않는다.
 - Tests는 검증 대상 구현과 테스트에 필요한 계약·도구를 참조한다.
 - Example은 독립 앱의 조립 지점이다. 실제 기능 실행에 필요한 Domain/Data/Networking 구현을 참조할 수 있다.
@@ -62,7 +62,10 @@ Apple 프레임워크·외부 패키지는 제외하며, Tests/Example의 의존
 
 - Domain과 Networking은 각각 `Interface/`와 `Sources/`를 별도 타겟으로 구성한다.
 - `NetworkingInterface`는 별도 프로젝트 폴더가 아니라 `Projects/Networking/Interface/` 타겟이다.
-- Feature Interface 타겟을 관성적으로 추가하지 않는다. 의존 경계를 분리할 실제 필요가 있을 때 검토한다.
+- 다른 Feature가 열어야 하는 화면에만 `Feature<Name>Interface` 타겟(`Interface/`)을 둔다. 호출되지 않는 Feature에는 추가하지 않는다.
+- Interface는 `<Name>ScreenFactory` 프로토콜(`makeScreen`)과 진입 값 타입(`Route` 등)으로 구성한다. 저장 클로저를 두지 않는다. 클로저는 부모→자식 콜백에만 쓴다.
+- 구현 Feature가 `Live<Name>ScreenFactory`와 `DependencyKey.liveValue`를 제공하고, App의 `RootView`가 주입한다. 호출 측 ViewModel의 `Destination`은 Route 값만 보관하고, View가 `@Dependency`로 화면을 만든다.
+- Interface 미주입 환경(Example, 프리뷰, 테스트)은 Interface가 제공하는 Placeholder 구현(빈 화면)을 쓴다.
 
 ## Feature 모듈 경계 규칙
 

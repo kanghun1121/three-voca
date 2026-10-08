@@ -42,7 +42,7 @@ final class RecognitionViewModelTests: XCTestCase {
 
         await vm.countdownTask?.value
 
-        XCTAssertEqual(vm.ringProgress, 1.0, accuracy: 0.01)
+        XCTAssertEqual(vm.ringProgress, 1.0)
         XCTAssertEqual(vm.viewState, .active)
     }
 }

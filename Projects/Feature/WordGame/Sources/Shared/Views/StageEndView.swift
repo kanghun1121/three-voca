@@ -32,9 +32,8 @@ private struct StageEndContent: View {
             StageEndCheckMark()
 
             Text(title)
-                .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 32))
-                .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
-                .kerning(-0.8)
+                .typography(DesignSystemTypography.Pretendard.extraBold32)
+                .foregroundStyle(DesignSystemColor.Base.white)
                 .multilineTextAlignment(.center)
                 .offset(y: textOffset)
                 .opacity(textOpacity)
@@ -62,8 +61,8 @@ private struct StageEndCheckMark: View {
         ZStack {
             RadialGradient(
                 gradient: Gradient(colors: [
-                    DesignSystemAsset.positive.swiftUIColor.opacity(0.35),
-                    DesignSystemAsset.positive.swiftUIColor.opacity(0)
+                    DesignSystemColor.Status.positive.opacity(0.35),
+                    DesignSystemColor.Status.positive.opacity(0)
                 ]),
                 center: .center,
                 startRadius: 0,
@@ -74,13 +73,13 @@ private struct StageEndCheckMark: View {
             .opacity(glowOpacity)
 
             Circle()
-                .fill(Color.white.opacity(0.12))
-                .stroke(DesignSystemAsset.positive.swiftUIColor, lineWidth: 2)
+                .fill(DesignSystemColor.Base.white.opacity(0.12))
+                .stroke(DesignSystemColor.Status.positive, lineWidth: 2)
                 .frame(width: 84, height: 84)
                 .overlay {
                     Image(systemName: "checkmark")
-                        .font(.system(size: 28, weight: .semibold))
-                        .foregroundStyle(DesignSystemAsset.positive.swiftUIColor)
+                        .typography(DesignSystemTypography.Pretendard.semiBold28)
+                        .foregroundStyle(DesignSystemColor.Status.positive)
                 }
                 .scaleEffect(markScale)
                 .opacity(markOpacity)

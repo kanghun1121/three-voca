@@ -4,9 +4,15 @@ import DependencyPlugin
 let project = Project.makeModule(
     name: ModulePath.Feature.name + ModulePath.Feature.wordGame.rawValue,
     targets: [
+        .feature(interface: .wordGame, factory: .init(
+            dependencies: [
+                .dependencies,
+            ]
+        )),
         .feature(implements: .wordGame, factory: .init(
             resources: ["Resources/**"],
             dependencies: [
+                .feature(interface: .wordGame),
                 .domainInterface,
                 .dependencies,
                 .dependenciesMacros,

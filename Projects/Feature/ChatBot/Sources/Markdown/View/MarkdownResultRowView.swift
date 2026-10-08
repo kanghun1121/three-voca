@@ -6,16 +6,16 @@ import DesignSystem
 struct MarkdownResultRowView: View {
     let item: MarkdownResultItem
 
-    private static let fontSize: CGFloat = 15
+    private static let fontSize: CGFloat = DesignSystemTypography.Pretendard.regular15.size
 
     var body: some View {
         HStack(spacing: 8) {
             Text(item.kind == .correct ? "✓" : "✗")
-                .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: Self.fontSize))
+                .typography(DesignSystemTypography.Pretendard.bold15)
                 .foregroundStyle(iconColor)
             Text(MarkdownInlineStyler.styled(item.text, baseSize: Self.fontSize))
-                .font(DesignSystemFontFamily.Pretendard.regular.swiftUIFont(size: Self.fontSize))
-                .foregroundStyle(DesignSystemAsset.fg.swiftUIColor)
+                .typography(DesignSystemTypography.Pretendard.regular15)
+                .foregroundStyle(DesignSystemColor.Foreground.default)
             Spacer(minLength: 0)
         }
         .padding(.horizontal, 12)
@@ -27,13 +27,13 @@ struct MarkdownResultRowView: View {
 
     private var iconColor: Color {
         item.kind == .correct
-            ? DesignSystemAsset.positive.swiftUIColor
-            : DesignSystemAsset.negative.swiftUIColor
+            ? DesignSystemColor.Status.positive
+            : DesignSystemColor.Status.negativeText
     }
 
     private var backgroundColor: Color {
         item.kind == .correct
-            ? DesignSystemAsset.positive100.swiftUIColor
-            : DesignSystemAsset.negative.swiftUIColor.opacity(0.08)
+            ? DesignSystemColor.Status.positive.opacity(0.12)
+            : DesignSystemColor.Status.negative.opacity(0.08)
     }
 }

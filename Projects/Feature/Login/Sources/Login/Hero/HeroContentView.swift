@@ -9,8 +9,8 @@ struct HeroContentView: View {
         ZStack(alignment: .topLeading) {
             LinearGradient(
                 stops: [
-                    .init(color: DesignSystemAsset.game100.swiftUIColor, location: 0),
-                    .init(color: DesignSystemAsset.white.swiftUIColor, location: 1)
+                    .init(color: DesignSystemColor.Game.base.opacity(0.08), location: 0),
+                    .init(color: DesignSystemColor.Background.base, location: 1)
                 ],
                 startPoint: UnitPoint(x: 0.28, y: 0),
                 endPoint: UnitPoint(x: 0.72, y: 1)
@@ -33,19 +33,19 @@ struct HeroContentView: View {
                 .accessibilityHidden(true)
 
             Circle()
-                .fill(DesignSystemAsset.game.swiftUIColor.opacity(0.4))
+                .fill(DesignSystemColor.Game.base.opacity(0.4))
                 .frame(width: 8, height: 8)
                 .offset(x: width - 60 - 8, y: 100)
                 .accessibilityHidden(true)
 
             Circle()
-                .fill(DesignSystemAsset.primary.swiftUIColor.opacity(0.5))
+                .fill(DesignSystemColor.Accent.primary.opacity(0.5))
                 .frame(width: 6, height: 6)
                 .offset(x: 24, y: 220)
                 .accessibilityHidden(true)
 
             Circle()
-                .fill(DesignSystemAsset.cautionary.swiftUIColor.opacity(0.3))
+                .fill(DesignSystemColor.Status.negative.opacity(0.3))
                 .frame(width: 10, height: 10)
                 .offset(x: width - 100 - 10, y: 460 - 60 - 10)
                 .accessibilityHidden(true)

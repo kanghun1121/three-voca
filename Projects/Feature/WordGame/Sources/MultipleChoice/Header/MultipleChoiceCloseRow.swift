@@ -9,8 +9,8 @@ struct MultipleChoiceCloseRow: View {
         HStack {
             Button(action: onDismiss) {
                 Image(systemName: "xmark")
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
+                    .typography(DesignSystemTypography.Pretendard.semiBold16)
+                    .foregroundStyle(DesignSystemColor.Base.white)
                     .frame(width: 40, height: 40)
             }
             .padding(.leading, 10)

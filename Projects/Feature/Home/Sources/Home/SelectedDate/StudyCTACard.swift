@@ -27,15 +27,15 @@ struct StudyCTACard: View {
         var body: some View {
             LinearGradient(
                 stops: [
-                    .init(color: DesignSystemAsset.ctaGradientStart.swiftUIColor, location: 0),
-                    .init(color: DesignSystemAsset.ctaGradientMid.swiftUIColor, location: 0.6),
-                    .init(color: DesignSystemAsset.ctaGradientEnd.swiftUIColor, location: 1),
+                    .init(color: DesignSystemColor.Gradient.ctaStart, location: 0),
+                    .init(color: DesignSystemColor.Gradient.ctaMid, location: 0.6),
+                    .init(color: DesignSystemColor.Gradient.ctaEnd, location: 1),
                 ],
                 startPoint: UnitPoint(x: 0, y: 0.41),
                 endPoint: UnitPoint(x: 1, y: 0.59)
             )
             .clipShape(.capsule)
-            .shadow(color: DesignSystemAsset.ctaGradientMid.swiftUIColor.opacity(0.225), radius: 7, y: 7)
+            .shadow(color: DesignSystemColor.Gradient.ctaMid.opacity(0.225), radius: 7, y: 7)
         }
     }
 
@@ -43,8 +43,8 @@ struct StudyCTACard: View {
         var body: some View {
             HStack {
                 Text("학습하러 가기")
-                    .homeTypography(.ctaTitle)
-                    .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
+                    .typography(DesignSystemTypography.Home.ctaTitle)
+                    .foregroundStyle(DesignSystemColor.Base.white)
                 Spacer()
                 PlayButton()
             }
@@ -54,11 +54,11 @@ struct StudyCTACard: View {
     private struct PlayButton: View {
         var body: some View {
             Image(systemName: "play.fill")
-                .font(.system(size: 17, weight: .semibold))
-                .foregroundStyle(DesignSystemAsset.ctaIcon.swiftUIColor)
+                .typography(DesignSystemTypography.Pretendard.semiBold17)
+                .foregroundStyle(DesignSystemColor.Accent.ctaIcon)
                 .offset(x: 1)
                 .frame(width: 48, height: 48)
-                .background(DesignSystemAsset.white.swiftUIColor, in: .circle)
+                .background(DesignSystemColor.Base.white, in: .circle)
                 .accessibilityHidden(true)
         }
     }

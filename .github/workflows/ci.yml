@@ -20,10 +20,15 @@ jobs:
         uses: jdx/mise-action@v2
 
       - name: Secrets.xcconfig 생성
+        env:
+          SUPABASE_PROD_URL: ${{ secrets.SUPABASE_PROD_URL }}
         run: |
+          # xcconfig에서 //가 주석으로 처리되지 않도록 https:/$()/ 형식으로 변환
+          XCCONFIG_URL=$(printf '%s' "$SUPABASE_PROD_URL" | sed 's#://#:/$()/#')
           cat > Projects/App/Secrets.xcconfig << EOF
           SUPABASE_ANON_KEY = ${{ secrets.SUPABASE_ANON_KEY }}
           MW_DICTIONARY_API_KEY = ${{ secrets.MW_DICTIONARY_API_KEY }}
+          SUPABASE_PROD_URL = ${XCCONFIG_URL}
           EOF
 
       - name: tuist install & generate

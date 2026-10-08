@@ -13,9 +13,8 @@ struct WordPreviewSection: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("이번 레슨의 단어 (\(words.count))")
-                .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 14))
-                .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
-                .tracking(0.26)
+                .typography(DesignSystemTypography.Pretendard.bold14)
+                .foregroundStyle(DesignSystemColor.Foreground.muted)
                 .padding(.bottom, 12)
 
             ForEach(Array(words.enumerated()), id: \.offset) { index, item in
@@ -37,8 +36,8 @@ struct WordPreviewSection: View {
                     }
                 } label: {
                     Text("+ \(words.count - previewLimit) more")
-                        .font(DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 14))
-                        .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
+                        .typography(DesignSystemTypography.Pretendard.medium14)
+                        .foregroundStyle(DesignSystemColor.Foreground.muted)
                         .frame(maxWidth: .infinity, alignment: .center)
                         .padding(.top, 12)
                 }
@@ -65,12 +64,12 @@ private struct WordPreviewRowContent: View {
     var body: some View {
         HStack {
             Text(item.term)
-                .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 16))
-                .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
+                .typography(DesignSystemTypography.Pretendard.semiBold16)
+                .foregroundStyle(DesignSystemColor.Foreground.strong)
             Spacer()
             Text(item.primaryMeaning)
-                .font(DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 14))
-                .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
+                .typography(DesignSystemTypography.Pretendard.medium14)
+                .foregroundStyle(DesignSystemColor.Foreground.muted)
         }
         .padding(.vertical, 12)
     }

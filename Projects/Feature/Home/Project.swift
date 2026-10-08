@@ -6,7 +6,7 @@ let project = Project.makeModule(
     targets: [
         .feature(implements: .home, factory: .init(
             dependencies: [
-                .feature(implements: .lesson),
+                .feature(interface: .lesson),
                 .domainInterface,
                 .dependencies,
                 .designSystem,
@@ -28,17 +28,6 @@ let project = Project.makeModule(
                 "UIApplicationSceneManifest": [
                     "UIApplicationSupportsMultipleScenes": false,
                     "UISceneConfigurations": [:]
-                ],
-                "UIAppFonts": [
-                    "Pretendard-Thin.otf",
-                    "Pretendard-ExtraLight.otf",
-                    "Pretendard-Light.otf",
-                    "Pretendard-Regular.otf",
-                    "Pretendard-Medium.otf",
-                    "Pretendard-SemiBold.otf",
-                    "Pretendard-Bold.otf",
-                    "Pretendard-ExtraBold.otf",
-                    "Pretendard-Black.otf"
                 ]
             ]),
             resources: ["Example/Resources/**"],

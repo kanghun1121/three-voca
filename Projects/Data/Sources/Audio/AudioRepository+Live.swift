@@ -52,6 +52,11 @@ extension AudioRepository: DependencyKey {
             guard let diskURL = diskCache.url(for: term) else { return nil }
             await memoryCache.markReady(term, url: diskURL)
             return diskURL
+        },
+        chunkAudioURL: { text in
+            @Dependency(\.audioRemoteDataSource) var remoteDataSource
+            let response = try await remoteDataSource.fetchChunkAudio(text)
+            return response.audioUrl
         }
     )
 }

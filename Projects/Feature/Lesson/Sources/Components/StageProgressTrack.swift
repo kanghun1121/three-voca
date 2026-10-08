@@ -10,7 +10,7 @@ struct StageProgressTrack: View {
 
     var body: some View {
         Capsule()
-            .fill(DesignSystemAsset.progressTrack.swiftUIColor)
+            .fill(DesignSystemColor.Stage.progressTrack)
             .overlay(alignment: .leading) {
                 // 채움 폭은 화면이 아니라 트랙 자신의 폭 기준이어야 한다.
                 GeometryReader { proxy in

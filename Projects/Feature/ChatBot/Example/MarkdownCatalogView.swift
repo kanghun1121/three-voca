@@ -15,7 +15,7 @@ struct MarkdownCatalogView: View {
             }
             .padding(16)
         }
-        .background(DesignSystemAsset.background.swiftUIColor)
+        .background(DesignSystemColor.Background.base)
     }
 
     private var entries: [MarkdownCatalogEntry] {
@@ -50,13 +50,13 @@ private struct MarkdownCatalogEntryView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(entry.title)
-                .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 13))
-                .foregroundStyle(DesignSystemAsset.study300.swiftUIColor)
+                .typography(DesignSystemTypography.Pretendard.semiBold13)
+                .foregroundStyle(DesignSystemColor.Status.positive)
             MarkdownView(markdown: entry.markdown)
         }
         .padding(12)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(DesignSystemAsset.bgSubtle.swiftUIColor)
+        .background(DesignSystemColor.Background.muted)
         .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
     }
 }

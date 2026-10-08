@@ -124,7 +124,8 @@ import SwiftUINavigation
 | `print` 대신 로거 사용 | `grep -rnE '^\s*print\(' Projects --include='*.swift' --exclude-dir=Tests --exclude-dir=Derived` |
 | `@State` private (swift-style.md) | `grep -rnE '@State (var\|let)' Projects --include='*.swift' --exclude-dir=Derived` |
 | `@ViewBuilder` 함수·computed property 지양 (swift-style.md) | `grep -rnE 'var \w+: some View' Projects --include='*.swift' --exclude-dir=Derived` 결과에서 `var body` 제외 |
-| 색상은 `DesignSystemAsset`만 사용 | `grep -rn 'Color(red' Projects --include='*.swift' --exclude-dir=Derived` |
+| 색상은 Figma 토큰 경로를 따르는 `DesignSystemColor` 사용 | `rg -n 'Color\(red:|DesignSystemAsset\.[A-Za-z0-9_]+\.swiftUIColor' Projects --glob '*.swift' --glob '!DesignSystemColor.swift'` |
+| App·Feature의 폰트는 DS Typography 사용; 자간·행간 직접 지정 금지 | `rg -n 'swiftUIFont|\.font\(\.system|\.fontWeight\(|\.kerning\(|\.tracking\(|\.lineSpacing\(' Projects/App Projects/Feature --glob '*.swift' --glob '!**/Derived/**'` |
 
 ### 코드를 읽어야 확인되는 것
 
@@ -138,4 +139,3 @@ import SwiftUINavigation
 | `[weak self]` 적정성 (§3) | 소유 관계를 봐야 한다 |
 
 이 항목은 `swift-lint` 스킬로 검토한다. grep으로 건수만 세어 위반으로 단정하지 않는다.
-

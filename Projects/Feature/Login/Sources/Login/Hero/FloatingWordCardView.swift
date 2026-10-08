@@ -7,26 +7,22 @@ struct FloatingWordCardView: View {
     let meaning: String
     let tagKind: WordCardTagPillView.Kind
 
-    @ScaledMetric private var meaningSize: CGFloat = 12
+    @ScaledMetric private var meaningSize: CGFloat = DesignSystemTypography.Pretendard.regular12.size
 
-    private let cardBaseColor = Color(
-        red: 0.09,
-        green: 0.09,
-        blue: 0.09
-    )
+    private let cardBaseColor = DesignSystemColor.Foreground.strong
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             FloatingWordCardHeaderView(word: word, tagKind: tagKind)
                 .padding(.bottom, 4)
             Text(meaning)
-                .font(DesignSystemFontFamily.Pretendard.regular.swiftUIFont(size: meaningSize))
-                .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
+                .typography(DesignSystemTypography.Pretendard.regular12.scaled(to: CGFloat(meaningSize)))
+                .foregroundStyle(DesignSystemColor.Foreground.muted)
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 14)
         .frame(width: 220)
-        .background(DesignSystemAsset.white.swiftUIColor)
+        .background(DesignSystemColor.Background.base)
         .clipShape(RoundedRectangle(cornerRadius: 14))
         .shadow(
             color: cardBaseColor.opacity(0.12),

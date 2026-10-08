@@ -1,7 +1,6 @@
 import Foundation
 
 import DomainInterface
-import FeatureLesson
 
 import Dependencies
 import SwiftUINavigation
@@ -11,8 +10,8 @@ import SwiftUINavigation
 public final class HomeViewModel {
     @CasePathable
     public enum Destination {
-        case lesson(LessonDetailViewModel)
-        case learningLibrary(LearningLibraryViewModel)
+        case lesson(lessonID: String)
+        case learningLibrary
     }
 
     var destination: Destination?
@@ -48,7 +47,7 @@ public final class HomeViewModel {
     }
     
     public func didTapLesson(id: String) {
-        destination = .lesson(LessonDetailViewModel(lessonID: id))
+        destination = .lesson(lessonID: id)
     }
 
     func didTapDate(_ date: Date) {
@@ -60,7 +59,7 @@ public final class HomeViewModel {
     }
 
     func didTapCTA() {
-        destination = .learningLibrary(LearningLibraryViewModel())
+        destination = .learningLibrary
     }
     
     private func apply(_ records: [LessonCompletionRecord]) {

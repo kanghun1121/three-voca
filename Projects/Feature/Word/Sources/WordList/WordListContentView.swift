@@ -36,7 +36,7 @@ struct WordListContentView: View {
             .padding(.bottom, 24)
         }
         .scrollIndicators(.hidden)
-        .background(DesignSystemAsset.background.swiftUIColor)
+        .background(DesignSystemColor.Background.base)
         .onChange(of: blurMode) { revealedIDs = [] }
     }
 }
@@ -78,17 +78,17 @@ private struct BlurModeButton: View {
     var body: some View {
         Button(action: action) {
             Text(title)
-                .font(DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 13))
+                .typography(DesignSystemTypography.Pretendard.medium13)
                 .foregroundStyle(isSelected
-                    ? DesignSystemAsset.fgStrong.swiftUIColor
-                    : DesignSystemAsset.fgMuted.swiftUIColor)
+                    ? DesignSystemColor.Foreground.strong
+                    : DesignSystemColor.Foreground.muted)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 6)
                 .background(isSelected
-                    ? DesignSystemAsset.bgSubtle.swiftUIColor
-                    : Color.clear)
+                    ? DesignSystemColor.Background.muted
+                    : DesignSystemColor.clear)
                 .clipShape(Capsule())
-                .overlay { Capsule().stroke(DesignSystemAsset.border.swiftUIColor, lineWidth: 1) }
+                .overlay { Capsule().stroke(DesignSystemColor.Border.default, lineWidth: 1) }
         }
         .buttonStyle(.plain)
         .animation(.easeInOut(duration: 0.15), value: isSelected)

@@ -8,11 +8,11 @@ struct ChatBotUserBubbleView: View {
 
     var body: some View {
         Text(text)
-            .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 14.5))
-            .foregroundStyle(.white)
+            .typography(DesignSystemTypography.Pretendard.semiBold14_5)
+            .foregroundStyle(DesignSystemColor.Base.white)
             .padding(.horizontal, 14)
             .padding(.vertical, 11)
-            .background(DesignSystemAsset.selectedBlue.swiftUIColor)
+            .background(DesignSystemColor.Accent.selectedBlue)
             .clipShape(.rect(
                 topLeadingRadius: 16,
                 bottomLeadingRadius: 16,

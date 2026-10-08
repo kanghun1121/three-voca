@@ -11,22 +11,22 @@ struct DeleteAccountActionRow: View {
         HStack(spacing: 12) {
             Button(action: onCancel) {
                 Text("취소")
-                    .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 16))
-                    .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
+                    .typography(DesignSystemTypography.Pretendard.semiBold16)
+                    .foregroundStyle(DesignSystemColor.Foreground.strong)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 14)
-                    .background(DesignSystemAsset.border.swiftUIColor)
+                    .background(DesignSystemColor.Border.default)
                     .clipShape(.rect(cornerRadius: 10))
             }
 
             Button(action: onConfirm) {
                 Text("탈퇴")
-                    .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 16))
-                    .foregroundStyle(.white)
+                    .typography(DesignSystemTypography.Pretendard.semiBold16)
+                    .foregroundStyle(DesignSystemColor.Base.white)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 14)
                     .background(
-                        DesignSystemAsset.negative.swiftUIColor
+                        DesignSystemColor.Status.negative
                             .opacity(isConfirmed ? 1 : 0.3)
                     )
                     .clipShape(.rect(cornerRadius: 10))

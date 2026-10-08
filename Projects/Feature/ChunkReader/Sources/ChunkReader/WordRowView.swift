@@ -9,24 +9,21 @@ struct WordRowView: View {
     var body: some View {
         HStack(alignment: .firstTextBaseline, spacing: 14) {
             Text(wordAnnotation.element.word)
-                .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 17))
-                .tracking(-0.02 * 17)
-                .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
+                .typography(DesignSystemTypography.Pretendard.extraBold17)
+                .foregroundStyle(DesignSystemColor.Foreground.strong)
                 .frame(minWidth: 98, alignment: .leading)
 
             Text(wordAnnotation.element.meaning)
-                .font(DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 15))
-                .tracking(-0.01 * 15)
-                .foregroundStyle(DesignSystemAsset.fg.swiftUIColor)
+                .typography(DesignSystemTypography.Pretendard.medium15)
+                .foregroundStyle(DesignSystemColor.Foreground.default)
                 .frame(maxWidth: .infinity, alignment: .leading)
 
             Text(wordAnnotation.element.pos.koreanPartOfSpeechLabel)
-                .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 11.5))
-                .tracking(-0.01 * 11.5)
-                .foregroundStyle(DesignSystemAsset.selectedBlue.swiftUIColor)
+                .typography(DesignSystemTypography.Pretendard.bold11_5)
+                .foregroundStyle(DesignSystemColor.Accent.selectedBlueText)
                 .padding(.horizontal, 11)
                 .padding(.vertical, 5)
-                .background(DesignSystemAsset.selectedBlue100.swiftUIColor)
+                .background(DesignSystemColor.Accent.selectedBlue100)
                 .clipShape(.capsule)
         }
         .padding(.vertical, 15)

@@ -3,7 +3,7 @@ import SwiftUI
 import DesignSystem
 
 struct LearningLibraryLoadingView: View {
-    @ScaledMetric private var captionSize: CGFloat = 13.5
+    @ScaledMetric private var captionSize: CGFloat = DesignSystemTypography.Pretendard.semiBold13_5.size
 
     var body: some View {
         VStack(spacing: 22) {
@@ -14,12 +14,11 @@ struct LearningLibraryLoadingView: View {
             }
             .frame(height: 24)
             Text("학습 라이브러리를 불러오는 중")
-                .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: captionSize))
-                .tracking(-0.0675)
-                .foregroundStyle(DesignSystemAsset.fgSubtle.swiftUIColor)
+                .typography(DesignSystemTypography.Pretendard.semiBold13_5.scaled(to: CGFloat(captionSize)))
+                .foregroundStyle(DesignSystemColor.Foreground.subtle)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(DesignSystemAsset.background.swiftUIColor)
+        .background(DesignSystemColor.Background.base)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("학습 라이브러리를 불러오는 중")
         .accessibilityAddTraits(.updatesFrequently)

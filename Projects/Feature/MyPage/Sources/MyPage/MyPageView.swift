@@ -12,6 +12,13 @@ public struct MyPageView: View {
         _viewModel = State(initialValue: viewModel)
     }
 
+    private var appearanceBinding: Binding<Bool> {
+        Binding(
+            get: { viewModel.isShowingAppearance },
+            set: { if !$0 { viewModel.destination = nil } }
+        )
+    }
+
     private var privacySheetBinding: Binding<Bool> {
         Binding(
             get: { viewModel.isShowingPrivacyWebView },
@@ -20,31 +27,38 @@ public struct MyPageView: View {
     }
 
     public var body: some View {
-        ZStack {
-            MyPageScrollContent(viewModel: viewModel)
+        NavigationStack {
+            ZStack {
+                MyPageScrollContent(viewModel: viewModel)
 
-            if viewModel.isShowingDeleteSheet {
-                Button {
-                    viewModel.closeDeleteSheet()
-                } label: {
-                    Color.black.opacity(0.4)
-                        .ignoresSafeArea()
+                if viewModel.isShowingDeleteSheet {
+                    Button {
+                        viewModel.closeDeleteSheet()
+                    } label: {
+                        DesignSystemColor.Foreground.strong.opacity(0.4)
+                            .ignoresSafeArea()
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("닫기")
+                    .transition(.opacity)
+
+                    DeleteAccountConfirmSheet(
+                        confirmText: $viewModel.deleteConfirmText,
+                        isConfirmed: viewModel.isDeleteConfirmed,
+                        onConfirm: viewModel.deleteAccountConfirmTapped,
+                        onCancel: viewModel.closeDeleteSheet
+                    )
+                    .padding(.horizontal, 30)
+                    .transition(reduceMotion ? .opacity : .move(edge: .bottom))
                 }
-                .buttonStyle(.plain)
-                .accessibilityLabel("닫기")
-                .transition(.opacity)
-
-                DeleteAccountConfirmSheet(
-                    confirmText: $viewModel.deleteConfirmText,
-                    isConfirmed: viewModel.isDeleteConfirmed,
-                    onConfirm: viewModel.deleteAccountConfirmTapped,
-                    onCancel: viewModel.closeDeleteSheet
-                )
-                .padding(.horizontal, 30)
-                .transition(reduceMotion ? .opacity : .move(edge: .bottom))
+            }
+            .animation(.spring(response: 0.4, dampingFraction: 0.85), value: viewModel.isShowingDeleteSheet)
+            .navigationDestination(isPresented: appearanceBinding) {
+                AppearanceSettingView()
             }
         }
-        .animation(.spring(response: 0.4, dampingFraction: 0.85), value: viewModel.isShowingDeleteSheet)
+        .tint(DesignSystemColor.Foreground.strong)
+        .toolbar(viewModel.isShowingAppearance ? .hidden : .visible, for: .tabBar)
         .sheet(isPresented: privacySheetBinding) {
             if let url = viewModel.privacyPolicyURL {
                 PrivacyWebView(url: url)
@@ -54,7 +68,7 @@ public struct MyPageView: View {
         .alert($viewModel.destination.alert) { action in
             viewModel.alertButtonTapped(action)
         }
-        .tint(DesignSystemAsset.white.swiftUIColor)
+        .tint(DesignSystemColor.Base.white)
         .task { viewModel.onAppear() }
     }
 }
