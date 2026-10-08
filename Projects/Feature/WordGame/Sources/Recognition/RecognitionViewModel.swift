@@ -145,17 +145,19 @@ public final class RecognitionViewModel {
         }
     }
 
-    // clock.timer는 마감 시각 기준으로 틱을 만들어 sleep 오차가 누적되지 않으므로, 틱 수로 경과를 센다.
+    // sleep이 늦게 깨어나도 그만큼이 경과로 잡히도록, 틱 수가 아니라 clock이 잰 실제 sleep 시간을 더한다.
     // TestClock으로 시간을 직접 흘려보낼 수 있다.
     private func runCountdown(remaining: Double) async {
-        let interval = Duration.milliseconds(10)
-        var elapsedSeconds = 0.0
+        var elapsed = Duration.zero
 
-        for await _ in clock.timer(interval: interval) {
-            guard !Task.isCancelled else { return }
-            elapsedSeconds += 0.01
+        while !Task.isCancelled {
+            elapsed += await clock.measure {
+                try? await clock.sleep(for: .milliseconds(10))
+            }
 
-            let left = remaining - elapsedSeconds
+            let seconds = Double(elapsed.components.seconds)
+                + Double(elapsed.components.attoseconds) / 1e18
+            let left = remaining - seconds
             updateProgress(timeLeft: max(0, left))
             if left <= 0 { break }
         }
