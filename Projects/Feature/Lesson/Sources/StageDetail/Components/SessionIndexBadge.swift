@@ -13,12 +13,12 @@ struct SessionIndexBadge: View {
             if isCompleted {
                 Circle().fill(StageColor.resolveDark(forLevel: level))
                 Image(systemName: "checkmark")
-                    .font(.system(size: 12, weight: .heavy))
-                    .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
+                    .typography(DesignSystemTypography.Pretendard.extraBold12)
+                    .foregroundStyle(DesignSystemColor.Base.white)
                     .accessibilityHidden(true)
             } else {
-                Circle().fill(DesignSystemAsset.badgeIdleBg.swiftUIColor)
-                numberLabel(color: DesignSystemAsset.textCaption.swiftUIColor)
+                Circle().fill(DesignSystemColor.Background.muted)
+                numberLabel(color: DesignSystemColor.Text.caption)
             }
         }
         .frame(width: 26, height: 26)
@@ -26,8 +26,7 @@ struct SessionIndexBadge: View {
 
     private func numberLabel(color: Color) -> some View {
         Text("\(sessionNumber)")
-            .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 12))
-            .monospacedDigit()
+            .typography(DesignSystemTypography.Stage.sessionIndex)
             .foregroundStyle(color)
     }
 }

@@ -12,7 +12,7 @@ struct WordDetailExamplesView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Divider()
-                .background(DesignSystemAsset.borderSubtle.swiftUIColor)
+                .background(DesignSystemColor.Border.subtle)
                 .padding(.bottom, 22)
             ExamplesSection(
                 term: term,
@@ -34,8 +34,8 @@ private struct ExamplesSection: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("예문")
-                .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 13))
-                .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
+                .typography(DesignSystemTypography.Pretendard.bold13)
+                .foregroundStyle(DesignSystemColor.Foreground.muted)
             ExampleList(
                 term: term,
                 examples: examples,

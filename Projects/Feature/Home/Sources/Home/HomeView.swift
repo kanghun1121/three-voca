@@ -25,7 +25,7 @@ public struct HomeView: View {
                     lessonScreenFactory.makeLearningLibraryScreen()
                 }
         }
-        .tint(DesignSystemAsset.fgStrong.swiftUIColor)
+        .tint(DesignSystemColor.Foreground.strong)
         .toolbar(viewModel.destination != nil ? .hidden : .visible, for: .tabBar)
     }
 }

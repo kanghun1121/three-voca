@@ -21,14 +21,14 @@ public struct LearningLibraryView: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 0) {
                         Text("학습 라이브러리")
-                            .stageTypography(.listTitle)
-                            .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
+                            .typography(DesignSystemTypography.Stage.listTitle)
+                            .foregroundStyle(DesignSystemColor.Foreground.strong)
                             .padding(.horizontal, 24)
                             .padding(.vertical, 16)
                         LevelList(levels: state.levels, onLevelTapped: { viewModel.didTapLevel(id: $0) })
                     }
                 }
-                .background(DesignSystemAsset.background.swiftUIColor)
+                .background(DesignSystemColor.Base.white)
             case .error(let message):
                 ContentUnavailableView(message, systemImage: "exclamationmark.triangle")
             }

@@ -14,32 +14,32 @@ struct EmptyDayView: View {
         VStack(spacing: 14) {
             ZStack {
                 Circle()
-                    .fill(DesignSystemAsset.bgSubtle.swiftUIColor)
+                    .fill(DesignSystemColor.Background.muted)
                     .frame(width: 44, height: 44)
                 Circle()
                     .strokeBorder(
-                        DesignSystemAsset.fgSubtle.swiftUIColor,
+                        DesignSystemColor.Foreground.subtle,
                         style: StrokeStyle(lineWidth: 3, dash: [3.5])
                     )
                     .frame(width: 20, height: 20)
             }
             VStack(spacing: 4) {
                 Text("학습 기록이 없는 날이에요")
-                    .homeTypography(.emptyDayTitle)
-                    .foregroundStyle(DesignSystemAsset.fg.swiftUIColor)
+                    .typography(DesignSystemTypography.Home.emptyDayTitle)
+                    .foregroundStyle(DesignSystemColor.Foreground.default)
                 Text(subtitle)
-                    .homeTypography(.emptyDaySubtext)
-                    .foregroundStyle(DesignSystemAsset.fgSubtle.swiftUIColor)
+                    .typography(DesignSystemTypography.Home.emptyDaySubtext)
+                    .foregroundStyle(DesignSystemColor.Foreground.subtle)
             }
             if !isFuture {
                 Button("오늘 학습으로 이동", action: onGoToToday)
-                    .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 13))
-                    .foregroundStyle(DesignSystemAsset.selectedBlue.swiftUIColor)
+                    .typography(DesignSystemTypography.Pretendard.semiBold13)
+                    .foregroundStyle(DesignSystemColor.Accent.selectedBlue)
                     .padding(.vertical, 9)
                     .padding(.horizontal, 18)
                     .frame(minHeight: 44)
                     .overlay {
-                        Capsule().strokeBorder(DesignSystemAsset.selectedBlue.swiftUIColor, lineWidth: 1)
+                        Capsule().strokeBorder(DesignSystemColor.Accent.selectedBlue, lineWidth: 1)
                     }
             }
         }

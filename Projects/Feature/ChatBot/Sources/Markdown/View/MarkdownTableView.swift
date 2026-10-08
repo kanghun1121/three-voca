@@ -19,14 +19,14 @@ struct MarkdownTableView: View {
             row(cells: table.headers, isHeader: true)
             ForEach(Array(table.rows.enumerated()), id: \.offset) { index, cells in
                 Rectangle()
-                    .fill(DesignSystemAsset.borderSubtle.swiftUIColor)
+                    .fill(DesignSystemColor.Border.subtle)
                     .frame(height: 1)
                 row(cells: cells, isHeader: false)
             }
         }
         .overlay(
             RoundedRectangle(cornerRadius: 8, style: .continuous)
-                .stroke(DesignSystemAsset.borderSubtle.swiftUIColor, lineWidth: 1)
+                .stroke(DesignSystemColor.Border.subtle, lineWidth: 1)
         )
         .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
     }
@@ -38,7 +38,7 @@ struct MarkdownTableView: View {
                     .frame(maxWidth: columnWidth(at: columnIndex), alignment: .leading)
             }
         }
-        .background(isHeader ? DesignSystemAsset.selectedBlue100.swiftUIColor : Color.clear)
+        .background(isHeader ? DesignSystemColor.Accent.selectedBlue100 : DesignSystemColor.clear)
     }
 
     private func columnWidth(at index: Int) -> CGFloat? {

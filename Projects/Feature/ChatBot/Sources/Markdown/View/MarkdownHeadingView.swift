@@ -11,36 +11,31 @@ struct MarkdownHeadingView: View {
         HStack(alignment: .firstTextBaseline, spacing: 6) {
             if level == 2 {
                 Circle()
-                    .fill(DesignSystemAsset.spectrumBlue.swiftUIColor)
+                    .fill(DesignSystemColor.Spectrum.blue)
                     .frame(width: 6, height: 6)
                     .offset(y: -2)
             }
             Text(MarkdownInlineStyler.styled(text, baseSize: fontSize))
-                .font(font)
+                .typography(typography)
                 .foregroundStyle(color)
         }
     }
 
-    private var fontSize: CGFloat {
-        switch level {
-        case 1: 19
-        case 2: 17
-        case 3: 15.5
-        default: 12
-        }
-    }
+    private var fontSize: CGFloat { typography.size }
 
-    private var font: Font {
+    private var typography: DesignSystemTypography {
         switch level {
-        case 1, 2, 3: DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: fontSize)
-        default: DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: fontSize)
+        case 1: DesignSystemTypography.Markdown.heading1
+        case 2: DesignSystemTypography.Markdown.heading2
+        case 3: DesignSystemTypography.Markdown.heading3
+        default: DesignSystemTypography.Markdown.heading4
         }
     }
 
     private var color: Color {
         switch level {
-        case 1, 2, 3: DesignSystemAsset.fgStrong.swiftUIColor
-        default: DesignSystemAsset.fgMuted.swiftUIColor
+        case 1, 2, 3: DesignSystemColor.Foreground.strong
+        default: DesignSystemColor.Foreground.muted
         }
     }
 }

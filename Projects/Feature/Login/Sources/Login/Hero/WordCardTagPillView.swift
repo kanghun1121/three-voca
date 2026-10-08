@@ -8,7 +8,7 @@ struct WordCardTagPillView: View {
         case time
     }
 
-    @ScaledMetric private var pillTextSize: CGFloat = 10
+    @ScaledMetric private var pillTextSize: CGFloat = DesignSystemTypography.Pretendard.extraBold10.size
 
     let kind: Kind
 
@@ -16,21 +16,19 @@ struct WordCardTagPillView: View {
         switch kind {
         case .know:
             Text("✓ 안다")
-                .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: pillTextSize))
-                .foregroundStyle(DesignSystemAsset.positive.swiftUIColor)
-                .kerning(pillTextSize * 0.04)
+                .typography(DesignSystemTypography.Pretendard.extraBold10.scaled(to: CGFloat(pillTextSize)))
+                .foregroundStyle(DesignSystemColor.Status.positive)
                 .padding(.horizontal, 7)
                 .padding(.vertical, 2)
-                .background(DesignSystemAsset.positive100.swiftUIColor)
+                .background(DesignSystemColor.Status.positive.opacity(0.12))
                 .clipShape(Capsule())
         case .time:
             Text("3s")
-                .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: pillTextSize))
-                .foregroundStyle(DesignSystemAsset.cautionary.swiftUIColor)
-                .kerning(pillTextSize * 0.04)
+                .typography(DesignSystemTypography.Pretendard.extraBold10.scaled(to: CGFloat(pillTextSize)))
+                .foregroundStyle(DesignSystemColor.Status.negative)
                 .padding(.horizontal, 7)
                 .padding(.vertical, 2)
-                .background(DesignSystemAsset.cautionary100.swiftUIColor)
+                .background(DesignSystemColor.Status.negative.opacity(0.12))
                 .clipShape(Capsule())
         }
     }

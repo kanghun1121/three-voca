@@ -20,8 +20,8 @@ public enum SentenceHighlighter {
         keyword: String,
         font: SwiftUI.Font,
         highlightFont: SwiftUI.Font,
-        highlightTextColor: Color = DesignSystemAsset.study300.swiftUIColor,
-        highlightBackgroundColor: Color = DesignSystemAsset.highlightBg.swiftUIColor
+        highlightTextColor: Color = DesignSystemColor.Status.positive,
+        highlightBackgroundColor: Color = DesignSystemColor.Accent.selectedBlue100
     ) -> AttributedString {
         let matchRanges = keyword.contains(" ")
             ? findPhraseRanges(in: sentence, phrase: keyword)

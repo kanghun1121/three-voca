@@ -12,7 +12,7 @@ struct WordDetailSkeletonView: View {
             WordDetailSkeletonContentView()
         }
         .scrollIndicators(.hidden)
-        .background(DesignSystemAsset.background.swiftUIColor)
+        .background(DesignSystemColor.Base.white)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("단어 정보 불러오는 중")
     }
@@ -40,8 +40,7 @@ private struct SkeletonHeaderView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("promise")
-                .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 40))
-                .kerning(-0.025 * 40)
+                .typography(DesignSystemTypography.Pretendard.extraBold40)
             SkeletonPronunciationRow()
                 .padding(.top, 8)
         }
@@ -52,7 +51,7 @@ private struct SkeletonPronunciationRow: View {
     var body: some View {
         HStack(spacing: 10) {
             Text("/ˈprɒm.ɪs/")
-                .font(.system(size: 14, design: .monospaced))
+                .typography(DesignSystemTypography.Mono.regular14)
             Circle()
                 .frame(width: 32, height: 32)
         }
@@ -75,10 +74,10 @@ private struct SkeletonDefinitionGroupView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             Text("동사")
-                .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 12))
+                .typography(DesignSystemTypography.Pretendard.extraBold12)
                 .padding(.horizontal, 10)
                 .padding(.vertical, 3)
-                .background(DesignSystemAsset.selectedBlue100.swiftUIColor)
+                .background(DesignSystemColor.Accent.selectedBlue100)
                 .clipShape(.rect(cornerRadius: 6))
             SkeletonMeaningList()
         }
@@ -102,9 +101,7 @@ private struct SkeletonMeaningRow: View {
                 .frame(width: 4, height: 4)
                 .padding(.top, 11)
             Text("약속하다, 다짐하다")
-                .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 17))
-                .lineSpacing(26 - 17)
-                .kerning(-0.012 * 17)
+                .typography(DesignSystemTypography.Content.wordDefinition)
         }
     }
 }
@@ -115,7 +112,7 @@ private struct SkeletonExamplesView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Divider()
-                .background(DesignSystemAsset.borderSubtle.swiftUIColor)
+                .background(DesignSystemColor.Border.subtle)
                 .padding(.bottom, 22)
             SkeletonExamplesSection()
         }
@@ -126,7 +123,7 @@ private struct SkeletonExamplesSection: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("예문")
-                .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 13))
+                .typography(DesignSystemTypography.Pretendard.bold13)
             SkeletonExampleList()
         }
     }
@@ -146,17 +143,17 @@ private struct SkeletonExampleRow: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("I promise I will call you tomorrow.")
-                .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 16))
+                .typography(DesignSystemTypography.Pretendard.semiBold16)
             Text("나는 내일 너에게 전화할 것을 약속해.")
-                .font(DesignSystemFontFamily.Pretendard.regular.swiftUIFont(size: 13))
+                .typography(DesignSystemTypography.Pretendard.regular13)
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(DesignSystemAsset.background.swiftUIColor)
+        .background(DesignSystemColor.Base.white)
         .clipShape(.rect(cornerRadius: 14))
         .overlay {
             RoundedRectangle(cornerRadius: 14)
-                .stroke(DesignSystemAsset.border.swiftUIColor, lineWidth: 1)
+                .stroke(DesignSystemColor.Border.default, lineWidth: 1)
         }
     }
 }

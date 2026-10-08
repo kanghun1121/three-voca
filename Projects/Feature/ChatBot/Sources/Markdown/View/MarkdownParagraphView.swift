@@ -5,12 +5,11 @@ import DesignSystem
 struct MarkdownParagraphView: View {
     let text: AttributedString
 
-    private static let fontSize: CGFloat = 15
+    private static let fontSize: CGFloat = DesignSystemTypography.Pretendard.regular15.size
 
     var body: some View {
         Text(MarkdownInlineStyler.styled(text, baseSize: Self.fontSize))
-            .font(DesignSystemFontFamily.Pretendard.regular.swiftUIFont(size: Self.fontSize))
-            .foregroundStyle(DesignSystemAsset.fg.swiftUIColor)
-            .lineSpacing(6)
+            .typography(DesignSystemTypography.Markdown.paragraph)
+            .foregroundStyle(DesignSystemColor.Foreground.default)
     }
 }

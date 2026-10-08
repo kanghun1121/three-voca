@@ -17,12 +17,12 @@ enum StageColor {
 
     private static func resolveTone(forLevel level: Int) -> (light: Color, dark: Color) {
         switch level {
-        case 1: (DesignSystemAsset.stageIntroLight.swiftUIColor, DesignSystemAsset.stageIntroDark.swiftUIColor)
-        case 2: (DesignSystemAsset.stageBasicLight.swiftUIColor, DesignSystemAsset.stageBasicDark.swiftUIColor)
-        case 3: (DesignSystemAsset.stageApplicationLight.swiftUIColor, DesignSystemAsset.stageApplicationDark.swiftUIColor)
-        case 4: (DesignSystemAsset.stageExpansionLight.swiftUIColor, DesignSystemAsset.stageExpansionDark.swiftUIColor)
-        case 5: (DesignSystemAsset.stageAdvanced.swiftUIColor, DesignSystemAsset.stageAdvanced.swiftUIColor)
-        default: (DesignSystemAsset.stageMastery.swiftUIColor, DesignSystemAsset.stageMastery.swiftUIColor)
+        case 1: (DesignSystemColor.Stage.introLight, DesignSystemColor.Accent.selectedBlue)
+        case 2: (DesignSystemColor.Spectrum.blue, DesignSystemColor.Stage.basicDark)
+        case 3: (DesignSystemColor.Spectrum.purple, DesignSystemColor.Accent.recordDotPurple)
+        case 4: (DesignSystemColor.Spectrum.purple, DesignSystemColor.Accent.recordDotPurple)
+        case 5: (DesignSystemColor.Spectrum.teal.opacity(0.65), DesignSystemColor.Spectrum.teal.opacity(0.65))
+        default: (DesignSystemColor.Spectrum.teal, DesignSystemColor.Spectrum.teal)
         }
     }
 }

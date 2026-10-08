@@ -22,7 +22,7 @@ struct StageRow: View {
                 )
                 Spacer()
                 Text(progressText)
-                    .stageTypography(.progressFigure)
+                    .typography(DesignSystemTypography.Stage.progressFigure)
                     .foregroundStyle(textColor)
             }
             .padding(.vertical, 16)
@@ -33,15 +33,15 @@ struct StageRow: View {
     }
 
     private var keylineColor: Color {
-        isLocked ? DesignSystemAsset.stageLockedKeyline.swiftUIColor : StageColor.resolveLight(forLevel: level.level)
+        isLocked ? DesignSystemColor.Border.line : StageColor.resolveLight(forLevel: level.level)
     }
 
     private var textColor: Color {
-        isLocked ? DesignSystemAsset.textCaption.swiftUIColor : DesignSystemAsset.fgStrong.swiftUIColor
+        isLocked ? DesignSystemColor.Text.caption : DesignSystemColor.Foreground.strong
     }
 
     private var secondaryTextColor: Color {
-        isLocked ? DesignSystemAsset.textCaption.swiftUIColor : DesignSystemAsset.textSecondary.swiftUIColor
+        isLocked ? DesignSystemColor.Text.caption : DesignSystemColor.Text.secondary
     }
 
     private var progressText: String {

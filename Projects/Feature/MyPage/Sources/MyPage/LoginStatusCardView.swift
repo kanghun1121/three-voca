@@ -18,7 +18,7 @@ struct LoginStatusCardView: View {
         }
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(DesignSystemAsset.bgMuted.swiftUIColor)
+        .background(DesignSystemColor.Background.muted)
         .clipShape(.rect(cornerRadius: 12))
         .padding(.horizontal, 26)
         .padding(.bottom, 20)
@@ -26,20 +26,20 @@ struct LoginStatusCardView: View {
 
     private var authenticatedContent: some View {
         Text("Apple로 로그인됨")
-            .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 15))
-            .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
+            .typography(DesignSystemTypography.Pretendard.bold15)
+            .foregroundStyle(DesignSystemColor.Foreground.strong)
     }
 
     private var unauthenticatedContent: some View {
         VStack(alignment: .leading, spacing: 12) {
             VStack(alignment: .leading, spacing: 4) {
                 Text("로그인이 필요해요")
-                    .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 15))
-                    .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
+                    .typography(DesignSystemTypography.Pretendard.bold15)
+                    .foregroundStyle(DesignSystemColor.Foreground.strong)
 
                 Text("로그인하고 더 많은 기능을 이용해 보세요.")
-                    .font(DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 13))
-                    .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
+                    .typography(DesignSystemTypography.Pretendard.medium13)
+                    .foregroundStyle(DesignSystemColor.Foreground.muted)
             }
 
             SignInWithAppleButton(

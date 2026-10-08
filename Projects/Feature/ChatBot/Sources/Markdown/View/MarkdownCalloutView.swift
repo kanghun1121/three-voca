@@ -21,12 +21,12 @@ struct MarkdownCalloutView: View {
                 .frame(width: 3)
             VStack(alignment: .leading, spacing: 4) {
                 Text(MarkdownInlineStyler.styled(title, baseSize: 12.5))
-                    .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 12.5))
+                    .typography(DesignSystemTypography.Pretendard.bold12_5)
                     .foregroundStyle(accentColor)
                 ForEach(Array(bodyLines.enumerated()), id: \.offset) { _, line in
                     Text(MarkdownInlineStyler.styled(line, baseSize: 13.5))
-                        .font(DesignSystemFontFamily.Pretendard.regular.swiftUIFont(size: 13.5))
-                        .foregroundStyle(DesignSystemAsset.fg.swiftUIColor)
+                        .typography(DesignSystemTypography.Pretendard.regular13_5)
+                        .foregroundStyle(DesignSystemColor.Foreground.default)
                 }
             }
             Spacer(minLength: 0)
@@ -38,17 +38,17 @@ struct MarkdownCalloutView: View {
 
     private var accentColor: Color {
         switch kind {
-        case .key: DesignSystemAsset.selectedBlue.swiftUIColor
-        case .caution: DesignSystemAsset.cautionary.swiftUIColor
-        case .tip: DesignSystemAsset.fgSubtle.swiftUIColor
+        case .key: DesignSystemColor.Accent.selectedBlue
+        case .caution: DesignSystemColor.Status.negative
+        case .tip: DesignSystemColor.Foreground.subtle
         }
     }
 
     private var backgroundColor: Color {
         switch kind {
-        case .key: DesignSystemAsset.selectedBlue100.swiftUIColor
-        case .caution: DesignSystemAsset.cautionary100.swiftUIColor
-        case .tip: DesignSystemAsset.bgSubtle.swiftUIColor
+        case .key: DesignSystemColor.Accent.selectedBlue100
+        case .caution: DesignSystemColor.Status.negative.opacity(0.12)
+        case .tip: DesignSystemColor.Background.muted
         }
     }
 }

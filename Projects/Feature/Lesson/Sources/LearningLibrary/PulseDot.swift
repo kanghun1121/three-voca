@@ -13,7 +13,7 @@ struct PulseDot: View {
     var body: some View {
         Circle()
             .frame(width: 12, height: 12)
-            .foregroundStyle(DesignSystemAsset.growDeep.swiftUIColor)
+            .foregroundStyle(DesignSystemColor.Status.positive)
             .scaleEffect(reduceMotion ? 0.62 : (isAnimating ? 1.0 : 0.62))
             .opacity(reduceMotion ? 0.55 : (isAnimating ? 1.0 : 0.28))
             .onAppear {

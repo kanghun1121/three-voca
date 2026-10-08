@@ -26,15 +26,15 @@ public struct ChunkReaderView: View {
             .padding(.bottom, 28)
         }
         .scrollIndicators(.hidden)
-        .background(DesignSystemAsset.background.swiftUIColor)
+        .background(DesignSystemColor.Base.white)
         .navigationBarBackButtonHidden(true)
-        .toolbarBackground(DesignSystemAsset.background.swiftUIColor, for: .navigationBar)
+        .toolbarBackground(DesignSystemColor.Base.white, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button("뒤로", systemImage: "chevron.left", action: dismiss.callAsFunction)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
+                    .typography(DesignSystemTypography.Content.bodySemiBold)
+                    .foregroundStyle(DesignSystemColor.Foreground.strong)
             }
         }
         .alert("오디오를 재생할 수 없습니다", isPresented: $viewModel.isAudioErrorPresented) {

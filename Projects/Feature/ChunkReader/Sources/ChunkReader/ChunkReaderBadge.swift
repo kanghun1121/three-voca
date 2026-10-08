@@ -9,17 +9,16 @@ struct ChunkReaderBadge: View {
     var body: some View {
         Label {
             Text(label)
-                .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 11.5))
-                .tracking(-0.01 * 12.5)
+                .typography(DesignSystemTypography.Pretendard.bold11_5)
         } icon: {
             Image(systemName: icon)
-                .font(.system(size: 12))
+                .typography(DesignSystemTypography.Pretendard.regular12)
         }
-        .foregroundStyle(DesignSystemAsset.selectedBlue.swiftUIColor)
+        .foregroundStyle(DesignSystemColor.Accent.selectedBlue)
         .padding(.init(top: 5, leading: 9, bottom: 5, trailing: 9))
         .overlay {
             Capsule()
-                .stroke(DesignSystemAsset.selectedBlue.swiftUIColor.opacity(0.4), lineWidth: 1)
+                .stroke(DesignSystemColor.Accent.selectedBlue.opacity(0.4), lineWidth: 1)
         }
     }
 }

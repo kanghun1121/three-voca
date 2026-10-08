@@ -9,7 +9,7 @@ struct ChunkReaderWordListView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Divider()
-                .background(DesignSystemAsset.line.swiftUIColor)
+                .background(DesignSystemColor.Border.line)
                 .padding(.bottom, 14)
 
             ChunkReaderWordRows(wordAnnotations: wordAnnotations)

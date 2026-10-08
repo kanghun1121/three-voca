@@ -27,7 +27,7 @@ public struct MyPageView: View {
                 Button {
                     viewModel.closeDeleteSheet()
                 } label: {
-                    Color.black.opacity(0.4)
+                    DesignSystemColor.Foreground.strong.opacity(0.4)
                         .ignoresSafeArea()
                 }
                 .buttonStyle(.plain)
@@ -54,7 +54,7 @@ public struct MyPageView: View {
         .alert($viewModel.destination.alert) { action in
             viewModel.alertButtonTapped(action)
         }
-        .tint(DesignSystemAsset.white.swiftUIColor)
+        .tint(DesignSystemColor.Base.white)
         .task { viewModel.onAppear() }
     }
 }

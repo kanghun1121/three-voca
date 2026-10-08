@@ -1,5 +1,6 @@
 import SwiftUI
 
+import DesignSystem
 import DomainInterface
 
 import Dependencies
@@ -98,7 +99,7 @@ struct EndpointDetailView: View {
                 Section("오류") {
                     Text(error)
                         .foregroundStyle(.red)
-                        .font(.system(.caption, design: .monospaced))
+                        .typography(DesignSystemTypography.Pretendard.regular12)
                 }
             }
 
@@ -106,7 +107,7 @@ struct EndpointDetailView: View {
                 Section("응답") {
                     ScrollView {
                         Text(response)
-                            .font(.system(.caption2, design: .monospaced))
+                            .typography(DesignSystemTypography.Pretendard.regular11)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .textSelection(.enabled)
                     }

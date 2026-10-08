@@ -24,7 +24,7 @@ public struct WordListView: View {
                 )
             case .error(let message):
                 Text(message)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DesignSystemColor.Foreground.muted)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
@@ -37,8 +37,8 @@ public struct WordListView: View {
                     systemImage: "chevron.left",
                     action: dismiss.callAsFunction
                 )
-                .fontWeight(.semibold)
-                .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
+                .typography(DesignSystemTypography.Content.bodySemiBold)
+                .foregroundStyle(DesignSystemColor.Foreground.strong)
             }
         }
         .navigationDestination(item: $viewModel.destination.wordDetail) { wordDetailVM in

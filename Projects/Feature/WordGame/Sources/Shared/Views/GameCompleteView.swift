@@ -54,8 +54,8 @@ private struct GameCompleteCheckMark: View {
         ZStack {
             RadialGradient(
                 gradient: Gradient(colors: [
-                    DesignSystemAsset.positive.swiftUIColor.opacity(0.35),
-                    DesignSystemAsset.positive.swiftUIColor.opacity(0)
+                    DesignSystemColor.Status.positive.opacity(0.35),
+                    DesignSystemColor.Status.positive.opacity(0)
                 ]),
                 center: .center,
                 startRadius: 0,
@@ -66,13 +66,13 @@ private struct GameCompleteCheckMark: View {
             .opacity(glowOpacity)
 
             Circle()
-                .fill(Color.white.opacity(0.12))
-                .stroke(DesignSystemAsset.positive.swiftUIColor, lineWidth: 2)
+                .fill(DesignSystemColor.Base.white.opacity(0.12))
+                .stroke(DesignSystemColor.Status.positive, lineWidth: 2)
                 .frame(width: 92, height: 92)
                 .overlay {
                     Image(systemName: "checkmark")
-                        .font(.system(size: 32, weight: .semibold))
-                        .foregroundStyle(DesignSystemAsset.positive.swiftUIColor)
+                        .typography(DesignSystemTypography.Pretendard.semiBold32)
+                        .foregroundStyle(DesignSystemColor.Status.positive)
                 }
                 .scaleEffect(markScale)
                 .opacity(markOpacity)
@@ -104,15 +104,13 @@ private struct GameCompleteTitleView: View {
     var body: some View {
         VStack(spacing: 12) {
             Text("오늘 학습 완료")
-                .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 30))
-                .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
-                .kerning(-0.75)
+                .typography(DesignSystemTypography.Pretendard.extraBold30)
+                .foregroundStyle(DesignSystemColor.Base.white)
 
             Text("단어 \(wordCount)개를 모두 끝냈어요")
-                .font(DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 16))
-                .foregroundStyle(DesignSystemAsset.white.swiftUIColor.opacity(0.62))
+                .typography(DesignSystemTypography.Content.gameCompletionSubtitle)
+                .foregroundStyle(DesignSystemColor.Base.white.opacity(0.62))
                 .multilineTextAlignment(.center)
-                .lineSpacing(4)
         }
         .offset(y: offset)
         .opacity(opacity)
@@ -130,8 +128,8 @@ private struct GameCompleteTitleView: View {
 private struct GameCompleteTapHint: View {
     var body: some View {
         Text("탭하면 학습을 종료합니다.")
-            .font(DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 15))
-            .foregroundStyle(Color.white.opacity(0.38))
+            .typography(DesignSystemTypography.Pretendard.medium15)
+            .foregroundStyle(DesignSystemColor.Base.white.opacity(0.38))
             .padding(.bottom, 30)
     }
 }

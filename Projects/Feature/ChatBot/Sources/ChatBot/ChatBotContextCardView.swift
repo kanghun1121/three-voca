@@ -14,34 +14,33 @@ struct ChatBotContextCardView: View {
         VStack(alignment: .leading, spacing: 9) {
             HStack(spacing: 6) {
                 Image(systemName: "square.grid.2x2.fill")
-                    .font(.system(size: 10))
+                    .typography(DesignSystemTypography.Pretendard.regular10)
                 Text("문법 분석 · \(context.levelLabel)")
-                    .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 12))
-                    .tracking(0.36)
+                    .typography(DesignSystemTypography.Pretendard.extraBold12)
             }
-            .foregroundStyle(DesignSystemAsset.selectedBlue.swiftUIColor)
+            .foregroundStyle(DesignSystemColor.Accent.selectedBlue)
 
             (highlightedSentence ?? Text(context.sentence))
-                .font(DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 15))
-                .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
+                .typography(DesignSystemTypography.Pretendard.semiBold15)
+                .foregroundStyle(DesignSystemColor.Foreground.strong)
         }
         .padding(.horizontal, 15)
         .padding(.vertical, 13)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(DesignSystemAsset.background.swiftUIColor)
+        .background(DesignSystemColor.Base.white)
         .clipShape(.rect(cornerRadius: 16))
         .overlay {
             RoundedRectangle(cornerRadius: 16)
-                .stroke(DesignSystemAsset.border.swiftUIColor, lineWidth: 1)
+                .stroke(DesignSystemColor.Border.default, lineWidth: 1)
         }
         .task(id: "\(context.term)|\(context.sentence)") {
             highlightedSentence = Text(SentenceHighlighter.highlighted(
                 sentence: context.sentence,
                 keyword: context.term,
-                font: DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 15),
-                highlightFont: DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 15),
-                highlightTextColor: DesignSystemAsset.selectedBlue.swiftUIColor,
-                highlightBackgroundColor: DesignSystemAsset.selectedBlue100.swiftUIColor
+                font: DesignSystemTypography.Pretendard.semiBold15.font,
+                highlightFont: DesignSystemTypography.Pretendard.bold15.font,
+                highlightTextColor: DesignSystemColor.Accent.selectedBlue,
+                highlightBackgroundColor: DesignSystemColor.Accent.selectedBlue100
             ))
         }
     }

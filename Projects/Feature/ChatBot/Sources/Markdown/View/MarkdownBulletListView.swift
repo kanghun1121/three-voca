@@ -5,19 +5,19 @@ import DesignSystem
 struct MarkdownBulletListView: View {
     let items: [MarkdownListItem]
 
-    private static let fontSize: CGFloat = 15
+    private static let fontSize: CGFloat = DesignSystemTypography.Pretendard.regular15.size
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             ForEach(Array(items.enumerated()), id: \.offset) { _, item in
                 HStack(alignment: .top, spacing: 8) {
                     Circle()
-                        .fill(DesignSystemAsset.fgSubtle.swiftUIColor)
+                        .fill(DesignSystemColor.Foreground.subtle)
                         .frame(width: 4, height: 4)
                         .padding(.top, 8)
                     Text(MarkdownInlineStyler.styled(item.text, baseSize: Self.fontSize))
-                        .font(DesignSystemFontFamily.Pretendard.regular.swiftUIFont(size: Self.fontSize))
-                        .foregroundStyle(DesignSystemAsset.fg.swiftUIColor)
+                        .typography(DesignSystemTypography.Pretendard.regular15)
+                        .foregroundStyle(DesignSystemColor.Foreground.default)
                 }
                 .padding(.leading, CGFloat(item.depth) * 16)
             }

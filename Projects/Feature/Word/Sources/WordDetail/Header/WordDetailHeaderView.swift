@@ -10,9 +10,8 @@ struct WordDetailHeaderView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text(term)
-                .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 40))
-                .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
-                .kerning(-0.025 * 40)
+                .typography(DesignSystemTypography.Pretendard.extraBold40)
+                .foregroundStyle(DesignSystemColor.Foreground.strong)
             PronunciationRow(pronunciation: pronunciation, onPronunciationTapped: onPronunciationTapped)
                 .padding(.top, 8)
         }
@@ -23,13 +22,13 @@ private struct PronunciationRow: View {
     let pronunciation: String
     let onPronunciationTapped: () -> Void
 
-    @ScaledMetric private var fontSize: Double = 14
+    @ScaledMetric private var fontSize: Double = Double(DesignSystemTypography.Mono.regular14.size)
 
     var body: some View {
         HStack(spacing: 10) {
             Text(pronunciation)
-                .font(.system(size: fontSize, design: .monospaced))
-                .foregroundStyle(DesignSystemAsset.fgMuted.swiftUIColor)
+                .typography(DesignSystemTypography.Mono.regular14.scaled(to: CGFloat(fontSize)))
+                .foregroundStyle(DesignSystemColor.Foreground.muted)
             AudioButton(action: onPronunciationTapped)
         }
     }
@@ -38,17 +37,17 @@ private struct PronunciationRow: View {
 private struct AudioButton: View {
     let action: () -> Void
 
-    @ScaledMetric private var iconSize: Double = 16
+    @ScaledMetric private var iconSize: Double = Double(DesignSystemTypography.Pretendard.regular16.size)
 
     var body: some View {
         Button(action: action) {
             Image(systemName: "speaker.wave.2")
-                .font(.system(size: iconSize))
-                .foregroundStyle(DesignSystemAsset.selectedBlue.swiftUIColor)
+                .typography(DesignSystemTypography.Pretendard.regular16.scaled(to: CGFloat(iconSize)))
+                .foregroundStyle(DesignSystemColor.Accent.selectedBlue)
                 .frame(width: 34, height: 34)
-                .background(DesignSystemAsset.background.swiftUIColor)
+                .background(DesignSystemColor.Base.white)
                 .clipShape(Circle())
-                .overlay { Circle().stroke(DesignSystemAsset.border.swiftUIColor, lineWidth: 1) }
+                .overlay { Circle().stroke(DesignSystemColor.Border.default, lineWidth: 1) }
                 .frame(minWidth: 44, minHeight: 44)
                 .contentShape(.rect)
         }

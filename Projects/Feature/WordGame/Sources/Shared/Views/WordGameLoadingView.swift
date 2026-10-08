@@ -38,19 +38,18 @@ private struct WordGameLoadingContent: View {
 // MARK: - 캡션
 
 private struct WordGameLoadingCaption: View {
-    @ScaledMetric private var mainSize: CGFloat = 18
-    @ScaledMetric private var subSize: CGFloat = 14
+    @ScaledMetric private var mainSize: CGFloat = DesignSystemTypography.Pretendard.bold18.size
+    @ScaledMetric private var subSize: CGFloat = DesignSystemTypography.Pretendard.medium14.size
 
     var body: some View {
         VStack(spacing: 7) {
             Text("오늘의 단어를 준비하고 있어요")
-                .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: mainSize))
-                .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
-                .kerning(-0.01 * 18)
+                .typography(DesignSystemTypography.Pretendard.bold18.scaled(to: CGFloat(mainSize)))
+                .foregroundStyle(DesignSystemColor.Base.white)
 
             Text("잠시만 기다려 주세요")
-                .font(DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: subSize))
-                .foregroundStyle(DesignSystemAsset.white.swiftUIColor.opacity(0.5))
+                .typography(DesignSystemTypography.Pretendard.medium14.scaled(to: CGFloat(subSize)))
+                .foregroundStyle(DesignSystemColor.Base.white.opacity(0.5))
         }
         .multilineTextAlignment(.center)
     }
@@ -69,7 +68,7 @@ private struct WordGamePulseDot: View {
     var body: some View {
         Circle()
             .frame(width: 15, height: 15)
-            .foregroundStyle(DesignSystemAsset.white.swiftUIColor)
+            .foregroundStyle(DesignSystemColor.Base.white)
             .scaleEffect(reduceMotion ? 0.8 : (isAnimating ? 1.0 : 0.6))
             .opacity(reduceMotion ? 0.68 : (isAnimating ? 1.0 : 0.35))
             .onAppear {

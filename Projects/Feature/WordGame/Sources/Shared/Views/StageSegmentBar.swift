@@ -11,8 +11,8 @@ struct StageSegmentBar: View {
             ForEach(0..<totalStages, id: \.self) { index in
                 Capsule()
                     .fill(index <= currentStage
-                          ? DesignSystemAsset.white.swiftUIColor
-                          : DesignSystemAsset.white.swiftUIColor.opacity(0.22))
+                          ? DesignSystemColor.Base.white
+                          : DesignSystemColor.Base.white.opacity(0.22))
                     .frame(height: 3)
             }
         }

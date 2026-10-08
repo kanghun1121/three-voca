@@ -11,13 +11,13 @@ struct LoginRequiredPopupView: View {
     var body: some View {
         VStack(spacing: 8) {
             Text("로그인이 필요해요")
-                .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 20))
-                .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
+                .typography(DesignSystemTypography.Pretendard.extraBold20)
+                .foregroundStyle(DesignSystemColor.Foreground.strong)
                 .padding(.top, 28)
 
             Text("이 기능을 사용하려면 로그인해 주세요.")
-                .font(DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 14))
-                .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor.opacity(0.61))
+                .typography(DesignSystemTypography.Pretendard.medium14)
+                .foregroundStyle(DesignSystemColor.Foreground.strong.opacity(0.61))
                 .padding(.bottom, 24)
 
             SignInWithAppleButton(
@@ -32,15 +32,15 @@ struct LoginRequiredPopupView: View {
 
             Button(action: onTapLater) {
                 Text("나중에")
-                    .font(DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 14))
-                    .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor.opacity(0.28))
+                    .typography(DesignSystemTypography.Pretendard.medium14)
+                    .foregroundStyle(DesignSystemColor.Foreground.strong.opacity(0.28))
             }
             .padding(.top, 16)
             .padding(.bottom, 28)
         }
         .frame(maxWidth: .infinity)
-        .background(DesignSystemAsset.background.swiftUIColor)
+        .background(DesignSystemColor.Base.white)
         .clipShape(.rect(cornerRadius: 20))
-        .shadow(color: .black.opacity(0.1), radius: 16, x: 0, y: -4)
+        .shadow(color: DesignSystemColor.Foreground.strong.opacity(0.1), radius: 16, x: 0, y: -4)
     }
 }

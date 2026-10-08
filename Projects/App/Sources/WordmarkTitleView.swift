@@ -6,11 +6,10 @@ struct WordmarkTitleView: View {
     var body: some View {
         HStack(spacing: 0) {
             Text("쓰리")
-                .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
+                .foregroundStyle(DesignSystemColor.Foreground.strong)
             Text("보카")
-                .foregroundStyle(DesignSystemAsset.primary.swiftUIColor)
+                .foregroundStyle(DesignSystemColor.Accent.primary)
         }
-        .font(DesignSystemFontFamily.Pretendard.extraBold.swiftUIFont(size: 60))
-        .tracking(-2.7)
+        .typography(DesignSystemTypography.Pretendard.extraBold60)
     }
 }

@@ -1,5 +1,7 @@
 import SwiftUI
 
+import DesignSystem
+
 import DomainInterface
 
 public struct ChatBotView: View {
@@ -16,7 +18,7 @@ public struct ChatBotView: View {
             ChatBotContentView(viewModel: viewModel)
 
             if viewModel.isShowingLoginRequiredPopup {
-                Color.black.opacity(0.4)
+                DesignSystemColor.Foreground.strong.opacity(0.4)
                     .ignoresSafeArea()
                     .transition(.opacity)
 

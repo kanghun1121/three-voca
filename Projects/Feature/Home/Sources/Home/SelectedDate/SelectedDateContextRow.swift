@@ -19,12 +19,12 @@ struct SelectedDateContextRow: View {
     var body: some View {
         HStack(alignment: .firstTextBaseline) {
             Text(dateLabel)
-                .homeTypography(.selectedDateContext)
-                .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
+                .typography(DesignSystemTypography.Home.selectedDateContext)
+                .foregroundStyle(DesignSystemColor.Foreground.strong)
             Spacer()
             Text(countLabel)
-                .homeTypography(.lessonCountCaption)
-                .foregroundStyle(DesignSystemAsset.fgSubtle.swiftUIColor)
+                .typography(DesignSystemTypography.Home.lessonCountCaption)
+                .foregroundStyle(DesignSystemColor.Foreground.subtle)
         }
         .padding(.top, 22)
         .padding(.horizontal, 24)

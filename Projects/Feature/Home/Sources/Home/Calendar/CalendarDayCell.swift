@@ -20,23 +20,23 @@ struct CalendarDayCell: View {
         var body: some View {
             switch kind {
             case .empty:
-                Color.clear.frame(width: 30, height: 30)
+                DesignSystemColor.clear.frame(width: 30, height: 30)
 
             case .future(let day):
-                NumberLabel(day: day, color: DesignSystemAsset.fgSubtle.swiftUIColor, emphasized: false)
+                NumberLabel(day: day, color: DesignSystemColor.Foreground.subtle, emphasized: false)
 
             case .past(let day, _):
-                NumberLabel(day: day, color: DesignSystemAsset.fgStrong.swiftUIColor, emphasized: false)
+                NumberLabel(day: day, color: DesignSystemColor.Foreground.strong, emphasized: false)
 
             case .today(let day, _):
-                NumberLabel(day: day, color: DesignSystemAsset.fgStrong.swiftUIColor, emphasized: true)
+                NumberLabel(day: day, color: DesignSystemColor.Foreground.strong, emphasized: true)
 
             case .selected(let day, _):
                 Circle()
-                    .fill(DesignSystemAsset.selectedBlue.swiftUIColor)
+                    .fill(DesignSystemColor.Accent.selectedBlue)
                     .frame(width: 30, height: 30)
                     .overlay {
-                        NumberLabel(day: day, color: DesignSystemAsset.white.swiftUIColor, emphasized: true)
+                        NumberLabel(day: day, color: DesignSystemColor.Base.white, emphasized: true)
                     }
             }
         }
@@ -55,14 +55,14 @@ struct CalendarDayCell: View {
         private var dotColor: Color {
             switch kind {
             case .selected:
-                DesignSystemAsset.selectedBlue.swiftUIColor
+                DesignSystemColor.Accent.selectedBlue
             case .empty, .future:
-                .clear
+                DesignSystemColor.clear
             case .past(_, let count), .today(_, let count):
                 switch count {
-                case 1: DesignSystemAsset.spectrumBlue.swiftUIColor
-                case 2: DesignSystemAsset.spectrumPurple.swiftUIColor
-                default: DesignSystemAsset.spectrumTeal.swiftUIColor
+                case 1: DesignSystemColor.Spectrum.blue
+                case 2: DesignSystemColor.Spectrum.purple
+                default: DesignSystemColor.Spectrum.teal
                 }
             }
         }
@@ -86,9 +86,8 @@ struct CalendarDayCell: View {
 
         var body: some View {
             Text("\(day)")
-                .homeTypography(emphasized ? .dateNumberEmphasis : .dateNumber)
+                .typography(emphasized ? DesignSystemTypography.Home.dateNumberEmphasis : DesignSystemTypography.Home.dateNumber)
                 .foregroundStyle(color)
-                .monospacedDigit()
                 .frame(width: 30, height: 30)
         }
     }

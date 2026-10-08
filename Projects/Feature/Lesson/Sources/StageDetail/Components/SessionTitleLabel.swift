@@ -10,11 +10,11 @@ struct SessionTitleLabel: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 3) {
             Text("\(lesson.lessonNumber)번째 세션")
-                .stageTypography(.sessionName)
-                .foregroundStyle(DesignSystemAsset.fgStrong.swiftUIColor)
+                .typography(DesignSystemTypography.Stage.sessionName)
+                .foregroundStyle(DesignSystemColor.Foreground.strong)
             Text("단어 \(lesson.totalWords)개")
-                .font(DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 12))
-                .foregroundStyle(DesignSystemAsset.textSecondary.swiftUIColor)
+                .typography(DesignSystemTypography.Pretendard.medium12)
+                .foregroundStyle(DesignSystemColor.Text.secondary)
         }
     }
 }

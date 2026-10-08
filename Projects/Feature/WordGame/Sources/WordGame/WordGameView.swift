@@ -63,16 +63,16 @@ private struct GameErrorView: View {
     var body: some View {
         VStack(spacing: 16) {
             Text(message)
-                .font(DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 16))
-                .foregroundStyle(DesignSystemAsset.white.swiftUIColor.opacity(0.70))
+                .typography(DesignSystemTypography.Pretendard.medium16)
+                .foregroundStyle(DesignSystemColor.Base.white.opacity(0.70))
                 .multilineTextAlignment(.center)
 
             Button(action: onDismiss) {
                 Text("닫기")
-                    .font(DesignSystemFontFamily.Pretendard.bold.swiftUIFont(size: 16))
-                    .foregroundStyle(DesignSystemAsset.game.swiftUIColor)
+                    .typography(DesignSystemTypography.Pretendard.bold16)
+                    .foregroundStyle(DesignSystemColor.Game.base)
                     .frame(width: 200, height: 60)
-                    .background(DesignSystemAsset.white.swiftUIColor)
+                    .background(DesignSystemColor.Base.white)
                     .clipShape(.rect(cornerRadius: 18))
             }
         }
