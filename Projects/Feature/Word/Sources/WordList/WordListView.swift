@@ -5,7 +5,6 @@ import Dependencies
 
 public struct WordListView: View {
     @Bindable private var viewModel: WordListViewModel
-    @Environment(\.dismiss) private var dismiss
 
     public init(viewModel: WordListViewModel) {
         self.viewModel = viewModel
@@ -29,18 +28,6 @@ public struct WordListView: View {
             }
         }
         .task { await viewModel.load() }
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Button(
-                    "뒤로",
-                    systemImage: "chevron.left",
-                    action: dismiss.callAsFunction
-                )
-                .typography(DesignSystemTypography.Content.bodySemiBold)
-                .foregroundStyle(DesignSystemColor.Foreground.strong)
-            }
-        }
         .navigationDestination(item: $viewModel.destination.wordDetail) { wordDetailVM in
             WordDetailView(viewModel: wordDetailVM)
         }

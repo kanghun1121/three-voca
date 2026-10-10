@@ -4,7 +4,6 @@ import DesignSystem
 
 struct AppearanceSettingView: View {
     @AppStorage(AppearanceMode.storageKey) private var appearanceMode: AppearanceMode = .system
-    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         VStack(spacing: 0) {
@@ -36,18 +35,6 @@ struct AppearanceSettingView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(DesignSystemColor.Background.base)
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Button(
-                    "뒤로",
-                    systemImage: "chevron.left",
-                    action: dismiss.callAsFunction
-                )
-                .typography(DesignSystemTypography.Content.bodySemiBold)
-                .foregroundStyle(DesignSystemColor.Foreground.strong)
-            }
-        }
     }
 }
 

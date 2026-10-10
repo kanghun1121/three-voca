@@ -4,7 +4,6 @@ import DesignSystem
 
 public struct ChunkReaderView: View {
     @Bindable private var viewModel: ChunkReaderViewModel
-    @Environment(\.dismiss) private var dismiss
 
     public init(viewModel: ChunkReaderViewModel) {
         self.viewModel = viewModel
@@ -27,16 +26,8 @@ public struct ChunkReaderView: View {
         }
         .scrollIndicators(.hidden)
         .background(DesignSystemColor.Background.base)
-        .navigationBarBackButtonHidden(true)
         .toolbarBackground(DesignSystemColor.Background.base, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Button("뒤로", systemImage: "chevron.left", action: dismiss.callAsFunction)
-                    .typography(DesignSystemTypography.Content.bodySemiBold)
-                    .foregroundStyle(DesignSystemColor.Foreground.strong)
-            }
-        }
         .alert("오디오를 재생할 수 없습니다", isPresented: $viewModel.isAudioErrorPresented) {
             Button("확인", role: .cancel) {}
         }
