@@ -34,9 +34,12 @@ struct LoginRequiredPopupView: View {
                 Text("나중에")
                     .typography(DesignSystemTypography.Pretendard.medium14)
                     .foregroundStyle(DesignSystemColor.Foreground.strong.opacity(0.28))
+                    .frame(maxWidth: .infinity, minHeight: 44)
+                    .contentShape(.rect)
             }
-            .padding(.top, 16)
-            .padding(.bottom, 28)
+            .buttonStyle(.plain)
+            .padding(.top, 3)
+            .padding(.bottom, 15)
         }
         .frame(maxWidth: .infinity)
         .background(DesignSystemColor.Background.base)
