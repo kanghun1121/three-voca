@@ -22,6 +22,10 @@ struct ScrollToBottomButton: View {
                     x: 0,
                     y: 2
                 )
+                // 시각 크기(36pt)와 레이아웃은 그대로 두고, 터치 영역만 44pt로 넓힌다.
+                .frame(width: 44, height: 44)
+                .contentShape(.rect)
+                .padding(-4)
         }
         .buttonStyle(.plain)
         .accessibilityLabel("최하단으로 이동")

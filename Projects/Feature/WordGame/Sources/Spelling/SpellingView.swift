@@ -42,10 +42,15 @@ struct SpellingView: View {
                     SpellingSubmitButton(isEnabled: canSubmit, action: onSubmit)
                         .padding(.top, 16)
 
-                    Button("건너뛰기", action: onSkip)
-                        .typography(DesignSystemTypography.Pretendard.regular14)
-                        .foregroundStyle(DesignSystemColor.Base.white.opacity(0.40))
-                        .padding(.top, 20)
+                    Button(action: onSkip) {
+                        Text("건너뛰기")
+                            .typography(DesignSystemTypography.Pretendard.regular14)
+                            .foregroundStyle(DesignSystemColor.Base.white.opacity(0.40))
+                            .frame(maxWidth: .infinity, minHeight: 44)
+                            .contentShape(.rect)
+                    }
+                    .buttonStyle(.plain)
+                    .padding(.top, 6)
                 }
 
                 // 오답 시 정답 카드
@@ -99,12 +104,19 @@ private struct SpellingInputField: View {
                 .disabled(viewState != .active)
 
             if viewState == .active && !text.isEmpty {
-                Button("전체 지우기", systemImage: "xmark.circle.fill") {
+                Button {
                     text = ""
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .typography(DesignSystemTypography.Pretendard.regular20)
+                        .foregroundStyle(DesignSystemColor.Base.white.opacity(0.55))
+                        // 시각 크기는 그대로 두고 터치 영역만 44pt로 넓힌다.
+                        .frame(width: 44, height: 44)
+                        .contentShape(.rect)
+                        .padding(.horizontal, -12)
                 }
-                .labelStyle(.iconOnly)
-                .typography(DesignSystemTypography.Pretendard.regular20)
-                .foregroundStyle(DesignSystemColor.Base.white.opacity(0.55))
+                .buttonStyle(.plain)
+                .accessibilityLabel("전체 지우기")
             }
         }
             .frame(maxWidth: .infinity, minHeight: 56, alignment: .leading)
@@ -147,12 +159,16 @@ private struct SpellingSubmitButton: View {
     let action: () -> Void
 
     var body: some View {
-        Button("제출", action: action)
-            .typography(DesignSystemTypography.Pretendard.bold16)
-            .foregroundStyle(DesignSystemColor.Base.white.opacity(isEnabled ? 1 : 0.40))
-            .frame(maxWidth: .infinity, minHeight: 52)
-            .background(DesignSystemColor.Base.white.opacity(isEnabled ? 0.28 : 0.10), in: .rect(cornerRadius: 14))
-            .disabled(!isEnabled)
+        Button(action: action) {
+            Text("제출")
+                .typography(DesignSystemTypography.Pretendard.bold16)
+                .foregroundStyle(DesignSystemColor.Base.white.opacity(isEnabled ? 1 : 0.40))
+                .frame(maxWidth: .infinity, minHeight: 52)
+                .background(DesignSystemColor.Base.white.opacity(isEnabled ? 0.28 : 0.10), in: .rect(cornerRadius: 14))
+                .contentShape(.rect(cornerRadius: 14))
+        }
+        .buttonStyle(.plain)
+        .disabled(!isEnabled)
     }
 }
 

@@ -38,8 +38,8 @@ struct WordPreviewSection: View {
                     Text("+ \(words.count - previewLimit) more")
                         .typography(DesignSystemTypography.Pretendard.medium14)
                         .foregroundStyle(DesignSystemColor.Foreground.muted)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .padding(.top, 12)
+                        .frame(maxWidth: .infinity, minHeight: 44, alignment: .center)
+                        .contentShape(.rect)
                 }
                 .buttonStyle(.plain)
             }

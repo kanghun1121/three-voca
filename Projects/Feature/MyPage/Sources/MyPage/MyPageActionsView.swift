@@ -12,6 +12,8 @@ struct MyPageActionsView: View {
                 Text("로그아웃")
                     .typography(DesignSystemTypography.Pretendard.semiBold14)
                     .foregroundStyle(DesignSystemColor.Foreground.strong)
+                    .frame(minHeight: 44)
+                    .contentShape(.rect)
             }
             .buttonStyle(.plain)
 
@@ -24,6 +26,8 @@ struct MyPageActionsView: View {
                 Text("회원 탈퇴")
                     .typography(DesignSystemTypography.Pretendard.semiBold14)
                     .foregroundStyle(DesignSystemColor.Status.negativeText)
+                    .frame(minHeight: 44)
+                    .contentShape(.rect)
             }
             .buttonStyle(.plain)
         }
