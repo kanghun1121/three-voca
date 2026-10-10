@@ -9,7 +9,6 @@ import SwiftUINavigation
 
 public struct WordDetailView: View {
     @Bindable private var viewModel: WordDetailViewModel
-    @Environment(\.dismiss) private var dismiss
     @Dependency(\.chunkReaderScreenFactory) private var chunkReaderScreenFactory
     @Dependency(\.chatBotScreenFactory) private var chatBotScreenFactory
 
@@ -38,21 +37,9 @@ public struct WordDetailView: View {
                     viewModel.currentIndex = nextIndex
                 }
         )
-        .navigationBarBackButtonHidden(true)
         .background(DesignSystemColor.Background.base)
         .toolbarBackground(DesignSystemColor.Background.base, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Button(
-                    "뒤로",
-                    systemImage: "chevron.left",
-                    action: dismiss.callAsFunction
-                )
-                    .typography(DesignSystemTypography.Content.bodySemiBold)
-                    .foregroundStyle(DesignSystemColor.Foreground.strong)
-            }
-        }
         .navigationDestination(item: $viewModel.destination.chunkReader) { route in
             chunkReaderScreenFactory.makeScreen(route: route.wrappedValue)
         }
