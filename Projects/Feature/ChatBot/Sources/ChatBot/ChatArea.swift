@@ -11,6 +11,7 @@ struct ChatArea: View {
 
     private static let bottomAnchorID = "chat-bottom-anchor"
     private static let bottomThreshold: CGFloat = 300
+    private static let contentPadding: CGFloat = 16
 
     var body: some View {
         ScrollViewReader { proxy in
@@ -28,17 +29,21 @@ struct ChatArea: View {
                             .frame(minHeight: reservesFullHeight ? chatAreaHeight : nil, alignment: .top)
                     }
 
+                    // 하단 여백을 이 앵커의 높이에 포함한다. 여백을 바깥 패딩으로 두면 `scrollTo(.bottom)`이
+                    // 여백을 화면 밖으로 밀어내, 키보드를 올렸다 내린 뒤 정지 위치가 달라진다.
                     DesignSystemColor.clear
-                        .frame(height: 1)
+                        .frame(height: 1 + Self.contentPadding)
                         .id(Self.bottomAnchorID)
                 }
-                .padding(16)
+                .padding([.horizontal, .top], Self.contentPadding)
                 // 대화가 짧아 콘텐츠가 뷰포트보다 낮아도, 스크롤 영역 전체(빈 공간 포함)에서
                 // 탭이 되도록 최소 뷰포트 높이만큼은 확보한다.
                 .frame(minHeight: chatAreaHeight, alignment: .top)
                 // 빈 영역도 탭 대상에 포함
                 .contentShape(Rectangle())
                 .onTapGesture { isInputFocused.wrappedValue = false }
+                // 키보드가 올라오고 내려갈 때 콘텐츠를 키보드와 같은 애니메이션으로 움직인다.
+                .background { KeyboardSyncedScroll(bottomTolerance: Self.bottomThreshold) }
             }
             // 카카오톡/ChatGPT처럼, 메시지 목록을 아래로 드래그한 만큼 키보드도 따라 내려가고
             // dismiss 임계값을 못 넘기면 다시 스프링백한다. 하단 입력바의 TextField에까지
@@ -49,15 +54,11 @@ struct ChatArea: View {
             } action: { newHeight in
                 chatAreaHeight = newHeight
             }
-            .onScrollGeometryChange(for: ScrollViewport.self) { geometry in
-                ScrollViewport(geometry: geometry, threshold: Self.bottomThreshold)
-            } action: { old, new in
-                isScrolledToBottom = new.isNearBottom
-                // 키보드로 스크롤 뷰가 줄어들 때, 직전까지 최하단 근처였다면 최하단을 유지해
-                // 하단 콘텐츠가 키보드에 가려지지 않고 함께 올라오게 한다.
-                if new.shouldKeepBottom(after: old) {
-                    proxy.scrollTo(Self.bottomAnchorID, anchor: .bottom)
-                }
+            .onScrollGeometryChange(for: Bool.self) { geometry in
+                geometry.contentOffset.y + geometry.containerSize.height
+                    >= geometry.contentSize.height - Self.bottomThreshold
+            } action: { _, isNearBottom in
+                isScrolledToBottom = isNearBottom
             }
             .onChange(of: viewModel.messages.count) {
                 scrollToLastUserMessageIfStreaming(proxy: proxy)
