@@ -60,6 +60,19 @@ struct KeyboardSyncedScroll: UIViewRepresentable {
             let beginOverlap = max(0, window.bounds.maxY - beginFrame.minY)
             let endOverlap = max(0, window.bounds.maxY - endFrame.minY)
             let delta = endOverlap - beginOverlap
+
+            if delta < 0 {
+                // 키보드가 내려갈 때: 하단 인셋이 줄어 새 최하단이 위로 올라오므로, 그 아래로 넘어간
+                // 오프셋을 새 최하단으로 되돌린다. 안 그러면 콘텐츠 아래에 빈 공간이 남는다.
+                let maxOffset = scrollView.contentSize.height + scrollView.adjustedContentInset.bottom - scrollView.bounds.height
+                guard scrollView.contentOffset.y > maxOffset else { return }
+                let target = CGPoint(x: scrollView.contentOffset.x, y: maxOffset)
+                let options = UIView.AnimationOptions(rawValue: UInt(curveRaw) << 16)
+                UIView.animate(withDuration: duration, delay: 0, options: [options, .beginFromCurrentState]) {
+                    scrollView.contentOffset = target
+                }
+                return
+            }
             guard delta > 0, duration > 0 else { return }
 
             // 알림이 오는 시점에 하단 인셋은 이미 새 값으로 바뀌어 있다. 변화 직전 인셋은 역산한다.

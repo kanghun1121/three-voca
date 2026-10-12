@@ -16,7 +16,10 @@ struct ChatArea: View {
     var body: some View {
         ScrollViewReader { proxy in
             ScrollView {
-                LazyVStack(alignment: .leading, spacing: 12) {
+                // LazyVStack이 아니라 VStack이다. 화면 밖의 긴 마크다운 행 높이를 추정값으로 잡는
+                // LazyVStack에서는 contentSize가 실제보다 크게(2557 → 1908) 잡혀, 하단 이동과
+                // 키보드 보정이 어긋나 콘텐츠 아래에 빈 공간이 생겼다.
+                VStack(alignment: .leading, spacing: 12) {
                     ChatBotContextCardView(context: viewModel.context)
 
                     ForEach(viewModel.messages) { message in
