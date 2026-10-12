@@ -58,6 +58,8 @@ private struct MenuRow: View {
                     .accessibilityHidden(true)
             }
             .padding(.vertical, 18)
+            // Spacer 영역까지 터치되도록 행 전체를 히트 테스트 영역으로 지정한다.
+            .contentShape(.rect)
         }
         .buttonStyle(.plain)
         .disabled(action == nil)
