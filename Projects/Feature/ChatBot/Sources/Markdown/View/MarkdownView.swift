@@ -14,7 +14,12 @@ public struct MarkdownView: View {
 
     public var body: some View {
         // 블록 사이 간격은 MarkdownBlockView가 블록마다 상하 패딩으로 준다 — 여기서는 0.
-        LazyVStack(alignment: .leading, spacing: 0) {
+        //
+        // LazyVStack이 아니라 VStack이다. 이 뷰는 채팅 ScrollView 안에 중첩돼, 화면 밖 블록의 높이를
+        // 추정값으로 잡는다. 키보드로 스크롤 영역 크기와 오프셋이 바뀔 때마다 실제값과 추정값이
+        // 번갈아 보고돼(한 행이 372 ↔ 886pt) 전체 콘텐츠 높이가 흔들리고, 오프셋이 그때마다 다시
+        // 보정되며 키보드를 열고 닫을수록 화면이 조금씩 밀렸다. 블록 수는 한 응답 안에서 적다.
+        VStack(alignment: .leading, spacing: 0) {
             ForEach(Array(blocks.enumerated()), id: \.offset) { _, block in
                 MarkdownBlockView(block: block)
             }
