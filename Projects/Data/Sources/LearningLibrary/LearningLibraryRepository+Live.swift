@@ -4,10 +4,6 @@ import DomainInterface
 
 import Dependencies
 
-/// Level/Lesson 콘텐츠와 완료 이력이 전부 로컬 시드/로컬 DB로 제공되므로 원격 진행 상태 병합은
-/// 더 이상 하지 않는다. 원격 진행 상태 조회(`LearningLibraryRemoteDataSource`)와 그 병합
-/// 로직(`LearningLibraryMerge`)은 완전히 제거했다 — 서버 진행 상태 동기화가 다시 필요해지면
-/// 그때 새로 설계한다.
 extension LearningLibraryRepository: DependencyKey {
     public static let liveValue: LearningLibraryRepository = {
         @Dependency(\.learningLibraryStore) var store
@@ -16,12 +12,6 @@ extension LearningLibraryRepository: DependencyKey {
         @Dependency(\.learningHistoryLocalDataSource) var historyDataSource
         @Dependency(\.uuid) var uuid
 
-        // 정적 구조(레벨 이름/난이도/레슨 번호/레슨당 단어 수)를 로컬 시드에서 조립한 뒤,
-        // 완료 이력(`LearningHistoryEntity`, 완료된 레슨만 한 행)을 lessonID(Int, 로컬 DB
-        // 공통 id)로 덧입혀 진행 상태를 계산한다 — 행이 있으면 `.completed`, 없으면
-        // `.notStarted`. `accuracy`/`wordsCompleted`(단어별 정답률)는 로컬에 저장하지 않기로
-        // 확정했으므로(완료 여부만 로컬화) 완료된 레슨도 `accuracy: nil`, `wordsCompleted:
-        // totalWords`로 채운다. stream(최초 스냅샷)과 refresh(수동 새로고침) 둘 다에서 쓰인다.
         @Sendable
         func refreshLearningLibrary() async throws {
             var summaries: [LevelSummary] = []
