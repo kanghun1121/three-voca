@@ -35,6 +35,9 @@ let project = Project.makeModule(
                 configurations: [
                     .debug(name: "Debug", xcconfig: "Secrets.xcconfig"),
                     .debug(name: "Dev", settings: [
+                        "MARKETING_VERSION": "1.0.0",
+                        "CURRENT_PROJECT_VERSION": "1",
+                        "CODE_SIGN_STYLE": "Automatic",
                         "DEV_TEST_EMAIL": "$(DEV_ACCOUNT_EMAIL)",
                         "DEV_TEST_PASSWORD": "$(DEV_ACCOUNT_PASSWORD)",
                         "SUPABASE_URL": "$(SUPABASE_DEV_URL)",

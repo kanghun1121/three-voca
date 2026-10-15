@@ -29,7 +29,7 @@
 | 프로젝트 생성 | `tuist generate --no-open` |
 | 전체 테스트 | `tuist test AllTest` |
 
-CI의 기준은 `.github/workflows/ci.yml`이다. 로컬 훅이 검증을 자동 실행한다고 가정하지 않는다.
+PR 자동 빌드·TestFlight 배포는 [Xcode Cloud 설정](xcode-cloud.md)을 따른다. 로컬 훅이 검증을 자동 실행한다고 가정하지 않는다.
 
 ## 변경별 검증
 
