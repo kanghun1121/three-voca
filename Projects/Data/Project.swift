@@ -5,7 +5,6 @@ let project = Project.makeModule(
     name: "Data",
     targets: [
         .data(factory: .init(
-            resources: ["Resources/**"],
             dependencies: [
                 .domainInterface,
                 .core,
