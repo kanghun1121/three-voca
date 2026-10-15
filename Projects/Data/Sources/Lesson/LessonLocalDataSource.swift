@@ -13,7 +13,6 @@ struct LessonLocalDataSource: Sendable {
     var lesson: @Sendable (_ id: Int) async throws -> LessonEntity?
     /// lessonNumber 오름차순 — LearningLibrary 레벨 안에서 레슨이 노출되는 순서다.
     var lessons: @Sendable (_ levelID: Int) async throws -> [LessonEntity]
-    var insertLessons: @Sendable (_ lessons: [LessonEntity]) async -> Void
 }
 
 extension LessonLocalDataSource: DependencyKey {
@@ -30,10 +29,6 @@ extension LessonLocalDataSource: DependencyKey {
                 predicate: #Predicate { $0.levelID == levelID },
                 sortBy: [SortDescriptor(\.lessonNumber)]
             ))
-        },
-        insertLessons: { lessons in
-            @Dependency(\.localDatabaseContext) var context
-            for lesson in lessons { await context.insert(lesson) }
         }
     )
 }

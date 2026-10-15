@@ -13,7 +13,6 @@ struct LevelLocalDataSource: Sendable {
     var level: @Sendable (_ id: Int) async throws -> LevelEntity?
     /// sortOrder 오름차순 — LearningLibrary 화면에 노출되는 레벨 순서다.
     var allLevels: @Sendable () async throws -> [LevelEntity]
-    var insertLevels: @Sendable (_ levels: [LevelEntity]) async -> Void
 }
 
 extension LevelLocalDataSource: DependencyKey {
@@ -29,12 +28,6 @@ extension LevelLocalDataSource: DependencyKey {
             return try await context.fetch(FetchDescriptor<LevelEntity>(
                 sortBy: [SortDescriptor(\.sortOrder)]
             ))
-        },
-        insertLevels: { levels in
-            @Dependency(\.localDatabaseContext) var context
-            for level in levels {
-                await context.insert(level)
-            }
         }
     )
 }

@@ -15,8 +15,6 @@ struct WordLocalDataSource: Sendable {
     /// Lesson 조립용 배치 조회 — 반환되는 딕셔너리엔 순서 정보가 없으므로, 호출부(Lesson
     /// LocalDataSource가 아는 lesson_words의 position)가 원하는 순서로 재조립해야 한다.
     var lessonWords: @Sendable (_ ids: [Int]) async throws -> [Int: Lesson.Word]
-    var insertWords: @Sendable (_ words: [WordEntity]) async -> Void
-    var insertExamples: @Sendable (_ examples: [WordExampleEntity]) async -> Void
 }
 
 extension WordLocalDataSource: DependencyKey {
@@ -45,14 +43,6 @@ extension WordLocalDataSource: DependencyKey {
             return Dictionary(uniqueKeysWithValues: words.map { entity in
                 (entity.id, entity.toLessonWord())
             })
-        },
-        insertWords: { words in
-            @Dependency(\.localDatabaseContext) var context
-            for word in words { await context.insert(word) }
-        },
-        insertExamples: { examples in
-            @Dependency(\.localDatabaseContext) var context
-            for example in examples { await context.insert(example) }
         }
     )
 }
