@@ -31,6 +31,15 @@ jobs:
           SUPABASE_PROD_URL = ${XCCONFIG_URL}
           EOF
 
+      - name: 시딩 데이터 내려받기 (비공개 저장소)
+        env:
+          SEED_REPO: ${{ secrets.SEED_REPO }}
+          SEED_REPO_TOKEN: ${{ secrets.SEED_REPO_TOKEN }}
+        run: |
+          git clone --depth 1 "https://x-access-token:${SEED_REPO_TOKEN}@github.com/${SEED_REPO}.git" "$RUNNER_TEMP/seed"
+          mkdir -p Projects/Data/Resources/Seed
+          cp "$RUNNER_TEMP"/seed/*.json Projects/Data/Resources/Seed/
+
       - name: tuist install & generate
         run: |
           tuist install
