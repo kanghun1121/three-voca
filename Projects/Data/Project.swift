@@ -15,8 +15,7 @@ let project = Project.makeModule(
         )),
         .data(tests: .init(
             infoPlist: .extendingDefault(with: [
-                "SUPABASE_URL": "$(SUPABASE_PROD_URL)",
-                "SUPABASE_ANON_KEY": "$(SUPABASE_ANON_KEY)"
+                "SUPABASE_URL": "$(SUPABASE_PROD_URL)"
             ]),
             dependencies: [
                 .data,
