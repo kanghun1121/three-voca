@@ -38,6 +38,7 @@ let project = Project.makeModule(
                         "MARKETING_VERSION": "1.0.0",
                         "CURRENT_PROJECT_VERSION": "1",
                         "CODE_SIGN_STYLE": "Automatic",
+                        "DEVELOPMENT_TEAM": "W35T2QAC67",
                         "DEV_TEST_EMAIL": "$(DEV_ACCOUNT_EMAIL)",
                         "DEV_TEST_PASSWORD": "$(DEV_ACCOUNT_PASSWORD)",
                         "SUPABASE_URL": "$(SUPABASE_DEV_URL)",
