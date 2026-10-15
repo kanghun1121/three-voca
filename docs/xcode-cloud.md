@@ -19,7 +19,7 @@
 | `DEV_ACCOUNT_EMAIL` | 선택: 내부 테스트 계정 |
 | `DEV_ACCOUNT_PASSWORD` | 선택: 내부 테스트 계정 암호 |
 
-`CI_TEAM_ID`는 Xcode Cloud가 제공한다. 스크립트가 이를 `DEVELOPMENT_TEAM`에 적용한다. 필수 변수가 빠지면 Archive 전에 빌드가 실패한다. 앱 버전은 Tuist에서 `1.0.0`으로 지정하며 빌드 번호는 Xcode Cloud가 자동으로 증가시킨다. 기존 TestFlight 빌드와 번호가 충돌하면 App Store Connect → Xcode Cloud → Settings → Build Number에서 다음 번호를 조정한다. [Apple 빌드 번호 안내](https://developer.apple.com/documentation/xcode/setting-the-next-build-number-for-xcode-cloud-builds)
+서명용 Apple Developer Team ID는 Dev 구성의 `DEVELOPMENT_TEAM`에 지정한다. Xcode Cloud의 `CI_TEAM_ID`는 UUID이므로 서명 설정에 사용하지 않는다. 필수 변수가 빠지면 Archive 전에 빌드가 실패한다. 앱 버전은 Tuist에서 `1.0.0`으로 지정하며 빌드 번호는 Xcode Cloud가 자동으로 증가시킨다. 기존 TestFlight 빌드와 번호가 충돌하면 App Store Connect → Xcode Cloud → Settings → Build Number에서 다음 번호를 조정한다. [Apple 빌드 번호 안내](https://developer.apple.com/documentation/xcode/setting-the-next-build-number-for-xcode-cloud-builds)
 
 ## 검증
 

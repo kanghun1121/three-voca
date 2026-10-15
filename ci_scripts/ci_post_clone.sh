@@ -15,7 +15,7 @@ import os
 from pathlib import Path
 from urllib.parse import urlsplit
 
-required = ("SUPABASE_DEV_URL", "SUPABASE_DEV_ANON_KEY", "MW_DICTIONARY_API_KEY", "CI_TEAM_ID")
+required = ("SUPABASE_DEV_URL", "SUPABASE_DEV_ANON_KEY", "MW_DICTIONARY_API_KEY")
 missing = [name for name in required if not os.environ.get(name)]
 if missing:
     raise SystemExit("Missing Xcode Cloud environment variables: " + ", ".join(missing))
@@ -27,7 +27,7 @@ if parts.scheme != "https" or not parts.netloc:
 
 values = {name: os.environ.get(name, "") for name in (
     "SUPABASE_DEV_ANON_KEY", "MW_DICTIONARY_API_KEY",
-    "DEV_ACCOUNT_EMAIL", "DEV_ACCOUNT_PASSWORD", "CI_TEAM_ID",
+    "DEV_ACCOUNT_EMAIL", "DEV_ACCOUNT_PASSWORD",
 )}
 for name, value in values.items():
     if any(char in value for char in "\r\n"):
@@ -39,7 +39,6 @@ lines = [
     "MW_DICTIONARY_API_KEY = " + values["MW_DICTIONARY_API_KEY"],
     "DEV_ACCOUNT_EMAIL = " + values["DEV_ACCOUNT_EMAIL"],
     "DEV_ACCOUNT_PASSWORD = " + values["DEV_ACCOUNT_PASSWORD"],
-    "DEVELOPMENT_TEAM = " + values["CI_TEAM_ID"],
 ]
 path = Path("Projects/App/Secrets.xcconfig")
 path.write_text("\n".join(lines) + "\n")
