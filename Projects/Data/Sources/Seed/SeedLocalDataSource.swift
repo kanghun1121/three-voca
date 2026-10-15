@@ -79,7 +79,9 @@ private extension SeedDataResponseDTO {
                 word: $0.word,
                 levelID: $0.levelId,
                 pronunciation: $0.pronunciation,
-                audioUrl: URL(string: $0.audioUrl, relativeTo: SupabaseConfig.baseURL)!.absoluteURL.absoluteString,
+                // 서버 값이 URL로 해석되지 않아도 저장이 중단되지 않도록 원본 문자열을 그대로 둔다.
+                audioUrl: URL(string: $0.audioUrl, relativeTo: SupabaseConfig.baseURL)?.absoluteURL.absoluteString
+                    ?? $0.audioUrl,
                 distractors: distractorsByWordID[$0.id] ?? [],
                 meanings: meaningsByWordID[$0.id] ?? []
             )
