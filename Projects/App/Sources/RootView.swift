@@ -40,7 +40,7 @@ struct RootView: View {
         $0.learningHistoryRepository = .liveValue
         $0.chatRepository = .liveValue
         $0.wordRepository = .liveValue
-        $0.localDatabaseSeeding = .liveValue
+        $0.seedRepository = .liveValue
         $0.audioRepository = .liveValue
         $0.audioPlayerRepository = .liveValue
         $0.tokenProvider = .liveValue
@@ -59,13 +59,7 @@ struct RootView: View {
     }
 
     var body: some View {
-        Group {
-            if viewModel.isSeedingDatabase {
-                SplashView()
-            } else {
-                MainTabView()
-            }
-        }
-        .task { viewModel.onAppear() }
+        MainTabView()
+            .task { viewModel.onAppear() }
     }
 }
