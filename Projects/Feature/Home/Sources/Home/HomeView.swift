@@ -18,6 +18,7 @@ public struct HomeView: View {
         NavigationStack {
             HomeContentView(viewModel: viewModel)
                 .task { await viewModel.onAppear() }
+                .task { await viewModel.syncSeedIfNeeded() }
                 .navigationDestination(item: $viewModel.destination.lesson) { lessonID in
                     lessonScreenFactory.makeLessonDetailScreen(lessonID: lessonID.wrappedValue)
                 }

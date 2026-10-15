@@ -27,6 +27,8 @@ public final class HomeViewModel {
     private var cal: Calendar { .current }
     
     @ObservationIgnored @Dependency(\.learningHistoryRepository) private var learningHistoryRepository
+    @ObservationIgnored @Dependency(\.seedRepository) private var seedRepository
+    @ObservationIgnored @Dependency(\.learningLibraryRepository) private var learningLibraryRepository
 
     public init(destination: Destination? = nil) {
         @Dependency(\.date.now) var now
@@ -46,6 +48,15 @@ public final class HomeViewModel {
         }
     }
     
+    /// 로컬 DB에 시드가 없으면 서버에서 받아온 뒤 학습 라이브러리를 다시 읽게 한다. 실패하면
+    /// 화면은 그대로 두고, 홈이 다시 나타날 때 같은 조건으로 재시도된다.
+    public func syncSeedIfNeeded() async {
+        do {
+            try await seedRepository.syncIfNeeded()
+            try await learningLibraryRepository.refresh()
+        } catch {}
+    }
+
     public func didTapLesson(id: String) {
         destination = .lesson(lessonID: id)
     }
