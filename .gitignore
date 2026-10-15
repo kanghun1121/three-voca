@@ -85,3 +85,5 @@ shrimp_data/
 ### 시크릿 ###
 Projects/Core/Example/Secrets.xcconfig
 Projects/App/Secrets.xcconfig
+### 시딩 데이터 (비공개) ###
+Projects/Data/Resources/Seed/*.json
