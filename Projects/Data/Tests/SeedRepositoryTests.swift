@@ -109,6 +109,51 @@ final class SeedRepositoryTests: XCTestCase {
         XCTAssertTrue(levels.isEmpty)
     }
 
+    private static let emptyResponse = """
+    {
+      "changed": true, "version": 6,
+      "levels": [], "lessons": [], "lesson_words": [], "words": [],
+      "word_meanings": [], "word_examples": [], "distractors": []
+    }
+    """
+
+    func test_비어_있을_때만_서버에서_받아_저장하고_순서는_확인_수신_저장이다() async throws {
+        let events = LockIsolated<[String]>([])
+
+        try await withDependencies {
+            $0.seedLocalDataSource.isEmpty = {
+                events.withValue { $0.append("isEmpty") }
+                return true
+            }
+            $0.seedLocalDataSource.save = { _ in events.withValue { $0.append("save") } }
+            $0.seedRemoteDataSource.fetchSeedData = {
+                events.withValue { $0.append("fetch") }
+                return try JSONDecoder.seed.decode(SeedDataResponseDTO.self, from: Data(Self.emptyResponse.utf8))
+            }
+        } operation: {
+            try await SeedRepository.liveValue.syncIfNeeded()
+        }
+
+        XCTAssertEqual(events.value, ["isEmpty", "fetch", "save"])
+    }
+
+    func test_이미_저장돼_있으면_수신도_저장도_하지_않는다() async throws {
+        let events = LockIsolated<[String]>([])
+
+        try await withDependencies {
+            $0.seedLocalDataSource.isEmpty = { false }
+            $0.seedLocalDataSource.save = { _ in events.withValue { $0.append("save") } }
+            $0.seedRemoteDataSource.fetchSeedData = {
+                events.withValue { $0.append("fetch") }
+                throw NetworkError.invalidRequest
+            }
+        } operation: {
+            try await SeedRepository.liveValue.syncIfNeeded()
+        }
+
+        XCTAssertEqual(events.value, [])
+    }
+
     // MARK: - Helpers
 
     private func sync(_ db: LocalDatabaseTestContext, client: SeedStubHTTPClient) async throws {
@@ -116,6 +161,7 @@ final class SeedRepositoryTests: XCTestCase {
             try await withDependencies {
                 $0.httpClient = client
                 $0.seedRemoteDataSource = .liveValue
+                $0.seedLocalDataSource = .liveValue
             } operation: {
                 try await SeedRepository.liveValue.syncIfNeeded()
             }
@@ -194,5 +240,14 @@ private final class SeedStubHTTPClient: HTTPClienting, @unchecked Sendable {
 
     func data(from url: URL) async throws -> Data {
         try result.get()
+    }
+}
+
+extension JSONDecoder {
+    /// 실제 `HTTPClient`와 같은 디코더 설정.
+    fileprivate static var seed: JSONDecoder {
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        return decoder
     }
 }
