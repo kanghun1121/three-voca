@@ -39,7 +39,7 @@ final class LocalDatabaseSeederTests: XCTestCase {
         XCTAssertEqual(lessonCount, 244)
         XCTAssertEqual(lessonWordCount, 4834)
         XCTAssertEqual(wordCount, 4834)
-        XCTAssertEqual(meaningCount, 7376)
+        XCTAssertEqual(meaningCount, 7213)
         XCTAssertEqual(exampleCount, 9668)
     }
 
@@ -60,7 +60,7 @@ final class LocalDatabaseSeederTests: XCTestCase {
         let words = try await db.context.fetch(FetchDescriptor<WordEntity>(predicate: #Predicate { $0.id == 23 }))
         let word = try XCTUnwrap(words.first)
 
-        XCTAssertEqual(word.meanings.count, 3)
+        XCTAssertEqual(word.meanings.count, 4)
     }
 
     func test_뜻이_4개인_단어의_meanings가_rank_오름차순으로_저장된다() async throws {
@@ -111,7 +111,7 @@ final class LocalDatabaseSeederTests: XCTestCase {
         XCTAssertEqual(lessons.count, 244)
         XCTAssertEqual(lessons.reduce(0) { $0 + $1.orderedWordIDs.count }, 4834)
         XCTAssertEqual(words.count, 4834)
-        XCTAssertEqual(words.reduce(0) { $0 + $1.meanings.count }, 7376)
+        XCTAssertEqual(words.reduce(0) { $0 + $1.meanings.count }, 7213)
         XCTAssertEqual(exampleCount, 9668)
     }
 

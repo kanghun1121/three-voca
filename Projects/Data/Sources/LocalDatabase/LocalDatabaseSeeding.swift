@@ -23,7 +23,8 @@ extension LocalDatabaseSeeding: DependencyKey {
     // 새로 바꿔 모든 기기가 이번 업데이트에서 무조건 한 번 재시딩하도록 강제한다.
     // #123에서 v3 → v4로 올렸다: levels.json의 name_ko(씨앗~완성 → 입문~완성)를 바꿨는데,
     // 시딩은 최초 1회만 실행되므로 플래그를 범프하지 않으면 기존 설치 기기에 반영되지 않는다.
-    static let seededFlagKey = "localDatabase.seeded.v4"
+    // 단어·뜻·예문 시드 전수 수정분을 기존 설치 기기에도 반영한다.
+    static let seededFlagKey = "localDatabase.seeded.v5"
 
     public static let liveValue = LocalDatabaseSeeding(seedIfNeeded: {
         guard !UserDefaults.standard.bool(forKey: Self.seededFlagKey) else { return }
