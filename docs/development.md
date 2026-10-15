@@ -29,7 +29,7 @@
 | 프로젝트 생성 | `tuist generate --no-open` |
 | 전체 테스트 | `tuist test AllTest` |
 
-Xcode Cloud 빌드·TestFlight 배포 설정과 현재 트리거 상태는 [Xcode Cloud 설정](xcode-cloud.md)을 따른다. 로컬 훅이 검증을 자동 실행한다고 가정하지 않는다.
+CI/CD는 Xcode Cloud에서 `develop` 브랜치 변경 시 실행한다. 로컬 훅이 검증을 자동 실행한다고 가정하지 않는다.
 
 ## 변경별 검증
 
