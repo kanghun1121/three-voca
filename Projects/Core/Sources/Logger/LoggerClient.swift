@@ -21,10 +21,10 @@ public extension DependencyValues {
 extension LoggerClient: DependencyKey {
     public static let liveValue = LoggerClient(
         debug: { category, message in
-            Logger(subsystem: "com.kangdev.FiveVoca", category: category).debug("\(message)")
+            Logger(subsystem: "com.kangdev.threevoca", category: category).debug("\(message)")
         },
         error: { category, message in
-            Logger(subsystem: "com.kangdev.FiveVoca", category: category).error("\(message)")
+            Logger(subsystem: "com.kangdev.threevoca", category: category).error("\(message)")
         }
     )
 }
