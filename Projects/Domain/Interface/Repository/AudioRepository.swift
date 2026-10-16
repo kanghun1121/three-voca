@@ -11,7 +11,6 @@ public struct AudioRepository: Sendable {
     public var prefetch: @Sendable (_ words: [(term: String, audioUrl: String)]) async -> Void
     public var fetchURL: @Sendable (_ term: String, _ audioUrl: String) async -> URL?
     public var url: @Sendable (_ term: String) async -> URL?
-    public var chunkAudioURL: @Sendable (_ text: String) async throws -> URL
 }
 
 extension AudioRepository: UnimplementedTestDependencyKey {}

@@ -21,7 +21,6 @@ import DependenciesMacros
 @DependencyClient
 struct AudioRemoteDataSource: Sendable {
     var download: @Sendable (_ remoteURL: URL) async throws -> Data
-    var fetchChunkAudio: @Sendable (_ text: String) async throws -> ChunkAudioResponseDTO
 }
 
 extension AudioRemoteDataSource: DependencyKey {
@@ -29,10 +28,6 @@ extension AudioRemoteDataSource: DependencyKey {
         download: { remoteURL in
             @Dependency(\.httpClient) var httpClient
             return try await httpClient.data(from: remoteURL)
-        },
-        fetchChunkAudio: { text in
-            @Dependency(\.httpClient) var httpClient
-            return try await httpClient.request(ChunkAudioRequest(text: text))
         }
     )
 }
