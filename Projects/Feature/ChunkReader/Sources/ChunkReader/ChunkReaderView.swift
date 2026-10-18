@@ -28,9 +28,5 @@ public struct ChunkReaderView: View {
         .background(DesignSystemColor.Background.base)
         .toolbarBackground(DesignSystemColor.Background.base, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
-        .alert("오디오를 재생할 수 없습니다", isPresented: $viewModel.isAudioErrorPresented) {
-            Button("확인", role: .cancel) {}
-        }
-        .onDisappear(perform: viewModel.stopAudio)
     }
 }

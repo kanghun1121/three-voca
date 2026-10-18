@@ -17,26 +17,19 @@ public struct WordDetailView: View {
     }
 
     public var body: some View {
-        WordDetailPageView(
-            viewState: viewModel.viewStates[viewModel.currentIndex],
-            onPronunciationTapped: viewModel.pronunciationTapped,
-            onChunkReaderTapped: viewModel.didTapChunkReader,
-            onChatBotTapped: viewModel.didTapChatBot
-        )
-        .id(viewModel.currentIndex)
-        .task(id: viewModel.currentIndex) {
-            await viewModel.requestIfNeeded(at: viewModel.currentIndex)
+        TabView(selection: $viewModel.currentIndex) {
+            ForEach(viewModel.wordIDs.indices, id: \.self) { index in
+                WordDetailPageView(
+                    viewState: viewModel.viewStates[index],
+                    onPronunciationTapped: viewModel.pronunciationTapped,
+                    onChunkReaderTapped: viewModel.didTapChunkReader,
+                    onChatBotTapped: viewModel.didTapChatBot
+                )
+                .tag(index)
+                .task { await viewModel.requestIfNeeded(at: index) }
+            }
         }
-        .simultaneousGesture(
-            DragGesture(minimumDistance: 50)
-                .onEnded { gesture in
-                    let horizontalDistance = gesture.translation.width
-                    guard abs(horizontalDistance) > abs(gesture.translation.height) else { return }
-                    let nextIndex = viewModel.currentIndex + (horizontalDistance < 0 ? 1 : -1)
-                    guard viewModel.wordIDs.indices.contains(nextIndex) else { return }
-                    viewModel.currentIndex = nextIndex
-                }
-        )
+        .tabViewStyle(.page(indexDisplayMode: .never))
         .background(DesignSystemColor.Background.base)
         .toolbarBackground(DesignSystemColor.Background.base, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
