@@ -12,10 +12,6 @@ struct MyPageMenuView: View {
             Rectangle()
                 .fill(DesignSystemColor.Border.default)
                 .frame(height: 1)
-            MenuRow(title: "문의사항")
-            Rectangle()
-                .fill(DesignSystemColor.Border.default)
-                .frame(height: 1)
             MenuRow(title: "개인정보 처리방침", action: viewModel.privacyTapped)
             #if DEV_ENVIRONMENT
             if !viewModel.isAuthenticated {
