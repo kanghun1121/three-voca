@@ -26,7 +26,6 @@ public struct ChunkReaderView: View {
         }
         .scrollIndicators(.hidden)
         .background(DesignSystemColor.Background.base)
-        .toolbarBackground(DesignSystemColor.Background.base, for: .navigationBar)
-        .toolbarBackground(.visible, for: .navigationBar)
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
