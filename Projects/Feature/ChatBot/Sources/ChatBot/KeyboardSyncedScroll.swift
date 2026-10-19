@@ -64,7 +64,11 @@ struct KeyboardSyncedScroll: UIViewRepresentable {
             if delta < 0 {
                 // 키보드가 내려갈 때: 하단 인셋이 줄어 새 최하단이 위로 올라오므로, 그 아래로 넘어간
                 // 오프셋을 새 최하단으로 되돌린다. 안 그러면 콘텐츠 아래에 빈 공간이 남는다.
-                let maxOffset = scrollView.contentSize.height + scrollView.adjustedContentInset.bottom - scrollView.bounds.height
+                // 알림 시점의 contentSize는 아직 키보드가 올라온 상태의 값이다. 대화가 짧으면 그 값으로 계산한
+                // 최하단이 최상단(-top 인셋)보다 위로 나와, 오프셋이 범위 밖으로 튀며 콘텐츠가 위로 솟았다 내려온다.
+                // 그래서 최상단 아래로는 내려가지 않게 막는다.
+                let minOffset = -scrollView.adjustedContentInset.top
+                let maxOffset = max(minOffset, scrollView.contentSize.height + scrollView.adjustedContentInset.bottom - scrollView.bounds.height)
                 guard scrollView.contentOffset.y > maxOffset else { return }
                 let target = CGPoint(x: scrollView.contentOffset.x, y: maxOffset)
                 let options = UIView.AnimationOptions(rawValue: UInt(curveRaw) << 16)
