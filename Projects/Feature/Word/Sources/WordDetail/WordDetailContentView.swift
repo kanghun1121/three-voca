@@ -29,7 +29,6 @@ struct WordDetailContentView: View {
             }
         }
         .padding(.horizontal, 20)
-        .padding(.top, 8)
         .padding(.bottom, 32)
     }
 }

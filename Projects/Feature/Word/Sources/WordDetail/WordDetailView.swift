@@ -17,22 +17,24 @@ public struct WordDetailView: View {
     }
 
     public var body: some View {
-        TabView(selection: $viewModel.currentIndex) {
-            ForEach(viewModel.wordIDs.indices, id: \.self) { index in
-                WordDetailPageView(
-                    viewState: viewModel.viewStates[index],
-                    onPronunciationTapped: viewModel.pronunciationTapped,
-                    onChunkReaderTapped: viewModel.didTapChunkReader,
-                    onChatBotTapped: viewModel.didTapChatBot
-                )
-                .tag(index)
-                .task { await viewModel.requestIfNeeded(at: index) }
+        GeometryReader { geometry in
+            TabView(selection: $viewModel.currentIndex) {
+                ForEach(viewModel.wordIDs.indices, id: \.self) { index in
+                    WordDetailPageView(
+                        viewState: viewModel.viewStates[index],
+                        topInset: geometry.safeAreaInsets.top,
+                        onPronunciationTapped: viewModel.pronunciationTapped,
+                        onChunkReaderTapped: viewModel.didTapChunkReader,
+                        onChatBotTapped: viewModel.didTapChatBot
+                    )
+                    .tag(index)
+                    .task { await viewModel.requestIfNeeded(at: index) }
+                }
             }
+            .tabViewStyle(.page(indexDisplayMode: .never))
         }
-        .tabViewStyle(.page(indexDisplayMode: .never))
         .background(DesignSystemColor.Background.base)
-        .toolbarBackground(DesignSystemColor.Background.base, for: .navigationBar)
-        .toolbarBackground(.visible, for: .navigationBar)
+        .navigationBarTitleDisplayMode(.inline)
         .navigationDestination(item: $viewModel.destination.chunkReader) { route in
             chunkReaderScreenFactory.makeScreen(route: route.wrappedValue)
         }
