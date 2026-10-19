@@ -12,17 +12,6 @@ struct EmptyDayView: View {
 
     var body: some View {
         VStack(spacing: 14) {
-            ZStack {
-                Circle()
-                    .fill(DesignSystemColor.Background.muted)
-                    .frame(width: 44, height: 44)
-                Circle()
-                    .strokeBorder(
-                        DesignSystemColor.Foreground.subtle,
-                        style: StrokeStyle(lineWidth: 3, dash: [3.5])
-                    )
-                    .frame(width: 20, height: 20)
-            }
             VStack(spacing: 4) {
                 Text("학습 기록이 없는 날이에요")
                     .typography(DesignSystemTypography.Home.emptyDayTitle)
@@ -43,7 +32,6 @@ struct EmptyDayView: View {
                     }
             }
         }
-        .padding(.top, 30)
-        .frame(maxWidth: .infinity)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }

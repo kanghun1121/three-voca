@@ -5,6 +5,8 @@ import DesignSystem
 struct HomeContentView: View {
     let viewModel: HomeViewModel
 
+    @State private var viewportHeight: CGFloat = 0
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
@@ -20,7 +22,10 @@ struct HomeContentView: View {
                 DayStateContent(viewModel: viewModel)
             }
             .padding(.bottom, 40)
+            // 기록 없는 날 화면이 남는 공간의 세로 가운데에 놓이도록 콘텐츠 높이를 뷰포트 이상으로 맞춘다.
+            .frame(minHeight: viewportHeight, alignment: .top)
         }
+        .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { viewportHeight = $0 }
         .background(DesignSystemColor.Background.base)
         .toolbar(.hidden, for: .navigationBar)
     }
