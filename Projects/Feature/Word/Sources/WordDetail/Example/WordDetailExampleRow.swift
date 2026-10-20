@@ -48,8 +48,8 @@ struct WordDetailExampleRow: View {
     }
 }
 
-/// 끊어읽기·챗봇 액션바 — 둘 다 모든 예문에 항상 노출한다. chunks는 모든 예문에
-/// 존재하고, 챗봇에는 어떤 예문이든 물어볼 수 있어야 한다.
+/// 끊어읽기 액션바. 챗봇 버튼은 다음 버전에 노출하기 위해 잠시 숨겨두었다
+/// (챗봇 기능과 onChatBotTapped 연결은 그대로 유지).
 private struct ActionBar: View {
     let example: WordDetail.Example
     let onChunkReaderTapped: (WordDetail.Example) -> Void
@@ -59,9 +59,6 @@ private struct ActionBar: View {
         HStack(spacing: 12) {
             actionButton(icon: DesignSystemAsset.alignLeft, title: "끊어읽기") {
                 onChunkReaderTapped(example)
-            }
-            actionButton(icon: DesignSystemAsset.messageSquare, title: "챗봇") {
-                onChatBotTapped(example)
             }
         }
     }
