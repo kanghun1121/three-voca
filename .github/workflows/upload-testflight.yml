@@ -93,6 +93,8 @@ jobs:
             -destination generic/platform=iOS \
             -archivePath $RUNNER_TEMP/FiveVoca.xcarchive \
             -skipMacroValidation \
+            CODE_SIGN_STYLE=Manual \
+            CODE_SIGN_IDENTITY="Apple Distribution" \
             DEVELOPMENT_TEAM="${{ env.DEVELOPMENT_TEAM }}" \
             PROVISIONING_PROFILE_SPECIFIER="${{ env.PROFILE_NAME }}" \
             MARKETING_VERSION=${{ env.MARKETING_VERSION }} \

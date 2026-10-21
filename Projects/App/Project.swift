@@ -47,8 +47,8 @@ let project = Project.makeModule(
                         "ASSETCATALOG_COMPILER_APPICON_NAME": "AppIconDev"
                     ], xcconfig: "Secrets.xcconfig"),
                     .release(name: "Release", settings: [
-                        "CODE_SIGN_STYLE": "Manual",
-                        "CODE_SIGN_IDENTITY": "Apple Distribution",
+                        "CODE_SIGN_STYLE": "Automatic",
+                        "DEVELOPMENT_TEAM": "W35T2QAC67",
                     ], xcconfig: "Secrets.xcconfig")
                 ]
             )
