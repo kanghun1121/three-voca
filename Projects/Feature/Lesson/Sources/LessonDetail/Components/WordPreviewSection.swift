@@ -1,0 +1,76 @@
+import SwiftUI
+
+import DesignSystem
+import DomainInterface
+
+struct WordPreviewSection: View {
+    let words: [Lesson.Word]
+
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var isExpanded = false
+    private let previewLimit = 6
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Text("이번 레슨의 단어 (\(words.count))")
+                .typography(DesignSystemTypography.Pretendard.bold14)
+                .foregroundStyle(DesignSystemColor.Foreground.muted)
+                .padding(.bottom, 12)
+
+            ForEach(Array(words.enumerated()), id: \.offset) { index, item in
+                if index < previewLimit || isExpanded {
+                    WordPreviewRow(item: item)
+                        .transition(reduceMotion ? .opacity : .opacity.combined(with: .move(edge: .top)))
+                        .animation(
+                            .easeOut(duration: 0.2)
+                                .delay(Double(max(0, index - previewLimit)) * 0.04),
+                            value: isExpanded
+                        )
+                }
+            }
+
+            if !isExpanded, words.count > previewLimit {
+                Button {
+                    withAnimation(.easeOut(duration: 0.2)) {
+                        isExpanded = true
+                    }
+                } label: {
+                    Text("+ \(words.count - previewLimit) more")
+                        .typography(DesignSystemTypography.Pretendard.medium14)
+                        .foregroundStyle(DesignSystemColor.Foreground.muted)
+                        .frame(maxWidth: .infinity, minHeight: 44, alignment: .center)
+                        .contentShape(.rect)
+                }
+                .buttonStyle(.plain)
+            }
+        }
+    }
+}
+
+private struct WordPreviewRow: View {
+    let item: Lesson.Word
+
+    var body: some View {
+        VStack(spacing: 0) {
+            WordPreviewRowContent(item: item)
+            Divider()
+        }
+    }
+}
+
+private struct WordPreviewRowContent: View {
+    let item: Lesson.Word
+
+    var body: some View {
+        HStack {
+            Text(item.term)
+                .typography(DesignSystemTypography.Pretendard.semiBold16)
+                .foregroundStyle(DesignSystemColor.Foreground.strong)
+            Spacer()
+            Text(item.primaryMeaning)
+                .typography(DesignSystemTypography.Pretendard.medium14)
+                .foregroundStyle(DesignSystemColor.Foreground.muted)
+        }
+        .padding(.vertical, 12)
+    }
+}

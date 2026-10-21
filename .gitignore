@@ -73,3 +73,17 @@ Tuist/.build
 graph.png
 shrimp_data/
 .claude/settings.local.json
+.claude/worktrees/
+.claude/logs/
+.claude/exec-plans/
+.claude/last-test-status
+.harness/plans/
+.harness/exec-plans/
+.harness/problems/
+.harness/handoff/
+
+### 시크릿 ###
+Projects/Core/Example/Secrets.xcconfig
+Projects/App/Secrets.xcconfig
+### 시딩 데이터 (비공개) ###
+Projects/Data/Resources/Seed/*.json

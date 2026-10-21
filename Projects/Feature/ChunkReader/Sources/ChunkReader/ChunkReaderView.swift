@@ -1,0 +1,31 @@
+import SwiftUI
+
+import DesignSystem
+
+public struct ChunkReaderView: View {
+    @Bindable private var viewModel: ChunkReaderViewModel
+
+    public init(viewModel: ChunkReaderViewModel) {
+        self.viewModel = viewModel
+    }
+
+    public var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 22) {
+                ChunkReaderSentenceView(
+                    chunks: viewModel.chunks,
+                    selectedChunkID: viewModel.selectedChunkID,
+                    onChunkTapped: viewModel.didTapChunk
+                )
+
+                ChunkReaderWordListView(wordAnnotations: viewModel.wordAnnotations)
+            }
+            .padding(.horizontal, 20)
+            .padding(.top, 16)
+            .padding(.bottom, 28)
+        }
+        .scrollIndicators(.hidden)
+        .background(DesignSystemColor.Background.base)
+        .navigationBarTitleDisplayMode(.inline)
+    }
+}

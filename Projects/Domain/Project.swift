@@ -1,0 +1,57 @@
+import ProjectDescription
+import DependencyPlugin
+
+let project = Project.makeModule(
+    name: "Domain",
+    targets: [
+        .domain(interface: .init(
+            dependencies: [.dependencies, .core, .dependenciesMacros]
+        )),
+        .domain(implements: .init(
+            dependencies: [
+                .domainInterface,
+                .dependencies,
+            ]
+        )),
+        .domain(tests: .init(
+            dependencies: [
+                .domain,
+                .domainInterface,
+                .dependencies,
+            ]
+        )),
+        .domain(example: .init(
+            infoPlist: .extendingDefault(with: [
+                "CFBundleShortVersionString": "1.0",
+                "CFBundleVersion": "1",
+                "UILaunchStoryboardName": "LaunchScreen",
+                "UIApplicationSceneManifest": [
+                    "UIApplicationSupportsMultipleScenes": false,
+                    "UISceneConfigurations": [:]
+                ],
+                "SUPABASE_URL": "$(SUPABASE_PROD_URL)",
+                "SUPABASE_ANON_KEY": "$(SUPABASE_ANON_KEY)"
+            ]),
+            dependencies: [
+                .domain,
+                .domainInterface,
+                .data,
+                .designSystem,
+                .dependencies,
+            ],
+            settings: .settings(
+                configurations: [
+                    .debug(name: "Debug", xcconfig: "../App/Secrets.xcconfig"),
+                    .release(name: "Release", xcconfig: "../App/Secrets.xcconfig")
+                ]
+            )
+        )),
+    ],
+    schemes: [
+        .scheme(
+            name: "DomainExample",
+            buildAction: .buildAction(targets: [.target("DomainExample")]),
+            runAction: .runAction(executable: .target("DomainExample"))
+        )
+    ]
+)
