@@ -10,15 +10,16 @@ POSTECH Apple Developer Academy Swift Style Guide + 사용자 커스텀 룰 기�
 
 ## 참조 문서
 
-`docs/lint.md`(저장소 루트)를 Swift 일반 규칙과 필수·권장 등급의 기준으로, SwiftUI 규칙은 `docs/swift-style.md`를 기준으로 삼는다.
-먼저 `docs/lint.md`의 `## 적용 및 검토 등급`을 읽고, 검토 대상에 따라 아래 섹션을 선택한다.
+`docs/lint.md`(저장소 루트)를 Swift 일반 규칙의 기준으로, SwiftUI 규칙은 `docs/swift-style.md`를 기준으로 삼는다.
+검토 대상에 따라 아래 섹션을 선택한다.
+구체적인 Good/Bad Case가 필요하면 `docs/lint/examples.md`를 참고한다.
 기존 코드의 준수 상태와 작성 정책을 구분하며, 요청 범위 밖의 기존 코드를 일괄 수정하지 않는다.
 
 | 문서 · 섹션 | 다루는 카테고리 | 언제 읽나 |
 |------|----------------|----------|
-| lint.md `## 1. 네이밍` | 변수/함수/enum/struct/class/protocol/delegate 네이밍 | 거의 항상 |
+| lint.md `## 1. 네이밍` | 변수/함수/enum/struct/class/protocol 네이밍 | 거의 항상 |
 | lint.md `## 2. 포맷` | 들여쓰기, 띄어쓰기, **파라미터 줄바꿈**, **import 정렬**, 주석 | 거의 항상 |
-| lint.md `## 3. 코드` | 클로저, 타입 추론/어노테이션, 메모리 관리 | 함수/타입 다룰 때 |
+| lint.md `## 3. 코드` | 클로저, 캡처와 Task 수명 | 함수/타입 다룰 때 |
 | swift-style.md 전체 | SwiftUI View 선언 방법, 레이아웃 컨테이너 | SwiftUI 코드일 때 |
 
 ## 사용자 커스텀 룰 (강조)
@@ -79,14 +80,14 @@ POSTECH Apple Developer Academy Swift Style Guide + 사용자 커스텀 룰 기�
 체크 순서:
 1. **Import 섹션** — 알파벳 순서 / 중복 / 줄바꿈 위치
 2. **타입 선언부** — 네이밍 (struct/class/enum/protocol)
-3. **프로퍼티** — 네이밍, 타입 어노테이션, computed/observer 위치
+3. **프로퍼티** — 네이밍, computed/observer 위치
 4. **이니셜라이저** — 파라미터 줄바꿈 (커스텀 룰)
 5. **함수/메서드** — 네이밍, 파라미터 줄바꿈, 클로저 사용
 6. **클로저 호출** — 후행 클로저 축약, 다중 클로저 형식
-7. **주석** — `///` 사용, MARK/TODO/FIXME
+7. **주석** — `///` 사용, 계약·제약 설명
 8. **들여쓰기/띄어쓰기** — 4 스페이스, 콜론 띄어쓰기
 9. **SwiftUI 한정** — Struct로 View 선언, 레이아웃 컨테이너 1개
-10. **메모리** — weak/unowned, Optional weak
+10. **캡처** — 소유 관계, Task의 종료·취소와 self 캡처
 
 각 위반은 다음 정보를 수집:
 - 위치 (라인 번호 또는 함수/타입 이름)
@@ -144,8 +145,7 @@ POSTECH Apple Developer Academy Swift Style Guide + 사용자 커스텀 룰 기�
 
 #### 우선순위 기준
 
-등급은 `docs/lint.md`의 `## 적용 및 검토 등급`을 그대로 따른다.
-네이밍·타입 어노테이션 등을 스킬 자체 판단으로 다른 등급에 재분류하지 않는다.
+각 판단의 근거는 `docs/lint.md` 또는 `docs/swift-style.md`의 해당 규칙에서 확인한다.
 메모리 문제는 실제 소유 관계·수명을 확인한다. 강한 self 캡처만으로 누수를 단정하지 않는다.
 
 ### 단계 5 — 자동 수정 제안 (선택)

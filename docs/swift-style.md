@@ -1,6 +1,6 @@
 # SwiftUI 작성 규칙
 
-SwiftUI View를 어떻게 작성하는지 정한다. Swift 일반 규칙(네이밍·포맷·코드)과 검토 등급·검사 방법은 [lint.md](lint.md)를 따른다.
+SwiftUI View를 어떻게 작성하는지 정한다. Swift 일반 규칙(네이밍·포맷·코드)은 [lint.md](lint.md)를 따른다.
 신규·수정 코드의 작성 기준이며, 기존 코드가 모두 준수한다는 설명은 아니다. 요청과 무관한 일괄 변경은 하지 않는다.
 
 ## 규칙
@@ -15,4 +15,4 @@ SwiftUI View를 어떻게 작성하는지 정한다. Swift 일반 규칙(네이�
 - `@State`는 `private`으로 선언한다.
 - modifier가 3개 이상 이어지면 한 줄에 하나씩 작성한다.
 - 반복되는 modifier 묶음은 `ViewModifier` 등으로 추출하기를 권장한다.
-- 상태·데이터 흐름·내비게이션의 책임은 [architecture.md](architecture.md)를 따른다.
+- 상태·데이터 흐름의 책임은 [architecture.md](architecture.md)를 따른다.

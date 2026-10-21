@@ -22,14 +22,14 @@ description: 현재 브랜치 변경 사항에서 버그·동시성 문제·레�
 * 인증/토큰 처리 (Keychain 저장, 토큰 갱신, `TokenProvider`)
 * 동시성 경계 (`@MainActor`, `Task`, `actor`, `Sendable`)
 * 로컬 저장 (`SwiftData @Model`, `LocalDataSource`, 디스크/메모리 캐시)
-* 레이어 경계를 넘는 참조 (`docs/architecture.md`의 허용 의존 표 기준)
+* 레이어 경계를 넘는 참조 (`docs/architecture/clean-architecture.md`의 의존 그래프 기준)
 * 외부 스트리밍 처리 (SSE 파싱, 연결 종료·재시도)
 
 ## Phase 3: 체크리스트 (모든 변경 파일에 전부 적용)
 
 * [ ] **동시성**: UI 갱신이 `@MainActor` 밖에서 일어나지 않는가? `Task` 취소·leak, actor 재진입 문제는 없는가?
 * [ ] **메모리**: 클로저의 강한 `self` 캡처로 인한 순환 참조는 없는가? `weak`/`unowned` 선택이 실제 소유 관계와 맞는가?
-* [ ] **레이어 경계**: Data가 Networking 구현체를 직접 참조하거나, Domain이 Data/Core/Networking을 참조하거나, ViewModel이 네트워크·Keychain·DB를 직접 호출하지 않는가? (`docs/architecture.md` 위반)
+* [ ] **레이어 경계**: Data가 Networking 구현체를 직접 참조하거나, Domain이 Data/Core/Networking을 참조하거나, ViewModel이 네트워크·Keychain·DB를 직접 호출하지 않는가? (`docs/architecture/clean-architecture.md` 위반)
 * [ ] **인증/토큰**: 토큰이 Keychain 밖(UserDefaults, 로그, 메모리 방치)에 남지 않는가? 만료·갱신 실패 처리가 있는가?
 * [ ] **로컬 저장/캐시**: SwiftData 마이그레이션이 안전한가? 캐시 무효화·용량 상한이 있는가? 동시 쓰기 경쟁은 없는가?
 * [ ] **네트워크 스트리밍**: SSE 파싱 오류, 부분 응답, 연결 끊김·재시도 처리가 있는가?
@@ -68,7 +68,7 @@ description: 현재 브랜치 변경 사항에서 버그·동시성 문제·레�
 * **문제**: 무엇이 잘못됐는가
 * **근거**: 왜 실제 문제인가 (이미 처리되지 않음, 테스트 없음 등)
 * **수정 제안**: 구체적인 방향
-* **참고**: `docs/architecture.md`/`docs/lint.md`/`docs/swift-style.md` 해당 섹션, 또는 Apple 문서
+* **참고**: `docs/architecture/`의 관련 문서/`docs/lint.md`/`docs/swift-style.md` 해당 섹션, 또는 Apple 문서
 
 의미 있는 문제가 없으면 없다고 말한다 — 없는 이슈를 지어내지 않는다.
 
