@@ -16,6 +16,7 @@ let project = Project.makeModule(
                 .dependencies,
                 .designSystem,
                 .core,
+                .markdownRenderer,
             ]
         )),
         .feature(tests: .chatBot, factory: .init(

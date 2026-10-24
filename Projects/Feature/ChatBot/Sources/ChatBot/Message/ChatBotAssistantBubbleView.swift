@@ -30,7 +30,7 @@ struct ChatBotAssistantBubbleView: View {
             }
             .padding(.vertical, 11)
         } else {
-            MarkdownView(markdown: message.text, fadesTail: isActivelyStreaming)
+            ChatMarkdownView(markdown: message.text, fadesTail: isActivelyStreaming)
                 .padding(.vertical, 11)
                 .background(DesignSystemColor.Background.base)
                 .clipShape(.rect(
