@@ -30,6 +30,7 @@ git diff dev...HEAD
 - 스타일·컨벤션 → `swift-lint`
 - 새 모듈/레이어 배치, 의존 방향 판단 → `architecture-review` (구조가 실제로 바뀔 때만)
 - 과한 추상화·공유 상태·캐시·재시도 구조 → `overengineering-check` (해당 구조가 추가·변경됐을 때만)
+- 테스트의 필요성·검증력·Mock 주입 → `test-value-check` (테스트나 핵심 동작의 검증이 변경됐을 때)
 
 이 스킬 자체는 별도 버그·스타일 체크리스트를 복제하지 않는다. 위 스킬들의 결과를 입력으로 받는다.
 
@@ -39,6 +40,8 @@ git diff dev...HEAD
 - 새 ViewModel 로직·`Destination` 분기 → 해당 Feature의 `Tests/`에 대응 테스트가 있는가
 - 버그 수정 → 회귀를 막을 테스트가 함께 추가됐는가. 없다면 이유를 확인한다
 - 테스트 코드 자체가 과도한 분기·반복문을 갖고 있지 않은가
+
+대응 테스트의 실질적인 가치는 `test-value-check` 기준으로 판단한다.
 
 ### 4. 장기 영향 판단 — 해당하면 사람 리뷰로 에스컬레이션 권고
 
@@ -71,7 +74,7 @@ final class WordViewModel {
 ## 출력 형식
 
 - **결론**: 승인 가능 / 보류(수정 필요) / 사람 에스컬레이션 필요 — 셋 중 하나
-- **하위 스킬 결과 요약**: 적용한 find-bugs/swift-lint/architecture-review/overengineering-check의 발견 사항과 심각도
+- **하위 스킬 결과 요약**: 적용한 find-bugs/swift-lint/architecture-review/overengineering-check/test-value-check의 발견 사항과 심각도
 - **테스트 커버리지 갭**: 있다면 어떤 시나리오가 비어 있는지
 - **에스컬레이션 사유**: 4단계에 해당하면 구체적으로 어떤 항목 때문인지
 
