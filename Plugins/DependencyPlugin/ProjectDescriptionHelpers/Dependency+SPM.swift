@@ -6,4 +6,5 @@ public extension TargetDependency {
     static let dependencies: TargetDependency = .external(name: "Dependencies")
     static let dependenciesMacros: TargetDependency = .external(name: "DependenciesMacros")
     static let swiftUINavigation: TargetDependency = .external(name: "SwiftUINavigation")
+    static let markdownRenderer: TargetDependency = .external(name: "MarkdownRenderer")
 }

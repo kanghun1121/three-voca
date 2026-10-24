@@ -20,7 +20,7 @@ struct MarkdownCatalogView: View {
 
     private var entries: [MarkdownCatalogEntry] {
         [
-            .init(title: "헤딩", markdown: "## 헤딩 2\n### 헤딩 3\n#### 헤딩 4"),
+            .init(title: "헤딩", markdown: "# 헤딩 1\n## 헤딩 2\n### 헤딩 3\n#### 헤딩 4"),
             .init(title: "인라인 서식", markdown: "**굵게** / *기울임* / `인라인 코드` / ==하이라이트== / [링크](#)"),
             .init(title: "불릿 리스트 (중첩)", markdown: "- 명사\n  - 주소라는 뜻\n- 동사"),
             .init(title: "번호 리스트", markdown: "1. 한정사 뒤 → 명사\n2. 주어 뒤 → 동사"),
@@ -32,7 +32,6 @@ struct MarkdownCatalogView: View {
             .init(title: "핵심 콜아웃", markdown: "> [!핵심] 제목\n> 본문 설명"),
             .init(title: "주의 콜아웃", markdown: "> [!주의] 제목\n> 본문 설명"),
             .init(title: "팁 콜아웃", markdown: "> [!팁] 제목\n> 본문 설명"),
-            .init(title: "구조 도식", markdown: "```structure\nYou   love   me.\n[S]   [V]    [O]\n```"),
             .init(title: "수평선", markdown: "위 문단\n\n---\n\n아래 문단")
         ]
     }
@@ -52,7 +51,7 @@ private struct MarkdownCatalogEntryView: View {
             Text(entry.title)
                 .typography(DesignSystemTypography.Pretendard.semiBold13)
                 .foregroundStyle(DesignSystemColor.Status.positive)
-            MarkdownView(markdown: entry.markdown)
+            ChatMarkdownView(markdown: entry.markdown)
         }
         .padding(12)
         .frame(maxWidth: .infinity, alignment: .leading)

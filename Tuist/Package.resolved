@@ -1,5 +1,5 @@
 {
-  "originHash" : "1d5876722604884988fb8d87271255093e3ec90564f225b109a6995e31358292",
+  "originHash" : "f0e3fa6973ee07fadb2eb301fbc49cba9e729243d426d55f88755a6b35b12804",
   "pins" : [
     {
       "identity" : "combine-schedulers",
@@ -8,6 +8,15 @@
       "state" : {
         "revision" : "dcccb979a2183b8df3334237e3dc1ae2b4116a86",
         "version" : "1.2.0"
+      }
+    },
+    {
+      "identity" : "markdownrenderer",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kanghun1121/MarkdownRenderer.git",
+      "state" : {
+        "revision" : "9e2592ef9c85f987d450735f793df7350ab72504",
+        "version" : "0.4.0"
       }
     },
     {
