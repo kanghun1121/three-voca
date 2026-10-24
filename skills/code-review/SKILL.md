@@ -29,6 +29,7 @@ git diff dev...HEAD
 - 버그·동시성·레이어 경계 위반·보안 → `find-bugs`
 - 스타일·컨벤션 → `swift-lint`
 - 새 모듈/레이어 배치, 의존 방향 판단 → `architecture-review` (구조가 실제로 바뀔 때만)
+- 과한 추상화·공유 상태·캐시·재시도 구조 → `overengineering-check` (해당 구조가 추가·변경됐을 때만)
 
 이 스킬 자체는 별도 버그·스타일 체크리스트를 복제하지 않는다. 위 스킬들의 결과를 입력으로 받는다.
 
@@ -70,7 +71,7 @@ final class WordViewModel {
 ## 출력 형식
 
 - **결론**: 승인 가능 / 보류(수정 필요) / 사람 에스컬레이션 필요 — 셋 중 하나
-- **하위 스킬 결과 요약**: find-bugs/swift-lint/architecture-review 각각 몇 건, 어떤 심각도
+- **하위 스킬 결과 요약**: 적용한 find-bugs/swift-lint/architecture-review/overengineering-check의 발견 사항과 심각도
 - **테스트 커버리지 갭**: 있다면 어떤 시나리오가 비어 있는지
 - **에스컬레이션 사유**: 4단계에 해당하면 구체적으로 어떤 항목 때문인지
 
