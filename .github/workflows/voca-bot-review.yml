@@ -34,7 +34,8 @@ jobs:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
           APP_BOT_LOGIN: ${{ steps.app-token.outputs.app-slug }}[bot]
           OPENAI_API_KEY: ${{ secrets.VOCA_BOT_OPENAI_API_KEY }}
-          OPENAI_MODEL: ${{ vars.VOCA_BOT_MODEL || 'gpt-4.1' }}
+          OPENAI_MODEL: ${{ vars.VOCA_BOT_MODEL || 'gpt-6.1-sol' }}
+          VOCA_BOT_REVIEW_MODE: dynamic
           GITHUB_REPOSITORY: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
         run: python3 scripts/voca_bot/review.py

@@ -81,6 +81,7 @@ shrimp_data/
 .harness/exec-plans/
 .harness/problems/
 .harness/handoff/
+/review-bench/
 
 ### 시크릿 ###
 Projects/Core/Example/Secrets.xcconfig
