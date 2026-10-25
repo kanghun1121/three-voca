@@ -81,6 +81,28 @@ class ContextRoutingTests(unittest.TestCase):
             paths = [path for path, _ in route_context(files)]
             self.assertIn(".agents/skills/overengineering-check/SKILL.md", paths)
 
+    def test_new_use_case_routes_only_abstraction_checklist(self):
+        files = [{"filename": "Projects/Domain/Interface/UseCase/LoadWordUseCase.swift",
+                  "status": "added", "patch": "@@ -0,0 +1 @@\n+struct LoadWordUseCase {}\n"}]
+        paths = [path for path, _ in route_context(files)]
+        prefix = ".agents/skills/overengineering-check/"
+        self.assertEqual([path for path in paths if path.startswith(prefix)], [
+            prefix + "SKILL.md", prefix + "references/abstractions.md",
+        ])
+
+    def test_options_routes_abstraction_and_maintenance_checklists(self):
+        files = [{"filename": "Projects/Feature/Word/Sources/LoadingOptions.swift",
+                  "status": "added", "patch": "@@ -0,0 +1 @@\n+struct LoadingOptions {}\n"}]
+        paths = [path for path, _ in route_context(files)]
+        self.assertIn(".agents/skills/overengineering-check/references/abstractions.md", paths)
+        self.assertIn(".agents/skills/overengineering-check/references/test-maintenance.md", paths)
+
+    def test_async_use_case_does_not_route_network_checklist(self):
+        files = [{"filename": "Projects/Domain/Sources/UseCase/LoadWordUseCase.swift",
+                  "status": "added", "patch": "@@ -0,0 +1 @@\n+func execute() async throws {}\n"}]
+        paths = [path for path, _ in route_context(files)]
+        self.assertNotIn(".agents/skills/overengineering-check/references/network-storage.md", paths)
+
     def test_download_retry_without_retry_word_routes_failure_review(self):
         files = [changed("Projects/Data/Sources/Audio/RemoteDataSource.swift",
                          "do { return try await httpClient.data(from: url) } catch { return try await httpClient.data(from: url) }")]

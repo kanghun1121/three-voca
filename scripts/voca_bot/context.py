@@ -66,6 +66,26 @@ def _test_value_references(files):
     return selected
 
 
+def overengineering_references(files):
+    """Select checklists from changed paths and diff lines, never PR prose."""
+    changed = "\n".join(file["filename"] for file in files)
+    changed += "\n" + _added_text(files) + "\n" + _removed_text(files)
+    selected = []
+    if re.search(r"UseCase|Repository|DataSource|Strategy|Factory|Options|Configuration|Coordinator|Manager", changed, re.I) or re.search(
+        r"\bprotocol\b|\binterface\b", changed, re.I
+    ):
+        selected.append("abstractions.md")
+    if re.search(r"Store|StateMachine|ViewState|UIState|@State", changed) or re.search(r"\bstore\b", changed, re.I):
+        selected.append("state.md")
+    if re.search(r"Cache|Retry|RemoteDataSource|Download|Timeout|Offline|Sync", changed) or re.search(
+        r"\b(?:cache|cached|retry|download|timeout|offline|sync)\b", changed, re.I
+    ):
+        selected.append("network-storage.md")
+    if re.search(r"ForTests|testOnly|unused|Options|Configuration", changed, re.I):
+        selected.append("test-maintenance.md")
+    return selected
+
+
 def _new_source_file(files, suffixes):
     return any(
         file.get("status") == "added"
@@ -128,10 +148,12 @@ def route_context(files):
         add("docs/system-design/server-failure.md", "요청 실패 처리 변경")
     if source and (
         re.search(r"\b(protocol|Repository|UseCase|DataSource|Coordinator|Manager|Cache|RetryPolicy)\b|\bactor\b", added)
-        or _new_source_file(files, ("Store.swift", "StateMachine.swift", "Options.swift", "Strategy.swift", "Cache.swift"))
+        or _new_source_file(files, ("UseCase.swift", "Store.swift", "StateMachine.swift", "Options.swift", "Strategy.swift", "Cache.swift"))
         or ("catch" in added and re.search(r"(?:\.download\(|\.data\(from:)", added))
     ):
         add(".agents/skills/overengineering-check/SKILL.md", "새 계층 또는 정책 구조 검토")
+        for name in overengineering_references(files):
+            add(f".agents/skills/overengineering-check/references/{name}", "변경 영역의 설계 비용 검토")
     if tests:
         add(".agents/skills/test-value-check/SKILL.md", "테스트 변경의 검증 가치 검토")
         for name in _test_value_references(files):
