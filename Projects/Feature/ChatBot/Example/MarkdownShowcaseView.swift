@@ -7,7 +7,7 @@ import FeatureChatBot
 struct MarkdownShowcaseView: View {
     var body: some View {
         ScrollView {
-            MarkdownView(markdown: MarkdownSample.fullResponse)
+            ChatMarkdownView(markdown: MarkdownSample.fullResponse)
                 .padding(16)
         }
         .background(DesignSystemColor.Background.base)

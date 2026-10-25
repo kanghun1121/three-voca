@@ -48,12 +48,23 @@ private enum ChatBotCase: String, CaseIterable, Identifiable {
 private struct ChatBotCaseListView: View {
     var body: some View {
         NavigationStack {
-            List(ChatBotCase.allCases) { chatBotCase in
-                NavigationLink(chatBotCase.rawValue) {
-                    ChatBotView(viewModel: chatBotCase.makeViewModel())
+            List {
+                Section("챗봇 시나리오") {
+                    ForEach(ChatBotCase.allCases) { chatBotCase in
+                        NavigationLink(chatBotCase.rawValue) {
+                            ChatBotView(viewModel: chatBotCase.makeViewModel())
+                        }
+                    }
+                }
+                Section("마크다운") {
+                    NavigationLink("모든 마크다운 형식") {
+                        MarkdownCatalogView()
+                            .navigationTitle("마크다운 형식")
+                            .navigationBarTitleDisplayMode(.inline)
+                    }
                 }
             }
-            .navigationTitle("챗봇 시나리오")
+            .navigationTitle("챗봇 Example")
         }
     }
 }

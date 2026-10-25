@@ -16,12 +16,6 @@ enum MarkdownSample {
     | me | 대명사 | 목적어 O | 나를 |
 
     
-    ```structure
-    You   love   me.
-    [주어 S]   [동사 V]   [목적어 O]
-    ```
-
-    
     ## 2. 왜 I가 아니라 me인가요?
 
     
@@ -66,13 +60,6 @@ enum MarkdownSample {
 
     
     한국어는 동사가 맨 끝, 영어는 **주어 바로 뒤**에 옵니다.
-
-    
-    ```structure
-    한국어    너는   →   나를   →   사랑한다
-    영어      You    →   love   →   me
-              [S]         [V]        [O]
-    ```
 
     
     > [!팁] 영어는 '누가 → 어떻게 하다 → 누구를' 순서
