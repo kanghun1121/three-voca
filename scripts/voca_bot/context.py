@@ -35,6 +35,37 @@ def _added_text(files):
     )
 
 
+def _removed_text(files):
+    return "\n".join(
+        row[1:]
+        for file in files
+        for row in (file.get("patch") or "").splitlines()
+        if row.startswith("-") and not row.startswith("---")
+    )
+
+
+def _test_value_references(files):
+    """Choose reference files from changed code, including removed assertions/calls."""
+    added = _added_text(files)
+    changed = added + "\n" + _removed_text(files)
+    selected = []
+    if len(re.findall(r"\bfunc\s+test\b|\bfunc\s+test_|@Test\b", added)) > 1 or re.search(
+        r"duplicate|redundant|same.test|중복", changed, re.I
+    ):
+        selected.append("test-value.md")
+    if re.search(r"XCTAssert|XCTFail|#expect|#require|\bcatch\b|\btry\?|\.map\(", added, re.I):
+        selected.append("assertions.md")
+    if re.search(r"withDependencies|\w*Mock\b|\w*Stub\b|fixture|ForTests", changed, re.I) or re.search(
+        r"\b(?:await|try)\s+(?:vm|sut|viewModel|repository)\.\w+\(", _removed_text(files), re.I
+    ):
+        selected.append("execution-path.md")
+    if re.search(r"Task\.sleep|Thread\.sleep|\.milliseconds\(|DispatchQueue\.asyncAfter|Task\.yield|AsyncStream|observationTask", changed, re.I):
+        selected.append("async-stability.md")
+    if not selected:
+        selected.extend(("assertions.md", "execution-path.md"))
+    return selected
+
+
 def _new_source_file(files, suffixes):
     return any(
         file.get("status") == "added"
@@ -103,6 +134,8 @@ def route_context(files):
         add(".agents/skills/overengineering-check/SKILL.md", "새 계층 또는 정책 구조 검토")
     if tests:
         add(".agents/skills/test-value-check/SKILL.md", "테스트 변경의 검증 가치 검토")
+        for name in _test_value_references(files):
+            add(f".agents/skills/test-value-check/references/{name}", "변경된 테스트의 관련 검토 항목")
     if "docs/architecture/clean-architecture.md" in selected:
         add("docs/architecture/clean-architecture/examples.md", "아키텍처 적용 예시")
     if "docs/architecture/dependency-injection.md" in selected:

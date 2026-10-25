@@ -28,7 +28,26 @@ class ContextRoutingTests(unittest.TestCase):
     def test_test_change_loads_test_skill(self):
         files = [changed("Projects/Feature/Home/Tests/HomeTests.swift", "func testEmpty() {}")]
         paths = [path for path, _ in route_context(files)]
-        self.assertEqual(paths, ["docs/review-policy.md", ".agents/skills/test-value-check/SKILL.md"])
+        self.assertEqual(paths, [
+            "docs/review-policy.md",
+            ".agents/skills/test-value-check/SKILL.md",
+            ".agents/skills/test-value-check/references/assertions.md",
+            ".agents/skills/test-value-check/references/execution-path.md",
+        ])
+
+    def test_removed_test_call_routes_execution_path(self):
+        files = [{"filename": "Projects/Feature/Word/Tests/WordTests.swift", "status": "modified",
+                  "patch": "@@ -1 +1 @@\n-        await vm.requestIfNeeded(at: 1)\n+        let detail = .previewFixture\n"}]
+        paths = [path for path, _ in route_context(files)]
+        self.assertIn(".agents/skills/test-value-check/references/execution-path.md", paths)
+        self.assertNotIn(".agents/skills/test-value-check/references/async-stability.md", paths)
+
+    def test_multiple_tests_with_assertions_route_value_and_assertions(self):
+        files = [{"filename": "Projects/Domain/Tests/WordTests.swift", "status": "modified",
+                  "patch": "@@ -0,0 +1,2 @@\n+func test_first() { XCTAssertEqual(value, 1) }\n+func test_second() { XCTAssertEqual(value, 1) }\n"}]
+        paths = [path for path, _ in route_context(files)]
+        self.assertIn(".agents/skills/test-value-check/references/test-value.md", paths)
+        self.assertIn(".agents/skills/test-value-check/references/assertions.md", paths)
 
     def test_state_and_cache_route_only_matching_docs(self):
         files = [changed("Projects/Feature/Home/Sources/HomeViewModel.swift", "@State var isLoading = true")]
