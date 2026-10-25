@@ -29,16 +29,25 @@ flowchart LR
 
 ## Repository / UseCase 패턴
 
+### Repository와 DataSource
+
 | 구성 요소 | 선언/구현 위치 | 책임 |
 |---|---|---|
 | Repository 계약 | `Projects/Domain/Interface/Repository/` | 데이터·시스템 기능을 struct-of-closures로 추상화 |
 | Repository 구현 | `Projects/Data/Sources/<영역>/` | API·저장소·시스템 호출, 데이터 조합·매핑·캐시 |
-| UseCase 계약 | `Projects/Domain/Interface/UseCase/` | 화면에서 사용하는 복합 동작의 계약 |
-| UseCase 구현 | `Projects/Domain/Sources/UseCase/` | Repository 호출 조합과 도메인 처리 |
 | LocalDataSource | `Projects/Data/Sources/<영역>/` | 담당 데이터의 로컬 조회·저장 |
 | RemoteDataSource | `Projects/Data/Sources/<영역>/` | 네트워크 요청·응답 수신·스트림 전송 처리 |
 
-DataSource와 UseCase의 활용 방법은 [예시](clean-architecture/examples.md)를 참고한다.
+DataSource의 활용 방법은 [예시](clean-architecture/examples.md)를 참고한다.
+
+### UseCase
+
+| 구성 요소 | 선언/구현 위치 | 책임 |
+|---|---|---|
+| UseCase 계약 | `Projects/Domain/Interface/UseCase/` | 화면에서 사용하는 복합 동작의 계약 |
+| UseCase 구현 | `Projects/Domain/Sources/UseCase/` | Repository 호출 조합과 도메인 처리 |
+
+UseCase의 활용 방법은 [예시](clean-architecture/examples.md)를 참고한다.
 
 ## 데이터 모델: DTO → Domain Model
 
